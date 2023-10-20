@@ -18,14 +18,15 @@ const AuthScreen = ({navigation}) => {
                 justifyContent: 'center',
                 alignItems: 'center',
                 backgroundColor: '#fff',
+                paddingTop: 100
             }}>
             <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', width: "100%" }}>
-                <View style={{ bottom: '10%' }}>
+                <View style={{ bottom: '10%', alignItems: 'center' }}>
                     <Image
                         source={require('../assets/images/SignIn/acount.jpg')}
                         style={{
-                            width: 197,
-                            height: 231,
+                            width: 167,
+                            height: 201,
                             bottom: 40,
                         }}
                     />
@@ -106,7 +107,7 @@ const AuthScreen = ({navigation}) => {
                         Continue with facebook
                     </Text>
                 </TouchableOpacity>
-                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', top : '10%'}}>
+                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', top : '6%'}}>
                     <View style={{ height: 1, width: '33%', backgroundColor: COLORS.grey }} />
                     <View>
                         <Text style={{ width: 50, textAlign: 'center', color: COLORS.black}}>or</Text>
@@ -125,7 +126,7 @@ const AuthScreen = ({navigation}) => {
                         bottom: '12%',
                         justifyContent: 'center',
                         alignItems: 'center',
-                        top: '20%'
+                        top: '15%'
                     }}>
                     <Text
                         style={{
@@ -147,7 +148,7 @@ const AuthScreen = ({navigation}) => {
                         bottom: '12%',
                         justifyContent: 'center',
                         alignItems: 'center',
-                        top :'30%'
+                        top :'25%'
                     }}>
                     <Text
                         style={{
