@@ -5,33 +5,32 @@
 /* eslint-disable semi */
 /* eslint-disable eol-last */
 import React, { useState } from 'react';
-import { View, Text, StatusBar, Image } from 'react-native';
+import { View, Text, StatusBar, Image, SafeAreaView } from 'react-native';
 import { COLORS, SIZES } from '../constants/theme';
 import AppIntroSlider from "react-native-app-intro-slider";
 
 const slides = [
     {
         id: 1,
-        title: 'Discover Best Places',
+        title: 'We are the job portal platform',
         description: '“Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat"',
         image: require('../assets/images/Onboarding/vecteezy_man-search-for-hiring-job-online-from-laptop-human_.jpg')
     },
     {
         id: 2,
-        title: 'Choose A Tasty Dish',
+        title: 'The place where work finds you',
         description: '“Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat"',
         image: require('../assets/images/Onboarding/vecteezy_a-salesperson-holds-a-megaphone-in-hand-and-announces-a_.jpg')
     },
     {
         id: 3,
-        title: 'Pick Up The Delivery',
+        title: "Let't start your career with us now!",
         description: '“Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat"',
         image: require('../assets/images/Onboarding/7566.jpg')
     }
 ]
-export default function App() {
+export default function App({ navigation }) {
     const [showHomePage, setShowHomePage] = useState(false);
-
     const buttonLabel = (label) => {
         return (
             <View style={{
@@ -59,6 +58,7 @@ export default function App() {
                             alignItems: 'center',
                             padding: 15,
                             paddingTop: 100,
+                            backgroundColor: COLORS.white,
                         }}>
                             <Image
                                 source={item.image}
@@ -93,19 +93,21 @@ export default function App() {
                 renderNextButton={() => buttonLabel("Next")}
                 renderSkipButton={() => buttonLabel("Skip")}
                 renderDoneButton={() => buttonLabel("Done")}
-                onDone={() => {
-                    setShowHomePage(true);
-                }}
+                onDone={() => navigation.navigate("Auth")}
             />
         )
     }
     return (
-        <View style={{
-            flex: 1,
-            justifyContent: "center",
-            alignItems: "center",
-        }}>
-            <Text>HomeScreen</Text>
-        </View>
-    )
+        <SafeAreaView
+            style={{
+                flex: 1,
+                justifyContent: 'center',
+                alignItems: 'center',
+                backgroundColor: '#fff',
+            }}>
+            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                <Text>Home Screen</Text>
+            </View>
+        </SafeAreaView>
+    );
 }
