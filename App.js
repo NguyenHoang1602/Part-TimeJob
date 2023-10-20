@@ -13,11 +13,18 @@
 // In App.js in a new project
 
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, StatusBar, } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import Router from './src/router/router';
 
 const App = () => {
+
+  React.useEffect(() => {
+    StatusBar.setBackgroundColor('#FF573300');
+    StatusBar.setTranslucent(true)
+    StatusBar.setBarStyle('dark-content', true);
+  }, []);
+
   return (
     <NavigationContainer>
       <Router />
