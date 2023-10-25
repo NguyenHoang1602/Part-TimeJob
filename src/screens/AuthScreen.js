@@ -115,7 +115,7 @@ const AuthScreen = ({ navigation }) => {
                         <View style={{ height: 1, width: '33%', backgroundColor: COLORS.grey }} />
                     </View>
                     <TouchableOpacity
-                        onPress={() => navigation.navigate('SignIn')}
+                        onPress={() => navigation.navigate('Login')}
                         style={{
                             backgroundColor: COLORS.primary,
                             padding: 5,
