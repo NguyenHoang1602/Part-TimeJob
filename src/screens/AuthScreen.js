@@ -172,6 +172,6 @@ const AuthScreen = ({ navigation }) => {
                     </TouchableOpacity>
                 </View>
             </SafeAreaView>
-    );
+                );
 };
 export default AuthScreen;
