@@ -11,7 +11,7 @@ export const COLORS = {
     title: '#072F4A',
     white: '#FFFFFF',
     lightGrey: '#D3D6D6',
-    grey: '#C1C0C9',
+    grey: '#AAAAAA',
     blue: '#087BB6',
     yellow: '#F4D03F',
     black: '#000000',

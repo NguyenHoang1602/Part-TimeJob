@@ -21,17 +21,20 @@ const AuthScreen = ({ navigation }) => {
             }}>
 
             <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', width: "100%" }}>
-                <View style={{ bottom: '10%', alignItems: 'center' }}>
+                <View style={{
+                    bottom: '10%',
+                    alignItems: 'center',
+                    gap: 25
+                }}>
                     <Image
                         source={require('../assets/images/SignIn/acount.jpg')}
                         style={{
                             width: 167,
                             height: 201,
-                            bottom: 40,
                         }}
                     />
                     <Text style={{
-                        fontSize: 40,
+                        fontSize: 38,
                         fontWeight: 400,
                         color: COLORS.black,
                     }}>
@@ -47,10 +50,11 @@ const AuthScreen = ({ navigation }) => {
                         borderRadius: 10,
                         borderStyle: 'solid',
                         borderWidth: 1.5,
-                        borderColor: COLORS.grey,
+                        borderColor: COLORS.blackOpacity,
                         flexDirection: 'row',
-                        bottom: '10%',
-                        justifyContent: 'center'
+                        bottom: '8%',
+                        justifyContent: 'center',
+                        marginTop: 20
                     }}>
                     <Image
                         source={require('../assets/images/SignIn/iconFB.png')}
@@ -68,7 +72,7 @@ const AuthScreen = ({ navigation }) => {
                             marginStart: '3%',
                             top: 3,
                         }}>
-                        Continue with facebook
+                        Continue with Facebook
                     </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
@@ -80,7 +84,7 @@ const AuthScreen = ({ navigation }) => {
                         borderRadius: 10,
                         borderStyle: 'solid',
                         borderWidth: 1.5,
-                        borderColor: COLORS.grey,
+                        borderColor: COLORS.blackOpacity,
                         flexDirection: 'row',
                         bottom: '2%',
                         justifyContent: 'center'
@@ -101,14 +105,12 @@ const AuthScreen = ({ navigation }) => {
                             marginStart: '3%',
                             top: 3,
                         }}>
-                        Continue with facebook
+                        Continue with Google
                     </Text>
                 </TouchableOpacity>
                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', top: '6%' }}>
                     <View style={{ height: 1, width: '33%', backgroundColor: COLORS.grey }} />
-                    <View>
-                        <Text style={{ width: 50, textAlign: 'center', color: COLORS.black }}>or</Text>
-                    </View>
+                    <Text style={{ width: 50, textAlign: 'center', color: COLORS.black, fontWeight: '700', fontSize: 18, }}>or</Text>
                     <View style={{ height: 1, width: '33%', backgroundColor: COLORS.grey }} />
                 </View>
                 <TouchableOpacity
@@ -116,14 +118,18 @@ const AuthScreen = ({ navigation }) => {
                     style={{
                         backgroundColor: COLORS.primary,
                         padding: 5,
-                        width: '85%',
+                        width: '75%',
                         height: 50,
                         borderRadius: 30,
                         flexDirection: 'row',
                         bottom: '12%',
                         justifyContent: 'center',
                         alignItems: 'center',
-                        top: '15%'
+                        top: '15%',
+                        shadowColor: COLORS.black,
+                        shadowOffset: { width: 10, height: 10 },
+                        shadowOpacity: 1,
+                        shadowRadius: 3,
                     }}>
                     <Text
                         style={{
@@ -141,23 +147,23 @@ const AuthScreen = ({ navigation }) => {
                         width: '85%',
                         height: 50,
                         flexDirection: 'row',
-                        bottom: '12%',
                         justifyContent: 'center',
                         alignItems: 'center',
-                        top: '25%'
+                        top: '20%'
                     }}>
                     <Text
                         style={{
-                            //fontWeight: 'bold',
+                            fontWeight: 'bold',
                             fontSize: 16,
                             color: COLORS.black,
+                            opacity: 0.4
                         }}>
                         Don’t have an account?
                     </Text>
                     <Text
                         style={{
-                            //fontWeight: 'bold',
-                            fontSize: 18,
+                            fontWeight: 'bold',
+                            fontSize: 16,
                             color: COLORS.primary,
                             marginStart: '3%'
                         }}>
