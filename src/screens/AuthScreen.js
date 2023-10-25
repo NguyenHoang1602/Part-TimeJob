@@ -115,7 +115,7 @@ const AuthScreen = ({navigation}) => {
                     <View style={{ height: 1, width: '33%', backgroundColor: COLORS.grey }} />
                 </View>
                 <TouchableOpacity
-                    onPress={() => navigation.navigate('SignIn')}
+                    onPress={() => navigation.navigate('Login')}
                     style={{
                         backgroundColor: COLORS.primary,
                         padding: 5,
@@ -135,11 +135,11 @@ const AuthScreen = ({navigation}) => {
                             color: COLORS.white,
                             fontFamily: 'Roboto-MediumItalic',
                         }}>
-                        Sign up with password
+                        Login with password
                     </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                    onPress={() => navigation.navigate('SignUp')}
+                    onPress={() => navigation.navigate('Register')}
                     style={{
                         padding: 5,
                         width: '85%',
@@ -167,7 +167,7 @@ const AuthScreen = ({navigation}) => {
                             fontFamily: 'Roboto-MediumItalic',
                             marginStart:'3%'
                         }}>
-                        Sign Up
+                        Create One
                     </Text>
                 </TouchableOpacity>
             </View>
