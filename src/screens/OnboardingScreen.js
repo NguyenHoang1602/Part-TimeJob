@@ -1,11 +1,12 @@
 /* eslint-disable prettier/prettier */
+/* eslint-disable no-unused-vars */
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable comma-dangle */
 /* eslint-disable quotes */
 /* eslint-disable semi */
 /* eslint-disable eol-last */
 import React, { useState } from 'react';
-import { View, Text, StatusBar, Image, SafeAreaView } from 'react-native';
+import { View, Text, Image, SafeAreaView } from 'react-native';
 import { COLORS, SIZES } from '../constants/theme';
 import AppIntroSlider from "react-native-app-intro-slider";
 
