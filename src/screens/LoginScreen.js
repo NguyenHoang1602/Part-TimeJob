@@ -10,6 +10,7 @@ import InputField from '../custom/InputField';
 import { COLORS } from '../constants/theme';
 import Button from '../custom/Button';
 import ButtonFbGg from '../custom/ButtonFbGg';
+import CheckBox from '@react-native-community/checkbox';
 
 //icon
 import Octicons from 'react-native-vector-icons/Octicons';
@@ -21,6 +22,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 const SignInScreen = ({ navigation, props }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [toggleCheckBox, setToggleCheckBox] = useState(false);
   const Login = () => {
     navigation.navigate("Home");
   }
@@ -40,10 +42,10 @@ const SignInScreen = ({ navigation, props }) => {
         </View>
       </SafeAreaView>
 
-      <View style={{ alignItems: 'center'}}>
+      <View style={{ alignItems: 'center' }}>
         <Image source={require('../assets/images/SignIn/LogoSignInUp.png')} style={styles.logo} />
 
-        <Text style={{ fontSize: 24, fontWeight: '700', color: COLORS.black}}>Login to your Account</Text>
+        <Text style={{ fontSize: 24, fontWeight: '700', color: COLORS.black, marginVertical: 10 }}>Login to your Account</Text>
 
         <TouchableOpacity
           style={{
@@ -56,21 +58,21 @@ const SignInScreen = ({ navigation, props }) => {
             backgroundColor: "#EDECEC"
           }}>
           <MaterialIcons name='email' size={24} color={COLORS.grey} />
-          <TextInput 
+          <TextInput
             placeholder='Email'
-            setValue={setEmail} 
-            style={{ flex: 1, fontSize: 16, color: COLORS.black, paddingHorizontal: 10 }}/>
+            setValue={setEmail}
+            style={{ flex: 1, fontSize: 16, color: COLORS.black, paddingHorizontal: 10 }} />
         </TouchableOpacity>
 
         <TouchableOpacity
           style={{
-            marginVertical: 20,
             flexDirection: 'row',
             height: 50,
             borderRadius: 10,
             alignItems: 'center',
             paddingHorizontal: 18,
-            backgroundColor: "#EDECEC"
+            backgroundColor: "#EDECEC",
+            marginBottom: 30
           }}>
           <MaterialIcons name='lock' size={24} color={COLORS.grey} />
           <TextInput
@@ -80,7 +82,28 @@ const SignInScreen = ({ navigation, props }) => {
             style={{ flex: 1, fontSize: 16, color: COLORS.black, paddingHorizontal: 10 }} />
         </TouchableOpacity>
 
+        <View style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}>
+          <CheckBox
+            disabled={false}
+            value={toggleCheckBox}
+            onValueChange={(newValue) => setToggleCheckBox(newValue)}
+          />
+          <Text style={{
+            color: COLORS.primary,
+            fontSize: 16,
+            fontWeight: "600",
+          }}>
+            Remember me
+          </Text>
+        </View>
+
+
         <TouchableOpacity
+          onPress={Login()}
           style={{
             backgroundColor: COLORS.primary,
             marginVertical: 20,
@@ -96,11 +119,9 @@ const SignInScreen = ({ navigation, props }) => {
 
         <Text style={styles.forgotpass}>Forgot the password ?</Text>
 
-        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', top: 210 }}>
+        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginVertical: 20 }}>
           <View style={{ height: 1, width: '25%', backgroundColor: COLORS.grey }} />
-          <View>
-            <Text style={{ width: 120, textAlign: 'center', color: COLORS.black, fontSize: 15, fontWeight: 400 }}>Or Continue With</Text>
-          </View>
+          <Text style={{ textAlign: 'center', color: COLORS.black, opacity: 0.5, fontSize: 14, fontWeight: "bold", paddingHorizontal: 5 }}>or continue with</Text>
           <View style={{ height: 1, width: '25%', backgroundColor: COLORS.grey }} />
         </View>
 
@@ -130,32 +151,29 @@ const styles = StyleSheet.create({
   logo: {
     width: 128,
     height: 128,
-    marginVertical: 40,
+    marginTop: 40,
     resizeMode: 'contain',
   },
   forgotpass: {
     fontSize: 15,
     fontWeight: "700",
     alignItems: 'center',
-    height: 70,
-    top: 240,
     color: COLORS.primary
   },
   btnFBGG: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    top: 250,
+
   },
   txthaveAccount: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    top: 300,
   },
   txt1: {
     fontSize: 16,
-    fontWeight: '400',
+    fontWeight: '600',
     alignItems: 'center',
   },
   txt2: {

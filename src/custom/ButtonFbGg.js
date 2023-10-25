@@ -18,13 +18,13 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     height: 51,
     width: 80,
-    borderRadius: 50,
+    borderRadius: 12,
     alignItems: 'center',
     justifyContent: 'center',
     borderColor: 'black',
     borderWidth: 0.2,
     borderStyle: 'solid',
-    marginRight: 25,
-    marginLeft: 25,
+    marginHorizontal: 10,
+    marginVertical: 20,
   }
 })
