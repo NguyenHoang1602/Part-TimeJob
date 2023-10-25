@@ -5,27 +5,27 @@
 /* eslint-disable semi */
 /* eslint-disable eol-last */
 import React, { useState } from 'react';
-import { View, Text, StatusBar, Image, SafeAreaView } from 'react-native';
+import { View, Text, StatusBar, Image, SafeAreaView, TouchableOpacity, Button } from 'react-native';
 import { COLORS, SIZES } from '../constants/theme';
 import AppIntroSlider from "react-native-app-intro-slider";
 
 const slides = [
     {
         id: 1,
-        title: 'We are the job portal platform',
-        description: '“Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat"',
+        title: 'We are the best job portal platform',
+        description: '“Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt "',
         image: require('../assets/images/Onboarding/vecteezy_man-search-for-hiring-job-online-from-laptop-human_.jpg')
     },
     {
         id: 2,
         title: 'The place where work finds you',
-        description: '“Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat"',
+        description: '“Lorem ipsum dolor sit amat, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore"',
         image: require('../assets/images/Onboarding/vecteezy_a-salesperson-holds-a-megaphone-in-hand-and-announces-a_.jpg')
     },
     {
         id: 3,
-        title: "Let't start your career with us now!",
-        description: '“Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat"',
+        title: "Let's start your career with us now!",
+        description: '“Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore "',
         image: require('../assets/images/Onboarding/7566.jpg')
     }
 ]
@@ -34,15 +34,28 @@ export default function App({ navigation }) {
     const buttonLabel = (label) => {
         return (
             <View style={{
-                padding: 12,
+                marginTop: -40,
+                marginEnd: 23
             }}>
                 <Text style={{
                     color: COLORS.title,
                     fontWeight: '600',
                     fontSize: SIZES.h4,
                 }}>
-                    {label}
                 </Text>
+                <View
+                    style={{
+                        backgroundColor: COLORS.buttonNext,
+                        height: 60,
+                        width: 314,
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        borderRadius: 64,
+                        flexDirection: "row",
+
+                    }}>
+                    <Text style={{ color: COLORS.white, fontSize: 18, fontWeight: "600", }}>{label}</Text>
+                </View>
             </View>
         )
     }
@@ -57,28 +70,32 @@ export default function App({ navigation }) {
                             flex: 1,
                             alignItems: 'center',
                             padding: 15,
-                            paddingTop: 100,
+                            paddingTop: 200,
                             backgroundColor: COLORS.white,
+                            gap: 25
                         }}>
                             <Image
                                 source={item.image}
                                 style={{
-                                    width: SIZES.width - 80,
-                                    height: 400,
+                                    width: SIZES.width,
+                                    height: 300,
                                 }}
                                 resizeMode="contain"
                             />
                             <Text style={{
-                                fontWeight: 'bold',
-                                color: COLORS.title,
-                                fontSize: SIZES.h1,
+                                fontWeight: '700',
+                                color: COLORS.primary,
+                                fontSize: SIZES.h0,
+                                textAlign: 'center',
+                                fontFamily: 'Inter'
+                                
                             }}>
                                 {item.title}
                             </Text>
                             <Text style={{
                                 textAlign: 'center',
-                                paddingTop: 5,
-                                color: COLORS.title
+                                color: COLORS.title,
+                                paddingHorizontal: 20
                             }}>
                                 {item.description}
                             </Text>
@@ -87,12 +104,17 @@ export default function App({ navigation }) {
                 }}
                 activeDotStyle={{
                     backgroundColor: COLORS.primary,
-                    width: 30,
+                    width: 20,
+                    marginTop: '-40%'
                 }}
-                showSkipButton
+
+                dotStyle={{
+                    backgroundColor: COLORS.blackOpacity10,
+                    width: 10,
+                    marginTop: '-40%'
+                }}
                 renderNextButton={() => buttonLabel("Next")}
-                renderSkipButton={() => buttonLabel("Skip")}
-                renderDoneButton={() => buttonLabel("Done")}
+                renderDoneButton={() => buttonLabel("Next")}
                 onDone={() => navigation.navigate("Auth")}
             />
         )

@@ -18,7 +18,7 @@ const AuthScreen = ({navigation}) => {
                 justifyContent: 'center',
                 alignItems: 'center',
                 backgroundColor: '#fff',
-                paddingTop: 100
+                paddingTop: 120,
             }}>
             <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', width: "100%" }}>
                 <View style={{ bottom: '10%', alignItems: 'center' }}>
@@ -33,7 +33,6 @@ const AuthScreen = ({navigation}) => {
                     <Text style={{
                         fontSize: 40,
                         fontWeight: 400,
-                        fontFamily: 'Roboto-MediumItalic',
                         color: COLORS.black,
                     }}>
                         Let's you in
@@ -66,7 +65,6 @@ const AuthScreen = ({navigation}) => {
                             fontWeight: 'bold',
                             fontSize: 18,
                             color: COLORS.black,
-                            fontFamily: 'Roboto-MediumItalic',
                             marginStart: '3%',
                             top: 3,
                         }}>
@@ -100,7 +98,6 @@ const AuthScreen = ({navigation}) => {
                             fontWeight: 'bold',
                             fontSize: 18,
                             color: COLORS.black,
-                            fontFamily: 'Roboto-MediumItalic',
                             marginStart: '3%',
                             top: 3,
                         }}>
@@ -133,7 +130,6 @@ const AuthScreen = ({navigation}) => {
                             fontWeight: 'bold',
                             fontSize: 18,
                             color: COLORS.white,
-                            fontFamily: 'Roboto-MediumItalic',
                         }}>
                         Sign up with password
                     </Text>
@@ -155,7 +151,6 @@ const AuthScreen = ({navigation}) => {
                             //fontWeight: 'bold',
                             fontSize: 16,
                             color: COLORS.black,
-                            fontFamily: 'Roboto-MediumItalic',
                         }}>
                         Don’t have an account?
                     </Text>
@@ -164,7 +159,6 @@ const AuthScreen = ({navigation}) => {
                             //fontWeight: 'bold',
                             fontSize: 18,
                             color: COLORS.primary,
-                            fontFamily: 'Roboto-MediumItalic',
                             marginStart:'3%'
                         }}>
                         Sign Up
