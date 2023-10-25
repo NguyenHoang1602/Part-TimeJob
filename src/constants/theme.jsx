@@ -15,9 +15,11 @@ export const COLORS = {
     blue: '#087BB6',
     yellow: '#F4D03F',
     black: '#000000',
+    blackOpacity: '#D9D9D9',
 };
 
 export const SIZES = {
+    h0: 32,
     h1: 22,
     h2: 20,
     h3: 18,
