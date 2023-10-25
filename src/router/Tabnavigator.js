@@ -4,7 +4,7 @@
 /* eslint-disable eqeqeq */
 
 import React from 'react';
-import { Image } from 'react-native';
+import { } from 'react-native';
 // Navigation
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -30,7 +30,9 @@ const HomeStack = () => {
             <Stack.Screen
                 name="HomeScreen"
                 component={HomeScreen}
-                options={{ headerShown: false }}
+                options={({}) => ({
+                    headerShown: false,
+                })}
             />
         </Stack.Navigator>
     );
@@ -41,7 +43,9 @@ const SavedStack = () => {
             <Stack.Screen
                 name="SavedJobsScreen"
                 component={SavedJobsScreen}
-                options={{ headerShown: false }}
+                options={() => ({
+                    headerShown: false,
+                })}
             />
         </Stack.Navigator>
     );
@@ -52,7 +56,10 @@ const PostStack = () => {
             <Stack.Screen
                 name="PostScreen"
                 component={PostScreen}
-                options={{ headerShown: false }}
+                options={({ route }) => ({
+                    title: route.params?.title,
+                    headerShown: false,
+                })}
             />
         </Stack.Navigator>
     );
@@ -63,7 +70,10 @@ const ManagementStack = () => {
             <Stack.Screen
                 name="ManagementScreen"
                 component={ManagementScreen}
-                options={{ headerShown: false }}
+                options={({ route }) => ({
+                    title: route.params?.title,
+                    headerShown: false,
+                })}
             />
         </Stack.Navigator>
     );
@@ -74,7 +84,10 @@ const ProfileStack = () => {
             <Stack.Screen
                 name="ProfileScreen"
                 component={ProfileScreen}
-                options={{ headerShown: false }}
+                options={({ route }) => ({
+                    title: route.params?.title,
+                    headerShown: false,
+                })}
             />
         </Stack.Navigator>
     );
@@ -118,7 +131,7 @@ const TabNavigator = () => {
                 component={PostStack}
                 options={({ route }) => ({
                     tabBarStyle: {
-                        display: getTabBarVisibility(route),
+                        display: 'none',
                     },
                     tabBarIcon: ({ color, size }) => (
                         <Octicons name="plus-circle" color={color} size={size} />
@@ -135,7 +148,6 @@ const TabNavigator = () => {
                     tabBarIcon: ({ color, size }) => (
                         <Ionicons name="folder-open-outline" color={color} size={size} />
                     ),
-                    tabBarShowLabel: true,
                 })}
             />
             <Tab.Screen
@@ -143,12 +155,11 @@ const TabNavigator = () => {
                 component={ProfileStack}
                 options={({ route }) => ({
                     tabBarStyle: {
-                        display: getTabBarVisibility(route),
+                        headerShown: false,
                     },
                     tabBarIcon: ({ color, size }) => (
                         <Feather name="user" color={color} size={size} />
                     ),
-                    tabBarShowLabel: true,
                 })}
             />
         </Tab.Navigator>
@@ -156,9 +167,9 @@ const TabNavigator = () => {
 }
 
 const getTabBarVisibility = route => {
-    // console.log(route);
+    console.log(route);
     const routeName = getFocusedRouteNameFromRoute(route) ?? 'Feed';
-    // console.log(routeName);
+    console.log(routeName);
 
     if (routeName == 'PostScreen') {
         return 'none';

@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable prettier/prettier */
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable comma-dangle */
@@ -15,7 +16,7 @@ const SignInScreen = ({ navigation, props }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const Login = () => {
-    navigation.navigate("Home");
+    navigation.navigate("TabNavigator");
   }
   return (
     <View style={{ flex: 1, alignItems: 'center', backgroundColor: "white" }}>
