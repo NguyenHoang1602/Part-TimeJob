@@ -156,6 +156,7 @@ const TabNavigator = () => {
                 options={({ route }) => ({
                     tabBarStyle: {
                         headerShown: false,
+                        display: getTabBarVisibility(route),
                     },
                     tabBarIcon: ({ color, size }) => (
                         <Feather name="user" color={color} size={size} />
