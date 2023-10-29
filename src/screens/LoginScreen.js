@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable prettier/prettier */
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable comma-dangle */
@@ -24,7 +25,7 @@ const SignInScreen = ({ navigation, props }) => {
   const [password, setPassword] = useState('');
   const [toggleCheckBox, setToggleCheckBox] = useState(false);
   const Login = () => {
-    navigation.navigate("Home");
+    navigation.navigate("TabNavigator");
   }
   return (
     <View style={{ flex: 1, backgroundColor: "white", paddingHorizontal: 18 }}>

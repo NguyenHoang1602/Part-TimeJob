@@ -18,6 +18,7 @@ const Router = () => {
         <Stack.Screen name="Onboarding" component={OnboardingScreen} />
         <Stack.Screen name="Auth" component={Auth} />
         <Stack.Screen name="Login" component={SignInScreen} />
+        <Stack.Screen name="TabNavigator" component={TabNavigator} />
       </Stack.Navigator>
     );
   };
