@@ -7,16 +7,15 @@
 /* eslint-disable eol-last */
 import React, { useState } from 'react';
 import { StyleSheet, View, Text, Image, Checkbox, SafeAreaView, TouchableOpacity, TextInput } from 'react-native';
-import InputField from '../custom/InputField';
 import { COLORS } from '../constants/theme';
-import Button from '../custom/Button';
 import ButtonFbGg from '../custom/ButtonFbGg';
 import CheckBox from '@react-native-community/checkbox';
 
 //icon
-import Octicons from 'react-native-vector-icons/Octicons';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 
 
@@ -24,8 +23,12 @@ const SignInScreen = ({ navigation, props }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [toggleCheckBox, setToggleCheckBox] = useState(false);
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [isFocusedEmail, setIsFocusedEmail] = useState(false);
+  const [isFocusedPass, setIsFocusedPass] = useState(false);
+
   const Login = () => {
-    navigation.navigate("TabNavigator");
+    navigation.navigate("TabNavigator")
   }
   return (
     <View style={{ flex: 1, backgroundColor: "white", paddingHorizontal: 18 }}>
@@ -48,7 +51,7 @@ const SignInScreen = ({ navigation, props }) => {
 
         <Text style={{ fontSize: 24, fontWeight: '700', color: COLORS.black, marginVertical: 10 }}>Login to your Account</Text>
 
-        <TouchableOpacity
+        <View
           style={{
             marginVertical: 20,
             flexDirection: 'row',
@@ -56,32 +59,53 @@ const SignInScreen = ({ navigation, props }) => {
             borderRadius: 10,
             alignItems: 'center',
             paddingHorizontal: 18,
-            backgroundColor: "#EDECEC"
+            backgroundColor: !isFocusedEmail ? COLORS.lightGrey : COLORS.blue,
+            borderWidth: 1,
+            borderColor: !isFocusedEmail ? COLORS.white : COLORS.primary
           }}>
-          <MaterialIcons name='email' size={24} color={COLORS.grey} />
+          <MaterialIcons name='email' size={24} color={email === '' ? COLORS.grey : COLORS.black} />
           <TextInput
             placeholder='Email'
-            setValue={setEmail}
+            value={email}
+            onChangeText={(value) => {
+              setEmail(value)
+            }}
+            onFocus={() => { setIsFocusedEmail(!isFocusedEmail) }}
+            onBlur={() => { setIsFocusedEmail(!isFocusedEmail) }}
             style={{ flex: 1, fontSize: 16, color: COLORS.black, paddingHorizontal: 10 }} />
-        </TouchableOpacity>
+        </View>
 
-        <TouchableOpacity
+        <View
           style={{
             flexDirection: 'row',
             height: 50,
             borderRadius: 10,
             alignItems: 'center',
             paddingHorizontal: 18,
-            backgroundColor: "#EDECEC",
-            marginBottom: 30
+            backgroundColor: "#F5F5F5",
+            marginBottom: 30,
+            backgroundColor: !isFocusedPass ? COLORS.lightGrey : COLORS.blue,
+            borderWidth: 1,
+            borderColor: !isFocusedPass ? COLORS.white : COLORS.primary
           }}>
-          <MaterialIcons name='lock' size={24} color={COLORS.grey} />
+          <MaterialIcons name='lock' size={24} color={password === '' ? COLORS.grey : COLORS.black} />
           <TextInput
             placeholder="Password"
-            setValue={setPassword}
-            secureTextEntry={true}
-            style={{ flex: 1, fontSize: 16, color: COLORS.black, paddingHorizontal: 10 }} />
-        </TouchableOpacity>
+            value={password}
+            onChangeText={(value) => {
+              setPassword(value)
+            }}
+            onFocus={() => { setIsFocusedPass(!isFocusedPass) }}
+            onBlur={() => { setIsFocusedPass(!isFocusedPass) }}
+            secureTextEntry={!isPasswordVisible}
+            style={{ flex: 1, fontSize: 16, color: COLORS.black, paddingHorizontal: 10, }} />
+          <TouchableOpacity onPress={() => {
+            setIsPasswordVisible(!isPasswordVisible)
+          }}>
+            <Ionicons name={isPasswordVisible ? 'eye' : 'eye-off'} size={24} color={password === '' ? COLORS.grey : COLORS.black} />
+          </TouchableOpacity>
+
+        </View>
 
         <View style={{
           flexDirection: 'row',
@@ -91,12 +115,19 @@ const SignInScreen = ({ navigation, props }) => {
           <CheckBox
             disabled={false}
             value={toggleCheckBox}
-            onValueChange={(newValue) => setToggleCheckBox(newValue)}
+            onValueChange={(newValue) => {
+              setToggleCheckBox(newValue)
+            }}
+            style={{
+              transform: [{ scaleX: 0.9 }, { scaleY: 0.9 }]
+            }}
+            tintColors={{ true: COLORS.primary, false: COLORS.primary }}
           />
           <Text style={{
-            color: COLORS.primary,
+            color: COLORS.black,
             fontSize: 16,
             fontWeight: "600",
+            fontFamily: 'FontFamily',
           }}>
             Remember me
           </Text>
@@ -104,7 +135,7 @@ const SignInScreen = ({ navigation, props }) => {
 
 
         <TouchableOpacity
-          onPress={Login()}
+          onPress={() => Login()}
           style={{
             backgroundColor: COLORS.primary,
             marginVertical: 20,

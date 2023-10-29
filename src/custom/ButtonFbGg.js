@@ -5,7 +5,7 @@ const ButtonFbGg = ({image}) => {
   return (
     <View>
       <TouchableOpacity style={styles.btnFb}>
-        <Image source={image} style={styles.img } />
+        <Image source={image}  height={10} width={10} style={styles.img } />
       </TouchableOpacity>
     </View>
   )
@@ -26,5 +26,8 @@ const styles = StyleSheet.create({
     borderStyle: 'solid',
     marginHorizontal: 10,
     marginVertical: 20,
+  },
+  img: {
+    padding: 5
   }
 })
