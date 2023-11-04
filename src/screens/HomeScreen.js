@@ -1,4 +1,6 @@
+/* eslint-disable react/no-unstable-nested-components */
 /* eslint-disable react/self-closing-comp */
+/* eslint-disable no-unused-vars */
 /* eslint-disable semi */
 /* eslint-disable eol-last */
 /* eslint-disable prettier/prettier */
@@ -44,6 +46,32 @@ const HomeScreen = () => {
     { id: '4', title: 'Freelancer', Address: 'Quan 1, TP. HCM', wagemax: '150000', wagemin: '50000', worktype: 'Partime', uri: 'https://devforum-uploads.s3.dualstack.us-east-2.amazonaws.com/uploads/original/4X/b/7/6/b766c952bf9c722c30447824d8fc06a48f008e31.png' },
     { id: '5', title: 'Freelancer', Address: 'Quan 1, TP. HCM', wagemax: '150000', wagemin: '50000', worktype: 'Partime', uri: 'https://devforum-uploads.s3.dualstack.us-east-2.amazonaws.com/uploads/original/4X/b/7/6/b766c952bf9c722c30447824d8fc06a48f008e31.png' },
   ]
+  const FlatLista = () => {
+    return (
+      <FlatList
+        showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}
+        data={data}
+        numColumns={4}
+        renderItem={renderItem}
+        nestedScrollEnabled={true}
+        scrollEnabled={false}
+      />
+    );
+
+  }
+  const FlatListb = () => {
+    return (
+      <FlatList
+        data={Jobdata}
+        keyExtractor={(item) => item.id}
+        renderItem={renderItemJob}
+        nestedScrollEnabled={true}
+        scrollEnabled={false}
+      />
+    );
+
+  }
   const renderItem = ({ item }) => (
     <View style={{ margin: 20, alignItems: 'center' }}>
       <ImageBackground
@@ -57,11 +85,11 @@ const HomeScreen = () => {
   const renderItemJob = ({ item }) => (
     <View style={{
       width: 340,
-      height: 125,
       borderWidth: 0.5,
       borderColor: COLORS.grey,
       borderRadius: 20,
       marginBottom: 18,
+      padding: 20,
     }}>
       <View style={{ width: '100%', flexDirection: 'row' }}>
         <ImageBackground
@@ -69,10 +97,32 @@ const HomeScreen = () => {
           style={{ width: 46, height: 46, marginBottom: 5 }}
           imageStyle={{ borderRadius: 5 }}
         />
-        <View style={{width: '50%', height:'100%', backgroundColor: COLORS.blue, marginStart: 25 }}>
-          <Text style={{fontSize: 18, fontWeight: 'bold'}}>Freelancer</Text>
+        <View style={{ width: '50%', height: '100%', marginStart: 20, flex: 1 }}>
+          <Text style={{ fontSize: 16, fontWeight: 'bold' }}>Freelancer</Text>
+          <Text style={{ fontSize: 16, fontWeight: 'bold', color: COLORS.grey }}>Dribbble Inc.</Text>
+        </View>
+        <TouchableOpacity onPress={() => { }}>
+          <Icon name="bookmark-plus-outline" size={30} color={COLORS.blue} />
+        </TouchableOpacity>
+      </View>
+      <View style={{ height: 1, width: '99%', backgroundColor: COLORS.grey, opacity: 0.4, marginTop: 15, marginBottom: 8 }} />
+      <View style={{ width: '100%', paddingStart: '22%' }}>
+        <Text style={{ fontSize: 16, fontWeight: 'bold', color: COLORS.grey }}>Quận 1, TP.HCM</Text>
+        <Text style={{ color: COLORS.blue, fontSize: 16, marginVertical: 9 }}>${item.wagemin} - {item.wagemax} /month</Text>
+        <View style={{
+          width: 60,
+          height: 25,
+          borderWidth: 0.5,
+          borderColor: COLORS.grey,
+          borderRadius: 7,
+          padding: 5,
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}>
+          <Text style={{ fontSize: 10 }}>{item.worktype}</Text>
         </View>
       </View>
+
     </View>
   );
   return (
@@ -178,46 +228,28 @@ const HomeScreen = () => {
         </View>
       </View>
       <View style={{ padding: 20 }}>
+        <ScrollView showsVerticalScrollIndicator={false}>
         <View style={{ width: '100%', height: 250, alignItems: 'center', marginBottom: 18 }}>
           <View style={{ width: '100%', marginBottom: 10 }}>
             <Text style={{ fontSize: 20, fontStyle: 'normal', color: COLORS.black, fontWeight: 'bold' }}>Danh mục ngành nghề</Text>
           </View>
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            directionalLockEnabled={true}
-            alwaysBounceVertical={false}
-          >
-            <FlatList
-              contentContainerStyle={{ alignSelf: 'flex-start' }}
-              numColumns={Math.ceil(data.length / 2)}
-              showsVerticalScrollIndicator={false}
-              showsHorizontalScrollIndicator={false}
-              data={data}
-              renderItem={renderItem}
-            />
-          </ScrollView>
+          <FlatLista/>
         </View>
         <View style={{ width: '100%', alignItems: 'center' }}>
-          <View style={{ width: '100%', marginBottom: 10, flexDirection: 'row', alignItems: 'center' }}>
+          <View style={{ width: '100%', marginBottom: 20, flexDirection: 'row', alignItems: 'center' }}>
             <Text style={{ fontSize: 20, fontStyle: 'normal', color: COLORS.black, fontWeight: 'bold' }}>Công việc mới</Text>
             <TouchableOpacity style={{ marginStart: '49%' }}
               onPress={() => { }}>
               <Text style={{ fontSize: 18, color: COLORS.blue, fontWeight: 'bold' }}>Tất cả</Text>
             </TouchableOpacity>
           </View>
-          <View style={{ width: '100%', backgroundColor: COLORS.grey }}>
-            <View style={{ padding: 5, alignItems: 'center' }}>
-              <ScrollView>
-                <FlatList
-                  data={Jobdata}
-                  keyExtractor={(item) => item.id}
-                  renderItem={renderItemJob}
-                />
-              </ScrollView>
+          <View style={{ width: '100%', paddingBottom: '50%' }}>
+            <View style={{ alignItems: 'center' }}>
+              <FlatListb/>
             </View>
           </View>
         </View>
+        </ScrollView>
       </View>
     </SafeAreaView >
   )

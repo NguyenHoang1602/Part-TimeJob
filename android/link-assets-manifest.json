@@ -1,0 +1,133 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "src/assets/fonts/BeVietnamPro-Black.ttf",
+      "sha1": "405a6e7828f292099161bf5cccb5402ec19f1833"
+    },
+    {
+      "path": "src/assets/fonts/BeVietnamPro-BlackItalic.ttf",
+      "sha1": "cffbcaeae7ec6a4baabdcdd02227beddfaa49d5e"
+    },
+    {
+      "path": "src/assets/fonts/BeVietnamPro-Bold.ttf",
+      "sha1": "0bd7e256f73efd0a8135c5090d62f150107ff37a"
+    },
+    {
+      "path": "src/assets/fonts/BeVietnamPro-BoldItalic.ttf",
+      "sha1": "1a5d8555a995733597d706fe3d02a38aa48dcc44"
+    },
+    {
+      "path": "src/assets/fonts/BeVietnamPro-ExtraBold.ttf",
+      "sha1": "18efb439fa36b6da24cf550de93a94c92cbe8d71"
+    },
+    {
+      "path": "src/assets/fonts/BeVietnamPro-ExtraBoldItalic.ttf",
+      "sha1": "33ae2a753d95b035cf7534a9af614fde3de2bdc0"
+    },
+    {
+      "path": "src/assets/fonts/BeVietnamPro-ExtraLight.ttf",
+      "sha1": "2487b745e3b46baa3c249062a48b79efeb48d314"
+    },
+    {
+      "path": "src/assets/fonts/BeVietnamPro-ExtraLightItalic.ttf",
+      "sha1": "2b61bfae7dc344b368c1a4c95c25f0b2e65ac415"
+    },
+    {
+      "path": "src/assets/fonts/BeVietnamPro-Italic.ttf",
+      "sha1": "cd74c031ed87c52f81b12e1886133283f36cc44a"
+    },
+    {
+      "path": "src/assets/fonts/BeVietnamPro-Light.ttf",
+      "sha1": "4c7d4497bc6b506d9fefdc8227418bbb637bc524"
+    },
+    {
+      "path": "src/assets/fonts/BeVietnamPro-LightItalic.ttf",
+      "sha1": "e6985b646a67ed2885e15c3f5b23dab28246621b"
+    },
+    {
+      "path": "src/assets/fonts/BeVietnamPro-Medium.ttf",
+      "sha1": "7525dd63d853386f3c192fa78502e547ea620e96"
+    },
+    {
+      "path": "src/assets/fonts/BeVietnamPro-MediumItalic.ttf",
+      "sha1": "b1d0a7a04e0b02414e50a69d8c7c952e42abea20"
+    },
+    {
+      "path": "src/assets/fonts/BeVietnamPro-Regular.ttf",
+      "sha1": "03d9e7cd56b446b0585b36a46c3f4b140c6e0026"
+    },
+    {
+      "path": "src/assets/fonts/BeVietnamPro-SemiBold.ttf",
+      "sha1": "1b8668d1e0f6949d9a702c2a590971ab7946a79f"
+    },
+    {
+      "path": "src/assets/fonts/BeVietnamPro-SemiBoldItalic.ttf",
+      "sha1": "6d432d0456dfc9f59a091444b5aae82f35c3df2d"
+    },
+    {
+      "path": "src/assets/fonts/BeVietnamPro-Thin.ttf",
+      "sha1": "629a4d348ac61e1ddabafc63683296ca7e1bfbe5"
+    },
+    {
+      "path": "src/assets/fonts/BeVietnamPro-ThinItalic.ttf",
+      "sha1": "6d7cc87fe54c683c66d0a791d82c4a10561488b8"
+    },
+    {
+      "path": "src/assets/fonts/Inter-Bold.ttf",
+      "sha1": "47bb768bc0dce7072a0c11562c76aec42edd1b6a"
+    },
+    {
+      "path": "src/assets/fonts/MTO COMIC 1.ttf",
+      "sha1": "0d2c0a668ef3f669d8775fb255903247af8a1760"
+    },
+    {
+      "path": "src/assets/fonts/Roboto-Black.ttf",
+      "sha1": "3f8e401d808f6ce84b542266726514ac8be73171"
+    },
+    {
+      "path": "src/assets/fonts/Roboto-BlackItalic.ttf",
+      "sha1": "03d6e3747d862385dbe48e8296385b9236101a62"
+    },
+    {
+      "path": "src/assets/fonts/Roboto-Bold.ttf",
+      "sha1": "62442a18a9fe9457c1afeabf683d263a691b7798"
+    },
+    {
+      "path": "src/assets/fonts/Roboto-BoldItalic.ttf",
+      "sha1": "2f10ad9e8cab0880182705c4e0fbaeabae706e64"
+    },
+    {
+      "path": "src/assets/fonts/Roboto-Italic.ttf",
+      "sha1": "65f3f6a7e1bd2fa6f2df35e4b07775d7f1dde4f0"
+    },
+    {
+      "path": "src/assets/fonts/Roboto-Light.ttf",
+      "sha1": "18788c5d630fa695f9283f6393bfa541b2031508"
+    },
+    {
+      "path": "src/assets/fonts/Roboto-LightItalic.ttf",
+      "sha1": "6e01f9df9449565697032b002706a94b51862bbe"
+    },
+    {
+      "path": "src/assets/fonts/Roboto-Medium.ttf",
+      "sha1": "3c6a09fcc6a454924c81af7dff94fc6d399ed79b"
+    },
+    {
+      "path": "src/assets/fonts/Roboto-MediumItalic.ttf",
+      "sha1": "b3aa2d8f16d5a331fdced82f213a052b204eaca0"
+    },
+    {
+      "path": "src/assets/fonts/Roboto-Regular.ttf",
+      "sha1": "56c5c0d38bde4c1f1549dda43db37b09c608aad3"
+    },
+    {
+      "path": "src/assets/fonts/Roboto-Thin.ttf",
+      "sha1": "58c733e22bceeaf9609ce578eca92ac303c6d92f"
+    },
+    {
+      "path": "src/assets/fonts/Roboto-ThinItalic.ttf",
+      "sha1": "cc79d5a23bd0ec08b1d99f5390bf33cacc3082f4"
+    }
+  ]
+}
