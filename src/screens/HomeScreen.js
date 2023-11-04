@@ -1,121 +1,257 @@
+/* eslint-disable react/no-unstable-nested-components */
+/* eslint-disable react/self-closing-comp */
+/* eslint-disable no-unused-vars */
 /* eslint-disable semi */
 /* eslint-disable eol-last */
 /* eslint-disable prettier/prettier */
 /* eslint-disable react-native/no-inline-styles */
 import React, { useState } from 'react';
-import { FlatList, Image, TextInput, ScrollView, StyleSheet, Text, TouchableHighlight, TouchableOpacity, View, Button } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { COLORS } from '../constants/theme';
-import ImagePicker from 'react-native-image-crop-picker';
-import FastImage from 'react-native-fast-image';  
+import { View, Text, SafeAreaView, TouchableOpacity, ImageBackground, ScrollView, TextInput, FlatList } from 'react-native';
 
-import Fontisto from 'react-native-vector-icons/Fontisto';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
+//
+import Input from '../components/Input';
+import COLORS from '../assets/const/colors';
+import Button from '../components/Button';
+//icon
+import Octicons from 'react-native-vector-icons/Octicons';
+import Feather from 'react-native-vector-icons/Feather';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Icons from 'react-native-vector-icons/MaterialIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import Ionicons from 'react-native-vector-icons/Ionicons'
-
-const URL_IMG = "https://manofmany.com/wp-content/uploads/2021/05/Best-Short-Hairstyles-for-Men.jpg";
+import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
+import IconWithBadge from '../components/IconWithBadge';
+import IconWithBadgeAntDesign from '../components/IconWithBadgeAntDesign';
 
 const HomeScreen = () => {
 
-  const [password, setPassword] = useState('');
+  const [search, setsearch] = useState('');
+  const data = [
+    { id: '1', title: 'Item 1', uri: 'https://devforum-uploads.s3.dualstack.us-east-2.amazonaws.com/uploads/original/4X/b/7/6/b766c952bf9c722c30447824d8fc06a48f008e31.png' },
+    { id: '2', title: 'Item 2', uri: 'https://devforum-uploads.s3.dualstack.us-east-2.amazonaws.com/uploads/original/4X/b/7/6/b766c952bf9c722c30447824d8fc06a48f008e31.png' },
+    { id: '3', title: 'Item 3', uri: 'https://devforum-uploads.s3.dualstack.us-east-2.amazonaws.com/uploads/original/4X/b/7/6/b766c952bf9c722c30447824d8fc06a48f008e31.png' },
+    { id: '4', title: 'Item 4', uri: 'https://devforum-uploads.s3.dualstack.us-east-2.amazonaws.com/uploads/original/4X/b/7/6/b766c952bf9c722c30447824d8fc06a48f008e31.png' },
+    { id: '5', title: 'Item 5', uri: 'https://devforum-uploads.s3.dualstack.us-east-2.amazonaws.com/uploads/original/4X/b/7/6/b766c952bf9c722c30447824d8fc06a48f008e31.png' },
+    { id: '6', title: 'Item 6', uri: 'https://devforum-uploads.s3.dualstack.us-east-2.amazonaws.com/uploads/original/4X/b/7/6/b766c952bf9c722c30447824d8fc06a48f008e31.png' },
+    { id: '7', title: 'Item 7', uri: 'https://devforum-uploads.s3.dualstack.us-east-2.amazonaws.com/uploads/original/4X/b/7/6/b766c952bf9c722c30447824d8fc06a48f008e31.png' },
+    { id: '8', title: 'Item 8', uri: 'https://devforum-uploads.s3.dualstack.us-east-2.amazonaws.com/uploads/original/4X/b/7/6/b766c952bf9c722c30447824d8fc06a48f008e31.png' },
+    { id: '9', title: 'Item 9', uri: 'https://devforum-uploads.s3.dualstack.us-east-2.amazonaws.com/uploads/original/4X/b/7/6/b766c952bf9c722c30447824d8fc06a48f008e31.png' },
+    { id: '10', title: 'Item 10', uri: 'https://devforum-uploads.s3.dualstack.us-east-2.amazonaws.com/uploads/original/4X/b/7/6/b766c952bf9c722c30447824d8fc06a48f008e31.png' },
 
-  const [isFocusedPass, setIsFocusedPass] = useState(false);
+  ];
+  const Jobdata = [
+    { id: '1', title: 'Freelancer', Address: 'Quan 1, TP. HCM', wagemax: '150000', wagemin: '50000', worktype: 'Partime', uri: 'https://devforum-uploads.s3.dualstack.us-east-2.amazonaws.com/uploads/original/4X/b/7/6/b766c952bf9c722c30447824d8fc06a48f008e31.png' },
+    { id: '2', title: 'Freelancer', Address: 'Quan 1, TP. HCM', wagemax: '150000', wagemin: '50000', worktype: 'Partime', uri: 'https://devforum-uploads.s3.dualstack.us-east-2.amazonaws.com/uploads/original/4X/b/7/6/b766c952bf9c722c30447824d8fc06a48f008e31.png' },
+    { id: '3', title: 'Freelancer', Address: 'Quan 1, TP. HCM', wagemax: '150000', wagemin: '50000', worktype: 'Partime', uri: 'https://devforum-uploads.s3.dualstack.us-east-2.amazonaws.com/uploads/original/4X/b/7/6/b766c952bf9c722c30447824d8fc06a48f008e31.png' },
+    { id: '4', title: 'Freelancer', Address: 'Quan 1, TP. HCM', wagemax: '150000', wagemin: '50000', worktype: 'Partime', uri: 'https://devforum-uploads.s3.dualstack.us-east-2.amazonaws.com/uploads/original/4X/b/7/6/b766c952bf9c722c30447824d8fc06a48f008e31.png' },
+    { id: '5', title: 'Freelancer', Address: 'Quan 1, TP. HCM', wagemax: '150000', wagemin: '50000', worktype: 'Partime', uri: 'https://devforum-uploads.s3.dualstack.us-east-2.amazonaws.com/uploads/original/4X/b/7/6/b766c952bf9c722c30447824d8fc06a48f008e31.png' },
+  ]
+  const FlatLista = () => {
+    return (
+      <FlatList
+        showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}
+        data={data}
+        numColumns={4}
+        renderItem={renderItem}
+        nestedScrollEnabled={true}
+        scrollEnabled={false}
+      />
+    );
 
-  return (
-    <ScrollView>
-      <SafeAreaView style={{ paddingVertical: 18, gap: 16, backgroundColor: 'white' }}>
-        {/* Header */}
-        <View style={{ paddingHorizontal: 18, flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-          <Image source={{ uri: URL_IMG }} style={{ width: 52, aspectRatio: 1, borderRadius: 52 }} />
-          <View style={{ flex: 1 }}>
-            <Text style={{ fontSize: 14, marginBottom: 5, color: COLORS.grey, }} numberOfLines={1}>
-              Good Day 👋
-            </Text>
-            <Text style={{ fontSize: 18, color: COLORS.black, fontWeight: "600", }} numberOfLines={1}>
-              Nguyễn Văn Chức
-            </Text>
-          </View>
-          <TouchableOpacity
-            style={{
-              width: 52,
-              aspectRatio: 1,
-              borderRadius: 52,
-              alignItems: 'center',
-              justifyContent: 'center',
-              borderWidth: 1,
-              borderColor: COLORS.grey,
-            }}>
-            <Fontisto name='bell' size={24} color={COLORS.black} />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={{
-              width: 52,
-              aspectRatio: 1,
-              borderRadius: 52,
-              alignItems: 'center',
-              justifyContent: 'center',
-              borderWidth: 1,
-              borderColor: COLORS.grey,
-            }}>
-            <FontAwesome name='send-o' size={24} color={COLORS.black} />
-          </TouchableOpacity>
+  }
+  const FlatListb = () => {
+    return (
+      <FlatList
+        data={Jobdata}
+        keyExtractor={(item) => item.id}
+        renderItem={renderItemJob}
+        nestedScrollEnabled={true}
+        scrollEnabled={false}
+      />
+    );
+
+  }
+  const renderItem = ({ item }) => (
+    <View style={{ margin: 20, alignItems: 'center' }}>
+      <ImageBackground
+        source={{ uri: item.uri }}
+        style={{ width: 46, height: 46, marginBottom: 5 }}
+        imageStyle={{ borderRadius: 5 }}
+      />
+      <Text>{item.title}</Text>
+    </View>
+  );
+  const renderItemJob = ({ item }) => (
+    <View style={{
+      width: 340,
+      borderWidth: 0.5,
+      borderColor: COLORS.grey,
+      borderRadius: 20,
+      marginBottom: 18,
+      padding: 20,
+    }}>
+      <View style={{ width: '100%', flexDirection: 'row' }}>
+        <ImageBackground
+          source={{ uri: item.uri }}
+          style={{ width: 46, height: 46, marginBottom: 5 }}
+          imageStyle={{ borderRadius: 5 }}
+        />
+        <View style={{ width: '50%', height: '100%', marginStart: 20, flex: 1 }}>
+          <Text style={{ fontSize: 16, fontWeight: 'bold' }}>Freelancer</Text>
+          <Text style={{ fontSize: 16, fontWeight: 'bold', color: COLORS.grey }}>Dribbble Inc.</Text>
         </View>
+        <TouchableOpacity onPress={() => { }}>
+          <Icon name="bookmark-plus-outline" size={30} color={COLORS.blue} />
+        </TouchableOpacity>
+      </View>
+      <View style={{ height: 1, width: '99%', backgroundColor: COLORS.grey, opacity: 0.4, marginTop: 15, marginBottom: 8 }} />
+      <View style={{ width: '100%', paddingStart: '22%' }}>
+        <Text style={{ fontSize: 16, fontWeight: 'bold', color: COLORS.grey }}>Quận 1, TP.HCM</Text>
+        <Text style={{ color: COLORS.blue, fontSize: 16, marginVertical: 9 }}>${item.wagemin} - {item.wagemax} /month</Text>
+        <View style={{
+          width: 60,
+          height: 25,
+          borderWidth: 0.5,
+          borderColor: COLORS.grey,
+          borderRadius: 7,
+          padding: 5,
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}>
+          <Text style={{ fontSize: 10 }}>{item.worktype}</Text>
+        </View>
+      </View>
 
-        {/* Search */}
+    </View>
+  );
+  return (
+    <SafeAreaView style={{ flex: 1 }}>
+      <View style={{
+        paddingBottom: 5,
+        paddingLeft: 20,
+        paddingRight: 20,
+        paddingTop: 20,
+      }}>
         <View
           style={{
             flexDirection: 'row',
-            paddingHorizontal: 18,
-            gap: 12,
+            justifyContent: 'center',
+            alignItems: 'center',
+            marginBottom: 18,
+            marginTop: '10%',
+            width: '100%',
+            height: 60,
           }}>
-          <View
+          <TouchableOpacity
             style={{
-              flex: 1,
               flexDirection: 'row',
-              height: 50,
-              borderRadius: 15,
+              marginStart: '2%',
               alignItems: 'center',
-              paddingHorizontal: 18,
-              backgroundColor: "#F5F5F5",
-              marginBottom: 30,
-              backgroundColor: !isFocusedPass ? COLORS.lightGrey : COLORS.blue,
-              borderWidth: 1,
-              borderColor: !isFocusedPass ? COLORS.white : COLORS.primary
-            }}>
-            <AntDesign name='search1' size={24} color={COLORS.grey} />
-            <TextInput
-              placeholder="Search . . ."
-              value={password}
-              onChangeText={(value) => {
-                setPassword(value)
+              width: '68%',
+            }} onPress={() => { }}>
+            <ImageBackground
+              source={require('../assets/images/homescreen/game-1.jpeg')}
+              style={{ width: 46, height: 46 }}
+              imageStyle={{ borderRadius: 46 }}
+            />
+            <View style={{ flexDirection: 'column', height: '100%', justifyContent: 'center', marginStart: 13 }}>
+              <Text style={{ color: '#7D7A7A', fontSize: 16 }}>Good Morning 👋</Text>
+              <Text style={{ color: COLORS.black, fontSize: 20 }}>Hồng Nhân</Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{
+              width: 46,
+              height: 46,
+              borderWidth: 0.4,
+              borderColor: COLORS.grey,
+              borderRadius: 46,
+              alignItems: 'center',
+              marginRight: '5%',
+              justifyContent: 'center',
+            }}
+            onPress={() => { }}>
+            {/* <Feather name='bell' size={24} color={COLORS.black}/> */}
+            <IconWithBadge iconName="bell" badgeText="2" />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{
+              width: 46,
+              height: 46,
+              borderWidth: 0.4,
+              borderColor: COLORS.grey,
+              borderRadius: 46,
+              marginEnd: '2%',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+            onPress={() => { }}>
+            {/* <AntDesign name='message1' size={24} color={COLORS.black}/> */}
+            <IconWithBadgeAntDesign iconName="message1" badgeText="" />
+          </TouchableOpacity>
+        </View>
+        <View
+          style={{
+            flexDirection: 'row',
+            borderColor: '#C6C6C6',
+            borderWidth: 1,
+            borderRadius: 10,
+            paddingHorizontal: 10,
+            alignItems: 'center',
+          }}>
+          <Feather
+            name="search"
+            size={20}
+            color="#C6C6C6"
+            style={{ marginRight: 20 }}
+          />
+          <TextInput
+            placeholder="Search for a job or compamny"
+            onChangeText={value => {
+              setsearch(value);
+            }} />
+          <TouchableOpacity
+            style={{
+              marginLeft: '18%',
+            }}
+            onPress={() => { }}>
+            <FontAwesome6
+              name="sliders"
+              size={20}
+              color={COLORS.blue}
+              style={{
+                opacity: 0.95,
               }}
-              onFocus={() => { setIsFocusedPass(!isFocusedPass) }}
-              onBlur={() => { setIsFocusedPass(!isFocusedPass) }}
-              style={{ flex: 1, fontSize: 16, color: COLORS.black, paddingHorizontal: 10, }} />
-            <TouchableOpacity onPress={() => {
-
-            }}>
-              <Ionicons name='filter' size={24} color={COLORS.primary} />
+            />
+          </TouchableOpacity>
+        </View>
+      </View>
+      <View style={{ padding: 20 }}>
+        <ScrollView showsVerticalScrollIndicator={false}>
+        <View style={{ width: '100%', height: 250, alignItems: 'center', marginBottom: 18 }}>
+          <View style={{ width: '100%', marginBottom: 10 }}>
+            <Text style={{ fontSize: 20, fontStyle: 'normal', color: COLORS.black, fontWeight: 'bold' }}>Danh mục ngành nghề</Text>
+          </View>
+          <FlatLista/>
+        </View>
+        <View style={{ width: '100%', alignItems: 'center' }}>
+          <View style={{ width: '100%', marginBottom: 20, flexDirection: 'row', alignItems: 'center' }}>
+            <Text style={{ fontSize: 20, fontStyle: 'normal', color: COLORS.black, fontWeight: 'bold' }}>Công việc mới</Text>
+            <TouchableOpacity style={{ marginStart: '49%' }}
+              onPress={() => { }}>
+              <Text style={{ fontSize: 18, color: COLORS.blue, fontWeight: 'bold' }}>Tất cả</Text>
             </TouchableOpacity>
           </View>
-        </View>
-
-        <View style={{ paddingHorizontal: 18 }}>
-          {/* Title */}
-          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
-            <Text style={{ fontSize: 20, fontWeight: "700", color: COLORS.text }}>Job Category</Text>
-            <TouchableOpacity>
-              <Text>See all</Text>
-            </TouchableOpacity>
+          <View style={{ width: '100%', paddingBottom: '50%' }}>
+            <View style={{ alignItems: 'center' }}>
+              <FlatListb/>
+            </View>
           </View>
-
-          
         </View>
-
-        
-      </SafeAreaView>
-    </ScrollView>
+        </ScrollView>
+      </View>
+    </SafeAreaView >
   )
 }
 

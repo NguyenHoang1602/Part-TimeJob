@@ -1,4 +1,5 @@
 /* eslint-disable prettier/prettier */
+/* eslint-disable react/self-closing-comp */
 /* eslint-disable no-unused-vars */
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable comma-dangle */
@@ -57,7 +58,6 @@ export default function App({ navigation }) {
                     }}>
                     <Text style={{ color: COLORS.white, fontSize: 18, fontWeight: "600", }}>{label}</Text>
                 </View>
-                
             </View>
         )
     }

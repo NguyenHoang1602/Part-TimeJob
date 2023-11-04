@@ -8,7 +8,7 @@ import { createBottomTabNavigator } from 'react-navigation-tabs';
 import OnboardingScreen from '../screens/OnboardingScreen';
 import Auth from '../screens/AuthScreen';
 import SignInScreen from '../screens/LoginScreen';
-import RegisterScreen from '../screens/RegisterScreen'
+import RegisterScreen from '../screens/RegisterScreen';
 import TabNavigator from "./Tabnavigator";
 
 const Stack = createNativeStackNavigator();

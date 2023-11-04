@@ -54,7 +54,7 @@ const PostStack = (props) => {
     return (
         <Stack.Navigator>
             <Stack.Screen
-                name="Đăng tin"55
+                name="Đăng tin"
                 component={PostScreen}
                 options={({ route }) => ({
                     title: route.params?.title,
