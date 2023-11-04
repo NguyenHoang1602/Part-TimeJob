@@ -10,14 +10,16 @@ export const COLORS = {
     primary: '#4587FF',
     title: '#072F4A',
     white: '#FFFFFF',
-    lightGrey: '#D3D6D6',
-    grey: '#C1C0C9',
-    blue: '#087BB6',
+    lightGrey: '#F5F5F5',
+    grey: '#AAAAAA',
+    blue: '#EEF4FF',
     yellow: '#F4D03F',
     black: '#000000',
+    blackOpacity: '#D9D9D9',
 };
 
 export const SIZES = {
+    h0: 32,
     h1: 22,
     h2: 20,
     h3: 18,
