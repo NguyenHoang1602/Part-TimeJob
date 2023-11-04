@@ -56,7 +56,7 @@ const SignInScreen = ({ navigation, props }) => {
             marginVertical: 20,
             flexDirection: 'row',
             height: 50,
-            borderRadius: 10,
+            borderRadius: 15,
             alignItems: 'center',
             paddingHorizontal: 18,
             backgroundColor: !isFocusedEmail ? COLORS.lightGrey : COLORS.blue,
@@ -79,7 +79,7 @@ const SignInScreen = ({ navigation, props }) => {
           style={{
             flexDirection: 'row',
             height: 50,
-            borderRadius: 10,
+            borderRadius: 15,
             alignItems: 'center',
             paddingHorizontal: 18,
             backgroundColor: "#F5F5F5",
@@ -104,7 +104,6 @@ const SignInScreen = ({ navigation, props }) => {
           }}>
             <Ionicons name={isPasswordVisible ? 'eye' : 'eye-off'} size={24} color={password === '' ? COLORS.grey : COLORS.black} />
           </TouchableOpacity>
-
         </View>
 
         <View style={{
@@ -133,7 +132,6 @@ const SignInScreen = ({ navigation, props }) => {
           </Text>
         </View>
 
-
         <TouchableOpacity
           onPress={() => Login()}
           style={{
@@ -156,7 +154,6 @@ const SignInScreen = ({ navigation, props }) => {
           <Text style={{ textAlign: 'center', color: COLORS.black, opacity: 0.5, fontSize: 14, fontWeight: "bold", paddingHorizontal: 5 }}>or continue with</Text>
           <View style={{ height: 1, width: '25%', backgroundColor: COLORS.grey }} />
         </View>
-
 
         <View style={styles.btnFBGG}>
           <ButtonFbGg image={require('../assets/images/SignIn/iconFB.png')} />
