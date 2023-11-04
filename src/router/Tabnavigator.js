@@ -4,7 +4,7 @@
 /* eslint-disable eqeqeq */
 
 import React from 'react';
-import { } from 'react-native';
+import { TouchableOpacity } from 'react-native';
 // Navigation
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -50,15 +50,27 @@ const SavedStack = () => {
         </Stack.Navigator>
     );
 };
-const PostStack = () => {
+const PostStack = (props) => {
     return (
         <Stack.Navigator>
             <Stack.Screen
-                name="PostScreen"
+                name="Đăng tin"55
                 component={PostScreen}
                 options={({ route }) => ({
                     title: route.params?.title,
-                    headerShown: false,
+                    headerShown: true,
+                    headerStyle : {
+                        backgroundColor: '#337BFF',
+                    },
+                    headerTitleStyle : {
+                        color : '#FFFFFF',
+                    },
+                    headerTitleAlign : 'center',
+                    headerLeft: () => (
+                        <TouchableOpacity onPress={() => props.navigation.goBack()}>
+                          <Ionicons name="arrow-back" size={24} color="white" />
+                        </TouchableOpacity>
+                     ),
                 })}
             />
         </Stack.Navigator>
@@ -168,9 +180,9 @@ const TabNavigator = () => {
 }
 
 const getTabBarVisibility = route => {
-    console.log(route);
+    // console.log(route);
     const routeName = getFocusedRouteNameFromRoute(route) ?? 'Feed';
-    console.log(routeName);
+    // console.log(routeName);
 
     if (routeName == 'PostScreen') {
         return 'none';
