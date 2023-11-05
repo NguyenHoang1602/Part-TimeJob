@@ -10,6 +10,7 @@ import Auth from '../screens/AuthScreen';
 import SignInScreen from '../screens/LoginScreen';
 import RegisterScreen from '../screens/RegisterScreen';
 import TabNavigator from "./Tabnavigator";
+import SavedJobsScreen from "../screens/SavedJobsScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -21,6 +22,7 @@ const Router = () => {
         <Stack.Screen name="Login" component={SignInScreen} />
         <Stack.Screen name="Register" component={RegisterScreen} />
         <Stack.Screen name="TabNavigator" component={TabNavigator} />
+        <Stack.Screen name="SavedJobsScreen" component={SavedJobsScreen} />
       </Stack.Navigator>
     );
   };
