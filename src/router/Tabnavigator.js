@@ -14,6 +14,7 @@ import SavedJobsScreen from '../screens/SavedJobsScreen';
 import ManagementScreen from '../screens/ManagementScreen';
 import PostScreen from '../screens/PostScreen';
 import ProfileScreen from '../screens/ProfileScreen';
+import DetailsScreen from '../screens/DetailsScreen';
 
 
 //icon
@@ -30,7 +31,14 @@ const HomeStack = () => {
             <Stack.Screen
                 name="HomeScreen"
                 component={HomeScreen}
-                options={({}) => ({
+                options={({ }) => ({
+                    headerShown: false,
+                })}
+            />
+            <Stack.Screen
+                name="DetailsScreen"
+                component={DetailsScreen}
+                options={({ route }) => ({
                     headerShown: false,
                 })}
             />
@@ -59,18 +67,18 @@ const PostStack = (props) => {
                 options={({ route }) => ({
                     title: route.params?.title,
                     headerShown: true,
-                    headerStyle : {
+                    headerStyle: {
                         backgroundColor: '#337BFF',
                     },
-                    headerTitleStyle : {
-                        color : '#FFFFFF',
+                    headerTitleStyle: {
+                        color: '#FFFFFF',
                     },
-                    headerTitleAlign : 'center',
+                    headerTitleAlign: 'center',
                     headerLeft: () => (
                         <TouchableOpacity onPress={() => props.navigation.goBack()}>
-                          <Ionicons name="arrow-back" size={24} color="white" />
+                            <Ionicons name="arrow-back" size={24} color="white" />
                         </TouchableOpacity>
-                     ),
+                    ),
                 })}
             />
         </Stack.Navigator>
@@ -184,7 +192,7 @@ const getTabBarVisibility = route => {
     const routeName = getFocusedRouteNameFromRoute(route) ?? 'Feed';
     // console.log(routeName);
 
-    if (routeName == 'PostScreen') {
+    if (routeName == 'DetailsScreen') {
         return 'none';
     }
     return 'flex';
