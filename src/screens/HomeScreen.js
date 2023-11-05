@@ -6,8 +6,6 @@ import React, { useState } from 'react';
 import { FlatList, Image, TextInput, ScrollView, StyleSheet, Text, TouchableHighlight, TouchableOpacity, View, Button } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS } from '../constants/theme';
-import ImagePicker from 'react-native-image-crop-picker';
-import FastImage from 'react-native-fast-image';
 
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -16,12 +14,9 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 
 const URL_IMG = "https://manofmany.com/wp-content/uploads/2021/05/Best-Short-Hairstyles-for-Men.jpg";
 
-const data = [1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6]; // Dữ liệu của bạn
-
 const HomeScreen = () => {
 
   const [password, setPassword] = useState('');
-  const numColumns = Math.ceil(data.length / 2);
 
   const [isFocusedPass, setIsFocusedPass] = useState(false);
 
@@ -76,12 +71,10 @@ const HomeScreen = () => {
           style={{
             flex: 1,
             flexDirection: 'row',
-            height: 50,
             borderRadius: 15,
             alignItems: 'center',
             paddingHorizontal: 18,
             backgroundColor: "#F5F5F5",
-            marginBottom: 30,
             backgroundColor: !isFocusedPass ? COLORS.lightGrey : COLORS.blue,
             borderWidth: 1,
             borderColor: !isFocusedPass ? COLORS.white : COLORS.primary
