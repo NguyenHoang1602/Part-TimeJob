@@ -228,7 +228,7 @@ const HomeScreen = () => {
         </View>
       </View>
       <View style={{ padding: 20 }}>
-        <ScrollView showsVerticalScrollIndicator={false}>
+        <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps={'always'}>
         <View style={{ width: '100%', height: 250, alignItems: 'center', marginBottom: 18 }}>
           <View style={{ width: '100%', marginBottom: 10 }}>
             <Text style={{ fontSize: 20, fontStyle: 'normal', color: COLORS.black, fontWeight: 'bold' }}>Danh mục ngành nghề</Text>
@@ -251,7 +251,7 @@ const HomeScreen = () => {
         </View>
         </ScrollView>
       </View>
-    </SafeAreaView >
+    </SafeAreaView>
   )
 }
 

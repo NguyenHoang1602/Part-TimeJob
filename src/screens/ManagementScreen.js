@@ -3,7 +3,7 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable react-native/no-inline-styles */
 import React, { useState } from 'react';
-import { Button, View, StyleSheet, Text, TouchableOpacity, Image, ScrollView } from 'react-native';
+import { Button, View, StyleSheet, Text, TouchableOpacity, Image, TextInput } from 'react-native';
 import Modal from 'react-native-modal';
 import { COLORS } from '../constants/theme';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -20,6 +20,11 @@ const URL_IMG = "https://manofmany.com/wp-content/uploads/2021/05/Best-Short-Hai
 const TopTab = createMaterialTopTabNavigator();
 
 function TopTabScreen1() {
+  const [inputText, setInputText] = 
+  useState();
+
+  console.log(inputText);
+
   return (
     <SafeAreaView
       style={{
@@ -65,6 +70,15 @@ function TopTabScreen1() {
             </View>
           </View>
         </View>
+
+        <TextInput
+          style={{ borderWidth: 1, borderColor: 'gray', height: 100 }}
+          multiline={true}
+          numberOfLines={4} // Số dòng tối đa bạn muốn hiển thị
+          value={inputText}
+          placeholder="Nhập văn bản ở đây"
+        />
+        <Text>Mô tả: {inputText}</Text>
       </View>
     </SafeAreaView>
   );
@@ -80,7 +94,7 @@ const ManagementScreen = () => {
   return (
     <SafeAreaView style={{ backgroundColor: 'white', flex: 1 }}>
       {/* Header */}
-      <View style={{ padding: 18, flexDirection: 'row', alignItems: 'center', gap: 8, borderBottomWidth: 0.5, borderColor: COLORS.grey,}}>
+      <View style={{ padding: 18, flexDirection: 'row', alignItems: 'center', gap: 8, borderBottomWidth: 0.5, borderColor: COLORS.grey, }}>
         <Image source={{ uri: URL_IMG }} style={{ width: 52, aspectRatio: 1, borderRadius: 52 }} />
         <View style={{ flex: 1 }}>
           <Text style={{ fontSize: 14, marginBottom: 5, color: COLORS.grey, }} numberOfLines={1}>
@@ -116,23 +130,23 @@ const ManagementScreen = () => {
         </TouchableOpacity>
       </View>
 
-        <TopTab.Navigator
-          screenOptions={{
-            tabBarLabelStyle: {
-              color: COLORS.primary,
-            },
-            tabBarItemStyle: {
-              width: 'auto',
-              
-            }
-          }}
-        >
-          <TopTab.Screen name="Đang hiện thị (2)" component={TopTabScreen1} />
-          <TopTab.Screen name="Đang chờ duyệt (1)" component={TopTabScreen1} />
-          <TopTab.Screen name="Bị từ chối (3)" component={TopTabScreen1} />
-        </TopTab.Navigator>
+      <TopTab.Navigator
+        screenOptions={{
+          tabBarLabelStyle: {
+            color: COLORS.primary,
+          },
+          tabBarItemStyle: {
+            width: 'auto',
 
-      
+          }
+        }}
+      >
+        <TopTab.Screen name="Đang hiện thị (2)" component={TopTabScreen1} />
+        <TopTab.Screen name="Đang chờ duyệt (1)" component={TopTabScreen1} />
+        <TopTab.Screen name="Bị từ chối (3)" component={TopTabScreen1} />
+      </TopTab.Navigator>
+
+
 
     </SafeAreaView>
   );
