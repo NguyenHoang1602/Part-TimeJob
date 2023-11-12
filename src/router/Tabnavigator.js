@@ -115,12 +115,14 @@ const ProfileStack = () => {
 
 const TabNavigator = () => {
     return (
-        <Tab.Navigator screenOptions={{
+        <Tab.Navigator
+            screenOptions={{
+            tabBarItemStyle : {},
             tabBarShowLabel: true,
             headerShown: false,
-            tabBarStyle: { backgroundColor: '#FFFFFF' },
             tabBarInactiveTintColor: '#AAAAAA',
             tabBarActiveTintColor: '#337BFF',
+            tabBarHideOnKeyboard: true,
         }}>
             <Tab.Screen
                 name="Home"
@@ -128,6 +130,8 @@ const TabNavigator = () => {
                 options={({ route }) => ({
                     tabBarStyle: {
                         display: getTabBarVisibility(route),
+                        height: 60,
+                        padding: 8
                     },
                     tabBarIcon: ({ color, size }) => (
                         <Octicons name="home" color={color} size={size} />
@@ -140,6 +144,7 @@ const TabNavigator = () => {
                 options={({ route }) => ({
                     tabBarStyle: {
                         display: getTabBarVisibility(route),
+                        height: 60
                     },
                     tabBarIcon: ({ color, size }) => (
                         <Octicons name="bookmark" color={color} size={size} />
@@ -164,6 +169,7 @@ const TabNavigator = () => {
                 options={({ route }) => ({
                     tabBarStyle: {
                         display: getTabBarVisibility(route),
+                        height: 60
                     },
                     tabBarIcon: ({ color, size }) => (
                         <Ionicons name="folder-open-outline" color={color} size={size} />
@@ -177,6 +183,7 @@ const TabNavigator = () => {
                     tabBarStyle: {
                         headerShown: false,
                         display: getTabBarVisibility(route),
+                        height: 60
                     },
                     tabBarIcon: ({ color, size }) => (
                         <Feather name="user" color={color} size={size} />
