@@ -13,7 +13,6 @@ import TabNavigator from "./Tabnavigator";
 import SavedJobsScreen from "../screens/SavedJobsScreen";
 import MessageScreen from "../screens/MessageScreen";
 import ChatScreen from "../screens/ChatScreen";
-import DropdownSelect from "../screens/DropDownSelect";
 const Stack = createNativeStackNavigator();
 
 const Router = () => {
