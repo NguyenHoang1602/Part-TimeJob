@@ -84,7 +84,7 @@ function TopTabScreen1() {
   );
 }
 
-const ManagementScreen = () => {
+const ManagementScreen = ({route, navigation}) => {
   const [isModalVisible, setModalVisible] = useState(false);
 
   const toggleModal = () => {
@@ -133,12 +133,15 @@ const ManagementScreen = () => {
       <TopTab.Navigator
         screenOptions={{
           tabBarLabelStyle: {
-            color: COLORS.primary,
+            fontSize: 14,
+            fontWeight: '500'
           },
           tabBarItemStyle: {
             width: 'auto',
-
-          }
+          },
+          lazyPlaceholder: true,
+          tabBarScrollEnabled: true,
+          tabBarActiveTintColor: COLORS.primary
         }}
       >
         <TopTab.Screen name="Đang hiện thị (2)" component={TopTabScreen1} />

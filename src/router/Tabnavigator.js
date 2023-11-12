@@ -107,13 +107,14 @@ const ProfileStack = () => {
 
 const TabNavigator = () => {
     return (
-        <Tab.Navigator screenOptions={{
+        <Tab.Navigator
+            screenOptions={{
             tabBarItemStyle : {},
             tabBarShowLabel: true,
             headerShown: false,
             tabBarInactiveTintColor: '#AAAAAA',
             tabBarActiveTintColor: '#337BFF',
-            tabBarHideOnKeyboard: true
+            tabBarHideOnKeyboard: true,
         }}>
             <Tab.Screen
                 name="Home"
