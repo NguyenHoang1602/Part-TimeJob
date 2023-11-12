@@ -1,5 +1,4 @@
 /* eslint-disable react/no-unstable-nested-components */
-/* eslint-disable react/self-closing-comp */
 /* eslint-disable no-unused-vars */
 /* eslint-disable semi */
 /* eslint-disable eol-last */
@@ -23,7 +22,7 @@ import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import IconWithBadge from '../components/IconWithBadge';
 import IconWithBadgeAntDesign from '../components/IconWithBadgeAntDesign';
 
-const HomeScreen = () => {
+const HomeScreen = ({navigation}) => {
 
   const [search, setsearch] = useState('');
   const data = [
@@ -40,11 +39,11 @@ const HomeScreen = () => {
 
   ];
   const Jobdata = [
-    { id: '1', title: 'Freelancer', Address: 'Quan 1, TP. HCM', wagemax: '150000', wagemin: '50000', worktype: 'Partime', uri: 'https://devforum-uploads.s3.dualstack.us-east-2.amazonaws.com/uploads/original/4X/b/7/6/b766c952bf9c722c30447824d8fc06a48f008e31.png' },
-    { id: '2', title: 'Freelancer', Address: 'Quan 1, TP. HCM', wagemax: '150000', wagemin: '50000', worktype: 'Partime', uri: 'https://devforum-uploads.s3.dualstack.us-east-2.amazonaws.com/uploads/original/4X/b/7/6/b766c952bf9c722c30447824d8fc06a48f008e31.png' },
-    { id: '3', title: 'Freelancer', Address: 'Quan 1, TP. HCM', wagemax: '150000', wagemin: '50000', worktype: 'Partime', uri: 'https://devforum-uploads.s3.dualstack.us-east-2.amazonaws.com/uploads/original/4X/b/7/6/b766c952bf9c722c30447824d8fc06a48f008e31.png' },
-    { id: '4', title: 'Freelancer', Address: 'Quan 1, TP. HCM', wagemax: '150000', wagemin: '50000', worktype: 'Partime', uri: 'https://devforum-uploads.s3.dualstack.us-east-2.amazonaws.com/uploads/original/4X/b/7/6/b766c952bf9c722c30447824d8fc06a48f008e31.png' },
-    { id: '5', title: 'Freelancer', Address: 'Quan 1, TP. HCM', wagemax: '150000', wagemin: '50000', worktype: 'Partime', uri: 'https://devforum-uploads.s3.dualstack.us-east-2.amazonaws.com/uploads/original/4X/b/7/6/b766c952bf9c722c30447824d8fc06a48f008e31.png' },
+    { id: '1', title: 'Freelancer 1', Details: 'Dribble Inc.', Address: 'Quan 1, TP. HCM', wagemax: '150000', wagemin: '50000', worktype: 'Partime', uri: 'https://devforum-uploads.s3.dualstack.us-east-2.amazonaws.com/uploads/original/4X/b/7/6/b766c952bf9c722c30447824d8fc06a48f008e31.png' },
+    { id: '2', title: 'Freelancer 2', Details: 'Dribble Inc.', Address: 'Quan 1, TP. HCM', wagemax: '150000', wagemin: '50000', worktype: 'Partime', uri: 'https://devforum-uploads.s3.dualstack.us-east-2.amazonaws.com/uploads/original/4X/b/7/6/b766c952bf9c722c30447824d8fc06a48f008e31.png' },
+    { id: '3', title: 'Freelancer 3', Details: 'Dribble Inc.', Address: 'Quan 1, TP. HCM', wagemax: '150000', wagemin: '50000', worktype: 'Partime', uri: 'https://devforum-uploads.s3.dualstack.us-east-2.amazonaws.com/uploads/original/4X/b/7/6/b766c952bf9c722c30447824d8fc06a48f008e31.png' },
+    { id: '4', title: 'Freelancer 4', Details: 'Dribble Inc.', Address: 'Quan 1, TP. HCM', wagemax: '150000', wagemin: '50000', worktype: 'Partime', uri: 'https://devforum-uploads.s3.dualstack.us-east-2.amazonaws.com/uploads/original/4X/b/7/6/b766c952bf9c722c30447824d8fc06a48f008e31.png' },
+    { id: '5', title: 'Freelancer 5', Details: 'Dribble Inc.', Address: 'Quan 1, TP. HCM', wagemax: '150000', wagemin: '50000', worktype: 'Partime', uri: 'https://devforum-uploads.s3.dualstack.us-east-2.amazonaws.com/uploads/original/4X/b/7/6/b766c952bf9c722c30447824d8fc06a48f008e31.png' },
   ]
   const FlatLista = () => {
     return (
@@ -73,24 +72,34 @@ const HomeScreen = () => {
 
   }
   const renderItem = ({ item }) => (
-    <View style={{ margin: 20, alignItems: 'center' }}>
+    <TouchableOpacity style={{ margin: 20, alignItems: 'center' }} onPress={()=>{}}>
       <ImageBackground
         source={{ uri: item.uri }}
         style={{ width: 46, height: 46, marginBottom: 5 }}
         imageStyle={{ borderRadius: 5 }}
       />
       <Text>{item.title}</Text>
-    </View>
+    </TouchableOpacity>
   );
   const renderItemJob = ({ item }) => (
-    <View style={{
+    <TouchableOpacity style={{
       width: 340,
       borderWidth: 0.5,
       borderColor: COLORS.grey,
       borderRadius: 20,
       marginBottom: 18,
       padding: 20,
-    }}>
+    }}
+    onPress={() => navigation.navigate('DetailsScreen', {
+      title: item.title,
+      id: item.id,
+      uri: item.uri,
+      address: item.Address,
+      wagemax: item.wagemax,
+      wagemin: item.wagemin,
+      worktype: item.worktype,
+      Details: item.Details,
+    })}>
       <View style={{ width: '100%', flexDirection: 'row' }}>
         <ImageBackground
           source={{ uri: item.uri }}
@@ -98,8 +107,8 @@ const HomeScreen = () => {
           imageStyle={{ borderRadius: 5 }}
         />
         <View style={{ width: '50%', height: '100%', marginStart: 20, flex: 1 }}>
-          <Text style={{ fontSize: 16, fontWeight: 'bold' }}>Freelancer</Text>
-          <Text style={{ fontSize: 16, fontWeight: 'bold', color: COLORS.grey }}>Dribbble Inc.</Text>
+          <Text style={{ fontSize: 16, fontWeight: 'bold' }}>{item.title}</Text>
+          <Text style={{ fontSize: 16, fontWeight: 'bold', color: COLORS.grey }}>{item.Details}</Text>
         </View>
         <TouchableOpacity onPress={() => { }}>
           <Icon name="bookmark-plus-outline" size={30} color={COLORS.blue} />
@@ -107,7 +116,7 @@ const HomeScreen = () => {
       </View>
       <View style={{ height: 1, width: '99%', backgroundColor: COLORS.grey, opacity: 0.4, marginTop: 15, marginBottom: 8 }} />
       <View style={{ width: '100%', paddingStart: '22%' }}>
-        <Text style={{ fontSize: 16, fontWeight: 'bold', color: COLORS.grey }}>Quận 1, TP.HCM</Text>
+        <Text style={{ fontSize: 16, fontWeight: 'bold', color: COLORS.grey }}>{item.Address}</Text>
         <Text style={{ color: COLORS.blue, fontSize: 16, marginVertical: 9 }}>${item.wagemin} - {item.wagemax} /month</Text>
         <View style={{
           width: 60,
@@ -123,7 +132,7 @@ const HomeScreen = () => {
         </View>
       </View>
 
-    </View>
+    </TouchableOpacity>
   );
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -151,7 +160,7 @@ const HomeScreen = () => {
               width: '68%',
             }} onPress={() => { }}>
             <ImageBackground
-              source={require('../assets/images/homescreen/game-1.jpeg')}
+              source={require('../assets/images/homescreen/avatar.png')}
               style={{ width: 46, height: 46 }}
               imageStyle={{ borderRadius: 46 }}
             />
@@ -228,7 +237,7 @@ const HomeScreen = () => {
         </View>
       </View>
       <View style={{ padding: 20 }}>
-        <ScrollView showsVerticalScrollIndicator={false}>
+        <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps={'always'}>
         <View style={{ width: '100%', height: 250, alignItems: 'center', marginBottom: 18 }}>
           <View style={{ width: '100%', marginBottom: 10 }}>
             <Text style={{ fontSize: 20, fontStyle: 'normal', color: COLORS.black, fontWeight: 'bold' }}>Danh mục ngành nghề</Text>
@@ -251,7 +260,7 @@ const HomeScreen = () => {
         </View>
         </ScrollView>
       </View>
-    </SafeAreaView >
+    </SafeAreaView>
   )
 }
 
