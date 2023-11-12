@@ -135,7 +135,7 @@ const HomeScreen = ({navigation}) => {
     </TouchableOpacity>
   );
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={{ flex: 1, color: COLORS.blue }}>
       <View style={{
         paddingBottom: 5,
         paddingLeft: 20,
