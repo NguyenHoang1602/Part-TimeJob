@@ -1,3 +1,4 @@
+/* eslint-disable quotes */
 /* eslint-disable keyword-spacing */
 /* eslint-disable eqeqeq */
 /* eslint-disable react/no-unstable-nested-components */
@@ -10,7 +11,9 @@ import React, { useState } from 'react';
 import { View, Text, SafeAreaView, Keyboard, ScrollView, StyleSheet, TouchableOpacity, ImageBackground, useWindowDimensions, FlatList, Image } from 'react-native';
 
 import Input from '../components/Input';
+import InputMutiple from '../components/InputMutiple';
 import COLORS from '../assets/const/colors';
+
 import Button from '../components/Button';
 //icon
 import Octicons from 'react-native-vector-icons/Octicons';
@@ -22,9 +25,24 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import ImagePicker from 'react-native-image-crop-picker';
 //modal
 import Modal from 'react-native-modal';
-import { Colors } from 'react-native/Libraries/NewAppScreen';
+//slect drop-down
+import { Dropdown } from 'react-native-element-dropdown';
+
+const data = [
+  { label: 'Item 1', value: '1' },
+  { label: 'Item 2', value: '2' },
+  { label: 'Item 3', value: '3' },
+  { label: 'Item 4', value: '4' },
+  { label: 'Item 5', value: '5' },
+  { label: 'Item 6', value: '6' },
+  { label: 'Item 7', value: '7' },
+  { label: 'Item 8', value: '8' },
+];
 
 const PostScreen = ({ navigation }) => {
+  //drop-down
+  const [value, setValue] = useState(null);
+  const [isFocus, setIsFocus] = useState(false);
   const [inputs, setInputs] = React.useState({
     id: '',
     title: '',
@@ -65,7 +83,7 @@ const PostScreen = ({ navigation }) => {
   const handleError = (error, input) => {
     setErrors(prevState => ({ ...prevState, [input]: error }));
   };
-  const logimage = () =>{
+  const logimage = () => {
     console.log(selectedImages);
   }
 
@@ -98,9 +116,9 @@ const PostScreen = ({ navigation }) => {
         //   });
         // }
         setSelectedImages(images);
-        if(shouldShow == false){
+        if (shouldShow == false) {
           setshoulShow(!shouldShow);
-        }else{
+        } else {
           setshoulShow(true);
         }
         setBottomSheetVisible(!isBottomSheetVisible);
@@ -327,14 +345,77 @@ const PostScreen = ({ navigation }) => {
               // value={route.params?.subtitle}
               error={errors.subtitle}
             />
-            <Input
+            {/* <Input
               onChangeText={text => handleOnchange(text, 'subtitle')}
               onFocus={() => handleError(null, 'subtitle')}
               placeholder="Ngành nghề"
               // value={route.params?.subtitle}
               error={errors.subtitle}
-            />
-            <Input
+            /> */}
+            <Dropdown
+            style={[styles.dropdown, isFocus && { borderColor: COLORS.darkBlue }]}
+            placeholderStyle={styles.placeholderStyle}
+            selectedTextStyle={styles.selectedTextStyle}
+            inputSearchStyle={styles.inputSearchStyle}
+            iconStyle={styles.iconStyle}
+            data={data}
+            search
+            maxHeight={300}
+            labelField="label"
+            valueField="value"
+            placeholder={!isFocus ? 'Ngành Ngề' : '...'}
+            searchPlaceholder="Search..."
+            value={value}
+            onFocus={() => setIsFocus(true)}
+            onBlur={() => setIsFocus(false)}
+            onChange={item => {
+              setValue(item.value);
+              setIsFocus(false);
+            }}
+          />
+          <Dropdown
+            style={[styles.dropdown, isFocus && { borderColor: COLORS.darkBlue }]}
+            placeholderStyle={styles.placeholderStyle}
+            selectedTextStyle={styles.selectedTextStyle}
+            inputSearchStyle={styles.inputSearchStyle}
+            iconStyle={styles.iconStyle}
+            data={data}
+            search
+            maxHeight={300}
+            labelField="label"
+            valueField="value"
+            placeholder={!isFocus ? 'Loại công việc' : '...'}
+            searchPlaceholder="Search..."
+            value={value}
+            onFocus={() => setIsFocus(true)}
+            onBlur={() => setIsFocus(false)}
+            onChange={item => {
+              setValue(item.value);
+              setIsFocus(false);
+            }}
+          />
+          <Dropdown
+            style={[styles.dropdown, isFocus && { borderColor: COLORS.darkBlue }]}
+            placeholderStyle={styles.placeholderStyle}
+            selectedTextStyle={styles.selectedTextStyle}
+            inputSearchStyle={styles.inputSearchStyle}
+            iconStyle={styles.iconStyle}
+            data={data}
+            search
+            maxHeight={300}
+            labelField="label"
+            valueField="value"
+            placeholder={!isFocus ? 'Hình thức trả lương' : '...'}
+            searchPlaceholder="Search..."
+            value={value}
+            onFocus={() => setIsFocus(true)}
+            onBlur={() => setIsFocus(false)}
+            onChange={item => {
+              setValue(item.value);
+              setIsFocus(false);
+            }}
+          />
+            {/* <Input
               onChangeText={text => handleOnchange(text, 'subtitle')}
               onFocus={() => handleError(null, 'subtitle')}
               placeholder="Loại công việc"
@@ -347,7 +428,7 @@ const PostScreen = ({ navigation }) => {
               placeholder="Hình thức trả lương"
               // value={route.params?.subtitle}
               error={errors.subtitle}
-            />
+            /> */}
             <Input
               keyboardType="numeric"
               onChangeText={text => handleOnchange(text, 'subtitle')}
@@ -364,10 +445,10 @@ const PostScreen = ({ navigation }) => {
               // value={route.params?.subtitle}
               error={errors.subtitle}
             />
-            <Input
+            <InputMutiple
               onChangeText={text => handleOnchange(text, 'subtitle')}
               onFocus={() => handleError(null, 'subtitle')}
-              placeholder="Mô tả công việc"
+              placeholder={"Mô tả công việc\nMô tả chi tiết một số đặc điểm nhân diện của công ty tuyển dụng:\n- Tên công ty, địa chỉ công ty, hình thức và mặt hàng kinh doanh."}
               // value={route.params?.subtitle}
               error={errors.subtitle}
             />
@@ -382,7 +463,7 @@ const PostScreen = ({ navigation }) => {
                   keyboardType="numeric"
                   onChangeText={text => handleOnchange(text, 'subtitle')}
                   onFocus={() => handleError(null, 'subtitle')}
-                  placeholder="Lương tối thiểu"
+                  placeholder="Độ tuổi tối thiểu"
                   // value={route.params?.subtitle}
                   error={errors.subtitle}
                 />
@@ -392,7 +473,7 @@ const PostScreen = ({ navigation }) => {
                   keyboardType="numeric"
                   onChangeText={text => handleOnchange(text, 'subtitle')}
                   onFocus={() => handleError(null, 'subtitle')}
-                  placeholder="Lương tối đa"
+                  placeholder="Độ tuổi tối đa"
                   // value={route.params?.subtitle}
                   error={errors.subtitle}
                 />
@@ -400,20 +481,62 @@ const PostScreen = ({ navigation }) => {
             </View>
           </View>
           <View style={{ marginHorizontal: 24 }}>
-            <Input
+            {/* <Input
               onChangeText={text => handleOnchange(text, 'subtitle')}
               onFocus={() => handleError(null, 'subtitle')}
               placeholder="Trình độ học vấn"
               // value={route.params?.subtitle}
               error={errors.subtitle}
-            />
-            <Input
+            /> */}
+            <Dropdown
+            style={[styles.dropdown, isFocus && { borderColor: COLORS.darkBlue }]}
+            placeholderStyle={styles.placeholderStyle}
+            selectedTextStyle={styles.selectedTextStyle}
+            inputSearchStyle={styles.inputSearchStyle}
+            iconStyle={styles.iconStyle}
+            data={data}
+            search
+            maxHeight={300}
+            labelField="label"
+            valueField="value"
+            placeholder={!isFocus ? 'Trình độ học vấn' : '...'}
+            searchPlaceholder="Search..."
+            value={value}
+            onFocus={() => setIsFocus(true)}
+            onBlur={() => setIsFocus(false)}
+            onChange={item => {
+              setValue(item.value);
+              setIsFocus(false);
+            }}
+          />
+          <Dropdown
+            style={[styles.dropdown, isFocus && { borderColor: COLORS.darkBlue }]}
+            placeholderStyle={styles.placeholderStyle}
+            selectedTextStyle={styles.selectedTextStyle}
+            inputSearchStyle={styles.inputSearchStyle}
+            iconStyle={styles.iconStyle}
+            data={data}
+            search
+            maxHeight={300}
+            labelField="label"
+            valueField="value"
+            placeholder={!isFocus ? 'Kinh nghiệm' : '...'}
+            searchPlaceholder="Search..."
+            value={value}
+            onFocus={() => setIsFocus(true)}
+            onBlur={() => setIsFocus(false)}
+            onChange={item => {
+              setValue(item.value);
+              setIsFocus(false);
+            }}
+          />
+            {/* <Input
               onChangeText={text => handleOnchange(text, 'subtitle')}
               onFocus={() => handleError(null, 'subtitle')}
               placeholder="Kinh nghiệm"
               // value={route.params?.subtitle}
               error={errors.subtitle}
-            />
+            /> */}
             <Input
               onChangeText={text => handleOnchange(text, 'subtitle')}
               onFocus={() => handleError(null, 'subtitle')}
@@ -511,6 +634,35 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#FF0000',
     paddingBottom: 5,
+  },
+  dropdown: {
+    height: 50,
+    borderColor: COLORS.grey,
+    borderWidth: 1,
+    borderRadius: 6,
+    paddingHorizontal: 18,
+    marginBottom : 13,
+  },
+  icon: {
+    marginRight: 5,
+  },
+  placeholderStyle: {
+    marginVertical: 5,
+    fontSize: 14,
+    color: COLORS.grey,
+  },
+  selectedTextStyle: {
+    fontSize: 14,
+    color: COLORS.darkBlue,
+  },
+  iconStyle: {
+    width: 20,
+    height: 20,
+  },
+  inputSearchStyle: {
+    height: 50,
+    fontSize: 14,
+    borderRadius: 6,
   },
 });
 

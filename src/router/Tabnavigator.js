@@ -15,6 +15,7 @@ import ManagementScreen from '../screens/ManagementScreen';
 import PostScreen from '../screens/PostScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import DetailsScreen from '../screens/DetailsScreen';
+import CVScreen from '../screens/CVScreen';
 
 
 //icon
@@ -25,7 +26,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
-const HomeStack = () => {
+const HomeStack = (props) => {
     return (
         <Stack.Navigator>
             <Stack.Screen
@@ -40,6 +41,26 @@ const HomeStack = () => {
                 component={DetailsScreen}
                 options={({ route }) => ({
                     headerShown: false,
+                })}
+            />
+            <Stack.Screen
+                name="Thông tin tuyển dụng"
+                component={CVScreen}
+                options={({ route }) => ({
+                    title: route.params?.title,
+                    headerShown: true,
+                    headerStyle: {
+                        backgroundColor: '#337BFF',
+                    },
+                    headerTitleStyle: {
+                        color: '#FFFFFF',
+                    },
+                    headerTitleAlign: 'center',
+                    headerLeft: () => (
+                        <TouchableOpacity onPress={() => props.navigation.goBack()}>
+                            <Ionicons name="close" size={24} color="white" />
+                        </TouchableOpacity>
+                    ),
                 })}
             />
         </Stack.Navigator>
@@ -199,7 +220,7 @@ const getTabBarVisibility = route => {
     const routeName = getFocusedRouteNameFromRoute(route) ?? 'Feed';
     // console.log(routeName);
 
-    if (routeName == 'DetailsScreen') {
+    if (routeName == 'DetailsScreen' || routeName == 'Thông tin tuyển dụng' ) {
         return 'none';
     }
     return 'flex';
