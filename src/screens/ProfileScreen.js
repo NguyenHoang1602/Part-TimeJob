@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
     marginTop: 60,
   },
   viewApp: {
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
   title: {
     marginLeft: 35,

@@ -13,6 +13,7 @@ import TabNavigator from "./Tabnavigator";
 import SavedJobsScreen from "../screens/SavedJobsScreen";
 import MessageScreen from "../screens/MessageScreen";
 import ChatScreen from "../screens/ChatScreen";
+import CVScreen from "../screens/CVScreen";
 const Stack = createNativeStackNavigator();
 
 const Router = () => {
@@ -26,6 +27,7 @@ const Router = () => {
         <Stack.Screen name="SavedJobsScreen" component={SavedJobsScreen} />
         <Stack.Screen name="MessageScreen" component={MessageScreen} />
         <Stack.Screen name="ChatScreen" component={ChatScreen} />
+        <Stack.Screen name="CVScreen" component={CVScreen}/>
       </Stack.Navigator>
     );
   };
