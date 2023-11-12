@@ -59,19 +59,20 @@ const ChatScreen = () => {
             <ScrollView>
 
                 <View style={{ padding: 18, }}>
-                    <View style={{ borderRadius: 15, borderWidth: 1, paddingHorizontal: 18, borderColor: COLORS.blackOpacity }}>
-                            <View style={{  }}>
-                                <Text style={{ fontSize: 18, color: COLORS.black, }} numberOfLines={1}>
-                                    UI/UX Designer
-                                </Text>
-          
-                        </View>
+                    <View style={{ borderRadius: 10, paddingHorizontal: 18, backgroundColor: COLORS.blackOpacity, borderCurve: 'continuous' }}>
+                        <Text style={{ fontSize: 18, color: COLORS.black, }} >
+                            UI/UX Designer
+                            UI/UX Designer
+                            UI/UX Designer
+                            UI/UX Designer
+                            UI/UX Designer
+                        </Text>
                     </View>
                 </View>
 
             </ScrollView>
 
-           
+
 
         </SafeAreaView>
 

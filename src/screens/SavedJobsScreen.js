@@ -55,7 +55,7 @@ const SavedJobsScreen = () => {
   const renderItemJob = ({ item }) => (
 
     <View style={{ padding: 18, }}>
-      <View style={{ borderRadius: 15, borderWidth: 1, paddingHorizontal: 18, borderColor: COLORS.blackOpacity }}>
+      <View style={{ borderRadius: 15, borderWidth: 1, paddingHorizontal: 18, borderColor: COLORS.blackOpacity, borderCurve: 'continuous' }}>
         <View style={{ flexDirection: 'row', gap: 8, paddingVertical: 18 }}>
           <Image source={{ uri: URL_IMG }} style={{ width: 52, aspectRatio: 1, borderRadius: 52 }} />
           <View style={{ flex: 1 }}>
