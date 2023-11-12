@@ -13,11 +13,12 @@ import TabNavigator from "./Tabnavigator";
 import SavedJobsScreen from "../screens/SavedJobsScreen";
 import MessageScreen from "../screens/MessageScreen";
 import ChatScreen from "../screens/ChatScreen";
+import DropdownSelect from "../screens/DropDownSelect";
 const Stack = createNativeStackNavigator();
 
 const Router = () => {
     return (
-      <Stack.Navigator initialRouteName="ChatScreen" screenOptions={{headerShown: false}}>
+      <Stack.Navigator screenOptions={{headerShown: false}}>
         <Stack.Screen name="Onboarding" component={TabNavigator} />
         <Stack.Screen name="Auth" component={Auth} />
         <Stack.Screen name="Login" component={SignInScreen} />
