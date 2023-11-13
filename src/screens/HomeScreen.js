@@ -180,7 +180,7 @@ const HomeScreen = ({navigation}) => {
               marginRight: '5%',
               justifyContent: 'center',
             }}
-            onPress={() => { }}>
+            onPress={() => navigation.navigate('Notifications')}>
             {/* <Feather name='bell' size={24} color={COLORS.black}/> */}
             <IconWithBadge iconName="bell" badgeText="2" />
           </TouchableOpacity>

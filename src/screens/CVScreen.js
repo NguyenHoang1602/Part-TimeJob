@@ -1,3 +1,5 @@
+/* eslint-disable no-undef */
+/* eslint-disable prettier/prettier */
 import {
   StyleSheet,
   Text,
@@ -13,12 +15,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import COLORS from '../assets/const/colors';
 import Button from '../components/Button';
 
-const CVScreen = () => {
-  React.useEffect(() => {
-    StatusBar.setBackgroundColor('#357AF9');
-    StatusBar.setTranslucent(true);
-    StatusBar.setBarStyle('dark-content', true);
-  }, []);
+const CVScreen = ({navigation}) => {
   return (
     <SafeAreaView style={{flex: 1}}>
       <ScrollView>

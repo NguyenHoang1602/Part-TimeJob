@@ -47,6 +47,9 @@ const SavedJobsScreen = (navigation) => {
     setModalVisible(!isModalVisible);
     setSelectedItem(item);
   };
+  const toggleModalclose = (item) => {
+    setModalVisible(!isModalVisible);
+  };
   const FlatListb = () => {
     return (
       <FlatList
@@ -235,7 +238,7 @@ const SavedJobsScreen = (navigation) => {
       <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps={'always'}>
         <FlatListb />
       </ScrollView>
-      <Modal onBackdropPress={toggleModal} isVisible={isModalVisible} style={{ justifyContent: 'flex-end', margin: 0 }}>
+      <Modal onBackdropPress={toggleModalclose} isVisible={isModalVisible} style={{ justifyContent: 'flex-end', margin: 0 }}>
         <View style={{
           backgroundColor: '#FFFFFF',
           shadowColor: '#333333',
@@ -270,7 +273,7 @@ const SavedJobsScreen = (navigation) => {
           <View style={{ paddingVertical: 18, width: "100%" }}>
             <View style={{ borderRadius: 15, borderWidth: 1, paddingHorizontal: 18, borderColor: COLORS.blackOpacity }}>
               <View style={{ flexDirection: 'row', gap: 8, paddingVertical: 18 }}>
-                <Image source={{ uri: URL_IMG }} style={{ width: 52, aspectRatio: 1, borderRadius: 52 }} />
+                <Image source={{ uri: selectedItem?.uri}} style={{ width: 52, aspectRatio: 1, borderRadius: 52 }} />
                 <View style={{ flex: 1 }}>
                   <Text style={{ fontSize: 18, color: COLORS.black, fontWeight: "600" }} numberOfLines={1}>
                     {selectedItem?.title}
@@ -311,7 +314,7 @@ const SavedJobsScreen = (navigation) => {
             flexDirection: 'row',
           }}>
             <TouchableOpacity
-              onPress={toggleModal}
+              onPress={toggleModalclose}
               style={{
                 backgroundColor: COLORS.blue,
                 alignItems: 'center',
