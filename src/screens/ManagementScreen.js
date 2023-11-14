@@ -33,12 +33,12 @@ function TopTabScreen1() {
     <SafeAreaView
       style={{
         flex: 1,
-        backgroundColor:COLORS.white,
-        paddingTop:-10,
+        backgroundColor: COLORS.white,
+        paddingTop: -10,
       }}>
       <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps={'always'}
         style={{
-          backgroundColor:COLORS.white,
+          backgroundColor: COLORS.white,
         }}>
         <View style={{ width: '100%', alignItems: 'center' }}>
           <FlatList
@@ -58,12 +58,12 @@ function TopTabScreen2() {
     <SafeAreaView
       style={{
         flex: 1,
-        backgroundColor:COLORS.white,
-        paddingTop:-10,
+        backgroundColor: COLORS.white,
+        paddingTop: -10,
       }}>
       <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps={'always'}
         style={{
-          backgroundColor:COLORS.white,
+          backgroundColor: COLORS.white,
         }}>
         <View style={{ width: '100%', alignItems: 'center' }}>
           <FlatList
@@ -83,12 +83,12 @@ function TopTabScreen3() {
     <SafeAreaView
       style={{
         flex: 1,
-        backgroundColor:COLORS.white,
-        paddingTop:-10,
+        backgroundColor: COLORS.white,
+        paddingTop: -10,
       }}>
       <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps={'always'}
         style={{
-          backgroundColor:COLORS.white,
+          backgroundColor: COLORS.white,
         }}>
         <View style={{ width: '100%', alignItems: 'center' }}>
           <FlatList
@@ -168,50 +168,71 @@ const ManagementScreen = ({ route, navigation }) => {
   return (
     <SafeAreaView style={{ backgroundColor: 'white', flex: 1 }}>
       {/* Header */}
-      <View style={{ padding: 18, flexDirection: 'row', alignItems: 'center', gap: 8, borderBottomWidth: 0.5, borderColor: COLORS.grey }}>
-        {/* <Image source={{ uri: URL_IMG }} style={{ width: 52, aspectRatio: 1, borderRadius: 52 }} /> */}
-        <ImageBackground
+      <View style={{
+        paddingBottom: 5,
+        paddingLeft: 20,
+        paddingRight: 20,
+        paddingTop: 20,
+        borderBottomWidth: 0.5,
+        borderColor: 'rgba(170, 170, 170, 1)',
+      }}>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'center',
+            alignItems: 'center',
+            marginBottom: 18,
+            width: '100%',
+            height: 60,
+          }}>
+          <TouchableOpacity
+            style={{
+              flexDirection: 'row',
+              marginStart: '2%',
+              alignItems: 'center',
+              width: '68%',
+            }} onPress={() => { }}>
+            <ImageBackground
               source={require('../assets/images/homescreen/avatar.png')}
               style={{ width: 46, height: 46 }}
               imageStyle={{ borderRadius: 46 }}
             />
-        <View style={{ flex: 1 }}>
-          <Text style={{ fontSize: 14, marginBottom: 5, color: COLORS.grey, }} numberOfLines={1}>
-            Good Day 👋
-          </Text>
-          <Text style={{ fontSize: 18, color: COLORS.black, fontWeight: "600", }} numberOfLines={1}>
-            Hồng Nhân
-          </Text>
+            <View style={{ flexDirection: 'column', height: '100%', justifyContent: 'center', marginStart: 13 }}>
+              <Text style={{ color: '#7D7A7A', fontSize: 16 }}>Good Morning 👋</Text>
+              <Text style={{ color: COLORS.black, fontSize: 20, fontWeight: "600" }}>Hồng Nhân</Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{
+              width: 46,
+              height: 46,
+              borderWidth: 0.4,
+              borderColor: COLORS.grey,
+              borderRadius: 46,
+              alignItems: 'center',
+              marginRight: '5%',
+              justifyContent: 'center',
+            }}
+            onPress={() => navigation.navigate('Notifications')}>
+            {/* <Feather name='bell' size={24} color={COLORS.black}/> */}
+            <IconWithBadge iconName="bell" badgeText="2" />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{
+              width: 46,
+              height: 46,
+              borderWidth: 0.4,
+              borderColor: COLORS.grey,
+              borderRadius: 46,
+              marginEnd: '2%',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+            onPress={() => navigation.navigate('ChatScreen')}>
+            {/* <AntDesign name='message1' size={24} color={COLORS.black}/> */}
+            <IconWithBadgeAntDesign iconName="message1" badgeText="" />
+          </TouchableOpacity>
         </View>
-        <TouchableOpacity
-          style={{
-            width: 46,
-            height: 46,
-            borderWidth: 0.4,
-            borderColor: COLORS.grey,
-            borderRadius: 46,
-            alignItems: 'center',
-            marginRight: '2%',
-            justifyContent: 'center',
-          }}
-          onPress={() => { }}>
-          {/* <Feather name='bell' size={24} color={COLORS.black}/> */}
-          <IconWithBadge iconName="bell" badgeText="2" />
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={{
-            width: 46,
-            height: 46,
-            borderWidth: 0.4,
-            borderColor: COLORS.grey,
-            borderRadius: 46,
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-          onPress={() => { }}>
-          {/* <AntDesign name='message1' size={24} color={COLORS.black}/> */}
-          <IconWithBadgeAntDesign iconName="message1" badgeText="" />
-        </TouchableOpacity>
       </View>
 
       <TopTab.Navigator

@@ -217,13 +217,14 @@ const CVScreen = ({navigation}) => {
               alignItems: 'center',
               paddingVertical: 20,
               flexDirection: 'row',
+              justifyContent: 'center',
             }}>
             <TouchableOpacity
               onPress={() => navigation.navigate('CVScreen')}
               style={{
                 backgroundColor: COLORS.blue,
                 padding: 5,
-                width: '40%',
+                width: '80%',
                 height: 50,
                 borderRadius: 30,
                 flexDirection: 'row',
@@ -233,33 +234,6 @@ const CVScreen = ({navigation}) => {
                 shadowOffset: {width: 10, height: 10},
                 shadowOpacity: 1,
                 shadowRadius: 3,
-                marginLeft: 25,
-              }}>
-              <Text
-                style={{
-                  fontWeight: 'bold',
-                  fontSize: 18,
-                  color: COLORS.white,
-                }}>
-                Huỷ
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => navigation.navigate('CVScreen')}
-              style={{
-                backgroundColor: COLORS.blue,
-                padding: 5,
-                width: '40%',
-                height: 50,
-                borderRadius: 30,
-                flexDirection: 'row',
-                justifyContent: 'center',
-                alignItems: 'center',
-                shadowColor: COLORS.black,
-                shadowOffset: {width: 10, height: 10},
-                shadowOpacity: 1,
-                shadowRadius: 3,
-                marginLeft: 30,
               }}>
               <Text
                 style={{
