@@ -135,7 +135,7 @@ const DetailsScreen = ({ route, navigation }) => {
                 </View>
                 <View style={{ width: '100%', alignItems: 'center', paddingVertical: 50 }}>
                     <TouchableOpacity
-                        onPress={() => navigation.navigate('Login')}
+                        onPress={() => navigation.navigate('Thông tin tuyển dụng')}
                         style={{
                             backgroundColor: COLORS.blue,
                             padding: 5,

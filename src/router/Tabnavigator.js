@@ -15,6 +15,8 @@ import ManagementScreen from '../screens/ManagementScreen';
 import PostScreen from '../screens/PostScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import DetailsScreen from '../screens/DetailsScreen';
+import CVScreen from '../screens/CVScreen';
+import Notification from '../screens/NotificationScreen'
 
 
 //icon
@@ -22,10 +24,12 @@ import Octicons from 'react-native-vector-icons/Octicons';
 import Feather from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
+
+
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
-const HomeStack = () => {
+const HomeStack = (props) => {
     return (
         <Stack.Navigator>
             <Stack.Screen
@@ -42,16 +46,57 @@ const HomeStack = () => {
                     headerShown: false,
                 })}
             />
+            <Stack.Screen
+                name="Thông tin tuyển dụng"
+                component={CVScreen}
+                options={({ route }) => ({
+                    title: route.params?.title,
+                    headerShown: true,
+                    headerStyle: {
+                        backgroundColor: '#337BFF',
+                    },
+                    headerTitleStyle: {
+                        color: '#FFFFFF',
+                    },
+                    headerTitleAlign: 'center',
+                    headerLeft: () => (
+                        <TouchableOpacity onPress={() => props.navigation.navigate('DetailsScreen')}>
+                            <Ionicons name="arrow-back" size={24} color="white" />
+                        </TouchableOpacity>
+                    ),
+                })}
+            />
+            <Stack.Screen
+                name="Notifications"
+                component={Notification}
+                options={({ route }) => ({
+                    headerShown: false,
+                })}
+            />
         </Stack.Navigator>
     );
 };
-const SavedStack = () => {
+const SavedStack = (props) => {
     return (
         <Stack.Navigator>
             <Stack.Screen
                 name="SavedJobsScreen"
                 component={SavedJobsScreen}
                 options={() => ({
+                    headerShown: false,
+                })}
+            />
+            <Stack.Screen
+                name="DetailsScreen"
+                component={DetailsScreen}
+                options={({ route }) => ({
+                    headerShown: false,
+                })}
+            />
+            <Stack.Screen
+                name="Notifications"
+                component={Notification}
+                options={({ route }) => ({
                     headerShown: false,
                 })}
             />
@@ -95,6 +140,20 @@ const ManagementStack = () => {
                     headerShown: false,
                 })}
             />
+            <Stack.Screen
+                name="DetailsScreen"
+                component={DetailsScreen}
+                options={({ route }) => ({
+                    headerShown: false,
+                })}
+            />
+            <Stack.Screen
+                name="Notifications"
+                component={Notification}
+                options={({ route }) => ({
+                    headerShown: false,
+                })}
+            />
         </Stack.Navigator>
     );
 };
@@ -131,11 +190,14 @@ const TabNavigator = () => {
                     tabBarStyle: {
                         display: getTabBarVisibility(route),
                         height: 60,
-                        padding: 8
+                        padding: 8,
                     },
                     tabBarIcon: ({ color, size }) => (
                         <Octicons name="home" color={color} size={size} />
                     ),
+                    tabBarLabelStyle: {
+                        marginBottom: 8,
+                    },
                 })}
             />
             <Tab.Screen
@@ -144,11 +206,15 @@ const TabNavigator = () => {
                 options={({ route }) => ({
                     tabBarStyle: {
                         display: getTabBarVisibility(route),
-                        height: 60
+                        height: 60,
+                        padding: 8,
                     },
                     tabBarIcon: ({ color, size }) => (
                         <Octicons name="bookmark" color={color} size={size} />
                     ),
+                    tabBarLabelStyle: {
+                        marginBottom: 8,
+                    },
                 })}
             />
             <Tab.Screen
@@ -161,6 +227,9 @@ const TabNavigator = () => {
                     tabBarIcon: ({ color, size }) => (
                         <Octicons name="plus-circle" color={color} size={size} />
                     ),
+                    tabBarLabelStyle: {
+                        marginBottom: 8,
+                    },
                 })}
             />
             <Tab.Screen
@@ -169,11 +238,15 @@ const TabNavigator = () => {
                 options={({ route }) => ({
                     tabBarStyle: {
                         display: getTabBarVisibility(route),
-                        height: 60
+                        height: 60,
+                        padding: 8,
                     },
                     tabBarIcon: ({ color, size }) => (
                         <Ionicons name="folder-open-outline" color={color} size={size} />
                     ),
+                    tabBarLabelStyle: {
+                        marginBottom: 8,
+                    },
                 })}
             />
             <Tab.Screen
@@ -183,11 +256,15 @@ const TabNavigator = () => {
                     tabBarStyle: {
                         headerShown: false,
                         display: getTabBarVisibility(route),
-                        height: 60
+                        height: 60,
+                        padding: 8,
                     },
                     tabBarIcon: ({ color, size }) => (
                         <Feather name="user" color={color} size={size} />
                     ),
+                    tabBarLabelStyle: {
+                        marginBottom: 8,
+                    },
                 })}
             />
         </Tab.Navigator>
@@ -199,7 +276,7 @@ const getTabBarVisibility = route => {
     const routeName = getFocusedRouteNameFromRoute(route) ?? 'Feed';
     // console.log(routeName);
 
-    if (routeName == 'DetailsScreen') {
+    if (routeName == 'DetailsScreen' || routeName == 'Thông tin tuyển dụng' ) {
         return 'none';
     }
     return 'flex';
