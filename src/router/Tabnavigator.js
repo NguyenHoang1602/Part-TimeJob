@@ -276,7 +276,7 @@ const getTabBarVisibility = route => {
     const routeName = getFocusedRouteNameFromRoute(route) ?? 'Feed';
     // console.log(routeName);
 
-    if (routeName == 'DetailsScreen' || routeName == 'Thông tin tuyển dụng' ) {
+    if (routeName == 'DetailsScreen' || routeName == 'Thông tin tuyển dụng' || routeName == 'Notifications') {
         return 'none';
     }
     return 'flex';
