@@ -28,7 +28,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 const NotificationScreen = ({ route, navigation }) => {
     return (
         <SafeAreaView style={{ flex: 1, paddingVertical: 18 }}>
-            
             <View>
                 <Text>aaaaaaaaaaa</Text>
             </View>

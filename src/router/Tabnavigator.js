@@ -4,7 +4,7 @@
 /* eslint-disable eqeqeq */
 
 import React from 'react';
-import { StatusBar, TouchableOpacity } from 'react-native';
+import { TouchableOpacity } from 'react-native';
 // Navigation
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -23,7 +23,7 @@ import Notification from '../screens/NotificationScreen'
 import Octicons from 'react-native-vector-icons/Octicons';
 import Feather from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { COLORS } from '../constants/theme';
+
 
 
 const Tab = createBottomTabNavigator();
@@ -60,7 +60,7 @@ const HomeStack = (props) => {
                     },
                     headerTitleAlign: 'center',
                     headerLeft: () => (
-                        <TouchableOpacity onPress={() => props.navigation.goBack()}>
+                        <TouchableOpacity onPress={() => props.navigation.navigate('DetailsScreen')}>
                             <Ionicons name="arrow-back" size={24} color="white" />
                         </TouchableOpacity>
                     ),
@@ -276,7 +276,7 @@ const getTabBarVisibility = route => {
     const routeName = getFocusedRouteNameFromRoute(route) ?? 'Feed';
     // console.log(routeName);
 
-    if (routeName == 'DetailsScreen') {
+    if (routeName == 'DetailsScreen' || routeName == 'Thông tin tuyển dụng' ) {
         return 'none';
     }
     return 'flex';

@@ -195,7 +195,7 @@ const HomeScreen = ({navigation}) => {
               alignItems: 'center',
               justifyContent: 'center',
             }}
-            onPress={() => { }}>
+            onPress={() => navigation.navigate('ChatScreen')}>
             {/* <AntDesign name='message1' size={24} color={COLORS.black}/> */}
             <IconWithBadgeAntDesign iconName="message1" badgeText="" />
           </TouchableOpacity>
