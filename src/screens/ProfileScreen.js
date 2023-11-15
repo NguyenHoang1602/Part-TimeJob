@@ -1,116 +1,133 @@
-/* eslint-disable semi */
-/* eslint-disable eol-last */
+/* eslint-disable jsx-quotes */
+/* eslint-disable no-unused-vars */
 /* eslint-disable prettier/prettier */
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
-import {View, Text, StyleSheet, Image} from 'react-native';
+import { View, Text, StyleSheet, Image, SafeAreaView, TouchableOpacity, ImageBackground, FlatList } from 'react-native';
+//
+import Input from '../components/Input';
+import COLORS from '../assets/const/colors';
+import Button from '../components/Button';
+//icon
+import Octicons from 'react-native-vector-icons/Octicons';
+import Feather from 'react-native-vector-icons/Feather';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Icons from 'react-native-vector-icons/MaterialIcons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import IconWithBadge from '../components/IconWithBadge';
+import IconWithBadgeAntDesign from '../components/IconWithBadgeAntDesign';
+import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 
-const ProfileScreen = () => {
-  return (
-    <View style={styles.body}>
-      <View style={styles.viewApp}>
-        <Image
-          style={styles.logo}
-          source={require('../assets/icon/logo.png')}
-        />
-        <Text style={styles.title}>Applications</Text>
-        <Image
-          style={styles.setting}
-          source={require('../assets/icon/setting.png')}
-        />
-      </View>
-      <View style={styles.viewApp}>
-        <Image style={styles.avatar} source={require('../assets/icon/avatar.png')}/>
-        <Text style={styles.nameAvatar}>Hồng Nhân {'\n'}Good morning 👋</Text>
-        <Image style={styles.edit} source={require('../assets/icon/edit.png')}/>
-      </View>
-      <View style={styles.viewApp}>
-        <Image style={styles.logo} source={require('../assets/icon/user.png')}/>
-        <Text style={styles.nameContact}>Contact Information</Text>
-        <Image style={[styles.edit, {marginLeft: 60, marginTop: 58}]} source={require('../assets/icon/edit.png')}/>
-      </View>
-      <View style={styles.viewApp}>
-        <Image style={styles.map} source={require('../assets/icon/map.png')}/>
-        <Text style={styles.address}>HCM, Quan 12</Text>
-      </View>
-      <View style={styles.viewApp}>
-        <Image style={[styles.map, {marginTop: 15}]} source={require('../assets/icon/call.png')}/>
-        <Text style={[styles.address, {marginTop: 15}]}>+0379354352</Text>
-      </View>
-      <View style={styles.viewApp}>
-        <Image style={[styles.map, {marginTop: 18}]} source={require('../assets/icon/mail.png')}/>
-        <Text style={[styles.address, {marginTop: 12}]}>trongnhan174@gmail.com</Text>
-      </View>
-      <View style={styles.viewApp}>
-        <Image style={styles.logo} source={require('../assets/icon/text.png')}/>
-        <Image style={[styles.edit, {marginLeft: 272, marginTop: 60}]} source={require('../assets/icon/edit.png')}/>
-      </View>
-      <Text style={styles.text}>Hello, I’m Pinkaan. I am a designer with more 
-than 5 years experience. My main fields are UI/UX Design. Illustrantion and Graphic Design. You can check the portfolio on my profile.</Text>
+const ProfileScreen = ({ navigation }) => {
+  const CV = [
+    {id: '1', name:'CV01'},
+    {id: '2', name:'CV02'},
+    {id: '3', name:'CV03'},
+  ];
+  const renderCV = ({ item }) => (
+
+    <View style={{ marginBottom: 18, flexDirection: 'row'}}>
+      <Ionicons name='document-text-outline' size={24} color={COLORS.black} />
+      <Text numberOfLines={1} style={{ flex: 1, fontSize: 16, fontWeight: '400', marginLeft: 25, color: COLORS.black }}>{item.name}</Text>
     </View>
-    
+  );
+  return (
+    <SafeAreaView style={{ flex: 1, paddingVertical: 18, backgroundColor: COLORS.white, paddingLeft: 20, paddingRight: 20 }}>
+      {/* Header */}
+      <View
+        style={{
+          flexDirection: 'row',
+          marginVertical: 20,
+          alignItems: 'center',
+        }}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Ionicons name="arrow-back" size={30} color={COLORS.black} />
+        </TouchableOpacity>
+        <View style={{ flex: 1, marginLeft: 20 }}>
+          <Text style={{ fontSize: 23, fontWeight: '700', color: COLORS.black }}>Applications</Text>
+        </View>
+        <TouchableOpacity style={{ marginEnd: 10 }}>
+          <AntDesign name="setting" size={30} color={COLORS.black} />
+        </TouchableOpacity>
+      </View>
+      {/* body */}
+      <View style={{
+        flexDirection: 'row',
+        alignItems: 'center',
+      }}>
+        <ImageBackground
+          source={require('../assets/images/homescreen/avatar.png')}
+          style={{ width: 70, height: 70 }}
+          imageStyle={{ borderRadius: 46 }}
+        />
+        <View style={{ flex: 1, marginStart: 22 }}>
+          <Text style={{ fontSize: 20, fontWeight: '600', color: COLORS.black }}>Hồng Nhân</Text>
+          <Text style={{ color: '#7D7A7A', fontSize: 16 }}>Good Morning 👋</Text>
+        </View>
+        <TouchableOpacity style={{ marginEnd: 10 }}>
+          <Feather name="edit" size={25} color={COLORS.blue} />
+        </TouchableOpacity>
+      </View>
+      <View style={{
+        width: '100%',
+        borderWidth: 0.5,
+        borderColor: COLORS.grey,
+        borderRadius: 15,
+        marginTop: 50,
+        padding: 18,
+      }}>
+        <View style={{ flexDirection: 'row' }}>
+          <FontAwesome name="user" size={30} color={COLORS.primary} />
+          <Text style={{ flex: 1, fontSize: 20, fontWeight: '700', marginLeft: 25, color: COLORS.black }}>Contact Information</Text>
+          <TouchableOpacity style={{}}>
+            <Feather name="edit" size={24} color={COLORS.blue} />
+          </TouchableOpacity>
+        </View>
+        <View style={{marginTop: 25}}>
+          <View style={{flexDirection:'row'}}>
+            <Feather name="map-pin" size={22} color={COLORS.black} />
+            <Text numberOfLines={1} style={{ flex: 1, fontSize: 16, fontWeight: '400', marginLeft: 25, color: COLORS.black }}>355/49 Lê Trọng Tấn, Bình Hưng Hòa, Bình Tân, TP. HCM</Text>
+          </View>
+          <View style={{flexDirection:'row', marginVertical: 18}}>
+            <Feather name="phone" size={22} color={COLORS.black} />
+            <Text numberOfLines={1} style={{ flex: 1, fontSize: 16, fontWeight: '400', marginLeft: 25, color: COLORS.black }}>+08123456789</Text>
+          </View>
+          <View style={{flexDirection:'row'}}>
+            <Feather name="mail" size={22} color={COLORS.black} />
+            <Text numberOfLines={1} style={{ flex: 1, fontSize: 16, fontWeight: '400', marginLeft: 25, color: COLORS.black }}>abc@gmail.com</Text>
+          </View>
+        </View>
+      </View>
+      <View style={{
+        width: '100%',
+        borderWidth: 0.5,
+        borderColor: COLORS.grey,
+        borderRadius: 15,
+        marginTop: 30,
+        padding: 18,
+      }}>
+        <View style={{ flexDirection: 'row', marginBottom: 25 }}>
+          <Ionicons name="document-text" size={30} color={COLORS.primary} />
+          <Text style={{ flex: 1, fontSize: 20, fontWeight: '700', marginLeft: 25, color: COLORS.black }}>CV/Resume</Text>
+          <TouchableOpacity style={{}}>
+            <Feather name="edit" size={24} color={COLORS.blue} />
+          </TouchableOpacity>
+        </View>
+        <FlatList
+        data={CV}
+        keyExtractor={(item) => item.id}
+        renderItem={renderCV}
+        nestedScrollEnabled={true}
+        scrollEnabled={false}
+      />
+
+      </View>
+    </SafeAreaView>
   );
 };
 
 export default ProfileScreen;
 
-const styles = StyleSheet.create({
-  text: {
-    padding: 22,
-  },
-  address: {
-    fontSize: 18,
-    marginLeft: 30,
-    marginTop: 35,
-    color: 'black'
-  },
-  map: {
-    marginLeft: 20,
-    marginTop: 35
-  },
-  nameContact: {
-    fontSize: 20,
-    color: 'black',
-    fontWeight: 'bold',
-    marginTop: 57,
-    marginLeft: 30
-  },
-  edit: {
-    marginLeft: 52,
-    marginTop: 55
-  },
-  nameAvatar: {
-    fontSize: 20,
-    color: 'black',
-    fontWeight: 'bold',
-    marginTop: 40,
-    marginLeft: 20
-  },
-  avatar: {
-    marginTop: 30
-  },
-  setting: {
-    marginLeft: 100,
-    marginTop: 60,
-  },
-  logo: {
-    marginLeft: 20,
-    marginTop: 60,
-  },
-  viewApp: {
-    flexDirection: 'row',
-  },
-  title: {
-    marginLeft: 35,
-    marginTop: 56,
-    fontSize: 23,
-    fontWeight: 'bold',
-    color: 'black',
-  },
-  body: {
-    padding: 24,
-    backgroundColor: 'white',
-    width: '100%',
-    height: '100%',
-  },
-});
