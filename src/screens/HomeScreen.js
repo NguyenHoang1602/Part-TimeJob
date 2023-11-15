@@ -117,7 +117,7 @@ const HomeScreen = ({navigation}) => {
       <View style={{ height: 1, width: '99%', backgroundColor: COLORS.grey, opacity: 0.4, marginTop: 15, marginBottom: 8 }} />
       <View style={{ width: '100%', paddingStart: '22%' }}>
         <Text style={{ fontSize: 16, fontWeight: 'bold', color: COLORS.grey }}>{item.Address}</Text>
-        <Text style={{ color: COLORS.blue, fontSize: 16, marginVertical: 9 }}>${item.wagemin} - {item.wagemax} /month</Text>
+        <Text style={{ color: COLORS.blue, fontSize: 16, marginVertical: 9 }}>${item.wagemin} - ${item.wagemax} /month</Text>
         <View style={{
           width: 60,
           height: 25,
@@ -135,7 +135,7 @@ const HomeScreen = ({navigation}) => {
     </TouchableOpacity>
   );
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={{ flex: 1, color: COLORS.blue, backgroundColor: COLORS.white }}>
       <View style={{
         paddingBottom: 5,
         paddingLeft: 20,
@@ -166,7 +166,7 @@ const HomeScreen = ({navigation}) => {
             />
             <View style={{ flexDirection: 'column', height: '100%', justifyContent: 'center', marginStart: 13 }}>
               <Text style={{ color: '#7D7A7A', fontSize: 16 }}>Good Morning 👋</Text>
-              <Text style={{ color: COLORS.black, fontSize: 20 }}>Hồng Nhân</Text>
+              <Text style={{ color: COLORS.black, fontSize: 20, fontWeight: "600" }}>Hồng Nhân</Text>
             </View>
           </TouchableOpacity>
           <TouchableOpacity
@@ -180,7 +180,7 @@ const HomeScreen = ({navigation}) => {
               marginRight: '5%',
               justifyContent: 'center',
             }}
-            onPress={() => { }}>
+            onPress={() => navigation.navigate('Notifications')}>
             {/* <Feather name='bell' size={24} color={COLORS.black}/> */}
             <IconWithBadge iconName="bell" badgeText="2" />
           </TouchableOpacity>
@@ -195,7 +195,7 @@ const HomeScreen = ({navigation}) => {
               alignItems: 'center',
               justifyContent: 'center',
             }}
-            onPress={() => { }}>
+            onPress={() => navigation.navigate('ChatScreen')}>
             {/* <AntDesign name='message1' size={24} color={COLORS.black}/> */}
             <IconWithBadgeAntDesign iconName="message1" badgeText="" />
           </TouchableOpacity>
