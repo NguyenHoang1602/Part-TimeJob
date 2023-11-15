@@ -14,6 +14,7 @@ import SavedJobsScreen from "../screens/SavedJobsScreen";
 import MessageScreen from "../screens/MessageScreen";
 import ChatScreen from "../screens/ChatScreen";
 import CVScreen from "../screens/CVScreen";
+import SearchScreen from "../screens/SearchScreen";
 const Stack = createNativeStackNavigator();
 
 const Router = () => {
@@ -26,8 +27,9 @@ const Router = () => {
         <Stack.Screen name="TabNavigator" component={TabNavigator} />
         <Stack.Screen name="SavedJobsScreen" component={SavedJobsScreen} />
         <Stack.Screen name="MessageScreen" component={MessageScreen} />
-        <Stack.Screen name="ChatScreen" component={ChatScreen} />
         <Stack.Screen name="CVScreen" component={CVScreen}/>
+        <Stack.Screen name="SearchScreen" component={SearchScreen} />
+        <Stack.Screen options={{headerShown: true}} name="ChatScreen" component={ChatScreen} />
       </Stack.Navigator>
     );
   };

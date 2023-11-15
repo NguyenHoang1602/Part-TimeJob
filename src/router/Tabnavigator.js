@@ -17,8 +17,7 @@ import ProfileScreen from '../screens/ProfileScreen';
 import DetailsScreen from '../screens/DetailsScreen';
 import CVScreen from '../screens/CVScreen';
 import Notification from '../screens/NotificationScreen'
-
-
+import SearchScreen from '../screens/SearchScreen';
 //icon
 import Octicons from 'react-native-vector-icons/Octicons';
 import Feather from 'react-native-vector-icons/Feather';
@@ -42,33 +41,6 @@ const HomeStack = (props) => {
             <Stack.Screen
                 name="DetailsScreen"
                 component={DetailsScreen}
-                options={({ route }) => ({
-                    headerShown: false,
-                })}
-            />
-            <Stack.Screen
-                name="Thông tin tuyển dụng"
-                component={CVScreen}
-                options={({ route }) => ({
-                    title: route.params?.title,
-                    headerShown: true,
-                    headerStyle: {
-                        backgroundColor: '#337BFF',
-                    },
-                    headerTitleStyle: {
-                        color: '#FFFFFF',
-                    },
-                    headerTitleAlign: 'center',
-                    headerLeft: () => (
-                        <TouchableOpacity onPress={() => props.navigation.navigate('DetailsScreen')}>
-                            <Ionicons name="arrow-back" size={24} color="white" />
-                        </TouchableOpacity>
-                    ),
-                })}
-            />
-            <Stack.Screen
-                name="Notifications"
-                component={Notification}
                 options={({ route }) => ({
                     headerShown: false,
                 })}
