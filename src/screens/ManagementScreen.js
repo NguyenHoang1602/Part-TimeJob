@@ -40,7 +40,7 @@ function TopTabScreen1() {
               <Text style={{ fontSize: 18, color: COLORS.black, fontWeight: "600", }} numberOfLines={1}>
                 UI/UX Designer
               </Text>
-              <Text style={{ fontSize: 16, color: COLORS.grey, paddingTop: 4 }} numberOfLines={1}>
+              <Text style={{ fontSize: 16, color: COLORS.grey, paddingTop: 4, }} numberOfLines={1}>
                 John Sena
               </Text>
             </View>

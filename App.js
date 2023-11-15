@@ -16,6 +16,7 @@ import React from 'react';
 import { View, Text, StatusBar, } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import Router from './src/router/router';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 const App = () => {
 
@@ -26,16 +27,19 @@ const App = () => {
   }, []);
 
   return (
-    <NavigationContainer>
-      <Router />
-    </NavigationContainer>
+    <GestureHandlerRootView style={{flex: 1}}>
+      <NavigationContainer>
+        <Router />
+      </NavigationContainer>
+    </GestureHandlerRootView>
+
   );
 };
 
 // eslint-disable-next-line no-unused-vars
 const Home = () => {
   return (
-    <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
       <Text>Home Screen</Text>
     </View>
   );

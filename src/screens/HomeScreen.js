@@ -5,7 +5,7 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable react-native/no-inline-styles */
 import React, { useState } from 'react';
-import { View, Text, SafeAreaView, TouchableOpacity, ImageBackground, ScrollView, TextInput, FlatList } from 'react-native';
+import { View, Text, SafeAreaView, TouchableOpacity, ImageBackground, ScrollView, TextInput, FlatList, Pressable } from 'react-native';
 
 //
 import Input from '../components/Input';
@@ -200,7 +200,10 @@ const HomeScreen = ({navigation}) => {
             <IconWithBadgeAntDesign iconName="message1" badgeText="" />
           </TouchableOpacity>
         </View>
-        <View
+        <Pressable
+          onPress={() => {
+            navigation.navigate('SearchScreen');
+          }}
           style={{
             flexDirection: 'row',
             borderColor: '#C6C6C6',
@@ -234,7 +237,7 @@ const HomeScreen = ({navigation}) => {
               }}
             />
           </TouchableOpacity>
-        </View>
+        </Pressable>
       </View>
       <View style={{ padding: 20 }}>
         <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps={'always'}>

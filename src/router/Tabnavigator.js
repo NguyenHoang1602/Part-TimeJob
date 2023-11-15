@@ -15,6 +15,7 @@ import ManagementScreen from '../screens/ManagementScreen';
 import PostScreen from '../screens/PostScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import DetailsScreen from '../screens/DetailsScreen';
+import SearchScreen from '../screens/SearchScreen';
 
 
 //icon
@@ -38,6 +39,13 @@ const HomeStack = () => {
             <Stack.Screen
                 name="DetailsScreen"
                 component={DetailsScreen}
+                options={({ route }) => ({
+                    headerShown: false,
+                })}
+            />
+            <Stack.Screen
+                name="SearchScreen"
+                component={SearchScreen}
                 options={({ route }) => ({
                     headerShown: false,
                 })}
