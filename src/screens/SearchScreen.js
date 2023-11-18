@@ -1,9 +1,13 @@
+/* eslint-disable eqeqeq */
+/* eslint-disable quotes */
+/* eslint-disable react/no-unstable-nested-components */
+/* eslint-disable no-dupe-keys */
 /* eslint-disable semi */
 /* eslint-disable eol-last */
 /* eslint-disable prettier/prettier */
 /* eslint-disable react-native/no-inline-styles */
 import React, { useState } from 'react';
-import { FlatList, Image, TextInput, ScrollView, StyleSheet, Text, TouchableHighlight, TouchableOpacity, View, Button } from 'react-native';
+import { FlatList, Image, TextInput, ScrollView, StyleSheet, Text, TouchableHighlight, TouchableOpacity, View, Button, ImageBackground } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS } from '../constants/theme';
 
@@ -34,13 +38,21 @@ const SavedJobsScreen = ({ navigation }) => {
   const [isFocusedPass, setIsFocusedPass] = useState(false);
 
   const [isSave, setSave] = useState(false);
-  const [isFound, setFound] = useState(false);
 
   const [startPrice, setStartPrice] = useState(50);
   const [endPrice, setEndPrice] = useState(250);
 
   const [isModalVisibleSave, setModalVisibleSave] = useState(false);
   const [isModalVisibleFilter, setModalVisibleFiler] = useState(false);
+
+  const Checkdata = ()=>{
+    if (Jobdata == ""){
+        return false;
+    } else {
+        return true;
+    }
+}
+const isFound = Checkdata();
 
   const toggleModalSave = () => {
     setModalVisibleSave(!isModalVisibleSave);
@@ -184,20 +196,28 @@ const SavedJobsScreen = ({ navigation }) => {
         </View>
         :
         //No Found
-        <View style={styles.show}>
-          <Image
-            source={{
-              uri: URL_IMG
-            }}
-            style={styles.imgNoFound}
+        <View style={{ alignItems: 'center', width: '100%', height: '100%', justifyContent: 'center' }}>
+          <ImageBackground
+            source={require('../assets/images/5928293_2953962.jpg')}
+            style={{ width: "108%", height: 430, marginEnd: '9%', marginBottom: -25 }}
           />
-          <Text style={styles.titleNoFound}>
-            Not Found
-          </Text>
-          <Text style={styles.textNoFound}>
-            Sorry, the keyword you entered cannot be found, please check again or search with another keyword.
-          </Text>
+          <Text style={{ fontSize: 22, color: COLORS.black, fontWeight: '700' }}>Empty</Text>
+          <Text style={{ fontSize: 16, marginTop: 7, marginBottom: '50%' }}>Sorry, the keyword you entered cannot be found, please check again or search with another keyword.</Text>
         </View>
+        // <View style={styles.show}>
+        //   <Image
+        //     source={{
+        //       uri: URL_IMG
+        //     }}
+        //     style={styles.imgNoFound}
+        //   />
+        //   <Text style={styles.titleNoFound}>
+        //     Not Found
+        //   </Text>
+        //   <Text style={styles.textNoFound}>
+        //     Sorry, the keyword you entered cannot be found, please check again or search with another keyword.
+        //   </Text>
+        // </View>
       }
 
       {/* Modal Save job */}
@@ -313,7 +333,7 @@ const SavedJobsScreen = ({ navigation }) => {
 
                   <View style={{ borderTopWidth: 1, borderColor: COLORS.blackOpacity, }} />
 
-                  <View style={{  gap: 8, paddingVertical: 12 }}>
+                  <View style={{ gap: 8, paddingVertical: 12 }}>
                     <View style={{ backgroundColor: COLORS.grey }}>
                       <Text>
                         Location

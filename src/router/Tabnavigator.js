@@ -45,6 +45,33 @@ const HomeStack = (props) => {
                     headerShown: false,
                 })}
             />
+            <Stack.Screen
+                name="Thông tin tuyển dụng"
+                component={CVScreen}
+                options={({ route }) => ({
+                    title: route.params?.title,
+                    headerShown: true,
+                    headerStyle: {
+                        backgroundColor: '#337BFF',
+                    },
+                    headerTitleStyle: {
+                        color: '#FFFFFF',
+                    },
+                    headerTitleAlign: 'center',
+                    headerLeft: () => (
+                        <TouchableOpacity onPress={() => props.navigation.navigate('DetailsScreen')}>
+                            <Ionicons name="arrow-back" size={24} color="white" />
+                        </TouchableOpacity>
+                    ),
+                })}
+            />
+            <Stack.Screen
+                name="Notifications"
+                component={Notification}
+                options={({ route }) => ({
+                    headerShown: false,
+                })}
+            />
         </Stack.Navigator>
     );
 };
@@ -148,13 +175,13 @@ const TabNavigator = () => {
     return (
         <Tab.Navigator
             screenOptions={{
-            tabBarItemStyle : {},
-            tabBarShowLabel: true,
-            headerShown: false,
-            tabBarInactiveTintColor: '#AAAAAA',
-            tabBarActiveTintColor: '#337BFF',
-            tabBarHideOnKeyboard: true,
-        }}>
+                tabBarItemStyle: {},
+                tabBarShowLabel: true,
+                headerShown: false,
+                tabBarInactiveTintColor: '#AAAAAA',
+                tabBarActiveTintColor: '#337BFF',
+                tabBarHideOnKeyboard: true,
+            }}>
             <Tab.Screen
                 name="Home"
                 component={HomeStack}
