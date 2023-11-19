@@ -6,7 +6,7 @@
 /* eslint-disable eol-last */
 /* eslint-disable prettier/prettier */
 /* eslint-disable react-native/no-inline-styles */
-import React, { useState } from 'react';
+import React, { useState, useEffect  } from 'react';
 import { View, Text, SafeAreaView, Keyboard, ScrollView, StyleSheet, TouchableOpacity, ImageBackground, useWindowDimensions, FlatList, Image } from 'react-native';
 
 import Input from '../components/Input';
@@ -26,6 +26,7 @@ import ImagePicker from 'react-native-image-crop-picker';
 import Modal from 'react-native-modal';
 //slect drop-down
 import { Dropdown } from 'react-native-element-dropdown';
+import { useFocusEffect } from '@react-navigation/native';
 
 const data = [
   { label: 'Item 1', value: '1' },
@@ -55,7 +56,7 @@ const PostScreen = ({ navigation }) => {
     let isValid = true;
 
     if (!inputs.title) {
-      handleError('Please input title', 'title');
+      handleError('Vui lòng nhập tiêu đề', 'title');
       isValid = false;
     }
     if (!inputs.subtitle) {
@@ -88,43 +89,52 @@ const PostScreen = ({ navigation }) => {
 
   //const [images, setImages] = useState([]);
   const [selectedImages, setSelectedImages] = useState([]);
-  const [shouldShow, setshoulShow] = useState(false);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      return () => {
+        // Clean up the state when the component loses focus
+        setSelectedImages([]);
+      };
+    }, [])
+  );
+  const Checkdataimage = ()=>{
+    if (selectedImages == ""){
+        return false;
+    } else {
+        return true;
+    }
+}
+const shouldShow = Checkdataimage();
   const openImagePicker = () => {
     ImagePicker.openPicker({
       multiple: true,
       mediaType: 'photo',
     })
       .then((images) => {
-        // let imageList = images;
-        // //console.log(imageList);
-        // for (let i = 0; i < Object.keys(imageList).length; i++) {
-        //   let data = imageList[String(i)];
-        //   let image = {
-        //     id: String(i+1),
-        //     mime: data.mime,
-        //     size: data.size,
-        //     path: data.path,
-        //   };
-        //   let path = data.path.split('/');
-        //   image.fileName = path[path.length - 1];
-        //   setSelectedImages({
-        //     id: image.id,
-        //     mime: image.mime,
-        //     size: image.size,
-        //     path: image.path,
-        //   });
-        // }
+        const newImages = images.map(image => ({
+          uri: image.uri,
+          type: image.type,
+          name: image.fileName || 'image.jpg',
+        }));
         setSelectedImages(images);
-        if (shouldShow == false) {
-          setshoulShow(!shouldShow);
-        } else {
-          setshoulShow(true);
-        }
         setBottomSheetVisible(!isBottomSheetVisible);
       })
       .catch((error) => {
         console.log(error);
       });
+  };
+  const uploadImages = async () => {
+    try {
+      const formData = new FormData();
+
+      selectedImages.forEach((image, index) => {
+        formData.append(`images[${index}]`, image);
+        console.log(formData);
+      });
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const BottomSheetContent = ({ isVisible, onClose }) => {
@@ -144,10 +154,10 @@ const PostScreen = ({ navigation }) => {
             <Text style={styles.panelTitle}>Tải ảnh lên</Text>
             <Text style={styles.panelSubtitle}>Chọn hình ảnh nơi làm việc</Text>
           </View>
-          <TouchableOpacity style={styles.panelButton} onPress={openImagePicker}>
+          <TouchableOpacity style={styles.panelButton} onPress={''}>
             <Text style={styles.panelButtonTitle}>Camera</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.panelButton} onPress={''}>
+          <TouchableOpacity style={styles.panelButton} onPress={openImagePicker}>
             <Text style={styles.panelButtonTitle}>Chọn từ thư viện</Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -177,18 +187,17 @@ const PostScreen = ({ navigation }) => {
           </View>
           <View style={{ marginVertical: 22, marginHorizontal: 24 }}>
             <Input
-              onChangeText={text => handleOnchange(text, 'subtitle')}
-              onFocus={() => handleError(null, 'price')}
+              onChangeText={text => handleOnchange(text, 'bussiness_name')}
+              onFocus={() => handleError(null, 'business_name')}
               placeholder="Tên doanh nghiệp"
-              value=""
-              error=""
+              error={errors.bussiness_name}
             />
             <Input
-              onChangeText={text => handleOnchange(text, 'subtitle')}
-              onFocus={() => handleError(null, 'subtitle')}
+              onChangeText={text => handleOnchange(text, 'address')}
+              onFocus={() => handleError(null, 'address')}
               placeholder="Địa chỉ"
               // value={route.params?.subtitle}
-              error={errors.subtitle}
+              error={errors.address}
             />
             <View style={{
               height: 120,
@@ -331,26 +340,19 @@ const PostScreen = ({ navigation }) => {
           </View>
           <View style={{ marginVertical: 22, marginHorizontal: 24 }}>
             <Input
-              onChangeText={text => handleOnchange(text, 'subtitle')}
-              onFocus={() => handleError(null, 'price')}
+              onChangeText={text => handleOnchange(text, 'title')}
+              onFocus={() => handleError(null, 'title')}
               placeholder="Tiêu đề tin đăng"
-              value=""
-              error=""
+              error={errors.title}
             />
             <Input
-              onChangeText={text => handleOnchange(text, 'subtitle')}
-              onFocus={() => handleError(null, 'subtitle')}
+              keyboardType="numeric"
+              onChangeText={text => handleOnchange(text, 'quantity')}
+              onFocus={() => handleError(null, 'quantity')}
               placeholder="Số lượng tuyển dụng"
               // value={route.params?.subtitle}
-              error={errors.subtitle}
+              error={errors.quantity}
             />
-            {/* <Input
-              onChangeText={text => handleOnchange(text, 'subtitle')}
-              onFocus={() => handleError(null, 'subtitle')}
-              placeholder="Ngành nghề"
-              // value={route.params?.subtitle}
-              error={errors.subtitle}
-            /> */}
             <Dropdown
             style={[styles.dropdown, isFocus && { borderColor: COLORS.darkBlue }]}
             placeholderStyle={styles.placeholderStyle}
@@ -414,35 +416,21 @@ const PostScreen = ({ navigation }) => {
               setIsFocus(false);
             }}
           />
-            {/* <Input
-              onChangeText={text => handleOnchange(text, 'subtitle')}
-              onFocus={() => handleError(null, 'subtitle')}
-              placeholder="Loại công việc"
-              // value={route.params?.subtitle}
-              error={errors.subtitle}
-            />
-            <Input
-              onChangeText={text => handleOnchange(text, 'subtitle')}
-              onFocus={() => handleError(null, 'subtitle')}
-              placeholder="Hình thức trả lương"
-              // value={route.params?.subtitle}
-              error={errors.subtitle}
-            /> */}
             <Input
               keyboardType="numeric"
-              onChangeText={text => handleOnchange(text, 'subtitle')}
-              onFocus={() => handleError(null, 'subtitle')}
+              onChangeText={text => handleOnchange(text, 'wagemin')}
+              onFocus={() => handleError(null, 'wagemin')}
               placeholder="Lương tối thiểu"
               // value={route.params?.subtitle}
-              error={errors.subtitle}
+              error={errors.wagemin}
             />
             <Input
               keyboardType="numeric"
-              onChangeText={text => handleOnchange(text, 'subtitle')}
-              onFocus={() => handleError(null, 'subtitle')}
+              onChangeText={text => handleOnchange(text, 'wagemax')}
+              onFocus={() => handleError(null, 'wagemax')}
               placeholder="Lương tối đa"
               // value={route.params?.subtitle}
-              error={errors.subtitle}
+              error={errors.wagemax}
             />
             <InputMutiple
               onChangeText={text => handleOnchange(text, 'subtitle')}
@@ -460,21 +448,21 @@ const PostScreen = ({ navigation }) => {
               <View style={{ width: '45%', justifyContent: 'flex-start' }}>
                 <Input
                   keyboardType="numeric"
-                  onChangeText={text => handleOnchange(text, 'subtitle')}
-                  onFocus={() => handleError(null, 'subtitle')}
+                  onChangeText={text => handleOnchange(text, 'agemin')}
+                  onFocus={() => handleError(null, 'agemin')}
                   placeholder="Độ tuổi tối thiểu"
                   // value={route.params?.subtitle}
-                  error={errors.subtitle}
+                  error={errors.agemin}
                 />
               </View>
               <View style={{ width: '45%', marginStart: '9.5%' }}>
                 <Input
                   keyboardType="numeric"
-                  onChangeText={text => handleOnchange(text, 'subtitle')}
-                  onFocus={() => handleError(null, 'subtitle')}
+                  onChangeText={text => handleOnchange(text, 'agemax')}
+                  onFocus={() => handleError(null, 'agemax')}
                   placeholder="Độ tuổi tối đa"
                   // value={route.params?.subtitle}
-                  error={errors.subtitle}
+                  error={errors.agemax}
                 />
               </View>
             </View>
@@ -537,17 +525,17 @@ const PostScreen = ({ navigation }) => {
               error={errors.subtitle}
             /> */}
             <Input
-              onChangeText={text => handleOnchange(text, 'subtitle')}
-              onFocus={() => handleError(null, 'subtitle')}
+              onChangeText={text => handleOnchange(text, 'Engraved_benefits')}
+              onFocus={() => handleError(null, 'Engraved_benefits')}
               placeholder="Các quyền lợi khác"
               // value={route.params?.subtitle}
-              error={errors.subtitle}
+              error={errors.Engraved_benefits}
             />
           </View>
           <View style={{ marginHorizontal: 24 }}>
             <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'center' }}>
               <View style={{ width: '40%', justifyContent: 'flex-start' }}>
-                <Button title="Xem trước" onPress={logimage} />
+                <Button title="Xem trước" onPress={uploadImages} />
               </View>
               <View style={{ width: '40%', marginStart: '10%' }}>
                 <Button title="Đăng tin" onPress={validate} />
@@ -648,7 +636,7 @@ const styles = StyleSheet.create({
   placeholderStyle: {
     marginVertical: 5,
     fontSize: 14,
-    color: COLORS.grey,
+    color: COLORS.grey1,
   },
   selectedTextStyle: {
     fontSize: 14,

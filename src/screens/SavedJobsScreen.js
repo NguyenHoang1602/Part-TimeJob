@@ -65,7 +65,16 @@ const SavedJobsScreen = ({navigation}) => {
 
   const renderItemJob = ({ item }) => (
 
-    <View style={{ padding: 18 }}>
+    <TouchableOpacity style={{ padding: 18 }} onPress={() =>  navigation.navigate('DetailsScreen', {
+      title: item.title,
+      id: item.id,
+      uri: item.uri,
+      address: item.Address,
+      wagemax: item.wagemax,
+      wagemin: item.wagemin,
+      worktype: item.worktype,
+      Details: item.Details,
+    })}>
       <View style={{ borderRadius: 15, borderWidth: 1, paddingHorizontal: 18, borderColor: COLORS.blackOpacity }}>
         <View style={{ flexDirection: 'row', gap: 8, paddingVertical: 18 }}>
           <Image source={{ uri: item.uri }} style={{ width: 52, aspectRatio: 1, borderRadius: 52 }} />
@@ -108,7 +117,7 @@ const SavedJobsScreen = ({navigation}) => {
           </View>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 
   return (
@@ -195,13 +204,14 @@ const SavedJobsScreen = ({navigation}) => {
             style={{ marginRight: 20 }}
           />
           <TextInput
-            placeholder="Search for a job or compamny"
+          style={{flex: 1}}
+            placeholder="Tìm kiếm việc làm"
             onChangeText={value => {
               setsearch(value);
             }} />
           <TouchableOpacity
             style={{
-              marginLeft: '18%',
+              marginEnd: '3%',
             }}
             onPress={() => { }}>
             <FontAwesome6

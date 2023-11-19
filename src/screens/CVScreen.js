@@ -292,7 +292,7 @@ const styles = StyleSheet.create({
   placeholderStyle: {
     marginVertical: 5,
     fontSize: 14,
-    color: COLORS.grey,
+    color: COLORS.grey1,
   },
   selectedTextStyle: {
     fontSize: 14,

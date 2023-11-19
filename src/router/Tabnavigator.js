@@ -18,6 +18,7 @@ import DetailsScreen from '../screens/DetailsScreen';
 import CVScreen from '../screens/CVScreen';
 import Notification from '../screens/NotificationScreen'
 import SearchScreen from '../screens/SearchScreen';
+import EditPostScreen from '../screens/EditPostScreen';
 //icon
 import Octicons from 'react-native-vector-icons/Octicons';
 import Feather from 'react-native-vector-icons/Feather';
@@ -45,6 +46,33 @@ const HomeStack = (props) => {
                     headerShown: false,
                 })}
             />
+            <Stack.Screen
+                name="Thông tin tuyển dụng"
+                component={CVScreen}
+                options={({ route }) => ({
+                    title: route.params?.title,
+                    headerShown: true,
+                    headerStyle: {
+                        backgroundColor: '#337BFF',
+                    },
+                    headerTitleStyle: {
+                        color: '#FFFFFF',
+                    },
+                    headerTitleAlign: 'center',
+                    headerLeft: () => (
+                        <TouchableOpacity onPress={() => props.navigation.navigate('DetailsScreen')}>
+                            <Ionicons name="arrow-back" size={24} color="white" />
+                        </TouchableOpacity>
+                    ),
+                })}
+            />
+            <Stack.Screen
+                name="Notifications"
+                component={Notification}
+                options={({ route }) => ({
+                    headerShown: false,
+                })}
+            />
         </Stack.Navigator>
     );
 };
@@ -61,13 +89,6 @@ const SavedStack = (props) => {
             <Stack.Screen
                 name="DetailsScreen"
                 component={DetailsScreen}
-                options={({ route }) => ({
-                    headerShown: false,
-                })}
-            />
-            <Stack.Screen
-                name="Notifications"
-                component={Notification}
                 options={({ route }) => ({
                     headerShown: false,
                 })}
@@ -101,7 +122,7 @@ const PostStack = (props) => {
         </Stack.Navigator>
     );
 };
-const ManagementStack = () => {
+const ManagementStack = (props) => {
     return (
         <Stack.Navigator>
             <Stack.Screen
@@ -120,10 +141,23 @@ const ManagementStack = () => {
                 })}
             />
             <Stack.Screen
-                name="Notifications"
-                component={Notification}
+                name="Chỉnh sửa bài đăng"
+                component={EditPostScreen}
                 options={({ route }) => ({
-                    headerShown: false,
+                    title: route.params?.title,
+                    headerShown: true,
+                    headerStyle: {
+                        backgroundColor: '#337BFF',
+                    },
+                    headerTitleStyle: {
+                        color: '#FFFFFF',
+                    },
+                    headerTitleAlign: 'center',
+                    headerLeft: () => (
+                        <TouchableOpacity onPress={() => props.navigation.navigate('ManagementScreen')}>
+                            <Ionicons name="arrow-back" size={24} color="white" />
+                        </TouchableOpacity>
+                    ),
                 })}
             />
         </Stack.Navigator>
@@ -148,13 +182,13 @@ const TabNavigator = () => {
     return (
         <Tab.Navigator
             screenOptions={{
-            tabBarItemStyle : {},
-            tabBarShowLabel: true,
-            headerShown: false,
-            tabBarInactiveTintColor: '#AAAAAA',
-            tabBarActiveTintColor: '#337BFF',
-            tabBarHideOnKeyboard: true,
-        }}>
+                tabBarItemStyle: {},
+                tabBarShowLabel: true,
+                headerShown: false,
+                tabBarInactiveTintColor: '#AAAAAA',
+                tabBarActiveTintColor: '#337BFF',
+                tabBarHideOnKeyboard: true,
+            }}>
             <Tab.Screen
                 name="Home"
                 component={HomeStack}
@@ -248,7 +282,7 @@ const getTabBarVisibility = route => {
     const routeName = getFocusedRouteNameFromRoute(route) ?? 'Feed';
     // console.log(routeName);
 
-    if (routeName == 'DetailsScreen' || routeName == 'Thông tin tuyển dụng' || routeName == 'Notifications') {
+    if (routeName == 'DetailsScreen' || routeName == 'Thông tin tuyển dụng' || routeName == 'Notifications' || routeName == 'Chỉnh sửa bài đăng') {
         return 'none';
     }
     return 'flex';

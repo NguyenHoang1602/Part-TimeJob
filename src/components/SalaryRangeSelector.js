@@ -106,19 +106,16 @@ const SalaryRangeSelector = ({
     }, [barWidth]);
 
     return (
-        <View style={{ padding: 18, }}>
-            <View style={{ marginBottom: 24 }}>
-                <Text style={{ fontSize: 16, fontWeight: "600", color: theme.colors.text }}>Price Range </Text>
-            </View>
+        <View style={{ paddingVertical: 18,}}>
 
-            {bars}
             <View
                 style={{
-                    height: 1,
+                    height: 4,
                     width: "100%",
                     backgroundColor: theme.colors.border,
                     position: "relative",
                     marginBottom: 16,
+                    borderRadius: 10,
                 }}
                 onLayout={(event) => {
                     setBarWidth(event.nativeEvent.layout.width);
@@ -141,8 +138,6 @@ const SalaryRangeSelector = ({
                     >
                         <View
                             style={{
-                                backgroundColor: 'red',
-                                width: 1,
                                 position: "absolute",
                                 height: 48,
                                 bottom: 24,
@@ -158,8 +153,6 @@ const SalaryRangeSelector = ({
                     >
                         <View
                             style={{
-                                backgroundColor: 'blue',
-                                width: 1,
                                 position: "absolute",
                                 height: 48,
                                 bottom: 24,
@@ -186,9 +179,10 @@ const SliderHandle = ({ label }) => {
                 justifyContent: "center",
                 borderRadius: 100,
                 borderColor: "#3b82f6",
-                backgroundColor: theme.colors.background,
+                backgroundColor: "white",
                 borderWidth: 2,
                 position: "relative",
+                top: 2,
                 transform: [
                     {
                         translateX: -12,
