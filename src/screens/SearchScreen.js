@@ -61,9 +61,9 @@ const SavedJobsScreen = ({ navigation }) => {
   const [isFocus, setIsFocus] = useState(false);
   const Checkdata = ()=>{
     if (Jobdata == ""){
-        return true;
-    } else {
         return false;
+    } else {
+        return true;
     }
 }
 
@@ -74,6 +74,9 @@ const isFound = Checkdata();
   };
 
   const toggleModalFilter = () => {
+    setModalVisibleFiler(!isModalVisibleFilter);
+  };
+  const toggleModalclose = (item) => {
     setModalVisibleFiler(!isModalVisibleFilter);
   };
   const FlatListb = () => {
@@ -203,13 +206,13 @@ const isFound = Checkdata();
       {isFound ?
         //Found
         <View style={styles.found}>
-          <ScrollView>
+          <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps={'always'}>
             <FlatListb />
           </ScrollView>
         </View>
         :
         //No Found
-        <View style={{ alignItems: 'center', width: '100%', height: '100%', justifyContent: 'center' }}>
+        <View style={{ alignItems: 'center', justifyContent: 'center' }}>
           <ImageBackground
             source={require('../assets/images/5928293_2953962.jpg')}
             style={{ width: "108%", height: 430, marginEnd: '9%', marginBottom: -25 }}
@@ -309,7 +312,9 @@ const isFound = Checkdata();
             {/* Tilter */}
 
             <View style={{ flexDirection: 'row', alignItems: 'flex-start' }}>
-              <AntDesign name='close' size={24} color={COLORS.black} />
+              <TouchableOpacity onPress={toggleModalclose}>
+                <AntDesign name='close' size={24} color={COLORS.black} />
+              </TouchableOpacity>
               <Text style={{ paddingStart: 10, fontSize: 18, fontWeight: '700', color: COLORS.black }}>Filter Options</Text>
             </View>
 

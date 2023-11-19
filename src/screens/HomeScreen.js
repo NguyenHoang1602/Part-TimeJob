@@ -24,7 +24,9 @@ import IconWithBadgeAntDesign from '../components/IconWithBadgeAntDesign';
 
 const HomeScreen = ({navigation}) => {
 
-  const [search, setsearch] = useState('');
+  const search = () =>{
+    navigation.navigate('SearchScreen')
+  }
   const data = [
     { id: '1', title: 'Item 1', uri: 'https://devforum-uploads.s3.dualstack.us-east-2.amazonaws.com/uploads/original/4X/b/7/6/b766c952bf9c722c30447824d8fc06a48f008e31.png' },
     { id: '2', title: 'Item 2', uri: 'https://devforum-uploads.s3.dualstack.us-east-2.amazonaws.com/uploads/original/4X/b/7/6/b766c952bf9c722c30447824d8fc06a48f008e31.png' },
@@ -48,13 +50,10 @@ const HomeScreen = ({navigation}) => {
   const FlatLista = () => {
     return (
       <FlatList
-        showsVerticalScrollIndicator={false}
-        showsHorizontalScrollIndicator={false}
         data={data}
-        numColumns={4}
+        keyExtractor={(item) => item.id}
         renderItem={renderItem}
-        nestedScrollEnabled={true}
-        scrollEnabled={false}
+        horizontal={true}
       />
     );
 
@@ -219,13 +218,13 @@ const HomeScreen = ({navigation}) => {
             style={{ marginRight: 20 }}
           />
           <TextInput
-            placeholder="Search for a job or compamny"
-            onChangeText={value => {
-              setsearch(value);
-            }} />
+          style={{flex:1}}
+            placeholder="Tìm kiếm việc làm"
+            onFocus={search}
+          />
           <TouchableOpacity
             style={{
-              marginLeft: '18%',
+              marginEnd: '2%',
             }}
             onPress={() => { }}>
             <FontAwesome6
@@ -241,7 +240,7 @@ const HomeScreen = ({navigation}) => {
       </View>
       <View style={{ padding: 20 }}>
         <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps={'always'}>
-        <View style={{ width: '100%', height: 250, alignItems: 'center', marginBottom: 18 }}>
+        <View style={{ width: '100%', alignItems: 'center', marginBottom: 15 }}>
           <View style={{ width: '100%', marginBottom: 10 }}>
             <Text style={{ fontSize: 20, fontStyle: 'normal', color: COLORS.black, fontWeight: 'bold' }}>Danh mục ngành nghề</Text>
           </View>
