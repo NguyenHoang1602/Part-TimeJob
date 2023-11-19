@@ -28,6 +28,7 @@ import Modal from 'react-native-modal';
 import { Dropdown } from 'react-native-element-dropdown';
 import { useFocusEffect } from '@react-navigation/native';
 
+
 const data = [
   { label: 'Item 1', value: '1' },
   { label: 'Item 2', value: '2' },
@@ -55,22 +56,44 @@ const PostScreen = ({ navigation }) => {
     Keyboard.dismiss();
     let isValid = true;
 
+    if (!inputs.bussiness_name) {
+      handleError('Vui lòng nhập tên doanh nghiệp', 'bussiness_name');
+      isValid = false;
+    }
+    if (!inputs.address) {
+      handleError('Vui lòng nhập địa chỉ', 'address');
+      isValid = false;
+    }
     if (!inputs.title) {
       handleError('Vui lòng nhập tiêu đề', 'title');
       isValid = false;
     }
+    if (!inputs.quantity) {
+      handleError('Vui lòng nhập số lượng', 'quantity');
+      isValid = false;
+    }
+    if (!inputs.wagemin) {
+      handleError('Vui lòng nhập lương', 'wagemin');
+      isValid = false;
+    }
+    if (!inputs.wagemax) {
+      handleError('Vui lòng nhập lương', 'wagemax');
+      isValid = false;
+    }
     if (!inputs.subtitle) {
-      handleError('Please input subtitle', 'subtitle');
+      handleError('Vui lòng nhập mô tả', 'subtitle');
       isValid = false;
     }
-
-    if (!inputs.price) {
-      handleError('Please input phone price', 'price');
+    if (!inputs.agemin) {
+      handleError('Vui lòng nhập tuổi', 'agemin');
       isValid = false;
     }
-
-    if (!inputs.details) {
-      handleError('Please input details', 'details');
+    if (!inputs.agemax) {
+      handleError('Vui lòng nhập tuổi', 'agemax');
+      isValid = false;
+    }
+    if (!inputs.Engraved_benefits) {
+      handleError('Vui lòng nhập quyền lợi', 'Engraved_benefits');
       isValid = false;
     }
     if (isValid) {
@@ -188,7 +211,7 @@ const shouldShow = Checkdataimage();
           <View style={{ marginVertical: 22, marginHorizontal: 24 }}>
             <Input
               onChangeText={text => handleOnchange(text, 'bussiness_name')}
-              onFocus={() => handleError(null, 'business_name')}
+              onFocus={() => handleError(null, 'bussiness_name')}
               placeholder="Tên doanh nghiệp"
               error={errors.bussiness_name}
             />
@@ -342,7 +365,7 @@ const shouldShow = Checkdataimage();
             <Input
               onChangeText={text => handleOnchange(text, 'title')}
               onFocus={() => handleError(null, 'title')}
-              placeholder="Tiêu đề tin đăng"
+              placeholder="Tiêu đề đăng tin"
               error={errors.title}
             />
             <Input
@@ -364,7 +387,7 @@ const shouldShow = Checkdataimage();
             maxHeight={300}
             labelField="label"
             valueField="value"
-            placeholder={!isFocus ? 'Ngành Ngề' : '...'}
+            placeholder={!isFocus ? 'Ngành Nghề' : '...'}
             searchPlaceholder="Search..."
             value={value}
             onFocus={() => setIsFocus(true)}

@@ -20,6 +20,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import IconWithBadge from '../components/IconWithBadge';
 import IconWithBadgeAntDesign from '../components/IconWithBadgeAntDesign';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
+import EditAccount from './EditAccount';
 
 const ProfileScreen = ({ navigation }) => {
   const CV = [
@@ -82,7 +83,7 @@ const ProfileScreen = ({ navigation }) => {
         <View style={{ flexDirection: 'row' }}>
           <FontAwesome name="user" size={30} color={COLORS.primary} />
           <Text style={{ flex: 1, fontSize: 20, fontWeight: '700', marginLeft: 25, color: COLORS.black }}>Contact Information</Text>
-          <TouchableOpacity style={{}}>
+          <TouchableOpacity onPress={() => navigation.navigate('Cập nhật thông tin cá nhân')} style={{}}>
             <Feather name="edit" size={24} color={COLORS.blue} />
           </TouchableOpacity>
         </View>
@@ -112,7 +113,7 @@ const ProfileScreen = ({ navigation }) => {
         <View style={{ flexDirection: 'row', marginBottom: 25 }}>
           <Ionicons name="document-text" size={30} color={COLORS.primary} />
           <Text style={{ flex: 1, fontSize: 20, fontWeight: '700', marginLeft: 25, color: COLORS.black }}>CV/Resume</Text>
-          <TouchableOpacity style={{}}>
+          <TouchableOpacity onPress={() => navigation.navigate('Cập nhật CV cá nhân')} style={{}}>
             <Feather name="edit" size={24} color={COLORS.blue} />
           </TouchableOpacity>
         </View>
