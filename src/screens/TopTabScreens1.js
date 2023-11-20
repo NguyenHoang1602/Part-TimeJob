@@ -180,7 +180,7 @@ const TopTabScreen1 = ({ navigation }) => {
                             <TouchableOpacity
                                 onPress={toggleModalclose}
                                 style={{
-                                    backgroundColor: COLORS.blue,
+                                    backgroundColor: 'rgba(51, 123, 255, 0.20)',
                                     alignItems: 'center',
                                     justifyContent: 'center',
                                     borderRadius: 64,
@@ -202,7 +202,16 @@ const TopTabScreen1 = ({ navigation }) => {
                                     width: 160,
                                     paddingVertical: 15,
                                 }}
-                                onPress={() => navigation.navigate('Chỉnh sửa bài đăng')}>
+                                onPress={() => navigation.navigate('Chỉnh sửa bài đăng', {
+                                    title: selectedItem?.title,
+                                    id: selectedItem?.id,
+                                    uri: selectedItem?.uri,
+                                    address: selectedItem?.Address,
+                                    wagemax: selectedItem?.wagemax,
+                                    wagemin: selectedItem?.wagemin,
+                                    worktype: selectedItem?.worktype,
+                                    Details: selectedItem?.Details,
+                                })}>
                                 <Text style={{ color: COLORS.white, fontSize: 18, fontWeight: '600' }}>Sửa tin</Text>
                             </TouchableOpacity>
                         </View>

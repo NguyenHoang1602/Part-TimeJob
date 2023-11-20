@@ -59,8 +59,8 @@ const PostScreen = ({ navigation }) => {
       handleError('Vui lòng nhập tiêu đề', 'title');
       isValid = false;
     }
-    if (!inputs.subtitle) {
-      handleError('Please input subtitle', 'subtitle');
+    if (!inputs.quantity) {
+      handleError('Vui lòng nhập số lượng', 'quantity');
       isValid = false;
     }
 

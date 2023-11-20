@@ -220,7 +220,7 @@ const CVScreen = ({navigation}) => {
               justifyContent: 'center',
             }}>
             <TouchableOpacity
-              onPress={() => navigation.navigate('CVScreen')}
+              onPress={validate}
               style={{
                 backgroundColor: COLORS.blue,
                 padding: 5,

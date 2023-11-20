@@ -113,7 +113,7 @@ const PostStack = (props) => {
                     },
                     headerTitleAlign: 'center',
                     headerLeft: () => (
-                        <TouchableOpacity onPress={() => props.navigation.goBack()}>
+                        <TouchableOpacity onPress={() => props.navigation.navigate('HomeScreen')}>
                             <Ionicons name="arrow-back" size={24} color="white" />
                         </TouchableOpacity>
                     ),
@@ -144,7 +144,6 @@ const ManagementStack = (props) => {
                 name="Chỉnh sửa bài đăng"
                 component={EditPostScreen}
                 options={({ route }) => ({
-                    title: route.params?.title,
                     headerShown: true,
                     headerStyle: {
                         backgroundColor: '#337BFF',
