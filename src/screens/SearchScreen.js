@@ -161,6 +161,12 @@ const SavedJobsScreen = ({ navigation }) => {
     setCollapsed4(true);
     setCollapsed5(true);
     setCollapsed1(true);
+    setIsselect1(true);
+    setIsselect2(true);
+    setIsselect3(true);
+    setIsselect4(true);
+    setIsselect5(true);
+    setIsselect(true);
   };
   const toggleModalclose = (item) => {
     setModalVisibleFiler(!isModalVisibleFilter);
@@ -416,7 +422,7 @@ const SavedJobsScreen = ({ navigation }) => {
                           Location & Salary
                         </Text>
                       </View>
-                      <Feather name={!isSelect ? 'chevron-up' : 'chevron-down'} size={24} color={COLORS.grey1} />
+                      <Feather name={!isSelect1 ? 'chevron-up' : 'chevron-down'} size={24} color={COLORS.grey1} />
                     </View>
                     <Collapsible collapsed={collapsed1}>
                       <View style={{ borderTopWidth: 1, borderColor: COLORS.blackOpacity }} />
@@ -465,7 +471,7 @@ const SavedJobsScreen = ({ navigation }) => {
                           Loại công việc
                         </Text>
                       </View>
-                      <Feather name={!isSelect ? 'chevron-up' : 'chevron-down'} size={24} color={COLORS.grey1} />
+                      <Feather name={!isSelect2 ? 'chevron-up' : 'chevron-down'} size={24} color={COLORS.grey1} />
                     </View>
                     <Collapsible collapsed={collapsed2}>
                       <View style={{ borderTopWidth: 1, borderColor: COLORS.blackOpacity }} />
@@ -484,7 +490,7 @@ const SavedJobsScreen = ({ navigation }) => {
                           Giới tính
                         </Text>
                       </View>
-                      <Feather name={!isSelect ? 'chevron-up' : 'chevron-down'} size={24} color={COLORS.grey1} />
+                      <Feather name={!isSelect3 ? 'chevron-up' : 'chevron-down'} size={24} color={COLORS.grey1} />
                     </View>
                     <Collapsible collapsed={collapsed3}>
                       <View style={{ borderTopWidth: 1, borderColor: COLORS.blackOpacity }} />
@@ -503,7 +509,7 @@ const SavedJobsScreen = ({ navigation }) => {
                           Trình độ học vấn
                         </Text>
                       </View>
-                      <Feather name={!isSelect ? 'chevron-up' : 'chevron-down'} size={24} color={COLORS.grey1} />
+                      <Feather name={!isSelect4 ? 'chevron-up' : 'chevron-down'} size={24} color={COLORS.grey1} />
                     </View>
                     <Collapsible collapsed={collapsed4}>
                       <View style={{ borderTopWidth: 1, borderColor: COLORS.blackOpacity }} />
@@ -522,7 +528,7 @@ const SavedJobsScreen = ({ navigation }) => {
                           Kinh nghiệm làm việc
                         </Text>
                       </View>
-                      <Feather name={!isSelect ? 'chevron-up' : 'chevron-down'} size={24} color={COLORS.grey1} />
+                      <Feather name={!isSelect5 ? 'chevron-up' : 'chevron-down'} size={24} color={COLORS.grey1} />
                     </View>
                     <Collapsible collapsed={collapsed5}>
                       <View style={{ borderTopWidth: 1, borderColor: COLORS.blackOpacity }} />
