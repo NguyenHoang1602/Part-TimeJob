@@ -4,7 +4,7 @@
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable eol-last */
 /* eslint-disable semi */
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, ImageBackground, ScrollView } from 'react-native';
 
 //
@@ -26,6 +26,18 @@ import IconWithBadgeAntDesign from '../components/IconWithBadgeAntDesign';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 const DetailsScreen = ({ route, navigation }) => {
+
+    const data = {
+        title: route.params?.title,
+        id: route.params?.id,
+        uri: route.params?.uri,
+        address: route.params?.Address,
+        wagemax: route.params?.wagemax,
+        wagemin: route.params?.wagemin,
+        worktype: route.params?.worktype,
+        Details: route.params?.Details,
+    };
+
     return (
         <SafeAreaView style={{ flex: 1, paddingVertical: 18 }}>
             <View style={{ flexDirection: 'row', paddingHorizontal: 18, paddingBottom: 15 }}>
@@ -35,7 +47,9 @@ const DetailsScreen = ({ route, navigation }) => {
                 <View style={{ flex: 1 }}>
                     <Text></Text>
                 </View>
-                <Icon style={{ marginRight: 22 }} name="bookmark-plus-outline" size={30} color={COLORS.black} />
+                <TouchableOpacity onPress={console.log(data)}>
+                    <Icon style={{ marginRight: 22 }} name="bookmark-plus-outline" size={30} color={COLORS.black} />
+                </TouchableOpacity>
                 <Ionicons name="ellipsis-horizontal-circle" size={30} color={COLORS.black} />
             </View>
             <ScrollView showsVerticalScrollIndicator={false} style={{ padding: 22 }}>
@@ -52,8 +66,8 @@ const DetailsScreen = ({ route, navigation }) => {
                         paddingTop: 9,
                         paddingLeft: 23,
                     }}>
-                    <Text style={{ fontSize: 22, color: COLORS.black, fontWeight: 'bold' }}>{route.params?.title}</Text>
-                    <Text style={{ color: '#FA1300', fontSize: 14, marginTop: 5, marginBottom: 7, fontWeight: 'bold' }}>${route.params?.wagemin} - {route.params?.wagemax} /month</Text>
+                    <Text style={{ fontSize: 22, color: COLORS.black, fontWeight: 'bold' }}>{data.title}</Text>
+                    <Text style={{ color: '#FA1300', fontSize: 14, marginTop: 5, marginBottom: 7, fontWeight: 'bold' }}>${data.wagemin} - {data.wagemax} /month</Text>
                     <Text style={{ fontSize: 14, color: COLORS.grey }}>Post 10 days ago, end in 31 Dec</Text>
                     <View style={{ flexDirection: 'row', marginTop: 15, alignItems: 'center', marginBottom: 34 }}>
                         <ImageBackground
@@ -65,7 +79,7 @@ const DetailsScreen = ({ route, navigation }) => {
                     </View>
                 </View>
                 <View style={{ height: 3, width: '100%', backgroundColor: COLORS.blue, borderRadius: 50, marginBottom: 20, opacity: 0.9 }} />
-                <View style={{ width: '100%'}}>
+                <View style={{ width: '100%' }}>
                     <Text style={{ fontSize: 15, fontStyle: 'normal', color: COLORS.black, opacity: 0.8 }}>[Nhà Hàng Hải Sản]  {'\n'}{'\n'}
                         ✨ #Cần_tuyển:
                         {'\n'}{'\n'}
@@ -95,7 +109,7 @@ const DetailsScreen = ({ route, navigation }) => {
                 </View>
                 <View style={{ flexDirection: 'row', marginTop: 10, alignItems: 'center' }}>
                     <Octicons name="log" size={24} color={COLORS.blue} />
-                    <Text style={{ marginStart: 15, fontSize: 15, color: COLORS.black, opacity: 0.8 }}>Loại công việc: {route.params?.worktype}</Text>
+                    <Text style={{ marginStart: 15, fontSize: 15, color: COLORS.black, opacity: 0.8 }}>Loại công việc: {data.worktype}</Text>
                 </View>
                 <View style={{ flexDirection: 'row', marginTop: 10, alignItems: 'center' }}>
                     <SimpleLineIcons name="briefcase" size={24} color={COLORS.blue} />

@@ -19,6 +19,8 @@ import CVScreen from '../screens/CVScreen';
 import Notification from '../screens/NotificationScreen'
 import SearchScreen from '../screens/SearchScreen';
 import EditPostScreen from '../screens/EditPostScreen';
+import EditAccount from '../screens/EditAccount';
+import EditCV from '../screens/EditCV';
 //icon
 import Octicons from 'react-native-vector-icons/Octicons';
 import Feather from 'react-native-vector-icons/Feather';
@@ -162,7 +164,7 @@ const ManagementStack = (props) => {
         </Stack.Navigator>
     );
 };
-const ProfileStack = () => {
+const ProfileStack = (props) => {
     return (
         <Stack.Navigator>
             <Stack.Screen
@@ -173,7 +175,55 @@ const ProfileStack = () => {
                     headerShown: false,
                 })}
             />
+            <Stack.Screen
+                name="Cập nhật thông tin cá nhân"
+                component={EditAccount}
+                options={({ route }) => ({
+                    title: route.params?.title,
+                    headerShown: true,
+                    headerStyle: {
+                        backgroundColor: '#337BFF',
+                    },
+                    headerTitleStyle: {
+                        color: '#FFFFFF',
+                    },
+                    headerTitleAlign: 'center',
+                    headerLeft: () => (
+                        <TouchableOpacity onPress={() => props.navigation.navigate('ProfileScreen')}>
+                            <Ionicons name="arrow-back" size={24} color="white" />
+                        </TouchableOpacity>
+                    ),
+                })}
+            />
+            <Stack.Screen
+                name="Cập nhật CV cá nhân"
+                component={EditCV}
+                options={({ route }) => ({
+                    title: route.params?.title,
+                    headerShown: true,
+                    headerStyle: {
+                        backgroundColor: '#337BFF',
+                    },
+                    headerTitleStyle: {
+                        color: '#FFFFFF',
+                    },
+                    headerTitleAlign: 'center',
+                    headerLeft: () => (
+                        <TouchableOpacity onPress={() => props.navigation.navigate('ProfileScreen')}>
+                            <Ionicons name="arrow-back" size={24} color="white" />
+                        </TouchableOpacity>
+                    ),
+                })}
+            />
+            <Stack.Screen
+                name="DetailsScreen"
+                component={DetailsScreen}
+                options={({ route }) => ({
+                    headerShown: false,
+                })}
+            />
         </Stack.Navigator>
+        
     );
 };
 
@@ -281,7 +331,7 @@ const getTabBarVisibility = route => {
     const routeName = getFocusedRouteNameFromRoute(route) ?? 'Feed';
     // console.log(routeName);
 
-    if (routeName == 'DetailsScreen' || routeName == 'Thông tin tuyển dụng' || routeName == 'Notifications' || routeName == 'Chỉnh sửa bài đăng') {
+    if (routeName == 'DetailsScreen' || routeName == 'Thông tin tuyển dụng' || routeName == 'Notifications' || routeName == 'Chỉnh sửa bài đăng' || routeName == 'Cập nhật thông tin cá nhân' || routeName == 'Cập nhật CV cá nhân') {
         return 'none';
     }
     return 'flex';
