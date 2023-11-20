@@ -12,13 +12,16 @@
 
 // In App.js in a new project
 
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, StatusBar, } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import Router from './src/router/router';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { UserProvider } from './src/components/UserConText';
 
 const App = () => {
+
+  const [user, setUser] = useState(null);
 
   React.useEffect(() => {
     StatusBar.setBackgroundColor('#FF573300');
@@ -27,12 +30,13 @@ const App = () => {
   }, []);
 
   return (
-    <GestureHandlerRootView style={{flex: 1}}>
-      <NavigationContainer>
-        <Router />
-      </NavigationContainer>
-    </GestureHandlerRootView>
-
+    <UserProvider value={{ user, setUser }}>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <NavigationContainer>
+          <Router />
+        </NavigationContainer>
+      </GestureHandlerRootView>
+    </UserProvider>
   );
 };
 

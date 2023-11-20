@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "598708373288",
+    "project_id": "part-time-job-e95a4",
+    "storage_bucket": "part-time-job-e95a4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:598708373288:android:221372c7729fdc7e07721d",
+        "android_client_info": {
+          "package_name": "com.parttimejob"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "598708373288-8r211lcml6nk8h4dkmfecj7fd7t9p0sb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.parttimejob",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "598708373288-vlbap93edc5r144q7cnealcu8vls110o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCRg9TqDd0Fils5XFW25PAHfXPCBr3u4Rs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "598708373288-vlbap93edc5r144q7cnealcu8vls110o.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

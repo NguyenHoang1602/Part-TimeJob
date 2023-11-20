@@ -4,64 +4,83 @@
 /* eslint-disable comma-dangle */
 /* eslint-disable quotes */
 /* eslint-disable eol-last */
-import React, { useState } from 'react';
-import { View, Text, StatusBar, Image, SafeAreaView, TouchableOpacity, ScrollView } from 'react-native';
+import React, { useState, useEffect, useContext } from 'react';
+import { View, Text, StatusBar, Image, TouchableOpacity, ScrollView } from 'react-native';
 import { COLORS, SIZES } from '../constants/theme';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import { SafeAreaView } from 'react-native-safe-area-context';
+
+import UserContext from '../components/UserConText';
+import axios from 'axios';
 
 const AuthScreen = ({ navigation }) => {
-    return (
-        <SafeAreaView
-            style={{
-                flex: 1,
-                justifyContent: 'center',
-                alignItems: 'center',
-                backgroundColor: '#fff',
-                paddingTop: 100
-            }}>
 
-            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', width: "100%" }}>
-                <View style={{
-                    bottom: '10%',
-                    alignItems: 'center',
-                    gap: 25
+    const { setUser } = useContext(UserContext);
+
+    useEffect(() => {
+        GoogleSignin.configure({
+            webClientId: '598708373288-vlbap93edc5r144q7cnealcu8vls110o.apps.googleusercontent.com',
+        });
+    })
+
+    async function signIn() {
+        try {
+            await GoogleSignin.hasPlayServices();
+            await GoogleSignin.signOut()
+            const userInfo = await GoogleSignin.signIn();
+            const token = userInfo.idToken;
+            const result = await axios.post('http://192.168.1.10:3000/users/GoogleSignIn', {
+                idtoken: token,
+            });
+            setUser(result.data);
+            navigation.navigate('TabNavigator')
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+
+    return (
+        <SafeAreaView style={{ paddingVertical: 18, gap: 32, backgroundColor: COLORS.white }}>
+
+            <View style={{ alignItems: 'center', justifyContent: 'center', paddingHorizontal: 20, marginTop: 100 }}>
+
+                <Image
+                    source={require('../assets/images/SignIn/acount.jpg')}
+                />
+            </View>
+
+            <View style={{ alignItems: 'center', justifyContent: 'center', paddingHorizontal: 20, }}>
+                <Text style={{
+                    fontSize: 38,
+                    fontWeight: 400,
+                    color: COLORS.black,
                 }}>
-                    <Image
-                        source={require('../assets/images/SignIn/acount.jpg')}
-                        style={{
-                            width: 167,
-                            height: 201,
-                        }}
-                    />
-                    <Text style={{
-                        fontSize: 38,
-                        fontWeight: 400,
-                        color: COLORS.black,
-                    }}>
-                        Let's you in
-                    </Text>
-                </View>
+                    Let's you in
+                </Text>
+            </View>
+
+            <View style={{ paddingHorizontal: 20 }}>
                 <TouchableOpacity
                     onPress={() => ("")}
                     style={{
                         backgroundColor: COLORS.white,
                         padding: 10,
-                        width: '85%',
                         borderRadius: 10,
                         borderStyle: 'solid',
                         borderWidth: 1.5,
                         borderColor: COLORS.blackOpacity,
                         flexDirection: 'row',
-                        bottom: '8%',
                         justifyContent: 'center',
-                        marginTop: 20
+                        alignItems: 'center',
+                        gap: 10
                     }}>
                     <Image
                         source={require('../assets/images/SignIn/iconFB.png')}
                         style={{
                             width: 30,
                             height: 30,
-                            justifyContent: 'flex-start',
                         }}
                     />
                     <Text
@@ -69,32 +88,34 @@ const AuthScreen = ({ navigation }) => {
                             fontWeight: 'bold',
                             fontSize: 18,
                             color: COLORS.black,
-                            marginStart: '3%',
-                            top: 3,
                         }}>
                         Continue with Facebook
                     </Text>
                 </TouchableOpacity>
+            </View>
+
+            <View style={{ paddingHorizontal: 20 }}>
                 <TouchableOpacity
-                    onPress={() => ("")}
+                    onPress={() => {
+                        signIn()
+                    }}
                     style={{
                         backgroundColor: COLORS.white,
                         padding: 10,
-                        width: '85%',
                         borderRadius: 10,
                         borderStyle: 'solid',
                         borderWidth: 1.5,
                         borderColor: COLORS.blackOpacity,
                         flexDirection: 'row',
-                        bottom: '2%',
-                        justifyContent: 'center'
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        gap: 10
                     }}>
                     <Image
                         source={require('../assets/images/SignIn/iconGG.png')}
                         style={{
                             width: 30,
                             height: 30,
-                            justifyContent: 'flex-start',
                         }}
                     />
                     <Text
@@ -102,75 +123,47 @@ const AuthScreen = ({ navigation }) => {
                             fontWeight: 'bold',
                             fontSize: 18,
                             color: COLORS.black,
-                            marginStart: '3%',
-                            top: 3,
                         }}>
                         Continue with Google
                     </Text>
                 </TouchableOpacity>
-                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', top: '6%' }}>
-                    <View style={{ height: 1, width: '33%', backgroundColor: COLORS.grey }} />
-                    <Text style={{ width: 50, textAlign: 'center', color: COLORS.black, fontWeight: '700', fontSize: 18, }}>or</Text>
-                    <View style={{ height: 1, width: '33%', backgroundColor: COLORS.grey }} />
-                </View>
+            </View>
+
+            <View style={{ paddingHorizontal: 20 }}>
                 <TouchableOpacity
-                    onPress={() => navigation.navigate('Login')}
+                    onPress={() => {
+                        navigation.navigate('SignInWithPhoneNumber')
+                    }}
                     style={{
-                        backgroundColor: COLORS.primary,
-                        padding: 5,
-                        width: '75%',
-                        height: 50,
-                        borderRadius: 30,
+                        backgroundColor: COLORS.white,
+                        padding: 10,
+                        borderRadius: 10,
+                        borderStyle: 'solid',
+                        borderWidth: 1.5,
+                        borderColor: COLORS.blackOpacity,
                         flexDirection: 'row',
-                        bottom: '12%',
                         justifyContent: 'center',
                         alignItems: 'center',
-                        top: '15%',
-                        shadowColor: COLORS.black,
-                        shadowOffset: { width: 10, height: 10 },
-                        shadowOpacity: 1,
-                        shadowRadius: 3,
+                        gap: 10
                     }}>
+                    <Image
+                        source={require('../assets/images/SignIn/Icon_Phone.png')}
+                    />
                     <Text
                         style={{
                             fontWeight: 'bold',
                             fontSize: 18,
-                            color: COLORS.white,
-                        }}>
-                        Sign up with password
-                    </Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    onPress={() => navigation.navigate('SignUp')}
-                    style={{
-                        padding: 5,
-                        width: '85%',
-                        height: 50,
-                        flexDirection: 'row',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        top: '20%'
-                    }}>
-                    <Text
-                        style={{
-                            fontWeight: 'bold',
-                            fontSize: 16,
                             color: COLORS.black,
-                            opacity: 0.4
                         }}>
-                        Don’t have an account?
-                    </Text>
-                    <Text
-                        style={{
-                            fontWeight: 'bold',
-                            fontSize: 16,
-                            color: COLORS.primary,
-                            marginStart: '3%'
-                        }}>
-                        Sign Up
+                        Continue with Phone Number
                     </Text>
                 </TouchableOpacity>
             </View>
+
+            <View style={{ height: 200 }}>
+
+            </View>
+
         </SafeAreaView>
     );
 };
