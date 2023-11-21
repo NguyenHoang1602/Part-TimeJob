@@ -88,7 +88,7 @@ const HomeScreen = ({navigation}) => {
     return (
       <FlatList
         data={list}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item, index) => index.toString()}
         renderItem={renderItemJob}
         nestedScrollEnabled={true}
         scrollEnabled={false}
@@ -128,13 +128,13 @@ const HomeScreen = ({navigation}) => {
     })}>
       <View style={{ width: '100%', flexDirection: 'row' }}>
         <ImageBackground
-          source={{ uri: item.uri }}
+          source={{ uri: item.image }}
           style={{ width: 46, height: 46, marginBottom: 5 }}
           imageStyle={{ borderRadius: 5 }}
         />
         <View style={{ width: '50%', height: '100%', marginStart: 20, flex: 1 }}>
           <Text style={{ fontSize: 16, fontWeight: 'bold' }}>{item.title}</Text>
-          <Text style={{ fontSize: 16, fontWeight: 'bold', color: COLORS.grey }}>{item.Details}</Text>
+          <Text style={{ fontSize: 16, fontWeight: 'bold', color: COLORS.grey }}>{item.describe}</Text>
         </View>
         <TouchableOpacity onPress={() => { }}>
           <Icon name="bookmark-plus-outline" size={30} color={COLORS.blue} />
