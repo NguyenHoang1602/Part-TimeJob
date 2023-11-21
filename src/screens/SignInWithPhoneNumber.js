@@ -83,7 +83,7 @@ const SignInWithPhoneNumber = ({navigation, props}) => {
         <View style={{ alignItems: 'center' }}>
           <Image source={require('../assets/images/SignIn/LogoSignInUp.png')} style={styles.logo} />
 
-          <Text style={{ fontSize: 24, fontWeight: '700', color: COLORS.black, marginVertical: 10 }}>Create New Account</Text>
+          <Text style={{ fontSize: 24, fontWeight: '700', color: COLORS.black, marginVertical: 10 }}>Enter your Phone Number</Text>
 
           <View
             style={{
@@ -132,7 +132,6 @@ const SignInWithPhoneNumber = ({navigation, props}) => {
 
   }
 
-  
 
     return (
       <View style={{ flex: 1, backgroundColor: "white", paddingHorizontal: 18 }}>
@@ -151,7 +150,6 @@ const SignInWithPhoneNumber = ({navigation, props}) => {
         </SafeAreaView>
 
         <View style={{ alignItems: 'center' }}>
-
           <View
             style={{
               marginVertical: 20,
@@ -173,7 +171,6 @@ const SignInWithPhoneNumber = ({navigation, props}) => {
               style={{ flex: 1, fontSize: 16, color: COLORS.black, paddingHorizontal: 10 }} />
           </View>
 
-  
 
           <TouchableOpacity
             onPress={() => confirmCode()}
@@ -199,7 +196,7 @@ export default SignInWithPhoneNumber;
 const styles = StyleSheet.create({
   logo: {
     width: 128,
-    height: 128,
+    height: 138,
     marginTop: 40,
     resizeMode: 'contain',
   },

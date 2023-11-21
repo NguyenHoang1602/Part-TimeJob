@@ -2,7 +2,7 @@
 /* eslint-disable eol-last */
 /* eslint-disable prettier/prettier */
 /* eslint-disable react-native/no-inline-styles */
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import {View, StyleSheet, Text, TouchableOpacity,ImageBackground } from 'react-native';
 import { COLORS } from '../constants/theme';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -22,9 +22,11 @@ const URL_IMG = "https://manofmany.com/wp-content/uploads/2021/05/Best-Short-Hai
 import TopTabScreen1 from './TopTabScreens1';
 import TopTabScreen2 from './TopTabScreens2';
 import TopTabScreen3 from './TopTabScreens3';
+import UserContext from '../components/UserConText';
 
 const TopTab = createMaterialTopTabNavigator();
 const ManagementScreen = ({ route, navigation }) => {
+  const { user } = useContext(UserContext);
   return (
     <SafeAreaView style={{ backgroundColor: 'white', flex: 1 }}>
       {/* Header */}
@@ -53,13 +55,13 @@ const ManagementScreen = ({ route, navigation }) => {
               width: '68%',
             }} onPress={() => { }}>
             <ImageBackground
-              source={require('../assets/images/homescreen/avatar.png')}
+              source={{ uri: user.photo}}
               style={{ width: 46, height: 46 }}
               imageStyle={{ borderRadius: 46 }}
             />
             <View style={{ flexDirection: 'column', height: '100%', justifyContent: 'center', marginStart: 13 }}>
               <Text style={{ color: '#7D7A7A', fontSize: 16 }}>Good Morning 👋</Text>
-              <Text style={{ color: COLORS.black, fontSize: 20, fontWeight: '600' }}>Hồng Nhân</Text>
+              <Text numberOfLines={1} style={{ color: COLORS.black, fontSize: 20, fontWeight: '600' }}>{user.displayName}</Text>
             </View>
           </TouchableOpacity>
           <TouchableOpacity

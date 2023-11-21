@@ -14,6 +14,9 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import UserContext from '../components/UserConText';
 import axios from 'axios';
 
+//icon
+import Ionicons from 'react-native-vector-icons/Ionicons';
+
 const AuthScreen = ({ navigation }) => {
 
     const { setUser } = useContext(UserContext);
@@ -22,19 +25,19 @@ const AuthScreen = ({ navigation }) => {
         GoogleSignin.configure({
             webClientId: '598708373288-vlbap93edc5r144q7cnealcu8vls110o.apps.googleusercontent.com',
         });
-    })
+    });
 
     async function signIn() {
         try {
             await GoogleSignin.hasPlayServices();
-            await GoogleSignin.signOut()
+            await GoogleSignin.signOut();
             const userInfo = await GoogleSignin.signIn();
             const token = userInfo.idToken;
             const result = await axios.post('http://192.168.1.10:3000/users/GoogleSignIn', {
                 idtoken: token,
             });
             setUser(result.data);
-            navigation.navigate('TabNavigator')
+            navigation.navigate('TabNavigator');
         } catch (error) {
             console.error(error);
         }
@@ -42,128 +45,161 @@ const AuthScreen = ({ navigation }) => {
 
 
     return (
-        <SafeAreaView style={{ paddingVertical: 18, gap: 32, backgroundColor: COLORS.white }}>
+        <SafeAreaView
+            style={{
+                flex: 1,
+                justifyContent: 'center',
+                alignItems: 'center',
+                backgroundColor: '#fff',
+                paddingTop: 100
+            }}>
 
-            <View style={{ alignItems: 'center', justifyContent: 'center', paddingHorizontal: 20, marginTop: 100 }}>
-
-                <Image
-                    source={require('../assets/images/SignIn/acount.jpg')}
-                />
-            </View>
-
-            <View style={{ alignItems: 'center', justifyContent: 'center', paddingHorizontal: 20, }}>
-                <Text style={{
-                    fontSize: 38,
-                    fontWeight: 400,
-                    color: COLORS.black,
+            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', width: "100%" }}>
+                <View style={{
+                    bottom: '10%',
+                    alignItems: 'center',
+                    gap: 25,
                 }}>
-                    Let's you in
-                </Text>
-            </View>
-
-            <View style={{ paddingHorizontal: 20 }}>
+                    <Image
+                        source={require('../assets/images/SignIn/acount.jpg')}
+                        style={{
+                            width: 175,
+                            height: 209,
+                        }}
+                    />
+                    <Text style={{
+                        fontSize: 38,
+                        fontWeight: 400,
+                        color: COLORS.black,
+                        fontFamily: 'BeVietnamPro-Regular',
+                    }}>
+                        Let’s you in
+                    </Text>
+                </View>
                 <TouchableOpacity
-                    onPress={() => ("")}
+                    onPress={() =>{}}
                     style={{
                         backgroundColor: COLORS.white,
                         padding: 10,
+                        width: '85%',
                         borderRadius: 10,
                         borderStyle: 'solid',
                         borderWidth: 1.5,
                         borderColor: COLORS.blackOpacity,
                         flexDirection: 'row',
+                        bottom: '8%',
                         justifyContent: 'center',
-                        alignItems: 'center',
-                        gap: 10
+                        marginTop: 20
                     }}>
-                    <Image
-                        source={require('../assets/images/SignIn/iconFB.png')}
-                        style={{
-                            width: 30,
-                            height: 30,
-                        }}
-                    />
+                   <Ionicons name="logo-facebook" size={30} color={COLORS.primary}/>
                     <Text
                         style={{
-                            fontWeight: 'bold',
                             fontSize: 18,
                             color: COLORS.black,
+                            marginStart: '3%',
+                            top: 3,
+                            fontFamily: 'aoboshione-regular',
                         }}>
                         Continue with Facebook
                     </Text>
                 </TouchableOpacity>
-            </View>
-
-            <View style={{ paddingHorizontal: 20 }}>
                 <TouchableOpacity
-                    onPress={() => {
-                        signIn()
-                    }}
+                    onPress={signIn}
                     style={{
                         backgroundColor: COLORS.white,
                         padding: 10,
+                        width: '85%',
                         borderRadius: 10,
                         borderStyle: 'solid',
                         borderWidth: 1.5,
                         borderColor: COLORS.blackOpacity,
                         flexDirection: 'row',
+                        bottom: '2%',
                         justifyContent: 'center',
-                        alignItems: 'center',
-                        gap: 10
                     }}>
                     <Image
-                        source={require('../assets/images/SignIn/iconGG.png')}
+                        source={require('../assets/icon/google.png')}
                         style={{
-                            width: 30,
-                            height: 30,
+                            width: 24,
+                            height: 24,
+                            justifyContent: 'flex-start',
+                            right:11,
                         }}
                     />
                     <Text
                         style={{
-                            fontWeight: 'bold',
                             fontSize: 18,
                             color: COLORS.black,
+                            marginStart: '3%',
+                            right: 9,
+                            fontFamily: 'aoboshione-regular',
                         }}>
                         Continue with Google
                     </Text>
                 </TouchableOpacity>
-            </View>
-
-            <View style={{ paddingHorizontal: 20 }}>
+                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', top: '6%' }}>
+                    <View style={{ height: 1, width: '33%', backgroundColor: COLORS.grey }} />
+                    <Text style={{ width: 50, textAlign: 'center', color: COLORS.black, fontWeight: '700', fontSize: 18, }}>or</Text>
+                    <View style={{ height: 1, width: '33%', backgroundColor: COLORS.grey }} />
+                </View>
                 <TouchableOpacity
-                    onPress={() => {
-                        navigation.navigate('SignInWithPhoneNumber')
-                    }}
+                    onPress={() =>  navigation.navigate('SignInWithPhoneNumber')}
                     style={{
-                        backgroundColor: COLORS.white,
-                        padding: 10,
-                        borderRadius: 10,
-                        borderStyle: 'solid',
-                        borderWidth: 1.5,
-                        borderColor: COLORS.blackOpacity,
+                        backgroundColor: COLORS.primary,
+                        padding: 5,
+                        width: '75%',
+                        height: 50,
+                        borderRadius: 30,
+                        flexDirection: 'row',
+                        bottom: '12%',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        top: '15%',
+                        shadowColor: COLORS.black,
+                        shadowOffset: { width: 10, height: 10 },
+                        shadowOpacity: 1,
+                        shadowRadius: 3,
+                    }}>
+                    <Text
+                        style={{
+                            fontSize: 18,
+                            color: COLORS.white,
+                            fontFamily: 'aoboshione-regular',
+                        }}>
+                        Sign up with Phone Number
+                    </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    onPress={() => navigation.navigate('SignUp')}
+                    style={{
+                        padding: 5,
+                        width: '85%',
+                        height: 50,
                         flexDirection: 'row',
                         justifyContent: 'center',
                         alignItems: 'center',
-                        gap: 10
+                        top: '22%'
                     }}>
-                    <Image
-                        source={require('../assets/images/SignIn/Icon_Phone.png')}
-                    />
                     <Text
                         style={{
                             fontWeight: 'bold',
-                            fontSize: 18,
+                            fontSize: 16,
                             color: COLORS.black,
+                            opacity: 0.4
                         }}>
-                        Continue with Phone Number
+                        Wellcome to
+                    </Text>
+                    <Text
+                        style={{
+                            fontWeight: 'bold',
+                            fontSize: 16,
+                            color: COLORS.primary,
+                            marginStart: '1%'
+                        }}>
+                        Part-time Jobs
                     </Text>
                 </TouchableOpacity>
             </View>
-
-            <View style={{ height: 200 }}>
-
-            </View>
-
         </SafeAreaView>
     );
 };

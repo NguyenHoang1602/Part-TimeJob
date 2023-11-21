@@ -7,11 +7,12 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable react-native/no-inline-styles */
 import React, { useState, useEffect  } from 'react';
-import { View, Text, SafeAreaView, Keyboard, ScrollView, StyleSheet, TouchableOpacity, ImageBackground, useWindowDimensions, FlatList, Image } from 'react-native';
+import { View, Text, SafeAreaView, Keyboard, ScrollView, StyleSheet, TouchableOpacity, ImageBackground, useWindowDimensions, FlatList, Image, Alert } from 'react-native';
 
 import Input from '../components/Input';
 import InputMutiple from '../components/InputMutiple';
 import COLORS from '../assets/const/colors';
+import axios from 'axios';
 
 import Button from '../components/Button';
 //icon
@@ -22,6 +23,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 // import BottomSheetContent from '../components/BottomSheetContent';
 //picker
 import ImagePicker from 'react-native-image-crop-picker';
+
 //modal
 import Modal from 'react-native-modal';
 //slect drop-down
@@ -40,7 +42,9 @@ const data = [
   { label: 'Item 8', value: '8' },
 ];
 
+
 const PostScreen = ({ navigation }) => {
+
   //drop-down
   const [value, setValue] = useState(null);
   const [isFocus, setIsFocus] = useState(false);
@@ -130,34 +134,80 @@ const PostScreen = ({ navigation }) => {
 }
 const shouldShow = Checkdataimage();
   const openImagePicker = () => {
+    // ImagePicker.openPicker({
+    //   multiple: true,
+    //   mediaType: 'photo',
+    // })
+    //   .then((images) => {
+    //     const newImages = images.map(image => ({
+    //       uri: image.uri,
+    //       type: image.type,
+    //       name: image.fileName || 'image.jpg',
+    //     }));
+    //     setSelectedImages(images);
+    //     setBottomSheetVisible(!isBottomSheetVisible);
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //   });
+    setSelectedImages([]);
     ImagePicker.openPicker({
-      multiple: true,
-      mediaType: 'photo',
-    })
-      .then((images) => {
-        const newImages = images.map(image => ({
-          uri: image.uri,
-          type: image.type,
-          name: image.fileName || 'image.jpg',
+        multiple: true,
+        mediaType: 'photo',
+      })
+      .then((response) => {
+        const source = response.map((image) => ({
+          uri: image.path,
+          width: image.width,
+          height: image.height,
         }));
-        setSelectedImages(images);
+
+        setSelectedImages((prevImages) => [...prevImages, ...source]);
         setBottomSheetVisible(!isBottomSheetVisible);
       })
       .catch((error) => {
-        console.log(error);
+        console.log('ImagePicker Error: ', error);
       });
   };
   const uploadImages = async () => {
+    console.log(selectedImages);
     try {
       const formData = new FormData();
 
       selectedImages.forEach((image, index) => {
-        formData.append(`images[${index}]`, image);
-        console.log(formData);
+        formData.append('images', {
+          uri: image.uri,
+          type: 'image/jpeg',
+          name: `image_${index}.jpg`,
+          width: image.width,
+          height: image.height,
+        });
       });
+    console.log(formData);
+    await axios.post('http://192.168.1.10:3000/posts/upload', { postImage : formData});
+
+      Alert.alert('Upload successful');
+      setSelectedImages([]);
     } catch (error) {
-      console.error(error);
+      console.log('Upload failed', error);
     }
+    // try {
+    //   const formData = new FormData();
+    //   selectedImages.forEach((image, index) => {
+    //     formData.append('images', {
+    //       uri: image.uri,
+    //       type: 'image/jpeg',
+    //       name: `image_${index}.jpg`,
+    //     });
+    //   });
+
+    //   await axios.post('http://192.168.1.10:3000/upload', formData);
+
+    //   Alert.alert('Upload successful');
+    //   selectedImages([]);
+    // } catch (error) {
+    //   console.log('Upload failed', error);
+    // }
   };
 
   const BottomSheetContent = ({ isVisible, onClose }) => {
@@ -281,7 +331,7 @@ const shouldShow = Checkdataimage();
                       </View>
                       <FlatList
                         data={selectedImages}
-                        keyExtractor={(item) => item.path}
+                        keyExtractor={(item) => item.uri}
                         horizontal
                         renderItem={({ item }) => (
                           <View style={{
@@ -291,7 +341,7 @@ const shouldShow = Checkdataimage();
                             flexDirection: 'column',
                           }}>
                             <Image
-                              source={{ uri: item.path }}
+                              source={{ uri: item.uri }}
                               style={{
                                 width: 70,
                                 height: 70,

@@ -1,3 +1,4 @@
+/* eslint-disable quotes */
 /* eslint-disable react/no-unstable-nested-components */
 /* eslint-disable no-unused-vars */
 /* eslint-disable semi */
@@ -51,7 +52,7 @@ const HomeScreen = ({navigation}) => {
 
   const { user } = useContext(UserContext);
   const [list, setList] = useState([]);
-
+  console.log(user);
   useFocusEffect(
     React.useCallback(() => {
       getList()
@@ -72,7 +73,7 @@ const HomeScreen = ({navigation}) => {
       setList(response)
     })
   }
-  
+
   const FlatLista = () => {
     return (
       <FlatList
@@ -87,7 +88,7 @@ const HomeScreen = ({navigation}) => {
   const FlatListb = () => {
     return (
       <FlatList
-        data={list}
+        data={list.reverse()}
         keyExtractor={(item) => item.id}
         renderItem={renderItemJob}
         nestedScrollEnabled={true}
@@ -128,7 +129,7 @@ const HomeScreen = ({navigation}) => {
     })}>
       <View style={{ width: '100%', flexDirection: 'row' }}>
         <ImageBackground
-          source={{ uri: item.uri }}
+          source={{ uri: item.image }}
           style={{ width: 46, height: 46, marginBottom: 5 }}
           imageStyle={{ borderRadius: 5 }}
         />
@@ -184,7 +185,7 @@ const HomeScreen = ({navigation}) => {
               marginStart: '2%',
               alignItems: 'center',
               width: '68%',
-            }} onPress={() => { }}>
+            }}>
             <ImageBackground
               source={{ uri : user.photo }}
               style={{ width: 46, height: 46 }}
