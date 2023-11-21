@@ -6,7 +6,7 @@
 /* eslint-disable eol-last */
 /* eslint-disable prettier/prettier */
 /* eslint-disable react-native/no-inline-styles */
-import React, { useState, useEffect  } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, SafeAreaView, Keyboard, ScrollView, StyleSheet, TouchableOpacity, ImageBackground, useWindowDimensions, FlatList, Image, Alert } from 'react-native';
 
 import Input from '../components/Input';
@@ -125,89 +125,65 @@ const PostScreen = ({ navigation }) => {
       };
     }, [])
   );
-  const Checkdataimage = ()=>{
-    if (selectedImages == ""){
-        return false;
+  const Checkdataimage = () => {
+    if (selectedImages == "") {
+      return false;
     } else {
-        return true;
+      return true;
     }
-}
-const shouldShow = Checkdataimage();
+  }
+  const shouldShow = Checkdataimage();
   const openImagePicker = () => {
-    // ImagePicker.openPicker({
-    //   multiple: true,
-    //   mediaType: 'photo',
-    // })
-    //   .then((images) => {
-    //     const newImages = images.map(image => ({
-    //       uri: image.uri,
-    //       type: image.type,
-    //       name: image.fileName || 'image.jpg',
-    //     }));
-    //     setSelectedImages(images);
-    //     setBottomSheetVisible(!isBottomSheetVisible);
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //   });
     setSelectedImages([]);
     ImagePicker.openPicker({
-        multiple: true,
-        mediaType: 'photo',
-      })
-      .then((response) => {
-        const source = response.map((image) => ({
+      multiple: true,
+      mediaType: 'photo',
+    })
+      .then((images) => {
+        const newImages = images.map(image => ({
           uri: image.path,
           width: image.width,
           height: image.height,
         }));
-
-        setSelectedImages((prevImages) => [...prevImages, ...source]);
+        setSelectedImages(newImages);
         setBottomSheetVisible(!isBottomSheetVisible);
       })
       .catch((error) => {
-        console.log('ImagePicker Error: ', error);
+        console.log(error);
       });
   };
   const uploadImages = async () => {
-    console.log(selectedImages);
     try {
+      const CLOUD_NAME = "dxrv1gdit";
+      const PRESET_NAME = "ParttimeJobs";
+      const urls = [];
+      const FOLDER_NAME = "Part-timeJobs";
+      const api = 'https://api.cloudinary.com/v1_1/dxrv1gdit/image/upload';
       const formData = new FormData();
 
-      selectedImages.forEach((image, index) => {
-        formData.append('images', {
+      formData.append("upload_preset", PRESET_NAME);
+      formData.append("folder", FOLDER_NAME);
+      selectedImages.forEach(async (image, index) => {
+        formData.append("file", {
           uri: image.uri,
           type: 'image/jpeg',
-          name: `image_${index}.jpg`,
-          width: image.width,
-          height: image.height,
+          name: `image_${index + 1}.jpg`,
         });
+        const response = await axios.post(api, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+        urls.push(response.data.secure_url);
+        console.log(urls);
       });
-    console.log(formData);
-    await axios.post('http://192.168.1.10:3000/posts/upload', { postImage : formData});
-
-      Alert.alert('Upload successful');
+      console.log(urls);
+      Alert.alert("Upload Image Succesfuly !");
       setSelectedImages([]);
+      return urls;
     } catch (error) {
-      console.log('Upload failed', error);
+      console.log("Upload failed", error);
     }
-    // try {
-    //   const formData = new FormData();
-    //   selectedImages.forEach((image, index) => {
-    //     formData.append('images', {
-    //       uri: image.uri,
-    //       type: 'image/jpeg',
-    //       name: `image_${index}.jpg`,
-    //     });
-    //   });
-
-    //   await axios.post('http://192.168.1.10:3000/upload', formData);
-
-    //   Alert.alert('Upload successful');
-    //   selectedImages([]);
-    // } catch (error) {
-    //   console.log('Upload failed', error);
-    // }
   };
 
   const BottomSheetContent = ({ isVisible, onClose }) => {
@@ -427,68 +403,68 @@ const shouldShow = Checkdataimage();
               error={errors.quantity}
             />
             <Dropdown
-            style={[styles.dropdown, isFocus && { borderColor: COLORS.darkBlue }]}
-            placeholderStyle={styles.placeholderStyle}
-            selectedTextStyle={styles.selectedTextStyle}
-            inputSearchStyle={styles.inputSearchStyle}
-            iconStyle={styles.iconStyle}
-            data={data}
-            search
-            maxHeight={300}
-            labelField="label"
-            valueField="value"
-            placeholder={!isFocus ? 'Ngành Nghề' : '...'}
-            searchPlaceholder="Search..."
-            value={value}
-            onFocus={() => setIsFocus(true)}
-            onBlur={() => setIsFocus(false)}
-            onChange={item => {
-              setValue(item.value);
-              setIsFocus(false);
-            }}
-          />
-          <Dropdown
-            style={[styles.dropdown, isFocus && { borderColor: COLORS.darkBlue }]}
-            placeholderStyle={styles.placeholderStyle}
-            selectedTextStyle={styles.selectedTextStyle}
-            inputSearchStyle={styles.inputSearchStyle}
-            iconStyle={styles.iconStyle}
-            data={data}
-            search
-            maxHeight={300}
-            labelField="label"
-            valueField="value"
-            placeholder={!isFocus ? 'Loại công việc' : '...'}
-            searchPlaceholder="Search..."
-            value={value}
-            onFocus={() => setIsFocus(true)}
-            onBlur={() => setIsFocus(false)}
-            onChange={item => {
-              setValue(item.value);
-              setIsFocus(false);
-            }}
-          />
-          <Dropdown
-            style={[styles.dropdown, isFocus && { borderColor: COLORS.darkBlue }]}
-            placeholderStyle={styles.placeholderStyle}
-            selectedTextStyle={styles.selectedTextStyle}
-            inputSearchStyle={styles.inputSearchStyle}
-            iconStyle={styles.iconStyle}
-            data={data}
-            search
-            maxHeight={300}
-            labelField="label"
-            valueField="value"
-            placeholder={!isFocus ? 'Hình thức trả lương' : '...'}
-            searchPlaceholder="Search..."
-            value={value}
-            onFocus={() => setIsFocus(true)}
-            onBlur={() => setIsFocus(false)}
-            onChange={item => {
-              setValue(item.value);
-              setIsFocus(false);
-            }}
-          />
+              style={[styles.dropdown, isFocus && { borderColor: COLORS.darkBlue }]}
+              placeholderStyle={styles.placeholderStyle}
+              selectedTextStyle={styles.selectedTextStyle}
+              inputSearchStyle={styles.inputSearchStyle}
+              iconStyle={styles.iconStyle}
+              data={data}
+              search
+              maxHeight={300}
+              labelField="label"
+              valueField="value"
+              placeholder={!isFocus ? 'Ngành Nghề' : '...'}
+              searchPlaceholder="Search..."
+              value={value}
+              onFocus={() => setIsFocus(true)}
+              onBlur={() => setIsFocus(false)}
+              onChange={item => {
+                setValue(item.value);
+                setIsFocus(false);
+              }}
+            />
+            <Dropdown
+              style={[styles.dropdown, isFocus && { borderColor: COLORS.darkBlue }]}
+              placeholderStyle={styles.placeholderStyle}
+              selectedTextStyle={styles.selectedTextStyle}
+              inputSearchStyle={styles.inputSearchStyle}
+              iconStyle={styles.iconStyle}
+              data={data}
+              search
+              maxHeight={300}
+              labelField="label"
+              valueField="value"
+              placeholder={!isFocus ? 'Loại công việc' : '...'}
+              searchPlaceholder="Search..."
+              value={value}
+              onFocus={() => setIsFocus(true)}
+              onBlur={() => setIsFocus(false)}
+              onChange={item => {
+                setValue(item.value);
+                setIsFocus(false);
+              }}
+            />
+            <Dropdown
+              style={[styles.dropdown, isFocus && { borderColor: COLORS.darkBlue }]}
+              placeholderStyle={styles.placeholderStyle}
+              selectedTextStyle={styles.selectedTextStyle}
+              inputSearchStyle={styles.inputSearchStyle}
+              iconStyle={styles.iconStyle}
+              data={data}
+              search
+              maxHeight={300}
+              labelField="label"
+              valueField="value"
+              placeholder={!isFocus ? 'Hình thức trả lương' : '...'}
+              searchPlaceholder="Search..."
+              value={value}
+              onFocus={() => setIsFocus(true)}
+              onBlur={() => setIsFocus(false)}
+              onChange={item => {
+                setValue(item.value);
+                setIsFocus(false);
+              }}
+            />
             <Input
               keyboardType="numeric"
               onChangeText={text => handleOnchange(text, 'wagemin')}
@@ -549,47 +525,47 @@ const shouldShow = Checkdataimage();
               error={errors.subtitle}
             /> */}
             <Dropdown
-            style={[styles.dropdown, isFocus && { borderColor: COLORS.darkBlue }]}
-            placeholderStyle={styles.placeholderStyle}
-            selectedTextStyle={styles.selectedTextStyle}
-            inputSearchStyle={styles.inputSearchStyle}
-            iconStyle={styles.iconStyle}
-            data={data}
-            search
-            maxHeight={300}
-            labelField="label"
-            valueField="value"
-            placeholder={!isFocus ? 'Trình độ học vấn' : '...'}
-            searchPlaceholder="Search..."
-            value={value}
-            onFocus={() => setIsFocus(true)}
-            onBlur={() => setIsFocus(false)}
-            onChange={item => {
-              setValue(item.value);
-              setIsFocus(false);
-            }}
-          />
-          <Dropdown
-            style={[styles.dropdown, isFocus && { borderColor: COLORS.darkBlue }]}
-            placeholderStyle={styles.placeholderStyle}
-            selectedTextStyle={styles.selectedTextStyle}
-            inputSearchStyle={styles.inputSearchStyle}
-            iconStyle={styles.iconStyle}
-            data={data}
-            search
-            maxHeight={300}
-            labelField="label"
-            valueField="value"
-            placeholder={!isFocus ? 'Kinh nghiệm' : '...'}
-            searchPlaceholder="Search..."
-            value={value}
-            onFocus={() => setIsFocus(true)}
-            onBlur={() => setIsFocus(false)}
-            onChange={item => {
-              setValue(item.value);
-              setIsFocus(false);
-            }}
-          />
+              style={[styles.dropdown, isFocus && { borderColor: COLORS.darkBlue }]}
+              placeholderStyle={styles.placeholderStyle}
+              selectedTextStyle={styles.selectedTextStyle}
+              inputSearchStyle={styles.inputSearchStyle}
+              iconStyle={styles.iconStyle}
+              data={data}
+              search
+              maxHeight={300}
+              labelField="label"
+              valueField="value"
+              placeholder={!isFocus ? 'Trình độ học vấn' : '...'}
+              searchPlaceholder="Search..."
+              value={value}
+              onFocus={() => setIsFocus(true)}
+              onBlur={() => setIsFocus(false)}
+              onChange={item => {
+                setValue(item.value);
+                setIsFocus(false);
+              }}
+            />
+            <Dropdown
+              style={[styles.dropdown, isFocus && { borderColor: COLORS.darkBlue }]}
+              placeholderStyle={styles.placeholderStyle}
+              selectedTextStyle={styles.selectedTextStyle}
+              inputSearchStyle={styles.inputSearchStyle}
+              iconStyle={styles.iconStyle}
+              data={data}
+              search
+              maxHeight={300}
+              labelField="label"
+              valueField="value"
+              placeholder={!isFocus ? 'Kinh nghiệm' : '...'}
+              searchPlaceholder="Search..."
+              value={value}
+              onFocus={() => setIsFocus(true)}
+              onBlur={() => setIsFocus(false)}
+              onChange={item => {
+                setValue(item.value);
+                setIsFocus(false);
+              }}
+            />
             {/* <Input
               onChangeText={text => handleOnchange(text, 'subtitle')}
               onFocus={() => handleError(null, 'subtitle')}
@@ -701,7 +677,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 6,
     paddingHorizontal: 18,
-    marginBottom : 13,
+    marginBottom: 13,
   },
   icon: {
     marginRight: 5,

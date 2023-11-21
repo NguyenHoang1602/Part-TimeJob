@@ -51,7 +51,7 @@ const AuthScreen = ({ navigation }) => {
                 justifyContent: 'center',
                 alignItems: 'center',
                 backgroundColor: '#fff',
-                paddingTop: 100
+                paddingTop: 50
             }}>
 
             <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', width: "100%" }}>
@@ -170,7 +170,6 @@ const AuthScreen = ({ navigation }) => {
                     </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                    onPress={() => navigation.navigate('SignUp')}
                     style={{
                         padding: 5,
                         width: '85%',
