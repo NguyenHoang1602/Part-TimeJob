@@ -143,7 +143,7 @@ const AuthScreen = ({ navigation }) => {
                     <View style={{ height: 1, width: '33%', backgroundColor: COLORS.grey }} />
                 </View>
                 <TouchableOpacity
-                    onPress={() =>  navigation.navigate('SignInWithPhoneNumber')}
+                    onPress={() =>  navigation.navigate('AddProfile')}
                     style={{
                         backgroundColor: COLORS.primary,
                         padding: 5,
