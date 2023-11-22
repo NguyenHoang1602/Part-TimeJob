@@ -1,3 +1,6 @@
+/* eslint-disable comma-dangle */
+/* eslint-disable no-shadow */
+/* eslint-disable jsx-quotes */
 /* eslint-disable eqeqeq */
 /* eslint-disable quotes */
 /* eslint-disable react/no-unstable-nested-components */
@@ -7,7 +10,7 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable react-native/no-inline-styles */
 import React, { useState } from 'react';
-import { FlatList, Image, TextInput, ScrollView, StyleSheet, Text, TouchableHighlight, TouchableOpacity, View, Button, ImageBackground } from 'react-native';
+import { FlatList, Image, TextInput, ScrollView, StyleSheet, Text, TouchableOpacity, View,ImageBackground, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS } from '../constants/theme';
 
@@ -15,11 +18,18 @@ import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import Feather from 'react-native-vector-icons/Feather';
 
+//lib
 import Modal from "react-native-modal";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import SalaryRangeSelector from '../components/SalaryRangeSelector';
 import { Dropdown } from 'react-native-element-dropdown';
+import Collapsible from 'react-native-collapsible';
+
+//
+import CheckBox from '../components/CheckBox';
+import CheckBoxCircle from '../components/CheckBoxCircle';
 
 const URL_IMG = "https://s3-alpha-sig.figma.com/img/acc1/c7a7/e9c43527e435b8c79bc8126d3d053264?Expires=1700438400&Signature=YkRmo~i-p6AZ1AulSOjpW4wA3UdrSHH2zV8WQihLw5uEordi8QWRvjnTz8mWYDq4ZkRCCVDBz1xuFXGQtgMqAStOpOvBGzkzNvHMeK4xw6AsufXB2uI2IIfmL2LgzBHgwk2l6IM3Rxb-4I9wdC8aSg1r9x9KwN~e31NOH19C3w1~A9jSJHDWJk9ECpnIqIrYRwzIfBR6nDOWxXZqjwn-Y8rg94RJb1UZYGQhSe9~MYAq1LzHKO0imJe1lpNv6dYv~amXSnfuuZW2awviacARGnYIjO~rDGmP339lgP9Df71ZKGUxsgIQpK26gCH0IoaFY1B9riTOaj2ENioGaqJurg__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4";
 
@@ -50,6 +60,42 @@ const SavedJobsScreen = ({ navigation }) => {
   const [isFocusedPass, setIsFocusedPass] = useState(false);
 
   const [isSave, setSave] = useState(false);
+  const [isSelect1, setIsselect1] = useState(true);
+  const [collapsed1, setCollapsed1] = useState(true);
+  const toggleSelect1 = () => {
+    setIsselect1(!isSelect1);
+    setCollapsed1(!collapsed1);
+  }
+  const [isSelect2, setIsselect2] = useState(true);
+  const [collapsed2, setCollapsed2] = useState(true);
+  const toggleSelect2 = () => {
+    setIsselect2(!isSelect2);
+    setCollapsed2(!collapsed2);
+  }
+  const [isSelect3, setIsselect3] = useState(true);
+  const [collapsed3, setCollapsed3] = useState(true);
+  const toggleSelect3 = () => {
+    setIsselect3(!isSelect3);
+    setCollapsed3(!collapsed3);
+  }
+  const [isSelect4, setIsselect4] = useState(true);
+  const [collapsed4, setCollapsed4] = useState(true);
+  const toggleSelect4 = () => {
+    setIsselect4(!isSelect4);
+    setCollapsed4(!collapsed4);
+  }
+  const [isSelect5, setIsselect5] = useState(true);
+  const [collapsed5, setCollapsed5] = useState(true);
+  const toggleSelect5 = () => {
+    setIsselect5(!isSelect5);
+    setCollapsed5(!collapsed5);
+  }
+  const [isSelect, setIsselect] = useState(true);
+  const [collapsed, setCollapsed] = useState(true);
+  const toggleSelect = () => {
+    setIsselect(!isSelect);
+    setCollapsed(!collapsed);
+  }
 
   const [startPrice, setStartPrice] = useState(50);
   const [endPrice, setEndPrice] = useState(250);
@@ -59,15 +105,49 @@ const SavedJobsScreen = ({ navigation }) => {
 
   const [value, setValue] = useState(null);
   const [isFocus, setIsFocus] = useState(false);
-  const Checkdata = ()=>{
-    if (Jobdata == ""){
-        return false;
+  const Checkdata = () => {
+    if (Jobdata == "") {
+      return false;
     } else {
-        return true;
+      return true;
     }
-}
+  }
 
-const isFound = Checkdata();
+  const isFound = Checkdata();
+
+  const optionsWorkType = [
+    { id: '01', text: 'Part-time (Công việc bán thời gian)' },
+    { id: '02', text: 'Full-time (Công việc toàn thời gian)' },
+  ];
+  const optionsSex = [
+    { id: '01', text: 'Nam' },
+    { id: '02', text: 'Nữ' },
+    { id: '03', text: 'Không yêu cầu' },
+  ];
+  const optionsEducation = [
+    { id: '01', text: 'Không yêu cầu' },
+    { id: '02', text: 'Cấp 1' },
+    { id: '03', text: 'Cấp 2' },
+    { id: '04', text: 'Cấp 3' },
+    { id: '05', text: 'Trung cấp - Nghề' },
+    { id: '06', text: 'Cao đẳng' },
+    { id: '07', text: 'Đại học' },
+  ];
+  const optionsExperience = [
+    { id: '01', text: 'Không yêu cầu' },
+    { id: '02', text: 'Dưới 1 năm' },
+    { id: '03', text: '1 - 2 năm' },
+    { id: '04', text: '3 - 5 năm' },
+    { id: '05', text: '6 - 10 năm' },
+    { id: '06', text: 'Trên 10 năm' },
+  ];
+  const optionsPaysForm = [
+    { id: '01', text: 'Tất cả' },
+    { id: '02', text: 'Theo giờ' },
+    { id: '03', text: 'Theo ngày' },
+    { id: '04', text: 'Theo tháng' },
+    { id: '05', text: 'Lương khoán' },
+  ];
 
   const toggleModalSave = () => {
     setModalVisibleSave(!isModalVisibleSave);
@@ -75,6 +155,18 @@ const isFound = Checkdata();
 
   const toggleModalFilter = () => {
     setModalVisibleFiler(!isModalVisibleFilter);
+    setCollapsed(true);
+    setCollapsed2(true);
+    setCollapsed3(true);
+    setCollapsed4(true);
+    setCollapsed5(true);
+    setCollapsed1(true);
+    setIsselect1(true);
+    setIsselect2(true);
+    setIsselect3(true);
+    setIsselect4(true);
+    setIsselect5(true);
+    setIsselect(true);
   };
   const toggleModalclose = (item) => {
     setModalVisibleFiler(!isModalVisibleFilter);
@@ -234,7 +326,7 @@ const isFound = Checkdata();
               <View style={{ flexDirection: 'row', gap: 8, paddingVertical: 18 }}>
                 <Image source={{ uri: URL_IMG }} style={{ width: 52, aspectRatio: 1, borderRadius: 52 }} />
                 <View style={{ flex: 1 }}>
-                  <Text style={{ fontSize: 18, color: COLORS.black, fontWeight: "600", }} numberOfLines={1}>
+                  <Text style={{ fontSize: 18, color: COLORS.black, fontWeight: "600",}} numberOfLines={1}>
                     UI/UX Designer
                   </Text>
                   <Text style={{ fontSize: 16, color: COLORS.grey, paddingTop: 4 }} numberOfLines={1}>
@@ -311,168 +403,196 @@ const isFound = Checkdata();
           <SafeAreaView style={{ backgroundColor: 'white', padding: 18 }}>
             {/* Tilter */}
 
-            <View style={{ flexDirection: 'row', alignItems: 'flex-start' }}>
-              <TouchableOpacity onPress={toggleModalclose}>
+            <View style={{ flexDirection: 'row', alignItems: 'flex-start', height: 40 }}>
+              <Text style={{ paddingStart: 10, fontSize: 18, fontWeight: '700', color: COLORS.black, flex: 1 }}>Filter Options</Text>
+              <TouchableOpacity style={{ marginEnd: 10 }} onPress={toggleModalclose}>
                 <AntDesign name='close' size={24} color={COLORS.black} />
               </TouchableOpacity>
-              <Text style={{ paddingStart: 10, fontSize: 18, fontWeight: '700', color: COLORS.black }}>Filter Options</Text>
             </View>
 
             {/* Filter Options */}
-            <View style={{ alignItems: 'center', height: '100%', }}>
-              {/* Location & Salary */}
-              <View style={{ paddingVertical: 18, width: "100%" }}>
-                <View style={{ borderRadius: 15, borderWidth: 1, paddingHorizontal: 18, borderColor: COLORS.blackOpacity }}>
-
-                  <View style={{ flexDirection: 'row', gap: 8, paddingVertical: 18 }}>
-                    <View style={{ flex: 1 }}>
-                      <Text style={{ fontSize: 18, color: COLORS.black, fontWeight: "700", }} numberOfLines={1}>
-                        Location & Salary
-                      </Text>
+            <ScrollView style={{height: '100%'}} showsVerticalScrollIndicator={false}>
+              <View style={{ alignItems: 'center'}}>
+                {/* Location & Salary */}
+                <Pressable style={{ paddingVertical: 18, width: "100%" }} onPress={toggleSelect1}>
+                  <View style={{ borderRadius: 15, borderWidth: 1, paddingHorizontal: 18, borderColor: COLORS.blackOpacity }}>
+                    <View style={{ flexDirection: 'row', gap: 8, paddingVertical: 15 }}>
+                      <View style={{ flex: 1 }}>
+                        <Text style={{ fontSize: 18, color: COLORS.black, fontWeight: "700", }} numberOfLines={1}>
+                          Location & Salary
+                        </Text>
+                      </View>
+                      <Feather name={!isSelect1 ? 'chevron-up' : 'chevron-down'} size={24} color={COLORS.grey1} />
                     </View>
-                    <TouchableOpacity>
-                      <MaterialCommunityIcons name={!isSave ? 'bookmark-minus' : 'bookmark-minus-outline'} size={26} color={COLORS.primary} />
-                    </TouchableOpacity>
+                    <Collapsible collapsed={collapsed1}>
+                      <View style={{ borderTopWidth: 1, borderColor: COLORS.blackOpacity }} />
+                      <View style={{ gap: 8, paddingVertical: 12 }}>
+                        <Dropdown
+                          style={[styles.dropdown, isFocus && { borderColor: COLORS.darkBlue }]}
+                          placeholderStyle={styles.placeholderStyle}
+                          selectedTextStyle={styles.selectedTextStyle}
+                          inputSearchStyle={styles.inputSearchStyle}
+                          iconStyle={styles.iconStyle}
+                          data={data}
+                          search
+                          maxHeight={300}
+                          labelField="label"
+                          valueField="value"
+                          placeholder={!isFocus ? 'Vị trí' : '...'}
+                          searchPlaceholder="Search..."
+                          value={value}
+                          onFocus={() => setIsFocus(true)}
+                          onBlur={() => setIsFocus(false)}
+                          onChange={item => {
+                            setValue(item.value);
+                            setIsFocus(false);
+                          }}
+                        />
+
+                        {/* Range Salary */}
+                        <SalaryRangeSelector
+                          minPrice={0}
+                          maxPrice={MAX_PRICE}
+                          startPrice={startPrice}
+                          endPrice={endPrice}
+                          onStartPriceChange={setStartPrice}
+                          onEndPriceChange={setEndPrice}
+                        />
+                      </View>
+                    </Collapsible>
                   </View>
-
-                  <View style={{ borderTopWidth: 1, borderColor: COLORS.blackOpacity, }} />
-
-                  <View style={{ gap: 8, paddingVertical: 12 }}>
-                    <Dropdown
-                      style={[styles.dropdown, isFocus && { borderColor: COLORS.darkBlue }]}
-                      placeholderStyle={styles.placeholderStyle}
-                      selectedTextStyle={styles.selectedTextStyle}
-                      inputSearchStyle={styles.inputSearchStyle}
-                      iconStyle={styles.iconStyle}
-                      data={data}
-                      search
-                      maxHeight={300}
-                      labelField="label"
-                      valueField="value"
-                      placeholder={!isFocus ? 'Vị trí' : '...'}
-                      searchPlaceholder="Search..."
-                      value={value}
-                      onFocus={() => setIsFocus(true)}
-                      onBlur={() => setIsFocus(false)}
-                      onChange={item => {
-                        setValue(item.value);
-                        setIsFocus(false);
-                      }}
-                    />
-
-                    {/* Range Salary */}
-                    <SalaryRangeSelector
-                      minPrice={0}
-                      maxPrice={MAX_PRICE}
-                      startPrice={startPrice}
-                      endPrice={endPrice}
-                      onStartPriceChange={setStartPrice}
-                      onEndPriceChange={setEndPrice}
-                    />
+                </Pressable>
+                {/* Work Type */}
+                <Pressable style={{ paddingVertical: 18, width: "100%" }} onPress={toggleSelect2}>
+                  <View style={{ borderRadius: 15, borderWidth: 1, paddingHorizontal: 18, borderColor: COLORS.blackOpacity }}>
+                    <View style={{ flexDirection: 'row', gap: 8, paddingVertical: 15 }}>
+                      <View style={{ flex: 1 }}>
+                        <Text style={{ fontSize: 18, color: COLORS.black, fontWeight: "700", fontFamily: 'Inter-VariableFont_slnt,wght' }} numberOfLines={1}>
+                          Loại công việc
+                        </Text>
+                      </View>
+                      <Feather name={!isSelect2 ? 'chevron-up' : 'chevron-down'} size={24} color={COLORS.grey1} />
+                    </View>
+                    <Collapsible collapsed={collapsed2}>
+                      <View style={{ borderTopWidth: 1, borderColor: COLORS.blackOpacity }} />
+                      <View style={{ gap: 8, paddingVertical: 12 }}>
+                        <CheckBoxCircle options={optionsWorkType} multiple={false} onchange={op => console.log("Loại CV: " + op)} />
+                      </View>
+                    </Collapsible>
                   </View>
+                </Pressable>
+                {/* Sex Type */}
+                <Pressable style={{ paddingVertical: 18, width: "100%" }} onPress={toggleSelect3}>
+                  <View style={{ borderRadius: 15, borderWidth: 1, paddingHorizontal: 18, borderColor: COLORS.blackOpacity }}>
+                    <View style={{ flexDirection: 'row', gap: 8, paddingVertical: 15 }}>
+                      <View style={{ flex: 1 }}>
+                        <Text style={{ fontSize: 18, color: COLORS.black, fontWeight: "700", fontFamily: 'Inter-VariableFont_slnt,wght' }} numberOfLines={1}>
+                          Giới tính
+                        </Text>
+                      </View>
+                      <Feather name={!isSelect3 ? 'chevron-up' : 'chevron-down'} size={24} color={COLORS.grey1} />
+                    </View>
+                    <Collapsible collapsed={collapsed3}>
+                      <View style={{ borderTopWidth: 1, borderColor: COLORS.blackOpacity }} />
+                      <View style={{ gap: 8, paddingVertical: 12 }}>
+                        <CheckBoxCircle options={optionsSex} multiple={false} onchange={op => console.log("GT: " + op)} />
+                      </View>
+                    </Collapsible>
+                  </View>
+                </Pressable>
+                {/* education */}
+                <Pressable style={{ paddingVertical: 18, width: "100%" }} onPress={toggleSelect4}>
+                  <View style={{ borderRadius: 15, borderWidth: 1, paddingHorizontal: 18, borderColor: COLORS.blackOpacity }}>
+                    <View style={{ flexDirection: 'row', gap: 8, paddingVertical: 15 }}>
+                      <View style={{ flex: 1 }}>
+                        <Text style={{ fontSize: 18, color: COLORS.black, fontWeight: "700", fontFamily: 'Inter-VariableFont_slnt,wght' }} numberOfLines={1}>
+                          Trình độ học vấn
+                        </Text>
+                      </View>
+                      <Feather name={!isSelect4 ? 'chevron-up' : 'chevron-down'} size={24} color={COLORS.grey1} />
+                    </View>
+                    <Collapsible collapsed={collapsed4}>
+                      <View style={{ borderTopWidth: 1, borderColor: COLORS.blackOpacity }} />
+                      <View style={{ gap: 8, paddingVertical: 12 }}>
+                        <CheckBox options={optionsEducation} multiple={false} onchange={op => console.log("TDHV: " + op)} />
+                      </View>
+                    </Collapsible>
+                  </View>
+                </Pressable>
+                {/* experence */}
+                <Pressable style={{ paddingVertical: 18, width: "100%" }} onPress={toggleSelect5}>
+                  <View style={{ borderRadius: 15, borderWidth: 1, paddingHorizontal: 18, borderColor: COLORS.blackOpacity }}>
+                    <View style={{ flexDirection: 'row', gap: 8, paddingVertical: 15 }}>
+                      <View style={{ flex: 1 }}>
+                        <Text style={{ fontSize: 18, color: COLORS.black, fontWeight: "700", fontFamily: 'Inter-VariableFont_slnt,wght' }} numberOfLines={1}>
+                          Kinh nghiệm làm việc
+                        </Text>
+                      </View>
+                      <Feather name={!isSelect5 ? 'chevron-up' : 'chevron-down'} size={24} color={COLORS.grey1} />
+                    </View>
+                    <Collapsible collapsed={collapsed5}>
+                      <View style={{ borderTopWidth: 1, borderColor: COLORS.blackOpacity }} />
+                      <View style={{ gap: 8, paddingVertical: 12 }}>
+                        <CheckBox options={optionsExperience} multiple={false} onchange={op => console.log("KNLV: " + op)} />
+                      </View>
+                    </Collapsible>
+                  </View>
+                </Pressable>
+                {/* Payform */}
+                <Pressable style={{ paddingVertical: 18, width: "100%" }} onPress={toggleSelect}>
+                  <View style={{ borderRadius: 15, borderWidth: 1, paddingHorizontal: 18, borderColor: COLORS.blackOpacity }}>
+                    <View style={{ flexDirection: 'row', gap: 8, paddingVertical: 15 }}>
+                      <View style={{ flex: 1 }}>
+                        <Text style={{ fontSize: 18, color: COLORS.black, fontWeight: "700", fontFamily: 'Inter-VariableFont_slnt,wght' }} numberOfLines={1}>
+                          Hình thức trả lương
+                        </Text>
+                      </View>
+                      <Feather name={!isSelect ? 'chevron-up' : 'chevron-down'} size={24} color={COLORS.grey1} />
+                    </View>
+                    <Collapsible collapsed={collapsed}>
+                      <View style={{ borderTopWidth: 1, borderColor: COLORS.blackOpacity }} />
+                      <View style={{ gap: 8, paddingVertical: 12 }}>
+                        <CheckBox options={optionsPaysForm} multiple={false} onchange={op => console.log("HTTL: " + op)} />
+                      </View>
+                    </Collapsible>
+                  </View>
+                </Pressable>
+                {/* Button */}
+                <View style={{
+                  flexDirection: 'row',
+                  marginTop: '40%',
+                  marginBottom: 40,
+                  shadowColor: 'red',
+                }}>
+                  <TouchableOpacity
+                    onPress={toggleModalFilter}
+                    style={{
+                      backgroundColor: 'rgba(51, 123, 255, 0.20)',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      borderRadius: 64,
+                      position: "relative",
+                      width: 160,
+                      paddingVertical: 15,
+                      marginEnd: 15,
+                    }}>
+                    <Text style={{ color: COLORS.primary, fontSize: 18, fontWeight: "600"}}>Reset</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={{
+                      backgroundColor: COLORS.primary,
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      borderRadius: 64,
+                      position: "relative",
+                      width: 160,
+                      paddingVertical: 15,
+                    }}>
+                    <Text style={{ color: COLORS.white, fontSize: 18, fontWeight: "600"}}>Apply</Text>
+                  </TouchableOpacity>
                 </View>
               </View>
-              {/* Work Type */}
-              <View style={{ paddingVertical: 18, width: "100%" }}>
-                <View style={{ borderRadius: 15, borderWidth: 1, paddingHorizontal: 18, borderColor: COLORS.blackOpacity }}>
-
-                  <View style={{ flexDirection: 'row', gap: 8, paddingVertical: 18 }}>
-                    <View style={{ flex: 1 }}>
-                      <Text style={{ fontSize: 18, color: COLORS.black, fontWeight: "700", }} numberOfLines={1}>
-                        Work Type
-                      </Text>
-                    </View>
-                    <TouchableOpacity>
-                      <MaterialCommunityIcons name={!isSave ? 'bookmark-minus' : 'bookmark-minus-outline'} size={26} color={COLORS.primary} />
-                    </TouchableOpacity>
-                  </View>
-
-                  <View style={{ borderTopWidth: 1, borderColor: COLORS.blackOpacity, }} />
-
-                  <View style={{ gap: 8, paddingVertical: 12 }}>
-                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10}}>
-                      <TouchableOpacity style={styles.radio} onPress={{}}/>
-                      <Text style={styles.textWorkType}>
-                        Onsite (Work at Office)
-                      </Text>
-                    </View>
-
-                    <View style={{}}>
-                      <Text style={styles.textWorkType}>
-                        Remote (Work at Home)
-                      </Text>
-                    </View>
-                  </View>
-                </View>
-              </View>
-              {/* Sex Type */}
-              <View style={{ paddingVertical: 18, width: "100%" }}>
-                <View style={{ borderRadius: 15, borderWidth: 1, paddingHorizontal: 18, borderColor: COLORS.blackOpacity }}>
-
-                  <View style={{ flexDirection: 'row', gap: 8, paddingVertical: 18 }}>
-                    <View style={{ flex: 1 }}>
-                      <Text style={{ fontSize: 18, color: COLORS.black, fontWeight: "700", }} numberOfLines={1}>
-                        Sex Type
-                      </Text>
-                    </View>
-                    <TouchableOpacity>
-                      <MaterialCommunityIcons name={!isSave ? 'bookmark-minus' : 'bookmark-minus-outline'} size={26} color={COLORS.primary} />
-                    </TouchableOpacity>
-                  </View>
-
-                  <View style={{ borderTopWidth: 1, borderColor: COLORS.blackOpacity, }} />
-
-                  <View style={{ gap: 8, paddingVertical: 12 }}>
-                    <View style={{}}>
-                      <Text style={styles.textWorkType}>
-                        Male
-                      </Text>
-                    </View>
-
-                    <View style={{}}>
-                      <Text style={styles.textWorkType}>
-                        Female
-                      </Text>
-                    </View>
-                  </View>
-                </View>
-              </View>
-              {/* Button */}
-              <View style={{
-                flexDirection: 'row',
-                bottom: 40,
-                position: 'absolute',
-                shadowColor: 'red'
-              }}>
-                <TouchableOpacity
-                  onPress={toggleModalFilter}
-                  style={{
-                    backgroundColor: COLORS.blue,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    borderRadius: 64,
-                    position: "relative",
-                    width: 160,
-                    paddingVertical: 15,
-                    marginEnd: 15
-                  }}>
-                  <Text style={{ color: COLORS.primary, fontSize: 18, fontWeight: "600", }}>Reset</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  style={{
-                    backgroundColor: COLORS.primary,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    borderRadius: 64,
-                    position: "relative",
-                    width: 160,
-                    paddingVertical: 15
-                  }}>
-                  <Text style={{ color: COLORS.white, fontSize: 18, fontWeight: "600", }}>Apply</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
+            </ScrollView>
           </SafeAreaView>
         </GestureHandlerRootView>
       </Modal>

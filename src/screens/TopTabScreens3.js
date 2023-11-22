@@ -180,7 +180,7 @@ const TopTabScreen3 = ({ navigation }) => {
                             <TouchableOpacity
                                 onPress={toggleModalclose}
                                 style={{
-                                    backgroundColor: COLORS.blue,
+                                    backgroundColor: 'rgba(51, 123, 255, 0.20)',
                                     alignItems: 'center',
                                     justifyContent: 'center',
                                     borderRadius: 64,

@@ -8,6 +8,8 @@ import {TextInput} from 'react-native-paper';
 import Input from '../components/Input';
 import InputMutiple from '../components/InputMutiple';
 import COLORS from '../assets/const/colors';
+import axios from 'axios';
+import { useFocusEffect } from '@react-navigation/native';
 
 import Button from '../components/Button';
 //icon
@@ -28,7 +30,15 @@ const data = [
   { label: 'Item 8', value: '8' },
 ];
 
-const CVScreen = ({navigation}) => {
+const CVScreen = ({ navigation }) => {
+  
+  useFocusEffect(
+    React.useCallback(() => {
+      getListCareers();
+    })
+  )
+
+
   const [value, setValue] = useState(null);
   const [isFocus, setIsFocus] = useState(false);
   const [inputs, setInputs] = React.useState({
@@ -43,22 +53,38 @@ const CVScreen = ({navigation}) => {
     Keyboard.dismiss();
     let isValid = true;
 
-    if (!inputs.title) {
-      handleError('Please input title', 'title');
-      isValid = false;
-    }
-    if (!inputs.subtitle) {
-      handleError('Please input subtitle', 'subtitle');
+    if (!inputs.name) {
+      handleError('Vui lòng nhập họ tên', 'name');
       isValid = false;
     }
 
-    if (!inputs.price) {
-      handleError('Please input phone price', 'price');
+    if (!inputs.phone) {
+      handleError('Vui lòng nhập số điện thoại', 'phone');
       isValid = false;
     }
 
-    if (!inputs.details) {
-      handleError('Please input details', 'details');
+    if (!inputs.year) {
+      handleError('Vui lòng nhập năm sinh', 'year');
+      isValid = false;
+    }
+
+    if (!inputs.email) {
+      handleError('Vui lòng nhập email', 'email');
+      isValid = false;
+    }
+
+    if (!inputs.address) {
+      handleError('Vui lòng nhập địa chỉ', 'address');
+      isValid = false;
+    }
+
+    if (!inputs.experience) {
+      handleError('Vui lòng nhập kinh nghiệm', 'experience');
+      isValid = false;
+    }
+
+    if (!inputs.introduce) {
+      handleError('Vui lòng nhập giới thiệu bản thân', 'introduce');
       isValid = false;
     }
     if (isValid) {
@@ -71,6 +97,21 @@ const CVScreen = ({navigation}) => {
   const handleError = (error, input) => {
     setErrors(prevState => ({ ...prevState, [input]: error }));
   };
+
+  const [listCareers, setListCareers] = useState([]);
+
+
+
+  const getListCareers = async () => { 
+    axios({
+      url: "http://192.168.9.49:3000/careers/list",
+      method: "GET"
+    }).then((res) => {
+      setListCareers(res.data);
+    })
+    console.log(listCareers);
+  }
+
   return (
     <SafeAreaView style={{flex: 1}}>
       <ScrollView>
@@ -86,31 +127,31 @@ const CVScreen = ({navigation}) => {
           </View>
           <View style={{ marginVertical: 22, marginHorizontal: 24 }}>
             <Input
-              onChangeText={text => handleOnchange(text, 'subtitle')}
-              onFocus={() => handleError(null, 'price')}
+              onChangeText={text => handleOnchange(text, 'name')}
+              onFocus={() => handleError(null, 'name')}
               placeholder="Họ tên"
               value=""
-              error=""
+              error={errors.name}
             />
             <View style={{ width: '100%', flexDirection: 'row' }}>
               <View style={{ width: '45%', justifyContent: 'flex-start' }}>
                 <Input
                   keyboardType="numeric"
-                  onChangeText={text => handleOnchange(text, 'subtitle')}
-                  onFocus={() => handleError(null, 'subtitle')}
+                  onChangeText={text => handleOnchange(text, 'phone')}
+                  onFocus={() => handleError(null, 'phone')}
                   placeholder="Số điện thoại"
                   // value={route.params?.subtitle}
-                  error={errors.subtitle}
+                  error={errors.phone}
                 />
               </View>
               <View style={{ width: '45%', marginStart: '9.5%' }}>
                 <Input
                   keyboardType="numeric"
-                  onChangeText={text => handleOnchange(text, 'subtitle')}
-                  onFocus={() => handleError(null, 'subtitle')}
+                  onChangeText={text => handleOnchange(text, 'year')}
+                  onFocus={() => handleError(null, 'year')}
                   placeholder="Năm sinh"
                   // value={route.params?.subtitle}
-                  error={errors.subtitle}
+                  error={errors.year}
                 />
               </View>
             </View>
@@ -120,11 +161,11 @@ const CVScreen = ({navigation}) => {
             selectedTextStyle={styles.selectedTextStyle}
             inputSearchStyle={styles.inputSearchStyle}
             iconStyle={styles.iconStyle}
-            data={data}
+            data={listCareers}
             search
             maxHeight={300}
-            labelField="label"
-            valueField="value"
+            labelField="c_title"
+            valueField="_id"
             placeholder={!isFocus ? 'Ngành Nghề' : '...'}
             searchPlaceholder="Search..."
             value={value}
@@ -136,11 +177,11 @@ const CVScreen = ({navigation}) => {
             }}
           />
           <Input
-              onChangeText={text => handleOnchange(text, 'subtitle')}
-              onFocus={() => handleError(null, 'price')}
+              onChangeText={text => handleOnchange(text, 'email')}
+              onFocus={() => handleError(null, 'email')}
               placeholder="Địa chỉ email"
               value=""
-              error=""
+              error={errors.email}
             />
           </View>
           <View style={{ backgroundColor: '#D9D9D9', height: 60, justifyContent: 'center' }}>
@@ -148,11 +189,11 @@ const CVScreen = ({navigation}) => {
           </View>
           <View style={{ marginVertical: 22, marginHorizontal: 24 }}>
             <Input
-              onChangeText={text => handleOnchange(text, 'subtitle')}
-              onFocus={() => handleError(null, 'price')}
+              onChangeText={text => handleOnchange(text, 'address')}
+              onFocus={() => handleError(null, 'address')}
               placeholder="Địa chỉ hiện tại"
               value=""
-              error=""
+              error={errors.address}
             />
             <Dropdown
             style={[styles.dropdown, isFocus && { borderColor: COLORS.darkBlue }]}
@@ -176,11 +217,11 @@ const CVScreen = ({navigation}) => {
             }}
           />
           <Input
-              onChangeText={text => handleOnchange(text, 'subtitle')}
-              onFocus={() => handleError(null, 'price')}
+              onChangeText={text => handleOnchange(text, 'experience')}
+              onFocus={() => handleError(null, 'experience')}
               placeholder="Kinh nghiệm làm việc"
               value=""
-              error=""
+              error={errors.experience}
             />
             <Dropdown
             style={[styles.dropdown, isFocus && { borderColor: COLORS.darkBlue }]}
@@ -204,11 +245,11 @@ const CVScreen = ({navigation}) => {
             }}
           />
           <InputMutiple
-              onChangeText={text => handleOnchange(text, 'subtitle')}
-              onFocus={() => handleError(null, 'subtitle')}
+              onChangeText={text => handleOnchange(text, 'introduce')}
+              onFocus={() => handleError(null, 'introduce')}
               placeholder={"Giới thiệu bản thân\nHãy nêu ra kinh nghiệm, sở trường và mong muốn của bạn liên quan đến công việc để ghi điểm hơn trong mắt nhà tuyển dụng"}
               // value={route.params?.subtitle}
-              error={errors.subtitle}
+              error={errors.introduce}
             />
           </View>
           <View
@@ -220,7 +261,7 @@ const CVScreen = ({navigation}) => {
               justifyContent: 'center',
             }}>
             <TouchableOpacity
-              onPress={() => navigation.navigate('CVScreen')}
+              onPress={validate}
               style={{
                 backgroundColor: COLORS.blue,
                 padding: 5,

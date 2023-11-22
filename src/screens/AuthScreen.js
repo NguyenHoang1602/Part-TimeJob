@@ -4,12 +4,46 @@
 /* eslint-disable comma-dangle */
 /* eslint-disable quotes */
 /* eslint-disable eol-last */
-import React, { useState } from 'react';
-import { View, Text, StatusBar, Image, SafeAreaView, TouchableOpacity, ScrollView } from 'react-native';
+import React, { useState, useEffect, useContext } from 'react';
+import { View, Text, StatusBar, Image, TouchableOpacity, ScrollView } from 'react-native';
 import { COLORS, SIZES } from '../constants/theme';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import { SafeAreaView } from 'react-native-safe-area-context';
+
+import UserContext from '../components/UserConText';
+import axios from 'axios';
+
+//icon
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const AuthScreen = ({ navigation }) => {
+
+    const { setUser } = useContext(UserContext);
+
+    useEffect(() => {
+        GoogleSignin.configure({
+            webClientId: '598708373288-vlbap93edc5r144q7cnealcu8vls110o.apps.googleusercontent.com',
+        });
+    });
+
+    async function signIn() {
+        try {
+            await GoogleSignin.hasPlayServices();
+            await GoogleSignin.signOut();
+            const userInfo = await GoogleSignin.signIn();
+            const token = userInfo.idToken;
+            const result = await axios.post('http://192.168.9.49:3000/users/GoogleSignIn', {
+                idtoken: token,
+            });
+            setUser(result.data);
+            navigation.navigate('TabNavigator');
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+
     return (
         <SafeAreaView
             style={{
@@ -17,32 +51,33 @@ const AuthScreen = ({ navigation }) => {
                 justifyContent: 'center',
                 alignItems: 'center',
                 backgroundColor: '#fff',
-                paddingTop: 100
+                paddingTop: 50
             }}>
 
             <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', width: "100%" }}>
                 <View style={{
                     bottom: '10%',
                     alignItems: 'center',
-                    gap: 25
+                    gap: 25,
                 }}>
                     <Image
                         source={require('../assets/images/SignIn/acount.jpg')}
                         style={{
-                            width: 167,
-                            height: 201,
+                            width: 175,
+                            height: 209,
                         }}
                     />
                     <Text style={{
                         fontSize: 38,
                         fontWeight: 400,
                         color: COLORS.black,
+                        fontFamily: 'BeVietnamPro-Regular',
                     }}>
-                        Let's you in
+                        Let’s you in
                     </Text>
                 </View>
                 <TouchableOpacity
-                    onPress={() => ("")}
+                    onPress={() =>{}}
                     style={{
                         backgroundColor: COLORS.white,
                         padding: 10,
@@ -56,27 +91,20 @@ const AuthScreen = ({ navigation }) => {
                         justifyContent: 'center',
                         marginTop: 20
                     }}>
-                    <Image
-                        source={require('../assets/images/SignIn/iconFB.png')}
-                        style={{
-                            width: 30,
-                            height: 30,
-                            justifyContent: 'flex-start',
-                        }}
-                    />
+                   <Ionicons name="logo-facebook" size={30} color={COLORS.primary}/>
                     <Text
                         style={{
-                            fontWeight: 'bold',
                             fontSize: 18,
                             color: COLORS.black,
                             marginStart: '3%',
                             top: 3,
+                            fontFamily: 'aoboshione-regular',
                         }}>
                         Continue with Facebook
                     </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                    onPress={() => ("")}
+                    onPress={signIn}
                     style={{
                         backgroundColor: COLORS.white,
                         padding: 10,
@@ -87,23 +115,24 @@ const AuthScreen = ({ navigation }) => {
                         borderColor: COLORS.blackOpacity,
                         flexDirection: 'row',
                         bottom: '2%',
-                        justifyContent: 'center'
+                        justifyContent: 'center',
                     }}>
                     <Image
-                        source={require('../assets/images/SignIn/iconGG.png')}
+                        source={require('../assets/icon/google.png')}
                         style={{
-                            width: 30,
-                            height: 30,
+                            width: 24,
+                            height: 24,
                             justifyContent: 'flex-start',
+                            right:11,
                         }}
                     />
                     <Text
                         style={{
-                            fontWeight: 'bold',
                             fontSize: 18,
                             color: COLORS.black,
                             marginStart: '3%',
-                            top: 3,
+                            right: 9,
+                            fontFamily: 'aoboshione-regular',
                         }}>
                         Continue with Google
                     </Text>
@@ -114,7 +143,7 @@ const AuthScreen = ({ navigation }) => {
                     <View style={{ height: 1, width: '33%', backgroundColor: COLORS.grey }} />
                 </View>
                 <TouchableOpacity
-                    onPress={() => navigation.navigate('Login')}
+                    onPress={() =>  navigation.navigate('SignInWithPhoneNumber')}
                     style={{
                         backgroundColor: COLORS.primary,
                         padding: 5,
@@ -133,15 +162,14 @@ const AuthScreen = ({ navigation }) => {
                     }}>
                     <Text
                         style={{
-                            fontWeight: 'bold',
                             fontSize: 18,
                             color: COLORS.white,
+                            fontFamily: 'aoboshione-regular',
                         }}>
-                        Sign up with password
+                        Sign up with Phone Number
                     </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                    onPress={() => navigation.navigate('SignUp')}
                     style={{
                         padding: 5,
                         width: '85%',
@@ -149,7 +177,7 @@ const AuthScreen = ({ navigation }) => {
                         flexDirection: 'row',
                         justifyContent: 'center',
                         alignItems: 'center',
-                        top: '20%'
+                        top: '22%'
                     }}>
                     <Text
                         style={{
@@ -158,16 +186,16 @@ const AuthScreen = ({ navigation }) => {
                             color: COLORS.black,
                             opacity: 0.4
                         }}>
-                        Don’t have an account?
+                        Wellcome to
                     </Text>
                     <Text
                         style={{
                             fontWeight: 'bold',
                             fontSize: 16,
                             color: COLORS.primary,
-                            marginStart: '3%'
+                            marginStart: '1%'
                         }}>
-                        Sign Up
+                        Part-time Jobs
                     </Text>
                 </TouchableOpacity>
             </View>
