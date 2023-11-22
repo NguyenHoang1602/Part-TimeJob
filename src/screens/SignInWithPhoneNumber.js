@@ -81,7 +81,7 @@ const SignInWithPhoneNumber = ({ navigation, props }) => {
         <View style={{ alignItems: 'center' }}>
           <Image source={require('../assets/images/SignIn/LogoSignInUp.png')} style={styles.logo} />
 
-          <Text style={{ fontSize: 24, fontWeight: '700', color: COLORS.black, marginVertical: 10 }}>Create New Account</Text>
+          <Text style={{ fontSize: 24, fontWeight: '700', color: COLORS.black, marginVertical: 10 }}>Enter your Phone Number</Text>
 
           <View
             style={{
@@ -128,6 +128,8 @@ const SignInWithPhoneNumber = ({ navigation, props }) => {
 
   }
 
+  
+
   return (
     <View style={{ flex: 1, backgroundColor: "white", paddingHorizontal: 18 }}>
       <SafeAreaView >
@@ -144,28 +146,28 @@ const SignInWithPhoneNumber = ({ navigation, props }) => {
         </View>
       </SafeAreaView>
 
-      <View style={{ alignItems: 'center' }}>
+        <View style={{ alignItems: 'center' }}>
+          <View
+            style={{
+              marginVertical: 20,
+              flexDirection: 'row',
+              height: 50,
+              borderRadius: 10,
+              alignItems: 'center',
+              paddingHorizontal: 18,
+              backgroundColor: !isFocusedEmail ? COLORS.lightGrey : COLORS.blue,
+              borderWidth: 1,
+              borderColor: !isFocusedEmail ? COLORS.white : COLORS.primary
+            }}>
+            <MaterialIcons name='phone' size={24} color={email === '' ? COLORS.grey : COLORS.black} />
+            <TextInput
+              placeholder='Phone Number'
+              value={code} onChangeText={text => setCode(text)}
+              onFocus={() => { setIsFocusedEmail(!isFocusedEmail) }}
+              onBlur={() => { setIsFocusedEmail(!isFocusedEmail) }}
+              style={{ flex: 1, fontSize: 16, color: COLORS.black, paddingHorizontal: 10 }} />
+          </View>
 
-        <View
-          style={{
-            marginVertical: 20,
-            flexDirection: 'row',
-            height: 50,
-            borderRadius: 10,
-            alignItems: 'center',
-            paddingHorizontal: 18,
-            backgroundColor: !isFocusedEmail ? COLORS.lightGrey : COLORS.blue,
-            borderWidth: 1,
-            borderColor: !isFocusedEmail ? COLORS.white : COLORS.primary
-          }}>
-          <MaterialIcons name='phone' size={24} color={email === '' ? COLORS.grey : COLORS.black} />
-          <TextInput
-            placeholder='Verify'
-            value={code} onChangeText={text => setCode(text)}
-            onFocus={() => { setIsFocusedEmail(!isFocusedEmail) }}
-            onBlur={() => { setIsFocusedEmail(!isFocusedEmail) }}
-            style={{ flex: 1, fontSize: 16, color: COLORS.black, paddingHorizontal: 10 }} />
-        </View>
 
         <TouchableOpacity
           onPress={() => confirmCode(code)}
@@ -191,7 +193,7 @@ export default SignInWithPhoneNumber;
 const styles = StyleSheet.create({
   logo: {
     width: 128,
-    height: 128,
+    height: 138,
     marginTop: 40,
     resizeMode: 'contain',
   },

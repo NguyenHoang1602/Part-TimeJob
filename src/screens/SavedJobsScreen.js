@@ -5,7 +5,7 @@
 /* eslint-disable eol-last */
 /* eslint-disable prettier/prettier */
 /* eslint-disable react-native/no-inline-styles */
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { FlatList, Image, TextInput, ScrollView, StyleSheet, Text, TouchableHighlight, TouchableOpacity, View, Button, ImageBackground } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS } from '../constants/theme';
@@ -20,6 +20,7 @@ import IconWithBadge from '../components/IconWithBadge';
 import IconWithBadgeAntDesign from '../components/IconWithBadgeAntDesign';
 
 import Modal from "react-native-modal";
+import UserContext from '../components/UserConText';
 
 const URL_IMG = "https://manofmany.com/wp-content/uploads/2021/05/Best-Short-Hairstyles-for-Men.jpg";
 
@@ -34,6 +35,7 @@ const Jobdata = [
 ]
 
 const SavedJobsScreen = ({navigation}) => {
+  const { user } = useContext(UserContext);
   const [selectedItem, setSelectedItem] = useState(null);
   const [password, setPassword] = useState('');
   const [search, setsearch] = useState('');
@@ -147,13 +149,13 @@ const SavedJobsScreen = ({navigation}) => {
               width: '68%',
             }} onPress={() => { }}>
             <ImageBackground
-              source={require('../assets/images/homescreen/avatar.png')}
+              source={{ uri: user.photo}}
               style={{ width: 46, height: 46 }}
               imageStyle={{ borderRadius: 46 }}
             />
             <View style={{ flexDirection: 'column', height: '100%', justifyContent: 'center', marginStart: 13 }}>
               <Text style={{ color: '#7D7A7A', fontSize: 16 }}>Good Morning 👋</Text>
-              <Text style={{ color: COLORS.black, fontSize: 20, fontWeight: "600" }}>Hồng Nhân</Text>
+              <Text numberOfLines={1} style={{ color: COLORS.black, fontSize: 20, fontWeight: "600" }}>{user.displayName}</Text>
             </View>
           </TouchableOpacity>
           <TouchableOpacity
@@ -307,7 +309,7 @@ const SavedJobsScreen = ({navigation}) => {
             <TouchableOpacity
               onPress={toggleModalclose}
               style={{
-                backgroundColor: COLORS.blue,
+                backgroundColor: 'rgba(51, 123, 255, 0.20)',
                 alignItems: 'center',
                 justifyContent: 'center',
                 borderRadius: 64,

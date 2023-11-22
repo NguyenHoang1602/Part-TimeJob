@@ -7,11 +7,12 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable react-native/no-inline-styles */
 import React, { useState, useEffect  } from 'react';
-import { View, Text, SafeAreaView, Keyboard, ScrollView, StyleSheet, TouchableOpacity, ImageBackground, useWindowDimensions, FlatList, Image } from 'react-native';
+import { View, Text, SafeAreaView, Keyboard, ScrollView, StyleSheet, TouchableOpacity, ImageBackground, useWindowDimensions, FlatList, Image, Alert } from 'react-native';
 
 import Input from '../components/Input';
 import InputMutiple from '../components/InputMutiple';
 import COLORS from '../assets/const/colors';
+import axios from 'axios';
 
 import Button from '../components/Button';
 //icon
@@ -22,11 +23,13 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 // import BottomSheetContent from '../components/BottomSheetContent';
 //picker
 import ImagePicker from 'react-native-image-crop-picker';
+
 //modal
 import Modal from 'react-native-modal';
 //slect drop-down
 import { Dropdown } from 'react-native-element-dropdown';
 import { useFocusEffect } from '@react-navigation/native';
+
 
 const data = [
   { label: 'Item 1', value: '1' },
@@ -39,7 +42,9 @@ const data = [
   { label: 'Item 8', value: '8' },
 ];
 
+
 const PostScreen = ({ navigation }) => {
+
   //drop-down
   const [value, setValue] = useState(null);
   const [isFocus, setIsFocus] = useState(false);
@@ -55,22 +60,44 @@ const PostScreen = ({ navigation }) => {
     Keyboard.dismiss();
     let isValid = true;
 
+    if (!inputs.bussiness_name) {
+      handleError('Vui lòng nhập tên doanh nghiệp', 'bussiness_name');
+      isValid = false;
+    }
+    if (!inputs.address) {
+      handleError('Vui lòng nhập địa chỉ', 'address');
+      isValid = false;
+    }
     if (!inputs.title) {
       handleError('Vui lòng nhập tiêu đề', 'title');
       isValid = false;
     }
+    if (!inputs.quantity) {
+      handleError('Vui lòng nhập số lượng', 'quantity');
+      isValid = false;
+    }
+    if (!inputs.wagemin) {
+      handleError('Vui lòng nhập lương', 'wagemin');
+      isValid = false;
+    }
+    if (!inputs.wagemax) {
+      handleError('Vui lòng nhập lương', 'wagemax');
+      isValid = false;
+    }
     if (!inputs.subtitle) {
-      handleError('Please input subtitle', 'subtitle');
+      handleError('Vui lòng nhập mô tả', 'subtitle');
       isValid = false;
     }
-
-    if (!inputs.price) {
-      handleError('Please input phone price', 'price');
+    if (!inputs.agemin) {
+      handleError('Vui lòng nhập tuổi', 'agemin');
       isValid = false;
     }
-
-    if (!inputs.details) {
-      handleError('Please input details', 'details');
+    if (!inputs.agemax) {
+      handleError('Vui lòng nhập tuổi', 'agemax');
+      isValid = false;
+    }
+    if (!inputs.Engraved_benefits) {
+      handleError('Vui lòng nhập quyền lợi', 'Engraved_benefits');
       isValid = false;
     }
     if (isValid) {
@@ -107,34 +134,86 @@ const PostScreen = ({ navigation }) => {
 }
 const shouldShow = Checkdataimage();
   const openImagePicker = () => {
+    // ImagePicker.openPicker({
+    //   multiple: true,
+    //   mediaType: 'photo',
+    // })
+    //   .then((images) => {
+    //     const newImages = images.map(image => ({
+    //       uri: image.uri,
+    //       type: image.type,
+    //       name: image.fileName || 'image.jpg',
+    //     }));
+    //     setSelectedImages(images);
+    //     setBottomSheetVisible(!isBottomSheetVisible);
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //   });
+    setSelectedImages([]);
     ImagePicker.openPicker({
-      multiple: true,
-      mediaType: 'photo',
-    })
-      .then((images) => {
-        const newImages = images.map(image => ({
-          uri: image.uri,
-          type: image.type,
-          name: image.fileName || 'image.jpg',
-        }));
-        setSelectedImages(images);
+        multiple: true,
+        mediaType: 'photo',
+      })
+      .then((response) => {
+        setSelectedImages((prevImages) => [...prevImages, ...response]);
         setBottomSheetVisible(!isBottomSheetVisible);
       })
       .catch((error) => {
-        console.log(error);
+        console.log('ImagePicker Error: ', error);
       });
   };
   const uploadImages = async () => {
+    console.log(selectedImages);
     try {
       const formData = new FormData();
 
       selectedImages.forEach((image, index) => {
-        formData.append(`images[${index}]`, image);
-        console.log(formData);
+        formData.append("file", {
+          uri: image.path,
+          type: image.type,
+          name: image.filename,
+        });
       });
+    console.log(formData);
+      axios.post('https://api.cloudinary.com/v1_1/deawv1daj', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          'X-Requested-With': 'XMLHttpRequest',
+        },
+        data: {
+          upload_preset: 'PartTime_Job',
+        },
+      })
+        .then((cloudinaryResponse) => {
+          console.log(cloudinaryResponse.data);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+
+      Alert.alert('Upload successful');
+      setSelectedImages([]);
     } catch (error) {
-      console.error(error);
+      console.log('Upload failed', error);
     }
+    // try {
+    //   const formData = new FormData();
+    //   selectedImages.forEach((image, index) => {
+    //     formData.append('images', {
+    //       uri: image.uri,
+    //       type: 'image/jpeg',
+    //       name: `image_${index}.jpg`,
+    //     });
+    //   });
+
+    //   await axios.post('http://192.168.1.10:3000/upload', formData);
+
+    //   Alert.alert('Upload successful');
+    //   selectedImages([]);
+    // } catch (error) {
+    //   console.log('Upload failed', error);
+    // }
   };
 
   const BottomSheetContent = ({ isVisible, onClose }) => {
@@ -188,7 +267,7 @@ const shouldShow = Checkdataimage();
           <View style={{ marginVertical: 22, marginHorizontal: 24 }}>
             <Input
               onChangeText={text => handleOnchange(text, 'bussiness_name')}
-              onFocus={() => handleError(null, 'business_name')}
+              onFocus={() => handleError(null, 'bussiness_name')}
               placeholder="Tên doanh nghiệp"
               error={errors.bussiness_name}
             />
@@ -258,7 +337,7 @@ const shouldShow = Checkdataimage();
                       </View>
                       <FlatList
                         data={selectedImages}
-                        keyExtractor={(item) => item.path}
+                        keyExtractor={(item) => item.uri}
                         horizontal
                         renderItem={({ item }) => (
                           <View style={{
@@ -268,7 +347,7 @@ const shouldShow = Checkdataimage();
                             flexDirection: 'column',
                           }}>
                             <Image
-                              source={{ uri: item.path }}
+                              source={{ uri: item.uri }}
                               style={{
                                 width: 70,
                                 height: 70,
@@ -342,7 +421,7 @@ const shouldShow = Checkdataimage();
             <Input
               onChangeText={text => handleOnchange(text, 'title')}
               onFocus={() => handleError(null, 'title')}
-              placeholder="Tiêu đề tin đăng"
+              placeholder="Tiêu đề đăng tin"
               error={errors.title}
             />
             <Input
@@ -364,7 +443,7 @@ const shouldShow = Checkdataimage();
             maxHeight={300}
             labelField="label"
             valueField="value"
-            placeholder={!isFocus ? 'Ngành Ngề' : '...'}
+            placeholder={!isFocus ? 'Ngành Nghề' : '...'}
             searchPlaceholder="Search..."
             value={value}
             onFocus={() => setIsFocus(true)}
