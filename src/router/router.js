@@ -1,4 +1,5 @@
 /* eslint-disable prettier/prettier */
+/* eslint-disable react/no-unstable-nested-components */
 /* eslint-disable no-unused-vars */
 /* eslint-disable quotes */
 /* eslint-disable eol-last */
@@ -16,15 +17,61 @@ import ChatScreen from "../screens/ChatScreen";
 import CVScreen from "../screens/CVScreen";
 import SearchScreen from "../screens/SearchScreen";
 import SignInWithPhoneNumber from "../screens/SignInWithPhoneNumber";
+import RegistrationScreen from "../screens/RegistrationScreens";
+
+import { TouchableOpacity } from "react-native";
+import Octicons from 'react-native-vector-icons/Octicons';
+import Feather from 'react-native-vector-icons/Feather';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 const Stack = createNativeStackNavigator();
+
+const AuthStack = (props) =>{
+  return (
+    <Stack.Navigator>
+        <Stack.Screen
+            name="Auth"
+            component={Auth}
+            options={({ }) => ({
+                headerShown: false,
+            })}
+        />
+        <Stack.Screen
+            name="SignInWithPhoneNumber"
+            component={SignInWithPhoneNumber}
+            options={({ route }) => ({
+                headerShown: false,
+            })}
+        />
+        <Stack.Screen
+                name="AddProfile"
+                component={RegistrationScreen}
+                options={() => ({
+                    title: "Thêm thông tin cá nhân",
+                    headerShown: true,
+                    headerStyle: {
+                        backgroundColor: '#337BFF',
+                    },
+                    headerTitleStyle: {
+                        color: '#FFFFFF',
+                    },
+                    headerTitleAlign: 'center',
+                    headerLeft: () => (
+                        <TouchableOpacity onPress={() => props.navigation.navigate('Auth')}>
+                            <Ionicons name="arrow-back" size={24} color="white" />
+                        </TouchableOpacity>
+                    ),
+                })}
+        />
+    </Stack.Navigator>
+);
+}
 
 const Router = () => {
     return (
       <Stack.Navigator initialRouteName="Onboarding" screenOptions={{headerShown: false}}>
         <Stack.Screen name="Onboarding" component={OnboardingScreen} />
-        <Stack.Screen name="Auth" component={Auth} />
         <Stack.Screen name="Login" component={SignInScreen} />
-        <Stack.Screen name="SignInWithPhoneNumber" component={SignInWithPhoneNumber} />
+        <Stack.Screen name="AuthStack" component={AuthStack} />
         <Stack.Screen name="TabNavigator" component={TabNavigator} />
         <Stack.Screen name="SavedJobsScreen" component={SavedJobsScreen} />
         <Stack.Screen name="MessageScreen" component={MessageScreen} />

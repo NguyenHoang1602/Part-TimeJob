@@ -190,9 +190,9 @@ const SignInWithPhoneNumber = ({navigation, props}) => {
       </View>
     );
   };
-  
+
 export default SignInWithPhoneNumber;
-  
+
 const styles = StyleSheet.create({
   logo: {
     width: 128,

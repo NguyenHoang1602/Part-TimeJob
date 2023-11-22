@@ -33,7 +33,7 @@ const AuthScreen = ({ navigation }) => {
             await GoogleSignin.signOut();
             const userInfo = await GoogleSignin.signIn();
             const token = userInfo.idToken;
-            const result = await axios.post('http://192.168.1.10:3000/users/GoogleSignIn', {
+            const result = await axios.post('http://192.168.9.150:3000/users/GoogleSignIn', {
                 idtoken: token,
             });
             setUser(result.data);
@@ -51,7 +51,7 @@ const AuthScreen = ({ navigation }) => {
                 justifyContent: 'center',
                 alignItems: 'center',
                 backgroundColor: '#fff',
-                paddingTop: 100
+                paddingTop: 50
             }}>
 
             <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', width: "100%" }}>
@@ -143,7 +143,7 @@ const AuthScreen = ({ navigation }) => {
                     <View style={{ height: 1, width: '33%', backgroundColor: COLORS.grey }} />
                 </View>
                 <TouchableOpacity
-                    onPress={() =>  navigation.navigate('SignInWithPhoneNumber')}
+                    onPress={() =>  navigation.navigate('AddProfile')}
                     style={{
                         backgroundColor: COLORS.primary,
                         padding: 5,
@@ -170,7 +170,6 @@ const AuthScreen = ({ navigation }) => {
                     </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                    onPress={() => navigation.navigate('SignUp')}
                     style={{
                         padding: 5,
                         width: '85%',
