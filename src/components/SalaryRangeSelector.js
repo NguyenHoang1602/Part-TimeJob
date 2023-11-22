@@ -76,28 +76,6 @@ const SalaryRangeSelector = ({
         right: barWidth - rightHandlePos.value,
     }));
 
-    const bars = useMemo(
-        () => (
-            <View style={{ flexDirection: "row", alignItems: "flex-end" }}>
-                {new Array(Math.round(maxPrice / 50)).fill("").map((_, i) => {
-                    const randomVlaue = Math.random();
-                    return (
-                        <View
-                            key={i}
-                            style={{
-                                flex: 1,
-                                height: Math.round(randomVlaue * 40) + 8,
-                                backgroundColor: "#3b82f6",
-                                opacity: Math.max(0.2, Math.min(0.5, randomVlaue)),
-                            }}
-                        />
-                    );
-                })}
-            </View>
-        ),
-        []
-    );
-
     useEffect(() => {
         if (barWidth === 0) return;
 
@@ -143,7 +121,7 @@ const SalaryRangeSelector = ({
                                 bottom: 24,
                             }}
                         />
-                        <SliderHandle label={`$${startPrice}`} />
+                        <SliderHandle label={`${startPrice}k/h`} />
                     </Animated.View>
                 </PanGestureHandler>
 
@@ -158,7 +136,7 @@ const SalaryRangeSelector = ({
                                 bottom: 24,
                             }}
                         />
-                        <SliderHandle label={`$${endPrice}`} />
+                        <SliderHandle label={`${endPrice}k/h`} />
                     </Animated.View>
                 </PanGestureHandler>
             </View>

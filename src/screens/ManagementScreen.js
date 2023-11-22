@@ -3,30 +3,84 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable react-native/no-inline-styles */
 import React, { useState, useContext } from 'react';
-import {View, StyleSheet, Text, TouchableOpacity,ImageBackground } from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity, ImageBackground } from 'react-native';
 import { COLORS } from '../constants/theme';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 
-import Fontisto from 'react-native-vector-icons/Fontisto';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import Ionicons from 'react-native-vector-icons/Ionicons'
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import IconWithBadge from '../components/IconWithBadge';
 import IconWithBadgeAntDesign from '../components/IconWithBadgeAntDesign';
-const URL_IMG = "https://manofmany.com/wp-content/uploads/2021/05/Best-Short-Hairstyles-for-Men.jpg";
+import axios from 'axios';
 
-//
-import TopTabScreen1 from './TopTabScreens1';
-import TopTabScreen2 from './TopTabScreens2';
-import TopTabScreen3 from './TopTabScreens3';
+import TopTabScreenIsDisplay from './TopTabScreenIsDisplay';
+import TopTabScreenWaiting from './TopTabScreenWaiting';
+import TopTabScreenDenied from './TopTabScreenDenied';
 import UserContext from '../components/UserConText';
+import { useFocusEffect } from '@react-navigation/native';
 
 const TopTab = createMaterialTopTabNavigator();
 const ManagementScreen = ({ route, navigation }) => {
   const { user } = useContext(UserContext);
+  const [listIsDisplay, setListIsDisplay] = useState([]);
+  const [listWaiting, setListWaiting] = useState([]);
+  const [listDenied, setListDenied] = useState([]);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      getListIsDisplay();
+      getListWaiting();
+      getListDenied();
+    }, [])
+  );
+
+  async function getListIsDisplay() {
+    try {
+      const result = await axios.get('http://192.168.1.10:3000/posts/listJobsIsDisplayForApp');
+      if (result.status === 200) {
+        //
+        setListIsDisplay(result.data);
+        let data = result.data;
+        if (data !== null) {
+      
+        }
+      }
+    } catch (error) {
+      console.log("Err : ", error);
+    }
+  }
+
+  async function getListWaiting() {
+    try {
+      const result = await axios.get('http://192.168.1.10:3000/posts/listJobsWaitingForApp');
+      if (result.status === 200) {
+        //
+        setListWaiting(result.data);
+        let data = result.data;
+        if (data !== null) {
+        
+        }
+      }
+    } catch (error) {
+
+    }
+  }
+
+  async function getListDenied() {
+    try {
+      const result = await axios.get('http://192.168.1.10:3000/posts/listJobsDeniedForApp');
+      if (result.status === 200) {
+        //
+        setListDenied(result.data);
+        let data = result.data;
+        if (data !== null) {
+         
+        }
+      }
+    } catch (error) {
+
+    }
+  }
+
   return (
     <SafeAreaView style={{ backgroundColor: 'white', flex: 1 }}>
       {/* Header */}
@@ -55,7 +109,7 @@ const ManagementScreen = ({ route, navigation }) => {
               width: '68%',
             }} onPress={() => { }}>
             <ImageBackground
-              source={{ uri: user.photo}}
+              source={{ uri: user.photo }}
               style={{ width: 46, height: 46 }}
               imageStyle={{ borderRadius: 46 }}
             />
@@ -111,9 +165,9 @@ const ManagementScreen = ({ route, navigation }) => {
           tabBarActiveTintColor: COLORS.primary,
         }}
       >
-        <TopTab.Screen name="Đang hiện thị (2)" component={TopTabScreen1} />
-        <TopTab.Screen name="Đang chờ duyệt (1)" component={TopTabScreen2} />
-        <TopTab.Screen name="Bị từ chối (3)" component={TopTabScreen3} />
+        <TopTab.Screen name={"Đang hiện thị (" + listIsDisplay.length + ")"} component={TopTabScreenIsDisplay} />
+        <TopTab.Screen name={"Đang chờ duyệt (" + listWaiting.length + ")"} component={TopTabScreenWaiting} />
+        <TopTab.Screen name={"Bị từ chối (" + listDenied.length + ")"} component={TopTabScreenDenied} />
       </TopTab.Navigator>
     </SafeAreaView>
   );

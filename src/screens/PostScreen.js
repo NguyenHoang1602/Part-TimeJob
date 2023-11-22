@@ -181,6 +181,7 @@ const PostScreen = ({ navigation }) => {
     }
   };
 
+  // Pick Images
   const BottomSheetContent = ({ isVisible, onClose }) => {
     return (
       <Modal

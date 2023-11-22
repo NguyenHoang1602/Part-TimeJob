@@ -51,7 +51,7 @@ const SignInWithPhoneNumber = ({ navigation, props }) => {
       await confirm.confirm(codes);
       // This
       
-      const result = await axios.post('http://192.168.1.10:3000/users/PhoneNumberSignIn', {
+      const result = await axios.post('http://192.168.8.124/users/PhoneNumberSignIn', {
         phoneNumber: number,
       });
       setUser(result.data);
