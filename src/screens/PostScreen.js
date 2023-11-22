@@ -156,13 +156,7 @@ const shouldShow = Checkdataimage();
         mediaType: 'photo',
       })
       .then((response) => {
-        const source = response.map((image) => ({
-          uri: image.path,
-          width: image.width,
-          height: image.height,
-        }));
-
-        setSelectedImages((prevImages) => [...prevImages, ...source]);
+        setSelectedImages((prevImages) => [...prevImages, ...response]);
         setBottomSheetVisible(!isBottomSheetVisible);
       })
       .catch((error) => {
@@ -175,16 +169,28 @@ const shouldShow = Checkdataimage();
       const formData = new FormData();
 
       selectedImages.forEach((image, index) => {
-        formData.append('images', {
-          uri: image.uri,
-          type: 'image/jpeg',
-          name: `image_${index}.jpg`,
-          width: image.width,
-          height: image.height,
+        formData.append("file", {
+          uri: image.path,
+          type: image.type,
+          name: image.filename,
         });
       });
     console.log(formData);
-    await axios.post('http://192.168.1.10:3000/posts/upload', { postImage : formData});
+      axios.post('https://api.cloudinary.com/v1_1/deawv1daj', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          'X-Requested-With': 'XMLHttpRequest',
+        },
+        data: {
+          upload_preset: 'PartTime_Job',
+        },
+      })
+        .then((cloudinaryResponse) => {
+          console.log(cloudinaryResponse.data);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
 
       Alert.alert('Upload successful');
       setSelectedImages([]);
