@@ -65,7 +65,7 @@ const HomeScreen = ({navigation}) => {
 
   const getList = () => {
     axios({
-      url: "http://192.168.1.10:3000/posts/list",
+      url: "http://192.168.9.150:3000/posts/list",
       method: "GET",
     }).then((res) => {
       var response = res.data
@@ -88,7 +88,7 @@ const HomeScreen = ({navigation}) => {
   const FlatListb = () => {
     return (
       <FlatList
-        data={list.reverse()}
+        data={Jobdata}
         keyExtractor={(item) => item.id}
         renderItem={renderItemJob}
         nestedScrollEnabled={true}
@@ -186,14 +186,14 @@ const HomeScreen = ({navigation}) => {
               alignItems: 'center',
               width: '68%',
             }}>
-            <ImageBackground
+            {/* <ImageBackground
               source={{ uri : user.photo }}
               style={{ width: 46, height: 46 }}
               imageStyle={{ borderRadius: 46 }}
-            />
+            /> */}
             <View style={{ flexDirection: 'column', height: '100%', justifyContent: 'center', marginStart: 13 }}>
               <Text style={{ color: '#7D7A7A', fontSize: 16 }}>Good Morning 👋</Text>
-              <Text style={{ color: COLORS.black, fontSize: 20, fontWeight: "600" }} numberOfLines={1}>{user.displayName}</Text>
+              {/* <Text style={{ color: COLORS.black, fontSize: 20, fontWeight: "600" }} numberOfLines={1}>{user.displayName}</Text> */}
             </View>
           </TouchableOpacity>
           <TouchableOpacity

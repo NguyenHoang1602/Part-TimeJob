@@ -21,7 +21,7 @@ const Stack = createNativeStackNavigator();
 const Router = () => {
     return (
       <Stack.Navigator initialRouteName="Onboarding" screenOptions={{headerShown: false}}>
-        <Stack.Screen name="Onboarding" component={OnboardingScreen} />
+        <Stack.Screen name="Onboarding" component={TabNavigator} />
         <Stack.Screen name="Auth" component={Auth} />
         <Stack.Screen name="Login" component={SignInScreen} />
         <Stack.Screen name="SignInWithPhoneNumber" component={SignInWithPhoneNumber} />

@@ -406,6 +406,24 @@ const PostScreen = ({ navigation }) => {
               style={[styles.dropdown, isFocus && { borderColor: COLORS.darkBlue }]}
               placeholderStyle={styles.placeholderStyle}
               selectedTextStyle={styles.selectedTextStyle}
+              iconStyle={styles.iconStyle}
+              data={data}
+              maxHeight={300}
+              labelField="label"
+              valueField="value"
+              placeholder={!isFocus ? 'Giới tính' : '...'}
+              value={value}
+              onFocus={() => setIsFocus(true)}
+              onBlur={() => setIsFocus(false)}
+              onChange={item => {
+                setValue(item.value);
+                setIsFocus(false);
+              }}
+            />
+            <Dropdown
+              style={[styles.dropdown, isFocus && { borderColor: COLORS.darkBlue }]}
+              placeholderStyle={styles.placeholderStyle}
+              selectedTextStyle={styles.selectedTextStyle}
               inputSearchStyle={styles.inputSearchStyle}
               iconStyle={styles.iconStyle}
               data={data}
@@ -573,13 +591,6 @@ const PostScreen = ({ navigation }) => {
               // value={route.params?.subtitle}
               error={errors.subtitle}
             /> */}
-            <Input
-              onChangeText={text => handleOnchange(text, 'Engraved_benefits')}
-              onFocus={() => handleError(null, 'Engraved_benefits')}
-              placeholder="Các quyền lợi khác"
-              // value={route.params?.subtitle}
-              error={errors.Engraved_benefits}
-            />
           </View>
           <View style={{ marginHorizontal: 24 }}>
             <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'center' }}>
