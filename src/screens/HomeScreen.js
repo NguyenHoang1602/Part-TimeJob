@@ -14,12 +14,8 @@ import Input from '../components/Input';
 import COLORS from '../assets/const/colors';
 import Button from '../components/Button';
 //icon
-import Octicons from 'react-native-vector-icons/Octicons';
 import Feather from 'react-native-vector-icons/Feather';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import Icons from 'react-native-vector-icons/MaterialIcons';
-import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import IconWithBadge from '../components/IconWithBadge';
 import IconWithBadgeAntDesign from '../components/IconWithBadgeAntDesign';
@@ -27,58 +23,51 @@ import UserContext from '../components/UserConText';
 
 import axios from 'axios';
 
-const data = [
-  { id: '1', title: 'Item 1', uri: 'https://devforum-uploads.s3.dualstack.us-east-2.amazonaws.com/uploads/original/4X/b/7/6/b766c952bf9c722c30447824d8fc06a48f008e31.png' },
-  { id: '2', title: 'Item 2', uri: 'https://devforum-uploads.s3.dualstack.us-east-2.amazonaws.com/uploads/original/4X/b/7/6/b766c952bf9c722c30447824d8fc06a48f008e31.png' },
-  { id: '3', title: 'Item 3', uri: 'https://devforum-uploads.s3.dualstack.us-east-2.amazonaws.com/uploads/original/4X/b/7/6/b766c952bf9c722c30447824d8fc06a48f008e31.png' },
-  { id: '4', title: 'Item 4', uri: 'https://devforum-uploads.s3.dualstack.us-east-2.amazonaws.com/uploads/original/4X/b/7/6/b766c952bf9c722c30447824d8fc06a48f008e31.png' },
-  { id: '5', title: 'Item 5', uri: 'https://devforum-uploads.s3.dualstack.us-east-2.amazonaws.com/uploads/original/4X/b/7/6/b766c952bf9c722c30447824d8fc06a48f008e31.png' },
-  { id: '6', title: 'Item 6', uri: 'https://devforum-uploads.s3.dualstack.us-east-2.amazonaws.com/uploads/original/4X/b/7/6/b766c952bf9c722c30447824d8fc06a48f008e31.png' },
-  { id: '7', title: 'Item 7', uri: 'https://devforum-uploads.s3.dualstack.us-east-2.amazonaws.com/uploads/original/4X/b/7/6/b766c952bf9c722c30447824d8fc06a48f008e31.png' },
-  { id: '8', title: 'Item 8', uri: 'https://devforum-uploads.s3.dualstack.us-east-2.amazonaws.com/uploads/original/4X/b/7/6/b766c952bf9c722c30447824d8fc06a48f008e31.png' },
-  { id: '9', title: 'Item 9', uri: 'https://devforum-uploads.s3.dualstack.us-east-2.amazonaws.com/uploads/original/4X/b/7/6/b766c952bf9c722c30447824d8fc06a48f008e31.png' },
-  { id: '10', title: 'Item 10', uri: 'https://devforum-uploads.s3.dualstack.us-east-2.amazonaws.com/uploads/original/4X/b/7/6/b766c952bf9c722c30447824d8fc06a48f008e31.png' },
-
-];
-const Jobdata = [
-  { id: '1', title: 'Freelancer 1', Details: 'Dribble Inc.', Address: 'Quan 1, TP. HCM', wagemax: '150000', wagemin: '50000', worktype: 'Partime', uri: 'https://devforum-uploads.s3.dualstack.us-east-2.amazonaws.com/uploads/original/4X/b/7/6/b766c952bf9c722c30447824d8fc06a48f008e31.png' },
-  { id: '2', title: 'Freelancer 2', Details: 'Dribble Inc.', Address: 'Quan 1, TP. HCM', wagemax: '150000', wagemin: '50000', worktype: 'Partime', uri: 'https://devforum-uploads.s3.dualstack.us-east-2.amazonaws.com/uploads/original/4X/b/7/6/b766c952bf9c722c30447824d8fc06a48f008e31.png' },
-  { id: '3', title: 'Freelancer 3', Details: 'Dribble Inc.', Address: 'Quan 1, TP. HCM', wagemax: '150000', wagemin: '50000', worktype: 'Partime', uri: 'https://devforum-uploads.s3.dualstack.us-east-2.amazonaws.com/uploads/original/4X/b/7/6/b766c952bf9c722c30447824d8fc06a48f008e31.png' },
-  { id: '4', title: 'Freelancer 4', Details: 'Dribble Inc.', Address: 'Quan 1, TP. HCM', wagemax: '150000', wagemin: '50000', worktype: 'Partime', uri: 'https://devforum-uploads.s3.dualstack.us-east-2.amazonaws.com/uploads/original/4X/b/7/6/b766c952bf9c722c30447824d8fc06a48f008e31.png' },
-  { id: '5', title: 'Freelancer 5', Details: 'Dribble Inc.', Address: 'Quan 1, TP. HCM', wagemax: '150000', wagemin: '50000', worktype: 'Partime', uri: 'https://devforum-uploads.s3.dualstack.us-east-2.amazonaws.com/uploads/original/4X/b/7/6/b766c952bf9c722c30447824d8fc06a48f008e31.png' },
-]
-
 const HomeScreen = ({navigation}) => {
 
-  const { user } = useContext(UserContext);
-  const [list, setList] = useState([]);
-  console.log(user);
   useFocusEffect(
     React.useCallback(() => {
-      getList()
+      getListJobs()
+      getListCareers()
     }, [])
   );
+
+  const { user } = useContext(UserContext);
+
+  const [listJobs, setListJobs] = useState([]);
+  const [listCareers, setListCareers] = useState([]);
 
   const search = () =>{
     navigation.navigate('SearchScreen')
   }
 
-  const getList = () => {
+  const getListJobs = () => {
     axios({
-      url: "http://192.168.9.150:3000/posts/list",
+      url: "http://192.168.1.10:3000/posts/list",
       method: "GET",
     }).then((res) => {
       var response = res.data
       console.log(response);
-      setList(response)
+      setListJobs(response)
+    })
+  }
+
+  const getListCareers = () => {
+    axios({
+      url: "http://192.168.1.10:3000/careers/listCareersForApp",
+      method: "GET",
+    }).then((res) => {
+      var response = res.data
+      console.log("Careers : " + response);
+      setListCareers(response)
     })
   }
 
   const FlatLista = () => {
     return (
       <FlatList
-        data={data}
-        keyExtractor={(item) => item.id}
+        data={listCareers}
+        keyExtractor={(item, index) => index.toString()}
         renderItem={renderItem}
         horizontal={true}
       />
@@ -88,23 +77,23 @@ const HomeScreen = ({navigation}) => {
   const FlatListb = () => {
     return (
       <FlatList
-        data={Jobdata}
-        keyExtractor={(item) => item.id}
+        data={listJobs.reverse()}
+        keyExtractor={(item, index) => index.toString()}
         renderItem={renderItemJob}
         nestedScrollEnabled={true}
         scrollEnabled={false}
       />
     );
-
   }
+
   const renderItem = ({ item }) => (
     <TouchableOpacity style={{ margin: 20, alignItems: 'center' }} onPress={()=>{}}>
       <ImageBackground
-        source={{ uri: item.uri }}
+        source={{ uri: item.image }}
         style={{ width: 46, height: 46, marginBottom: 5 }}
         imageStyle={{ borderRadius: 5 }}
       />
-      <Text>{item.title}</Text>
+      <Text>{item.c_title}</Text>
     </TouchableOpacity>
   );
 
@@ -122,20 +111,28 @@ const HomeScreen = ({navigation}) => {
       id: item.id,
       uri: item.uri,
       address: item.Address,
-      wagemax: item.wagemax,
-      wagemin: item.wagemin,
+      wage_max: item.wagemax,
+      wage_min: item.wagemin,
       worktype: item.worktype,
       Details: item.Details,
     })}>
       <View style={{ width: '100%', flexDirection: 'row' }}>
-        <ImageBackground
-          source={{ uri: item.image }}
-          style={{ width: 46, height: 46, marginBottom: 5 }}
-          imageStyle={{ borderRadius: 5 }}
-        />
+        {item.image.map((imageUrl, index) => {
+          if (index === 0) {
+            return (
+              <ImageBackground
+                key={index}
+                source={{ uri: imageUrl }}
+                style={{ width: 46, height: 46, marginBottom: 5 }}
+                imageStyle={{ borderRadius: 5 }}
+              />
+            );
+          }
+        })}
+        
         <View style={{ width: '50%', height: '100%', marginStart: 20, flex: 1 }}>
           <Text style={{ fontSize: 16, fontWeight: 'bold' }}>{item.title}</Text>
-          <Text style={{ fontSize: 16, fontWeight: 'bold', color: COLORS.grey }}>{item.Details}</Text>
+          <Text style={{ fontSize: 16, fontWeight: 'bold', color: COLORS.grey }}>{item.describe}</Text>
         </View>
         <TouchableOpacity onPress={() => { }}>
           <Icon name="bookmark-plus-outline" size={30} color={COLORS.blue} />
@@ -144,7 +141,7 @@ const HomeScreen = ({navigation}) => {
       <View style={{ height: 1, width: '99%', backgroundColor: COLORS.grey, opacity: 0.4, marginTop: 15, marginBottom: 8 }} />
       <View style={{ width: '100%', paddingStart: '22%' }}>
         <Text style={{ fontSize: 16, fontWeight: 'bold', color: COLORS.grey }}>{item.Address}</Text>
-        <Text style={{ color: COLORS.blue, fontSize: 16, marginVertical: 9 }}>${item.wagemin} - ${item.wagemax} /month</Text>
+        <Text style={{ color: COLORS.blue, fontSize: 16, marginVertical: 9 }}>${item.wage_min} - ${item.wage_max} /month</Text>
         <View style={{
           width: 60,
           height: 25,
@@ -161,6 +158,7 @@ const HomeScreen = ({navigation}) => {
 
     </TouchableOpacity>
   );
+
   return (
     <SafeAreaView style={{ flex: 1, color: COLORS.blue, backgroundColor: COLORS.white }}>
       <View style={{
@@ -186,14 +184,14 @@ const HomeScreen = ({navigation}) => {
               alignItems: 'center',
               width: '68%',
             }}>
-            {/* <ImageBackground
+            <ImageBackground
               source={{ uri : user.photo }}
               style={{ width: 46, height: 46 }}
               imageStyle={{ borderRadius: 46 }}
-            /> */}
+            />
             <View style={{ flexDirection: 'column', height: '100%', justifyContent: 'center', marginStart: 13 }}>
               <Text style={{ color: '#7D7A7A', fontSize: 16 }}>Good Morning 👋</Text>
-              {/* <Text style={{ color: COLORS.black, fontSize: 20, fontWeight: "600" }} numberOfLines={1}>{user.displayName}</Text> */}
+              <Text style={{ color: COLORS.black, fontSize: 20, fontWeight: "600" }} numberOfLines={1}>{user.displayName}</Text>
             </View>
           </TouchableOpacity>
           <TouchableOpacity

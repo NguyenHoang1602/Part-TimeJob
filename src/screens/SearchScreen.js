@@ -9,8 +9,8 @@
 /* eslint-disable eol-last */
 /* eslint-disable prettier/prettier */
 /* eslint-disable react-native/no-inline-styles */
-import React, { useState } from 'react';
-import { FlatList, Image, TextInput, ScrollView, StyleSheet, Text, TouchableOpacity, View,ImageBackground, Pressable } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { FlatList, Image, TextInput, ScrollView, StyleSheet, Text, TouchableOpacity, View, ImageBackground, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS } from '../constants/theme';
 
@@ -19,6 +19,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 //lib
 import Modal from "react-native-modal";
@@ -31,9 +32,11 @@ import Collapsible from 'react-native-collapsible';
 import CheckBox from '../components/CheckBox';
 import CheckBoxCircle from '../components/CheckBoxCircle';
 
+import axios from 'axios';
+
 const URL_IMG = "https://s3-alpha-sig.figma.com/img/acc1/c7a7/e9c43527e435b8c79bc8126d3d053264?Expires=1700438400&Signature=YkRmo~i-p6AZ1AulSOjpW4wA3UdrSHH2zV8WQihLw5uEordi8QWRvjnTz8mWYDq4ZkRCCVDBz1xuFXGQtgMqAStOpOvBGzkzNvHMeK4xw6AsufXB2uI2IIfmL2LgzBHgwk2l6IM3Rxb-4I9wdC8aSg1r9x9KwN~e31NOH19C3w1~A9jSJHDWJk9ECpnIqIrYRwzIfBR6nDOWxXZqjwn-Y8rg94RJb1UZYGQhSe9~MYAq1LzHKO0imJe1lpNv6dYv~amXSnfuuZW2awviacARGnYIjO~rDGmP339lgP9Df71ZKGUxsgIQpK26gCH0IoaFY1B9riTOaj2ENioGaqJurg__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4";
 
-const MAX_PRICE = 500;
+const MAX_PRICE = 100;
 
 const data = [
   { label: 'Item 1', value: '1' },
@@ -54,10 +57,12 @@ const Jobdata = [
   { id: '5', title: 'Freelancer', Address: 'Quan 1, TP. HCM', wagemax: '150000', wagemin: '50000', worktype: 'Partime', uri: 'https://devforum-uploads.s3.dualstack.us-east-2.amazonaws.com/uploads/original/4X/b/7/6/b766c952bf9c722c30447824d8fc06a48f008e31.png' },
 ]
 
-const SavedJobsScreen = ({ navigation }) => {
+const SearchScreen = ({ navigation }) => {
 
-  const [password, setPassword] = useState('');
-  const [isFocusedPass, setIsFocusedPass] = useState(false);
+  const [list, setList] = useState([]);
+  const [key, setKey] = useState('');
+  const [valueKey, setValueKey] = useState(key);
+  const [isFocusedSearch, setIsFocusedSearch] = useState(false);
 
   const [isSave, setSave] = useState(false);
   const [isSelect1, setIsselect1] = useState(true);
@@ -105,15 +110,6 @@ const SavedJobsScreen = ({ navigation }) => {
 
   const [value, setValue] = useState(null);
   const [isFocus, setIsFocus] = useState(false);
-  const Checkdata = () => {
-    if (Jobdata == "") {
-      return false;
-    } else {
-      return true;
-    }
-  }
-
-  const isFound = Checkdata();
 
   const optionsWorkType = [
     { id: '01', text: 'Part-time (Công việc bán thời gian)' },
@@ -171,68 +167,116 @@ const SavedJobsScreen = ({ navigation }) => {
   const toggleModalclose = (item) => {
     setModalVisibleFiler(!isModalVisibleFilter);
   };
+
+  useEffect(() => {
+
+  }, []);
+  console.log(key);
+  async function search(value) {
+    try {
+      const API = 'http://192.168.1.10:3000/posts/list'
+      const result = await axios.post('http://192.168.1.10:3000/posts/searchByKeyForApp', { key: value });
+      //const result = await axios.get(`${API}?filter=${value}`);
+      if (result.status === 200) {
+        //
+        setList(result.data);
+        console.log(result.data);
+        let data = result.data;
+        if (data !== null) {
+          // setForm(true)
+        }
+      }
+    } catch (error) {
+      console.log("Err : ", error);
+    }
+  }
+
   const FlatListb = () => {
     return (
       <FlatList
-        data={Jobdata}
-        keyExtractor={(item) => item.id}
+        data={list}
+        keyExtractor={(item) => item._id}
         renderItem={renderItemJob}
-        nestedScrollEnabled={true}
-        scrollEnabled={false}
+        showsVerticalScrollIndicator={false}
+        ListEmptyComponent={() => (
+          <View style={{ alignItems: 'center', justifyContent: 'center', paddingHorizontal: 20 }}>
+            <ImageBackground
+              source={require('../assets/images/5928293_2953962.jpg')}
+              style={{ width: "100%", height: 430, }}
+            />
+            <Text style={{ fontSize: 22, color: COLORS.black, fontWeight: '700' }}>Empty</Text>
+            <Text style={{ fontSize: 16, marginTop: 7, textAlign: 'center' }}>Sorry, the keyword you entered cannot be found, please check again or search with another keyword.</Text>
+          </View>
+        )}
       />
     );
 
   }
 
   const renderItemJob = ({ item }) => (
-
-    <View style={{ padding: 18, }}>
-      <View style={{ borderRadius: 15, borderWidth: 1, paddingHorizontal: 18, borderColor: COLORS.blackOpacity, borderCurve: 'continuous' }}>
-        <View style={{ flexDirection: 'row', gap: 8, paddingVertical: 18 }}>
-          <Image source={{ uri: URL_IMG }} style={{ width: 52, aspectRatio: 1, borderRadius: 52 }} />
-          <View style={{ flex: 1 }}>
-            <Text style={{ fontSize: 18, color: COLORS.black, fontWeight: "600", }} numberOfLines={1}>
-              UI/UX Designer
-            </Text>
-            <Text style={{ fontSize: 16, color: COLORS.grey, paddingTop: 4 }} numberOfLines={1}>
-              John Sena
-            </Text>
-          </View>
-          <TouchableOpacity onPress={toggleModalSave}>
-            <MaterialCommunityIcons name={!isSave ? 'bookmark-minus' : 'bookmark-minus-outline'} size={26} color={COLORS.primary} />
-          </TouchableOpacity>
+    <TouchableOpacity style={{
+      width: 340,
+      borderWidth: 0.5,
+      borderColor: COLORS.grey,
+      borderRadius: 20,
+      marginBottom: 18,
+      padding: 20,
+    }}
+      onPress={() => navigation.navigate('DetailsScreen', {
+        title: item.title,
+        id: item.id,
+        uri: item.uri,
+        address: item.Address,
+        wagemax: item.wagemax,
+        wagemin: item.wagemin,
+        worktype: item.worktype,
+        Details: item.Details,
+      })}>
+      <View style={{ width: '100%', flexDirection: 'row' }}>
+        {item.image.map((imageUrl, index) => {
+          if (index === 0) {
+            return (
+              <ImageBackground
+                key={index}
+                source={{ uri: imageUrl }}
+                style={{ width: 46, height: 46, marginBottom: 5 }}
+                imageStyle={{ borderRadius: 5 }}
+              />
+            );
+          }
+        })}
+        <View style={{ width: '50%', height: '100%', marginStart: 20, flex: 1 }}>
+          <Text style={{ fontSize: 16, fontWeight: 'bold' }}>{item.title}</Text>
+          <Text style={{ fontSize: 16, fontWeight: 'bold', color: COLORS.grey }}>{item.describe}</Text>
         </View>
-
-        <View style={{ borderTopWidth: 1, borderColor: COLORS.blackOpacity, }} />
-
-        <View style={{ flexDirection: 'row', gap: 8, paddingVertical: 12 }}>
-          <View style={{ paddingStart: 60 }}>
-            <Text style={{ fontSize: 18, color: COLORS.black, fontWeight: "600", }} numberOfLines={1}>
-              UI/UX Designer
-            </Text>
-            <Text style={{ fontSize: 16, color: COLORS.primary, paddingVertical: 4 }} numberOfLines={1}>
-              ${item.wagemin} - {item.wagemax} /month
-            </Text>
-            <View style={{
-              width: 60,
-              borderWidth: 0.5,
-              borderColor: COLORS.grey,
-              borderRadius: 7,
-              padding: 5,
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}>
-              <Text style={{ fontSize: 10 }}>{item.worktype}</Text>
-            </View>
-          </View>
+        <TouchableOpacity onPress={() => { }}>
+          <Icon name="bookmark-plus-outline" size={30} color={COLORS.blue} />
+        </TouchableOpacity>
+      </View>
+      <View style={{ height: 1, width: '99%', backgroundColor: COLORS.grey, opacity: 0.4, marginTop: 15, marginBottom: 8 }} />
+      <View style={{ width: '100%', paddingStart: '22%' }}>
+        <Text style={{ fontSize: 16, fontWeight: 'bold', color: COLORS.grey }}>{item.Address}</Text>
+        <Text style={{ color: COLORS.blue, fontSize: 16, marginVertical: 9 }}>${item.wagemin} - ${item.wagemax} /month</Text>
+        <View style={{
+          width: 60,
+          height: 25,
+          borderWidth: 0.5,
+          borderColor: COLORS.grey,
+          borderRadius: 7,
+          padding: 5,
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}>
+          <Text style={{ fontSize: 10 }}>{item.worktype}</Text>
         </View>
       </View>
-    </View>
+
+    </TouchableOpacity>
   );
 
   return (
 
-    <SafeAreaView style={{ paddingVertical: 18, gap: 16, backgroundColor: 'white', height: '100%' }}>
+    <SafeAreaView style={{ flex: 1, paddingVertical: 18, gap: 16, backgroundColor: 'white' }}>
 
       {/* Search */}
       <View
@@ -248,6 +292,7 @@ const SavedJobsScreen = ({ navigation }) => {
           <Ionicons name='chevron-back-outline' size={24} color={COLORS.grey} />
         </TouchableOpacity>
 
+        {/* Search */}
         <View
           style={{
             flex: 1,
@@ -257,19 +302,18 @@ const SavedJobsScreen = ({ navigation }) => {
             alignItems: 'center',
             paddingHorizontal: 18,
             backgroundColor: "#F5F5F5",
-            backgroundColor: !isFocusedPass ? COLORS.lightGrey : COLORS.blue,
+            backgroundColor: !isFocusedSearch ? COLORS.lightGrey : COLORS.blue,
             borderWidth: 1,
-            borderColor: !isFocusedPass ? COLORS.white : COLORS.primary
+            borderColor: !isFocusedSearch ? COLORS.white : COLORS.primary
           }}>
-          <AntDesign name='search1' size={24} color={!isFocusedPass ? COLORS.grey : COLORS.primary} />
+          <AntDesign name='search1' size={24} color={!isFocusedSearch ? COLORS.grey : COLORS.primary} />
           <TextInput
             placeholder="Search . . ."
-            value={password}
-            onChangeText={(value) => {
-              setPassword(value)
+            onChangeText={value => {
+              search(value)
             }}
-            onFocus={() => { setIsFocusedPass(!isFocusedPass) }}
-            onBlur={() => { setIsFocusedPass(!isFocusedPass) }}
+            onFocus={() => { setIsFocusedSearch(!isFocusedSearch) }}
+            onBlur={() => { setIsFocusedSearch(!isFocusedSearch) }}
             style={{ flex: 1, fontSize: 16, color: COLORS.black, paddingHorizontal: 10, }} />
           <TouchableOpacity onPress={() => {
             toggleModalFilter()
@@ -283,7 +327,7 @@ const SavedJobsScreen = ({ navigation }) => {
       <View style={styles.foundNav}>
         <View style={{ flex: 1 }}>
           <Text style={styles.textFound}>
-            0 Found
+            {list.length} Found
           </Text>
         </View>
         <TouchableOpacity onPress={() => {
@@ -294,25 +338,9 @@ const SavedJobsScreen = ({ navigation }) => {
       </View>
 
       {/* Show Search */}
-
-      {isFound ?
-        //Found
-        <View style={styles.found}>
-          <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps={'always'}>
-            <FlatListb />
-          </ScrollView>
-        </View>
-        :
-        //No Found
-        <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-          <ImageBackground
-            source={require('../assets/images/5928293_2953962.jpg')}
-            style={{ width: "108%", height: 430, marginEnd: '9%', marginBottom: -25 }}
-          />
-          <Text style={{ fontSize: 22, color: COLORS.black, fontWeight: '700' }}>Empty</Text>
-          <Text style={{ fontSize: 16, marginTop: 7, marginBottom: '50%' }}>Sorry, the keyword you entered cannot be found, please check again or search with another keyword.</Text>
-        </View>
-      }
+      <View style={{alignItems: 'center', flex: 1}}>
+        <FlatListb />
+      </View>
 
       {/* Modal Save job */}
       <Modal isVisible={isModalVisibleSave} style={{ justifyContent: 'flex-end', margin: 0 }}>
@@ -326,7 +354,7 @@ const SavedJobsScreen = ({ navigation }) => {
               <View style={{ flexDirection: 'row', gap: 8, paddingVertical: 18 }}>
                 <Image source={{ uri: URL_IMG }} style={{ width: 52, aspectRatio: 1, borderRadius: 52 }} />
                 <View style={{ flex: 1 }}>
-                  <Text style={{ fontSize: 18, color: COLORS.black, fontWeight: "600",}} numberOfLines={1}>
+                  <Text style={{ fontSize: 18, color: COLORS.black, fontWeight: "600", }} numberOfLines={1}>
                     UI/UX Designer
                   </Text>
                   <Text style={{ fontSize: 16, color: COLORS.grey, paddingTop: 4 }} numberOfLines={1}>
@@ -398,12 +426,15 @@ const SavedJobsScreen = ({ navigation }) => {
       </Modal>
 
       {/* Modal Filter */}
-      <Modal isVisible={isModalVisibleFilter} style={{ margin: 0 }}>
-        <GestureHandlerRootView style={{ flex: 1 }}>
-          <SafeAreaView style={{ backgroundColor: 'white', padding: 18 }}>
-            {/* Tilter */}
+      <Modal isVisible={isModalVisibleFilter}
+        style={{
+          margin: 0,
+        }}>
+        <GestureHandlerRootView style={{ flex: 1, }}>
+          <SafeAreaView style={{ backgroundColor: 'white', padding: 18, height: "100%", paddingBottom: 60 }}>
 
-            <View style={{ flexDirection: 'row', alignItems: 'flex-start', height: 40 }}>
+            {/* Tilter */}
+            <View style={{ flexDirection: 'row', height: 40 }}>
               <Text style={{ paddingStart: 10, fontSize: 18, fontWeight: '700', color: COLORS.black, flex: 1 }}>Filter Options</Text>
               <TouchableOpacity style={{ marginEnd: 10 }} onPress={toggleModalclose}>
                 <AntDesign name='close' size={24} color={COLORS.black} />
@@ -411,8 +442,8 @@ const SavedJobsScreen = ({ navigation }) => {
             </View>
 
             {/* Filter Options */}
-            <ScrollView style={{height: '100%'}} showsVerticalScrollIndicator={false}>
-              <View style={{ alignItems: 'center'}}>
+            <ScrollView showsVerticalScrollIndicator={false}>
+              <View style={{ alignItems: 'center' }}>
                 {/* Location & Salary */}
                 <Pressable style={{ paddingVertical: 18, width: "100%" }} onPress={toggleSelect1}>
                   <View style={{ borderRadius: 15, borderWidth: 1, paddingHorizontal: 18, borderColor: COLORS.blackOpacity }}>
@@ -422,7 +453,7 @@ const SavedJobsScreen = ({ navigation }) => {
                           Location & Salary
                         </Text>
                       </View>
-                      <Feather name={!isSelect1 ? 'chevron-up' : 'chevron-down'} size={24} color={COLORS.grey1} />
+                      <Feather name={!isSelect1 ? 'chevron-up' : 'chevron-down'} size={24} color={COLORS.primary} />
                     </View>
                     <Collapsible collapsed={collapsed1}>
                       <View style={{ borderTopWidth: 1, borderColor: COLORS.blackOpacity }} />
@@ -462,6 +493,7 @@ const SavedJobsScreen = ({ navigation }) => {
                     </Collapsible>
                   </View>
                 </Pressable>
+
                 {/* Work Type */}
                 <Pressable style={{ paddingVertical: 18, width: "100%" }} onPress={toggleSelect2}>
                   <View style={{ borderRadius: 15, borderWidth: 1, paddingHorizontal: 18, borderColor: COLORS.blackOpacity }}>
@@ -471,7 +503,7 @@ const SavedJobsScreen = ({ navigation }) => {
                           Loại công việc
                         </Text>
                       </View>
-                      <Feather name={!isSelect2 ? 'chevron-up' : 'chevron-down'} size={24} color={COLORS.grey1} />
+                      <Feather name={!isSelect2 ? 'chevron-up' : 'chevron-down'} size={24} color={COLORS.primary} />
                     </View>
                     <Collapsible collapsed={collapsed2}>
                       <View style={{ borderTopWidth: 1, borderColor: COLORS.blackOpacity }} />
@@ -481,6 +513,7 @@ const SavedJobsScreen = ({ navigation }) => {
                     </Collapsible>
                   </View>
                 </Pressable>
+
                 {/* Sex Type */}
                 <Pressable style={{ paddingVertical: 18, width: "100%" }} onPress={toggleSelect3}>
                   <View style={{ borderRadius: 15, borderWidth: 1, paddingHorizontal: 18, borderColor: COLORS.blackOpacity }}>
@@ -490,7 +523,7 @@ const SavedJobsScreen = ({ navigation }) => {
                           Giới tính
                         </Text>
                       </View>
-                      <Feather name={!isSelect3 ? 'chevron-up' : 'chevron-down'} size={24} color={COLORS.grey1} />
+                      <Feather name={!isSelect3 ? 'chevron-up' : 'chevron-down'} size={24} color={COLORS.primary} />
                     </View>
                     <Collapsible collapsed={collapsed3}>
                       <View style={{ borderTopWidth: 1, borderColor: COLORS.blackOpacity }} />
@@ -500,7 +533,8 @@ const SavedJobsScreen = ({ navigation }) => {
                     </Collapsible>
                   </View>
                 </Pressable>
-                {/* education */}
+
+                {/* Education */}
                 <Pressable style={{ paddingVertical: 18, width: "100%" }} onPress={toggleSelect4}>
                   <View style={{ borderRadius: 15, borderWidth: 1, paddingHorizontal: 18, borderColor: COLORS.blackOpacity }}>
                     <View style={{ flexDirection: 'row', gap: 8, paddingVertical: 15 }}>
@@ -509,7 +543,7 @@ const SavedJobsScreen = ({ navigation }) => {
                           Trình độ học vấn
                         </Text>
                       </View>
-                      <Feather name={!isSelect4 ? 'chevron-up' : 'chevron-down'} size={24} color={COLORS.grey1} />
+                      <Feather name={!isSelect4 ? 'chevron-up' : 'chevron-down'} size={24} color={COLORS.primary} />
                     </View>
                     <Collapsible collapsed={collapsed4}>
                       <View style={{ borderTopWidth: 1, borderColor: COLORS.blackOpacity }} />
@@ -519,7 +553,8 @@ const SavedJobsScreen = ({ navigation }) => {
                     </Collapsible>
                   </View>
                 </Pressable>
-                {/* experence */}
+
+                {/* Experence */}
                 <Pressable style={{ paddingVertical: 18, width: "100%" }} onPress={toggleSelect5}>
                   <View style={{ borderRadius: 15, borderWidth: 1, paddingHorizontal: 18, borderColor: COLORS.blackOpacity }}>
                     <View style={{ flexDirection: 'row', gap: 8, paddingVertical: 15 }}>
@@ -528,7 +563,7 @@ const SavedJobsScreen = ({ navigation }) => {
                           Kinh nghiệm làm việc
                         </Text>
                       </View>
-                      <Feather name={!isSelect5 ? 'chevron-up' : 'chevron-down'} size={24} color={COLORS.grey1} />
+                      <Feather name={!isSelect5 ? 'chevron-up' : 'chevron-down'} size={24} color={COLORS.primary} />
                     </View>
                     <Collapsible collapsed={collapsed5}>
                       <View style={{ borderTopWidth: 1, borderColor: COLORS.blackOpacity }} />
@@ -538,6 +573,7 @@ const SavedJobsScreen = ({ navigation }) => {
                     </Collapsible>
                   </View>
                 </Pressable>
+
                 {/* Payform */}
                 <Pressable style={{ paddingVertical: 18, width: "100%" }} onPress={toggleSelect}>
                   <View style={{ borderRadius: 15, borderWidth: 1, paddingHorizontal: 18, borderColor: COLORS.blackOpacity }}>
@@ -547,7 +583,7 @@ const SavedJobsScreen = ({ navigation }) => {
                           Hình thức trả lương
                         </Text>
                       </View>
-                      <Feather name={!isSelect ? 'chevron-up' : 'chevron-down'} size={24} color={COLORS.grey1} />
+                      <Feather name={!isSelect ? 'chevron-up' : 'chevron-down'} size={24} color={COLORS.primary} />
                     </View>
                     <Collapsible collapsed={collapsed}>
                       <View style={{ borderTopWidth: 1, borderColor: COLORS.blackOpacity }} />
@@ -557,42 +593,57 @@ const SavedJobsScreen = ({ navigation }) => {
                     </Collapsible>
                   </View>
                 </Pressable>
-                {/* Button */}
-                <View style={{
-                  flexDirection: 'row',
-                  marginTop: '40%',
-                  marginBottom: 40,
-                  shadowColor: 'red',
-                }}>
-                  <TouchableOpacity
-                    onPress={toggleModalFilter}
-                    style={{
-                      backgroundColor: 'rgba(51, 123, 255, 0.20)',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      borderRadius: 64,
-                      position: "relative",
-                      width: 160,
-                      paddingVertical: 15,
-                      marginEnd: 15,
-                    }}>
-                    <Text style={{ color: COLORS.primary, fontSize: 18, fontWeight: "600"}}>Reset</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    style={{
-                      backgroundColor: COLORS.primary,
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      borderRadius: 64,
-                      position: "relative",
-                      width: 160,
-                      paddingVertical: 15,
-                    }}>
-                    <Text style={{ color: COLORS.white, fontSize: 18, fontWeight: "600"}}>Apply</Text>
-                  </TouchableOpacity>
-                </View>
+
               </View>
             </ScrollView>
+
+            {/* Footer */}
+            <View style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              position: 'absolute',
+              bottom: 0,
+              left: 0,
+              right: 0,
+              paddingHorizontal: 25,
+              paddingVertical: 10,
+              backgroundColor: 'white'
+            }}>
+              <TouchableOpacity
+                onPress={toggleModalFilter}
+                style={{
+                  backgroundColor: '#E9F0FF',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  borderRadius: 64,
+                  position: "relative",
+                  width: 160,
+                  paddingVertical: 15,
+
+                }}>
+                <Text style={{ color: COLORS.primary, fontSize: 18, fontWeight: "600" }}>Reset</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={{
+                  backgroundColor: COLORS.primary,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  borderRadius: 64,
+                  position: "relative",
+                  width: 160,
+                  paddingVertical: 15,
+                  shadowColor: COLORS.primary,
+                  shadowOffset: {
+                    width: 0,
+                    height: 2,
+                  },
+                  shadowOpacity: 0.25,
+                  shadowRadius: 3.84,
+                  elevation: 5,
+                }}>
+                <Text style={{ color: COLORS.white, fontSize: 18, fontWeight: "600" }}>Apply</Text>
+              </TouchableOpacity>
+            </View>
           </SafeAreaView>
         </GestureHandlerRootView>
       </Modal>
@@ -601,7 +652,7 @@ const SavedJobsScreen = ({ navigation }) => {
   )
 }
 
-export default SavedJobsScreen;
+export default SearchScreen;
 
 const styles = StyleSheet.create({
   foundNav: {
