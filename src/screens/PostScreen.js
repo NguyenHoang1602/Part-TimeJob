@@ -193,8 +193,14 @@ console.log(inputs);
           type: 'image/jpeg',
           name: `image_${index + 1}.jpg`,
         });
+        const response = await axios.post(api, formData, {
+          headers: {
+            "Content-Type" : "multipart/form-data",
+          },
+        })
+        urls.push(response.data.secure_url);
+        console.log("image url :" + urls);
       });
-      console.log(urls);
       Alert.alert("Upload Image Succesfuly !");
       setSelectedImages([]);
       return urls;

@@ -5,7 +5,7 @@
 /* eslint-disable eol-last */
 /* eslint-disable semi */
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, ImageBackground, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, ImageBackground, ScrollView, Image } from 'react-native';
 
 //
 import Input from '../components/Input';
@@ -24,37 +24,74 @@ import Fontisto from 'react-native-vector-icons/Fontisto';
 import IconWithBadge from '../components/IconWithBadge';
 import IconWithBadgeAntDesign from '../components/IconWithBadgeAntDesign';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import AppIntroSlider from "react-native-app-intro-slider";
+import { SIZES } from '../constants/theme';
 
 const DetailsScreen = ({ route, navigation }) => {
 
     const data = {
+        users_id: route.params?.users_id,
+        address: route.params?.address,
+        business_name: route.params?.business_name,
+        image: route.params?.image,
+        quantity: route.params?.quantity,
         title: route.params?.title,
-        id: route.params?.id,
-        uri: route.params?.uri,
-        address: route.params?.Address,
-        wagemax: route.params?.wagemax,
-        wagemin: route.params?.wagemin,
-        worktype: route.params?.worktype,
-        Details: route.params?.Details,
+        career_id: route.params?.career_id,
+        payform_id: route.params?.payform_id,
+        experience_id: route.params?.experience_id,
+        acedemic_id: route.params?.acedemic_id,
+        worktype_id: route.params?.worktype_id,
+        describe: route.params?.describe,
+        age_min: route.params?.age_min,
+        age_max: route.params?.age_max,
+        wage_min: route.params?.wage_min,
+        wage_max: route.params?.wage_max,
+        status_id: route.params?.status_id,
+        date: route.params?.date,
+        time: route.params?.time,
     };
-
     return (
         <SafeAreaView style={{ flex: 1, paddingVertical: 18 }}>
-            <View style={{ flexDirection: 'row', paddingHorizontal: 18, paddingBottom: 15 }}>
+            <View style={{ flexDirection: 'row', paddingHorizontal: 18 }}>
                 <TouchableOpacity onPress={() => navigation.goBack()}>
                     <Ionicons name="arrow-back" size={30} color={COLORS.black} />
                 </TouchableOpacity>
                 <View style={{ flex: 1 }}>
                     <Text></Text>
                 </View>
-                <TouchableOpacity onPress={console.log(data)}>
+                <TouchableOpacity>
                     <Icon style={{ marginRight: 22 }} name="bookmark-plus-outline" size={30} color={COLORS.black} />
                 </TouchableOpacity>
                 <Ionicons name="ellipsis-horizontal-circle" size={30} color={COLORS.black} />
             </View>
-            <ScrollView showsVerticalScrollIndicator={false} style={{ padding: 22 }}>
-                <View style={{ width: '100%', height: 250, backgroundColor: COLORS.grey, marginBottom: 25 }}>
-                </View>
+            <ScrollView showsVerticalScrollIndicator={false} style={{ padding: 22}}>
+                <AppIntroSlider
+                    showSkipButton={false}
+                    showDoneButton={false}
+                    showNextButton={false}
+                    data={data.image}
+                    renderItem={({ item }) => {
+                        return (
+                            <View style={{marginBottom: 25 }}>
+                                <Image
+                                    source={{ uri: item }}
+                                    style={{
+                                        width: '100%',
+                                        height: 250,
+                                    }}
+                                />
+                            </View>
+                        )
+                    }}
+                    activeDotStyle={{
+                        backgroundColor: COLORS.primary,
+                        width: 20,
+                    }}
+                    dotStyle={{
+                        backgroundColor: '#D9D9D9',
+                        width: 10,
+                    }}
+                />
                 <View
                     style={{
                         width: '100%',
@@ -67,45 +104,24 @@ const DetailsScreen = ({ route, navigation }) => {
                         paddingLeft: 23,
                     }}>
                     <Text style={{ fontSize: 22, color: COLORS.black, fontWeight: 'bold' }}>{data.title}</Text>
-                    <Text style={{ color: '#FA1300', fontSize: 14, marginTop: 5, marginBottom: 7, fontWeight: 'bold' }}>${data.wagemin} - {data.wagemax} /month</Text>
-                    <Text style={{ fontSize: 14, color: COLORS.grey }}>Post 10 days ago, end in 31 Dec</Text>
+                    <Text style={{ color: '#FA1300', fontSize: 14, marginTop: 5, marginBottom: 7, fontWeight: 'bold' }}>${data.wage_min} - {data.wage_max} /month</Text>
+                    <Text style={{ fontSize: 14, color: COLORS.grey }}>{data.date} {data.time}</Text>
                     <View style={{ flexDirection: 'row', marginTop: 15, alignItems: 'center', marginBottom: 34 }}>
                         <ImageBackground
                             source={require('../assets/images/homescreen/avatar.png')}
                             style={{ width: 48, height: 48 }}
                             imageStyle={{ borderRadius: 48 }}
                         />
-                        <Text style={{ color: COLORS.black, fontSize: 16, marginStart: 10, fontWeight: 'bold' }}>Nguyễn Văn Chức</Text>
+                        <Text style={{ color: COLORS.black, fontSize: 16, marginStart: 10, fontWeight: 'bold' }}>{data.users_id.displayName}</Text>
                     </View>
                 </View>
                 <View style={{ height: 3, width: '100%', backgroundColor: COLORS.blue, borderRadius: 50, marginBottom: 20, opacity: 0.9 }} />
                 <View style={{ width: '100%' }}>
-                    <Text style={{ fontSize: 15, fontStyle: 'normal', color: COLORS.black, opacity: 0.8 }}>[Nhà Hàng Hải Sản]  {'\n'}{'\n'}
-                        ✨ #Cần_tuyển:
-                        {'\n'}{'\n'}
-                        ♻ #Vị_trí : phục vụ, phụ bếp , tạp vụ, giữ xe .
-                        {'\n'}{'\n'}
-                        🕐 #Thời_gian_làm_việc: 13h đến Hết Khách .
-                        {'\n'}{'\n'}
-                        🗳 #Quyền_lợi : tips + doanh thu tháng, ưu đãi nhân viên,...
-                        {'\n'}{'\n'}
-                        💶 #Lương : trên 8 Triệu (tiền bo tiền tiếp Nữ : 300k - 500k/ngày)
-                        {'\n'}{'\n'}
-                        📲 #Hotline :gặp (#Anh_Tài & #Chị_Tuyết)
-                        {'\n'}{'\n'}
-                        🚦 Yêu cầu :{'\n'}{'\n'}
-                        ✅ Chỉ nhận làm ở lại tại Quán{'\n'}{'\n'}
-                        ✅ Gọi trực tiếp để nhận việc không tiếp tin nhắn .
-                        {'\n'}{'\n'}
-                        📍 CHI NHÁNH tuyển :{'\n'}{'\n'}
-                        * Đường : Hải Thượng Lãn Ông , Quận 5 .{'\n'}{'\n'}
-                        * Đường : Nguyễn Thiện Thuật , Quận 3 .{'\n'}{'\n'}
-                        * Đường : Bông Sao , Quận 8 .{'\n'}{'\n'}
-                        * Đường : Phạm Ngũ Lão , Quận 1</Text>
+                    <Text style={{ fontSize: 15, fontStyle: 'normal', color: COLORS.black, opacity: 0.8 }}>{data.describe}</Text>
                 </View>
                 <View style={{ flexDirection: 'row', marginTop: 20, alignItems: 'center' }}>
                     <AntDesign name="creditcard" size={24} color={COLORS.blue} />
-                    <Text style={{ marginStart: 15, fontSize: 15, color: COLORS.black, opacity: 0.8 }}>Hình thức trả lương: Theo tháng</Text>
+                    <Text style={{ marginStart: 15, fontSize: 15, color: COLORS.black, opacity: 0.8 }}>Hình thức trả lương: {data.payform_id.pf_title}</Text>
                 </View>
                 <View style={{ flexDirection: 'row', marginTop: 10, alignItems: 'center' }}>
                     <Octicons name="log" size={24} color={COLORS.blue} />
@@ -113,15 +129,15 @@ const DetailsScreen = ({ route, navigation }) => {
                 </View>
                 <View style={{ flexDirection: 'row', marginTop: 10, alignItems: 'center' }}>
                     <SimpleLineIcons name="briefcase" size={24} color={COLORS.blue} />
-                    <Text style={{ marginStart: 15, fontSize: 15, color: COLORS.black, opacity: 0.8 }}>Ngành nghề: Phục vụ</Text>
+                    <Text style={{ marginStart: 15, fontSize: 15, color: COLORS.black, opacity: 0.8 }}>Ngành nghề: {data.career_id.c_title}</Text>
                 </View>
                 <View style={{ flexDirection: 'row', marginTop: 10, alignItems: 'center' }}>
                     <AntDesign name="carryout" size={24} color={COLORS.blue} />
-                    <Text style={{ marginStart: 15, fontSize: 15, color: COLORS.black, opacity: 0.8 }}>Kinh nghiệm: Không yêu cầu</Text>
+                    <Text style={{ marginStart: 15, fontSize: 15, color: COLORS.black, opacity: 0.8 }}>Kinh nghiệm: {data.experience_id.e_title}</Text>
                 </View>
                 <View style={{ flexDirection: 'row', marginTop: 10, alignItems: 'center' }}>
                     <Octicons name="mortar-board" size={24} color={COLORS.blue} />
-                    <Text style={{ marginStart: 15, fontSize: 15, color: COLORS.black, opacity: 0.8 }}>Trình độ học vấn: Không yêu cầu</Text>
+                    <Text style={{ marginStart: 15, fontSize: 15, color: COLORS.black, opacity: 0.8 }}>Trình độ học vấn: {data.acedemic_id.a_title}</Text>
                 </View>
                 <View style={{ flexDirection: 'row', marginTop: 10, alignItems: 'center' }}>
                     <Fontisto name="venus-mars" size={24} color={COLORS.blue} />
@@ -129,23 +145,23 @@ const DetailsScreen = ({ route, navigation }) => {
                 </View>
                 <View style={{ flexDirection: 'row', marginTop: 10, alignItems: 'center' }}>
                     <FontAwesome name="building-o" size={24} color={COLORS.blue} />
-                    <Text style={{ marginStart: 15, fontSize: 15, color: COLORS.black, opacity: 0.8 }}>Tên Công ty: Windy Coffee</Text>
+                    <Text style={{ marginStart: 15, fontSize: 15, color: COLORS.black, opacity: 0.8 }}>Tên Công ty: {data.business_name}</Text>
                 </View>
                 <View style={{ flexDirection: 'row', marginTop: 10, alignItems: 'center' }}>
                     <Octicons name="people" size={24} color={COLORS.blue} />
-                    <Text style={{ marginStart: 15, fontSize: 15, color: COLORS.black, opacity: 0.8 }}>Số lượng tuyển dụng: 3</Text>
+                    <Text style={{ marginStart: 15, fontSize: 15, color: COLORS.black, opacity: 0.8 }}>Số lượng tuyển dụng: {data.quantity}</Text>
                 </View>
                 <View style={{ flexDirection: 'row', marginTop: 10, alignItems: 'center' }}>
                     <AntDesign name="leftsquareo" size={24} color={COLORS.blue} />
-                    <Text style={{ marginStart: 15, fontSize: 15, color: COLORS.black, opacity: 0.8 }}>Tuổi tối thiểu: 18</Text>
+                    <Text style={{ marginStart: 15, fontSize: 15, color: COLORS.black, opacity: 0.8 }}>Tuổi tối thiểu: {data.age_min}</Text>
                 </View>
                 <View style={{ flexDirection: 'row', marginTop: 10, alignItems: 'center' }}>
                     <AntDesign name="rightsquareo" size={24} color={COLORS.blue} />
-                    <Text style={{ marginStart: 15, fontSize: 15, color: COLORS.black, opacity: 0.8 }}>Tuổi đa: 25</Text>
+                    <Text style={{ marginStart: 15, fontSize: 15, color: COLORS.black, opacity: 0.8 }}>Tuổi đa: {data.age_max}</Text>
                 </View>
                 <View style={{ flexDirection: 'row', marginTop: 10, alignItems: 'center', width: '90%' }}>
                     <Feather name="map-pin" size={24} color={COLORS.blue} />
-                    <Text style={{ marginStart: 15, fontSize: 15, color: COLORS.black, opacity: 0.8 }}>Windy Coffee, Phan Văn Hớn, Tân Thới Nhất, Quận 12, TP. HCM</Text>
+                    <Text style={{ marginStart: 15, fontSize: 15, color: COLORS.black, opacity: 0.8 }}>{data.address}</Text>
                 </View>
                 <View style={{ width: '100%', alignItems: 'center', paddingVertical: 50 }}>
                     <TouchableOpacity
