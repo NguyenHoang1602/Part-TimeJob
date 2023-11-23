@@ -53,7 +53,7 @@ const ProfileScreen = ({ navigation }) => {
         <View style={{ flex: 1, marginLeft: 20 }}>
           <Text style={{ fontSize: 23, fontWeight: '700', color: COLORS.black }}>Applications</Text>
         </View>
-        <TouchableOpacity style={{ marginEnd: 10 }}>
+        <TouchableOpacity style={{ marginEnd: 10 }} onPress={() => navigation.navigate('Cài đặt')}>
           <AntDesign name="setting" size={30} color={COLORS.black} />
         </TouchableOpacity>
       </View>
