@@ -16,8 +16,6 @@ import axios from 'axios';
 
 import Button from '../components/Button';
 //icon
-import Octicons from 'react-native-vector-icons/Octicons';
-import Feather from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 // import BottomSheetContent from '../components/BottomSheetContent';
@@ -29,11 +27,9 @@ import Modal from 'react-native-modal';
 //slect drop-down
 import { Dropdown } from 'react-native-element-dropdown';
 import { useFocusEffect } from '@react-navigation/native';
-import { List } from 'react-native-paper';
-
 
 const data = [
-  { label: 'Item 1', value: '1' },
+  { label: 'Item 1', value: 'Item 1' },
   { label: 'Item 2', value: '2' },
   { label: 'Item 3', value: '3' },
   { label: 'Item 4', value: '4' },
@@ -43,7 +39,12 @@ const data = [
   { label: 'Item 8', value: '8' },
 ];
 
-
+const payForm = [
+  { value: 'Theo giờ' },
+  { value: 'Theo ngày' },
+  { value: 'Theo tháng' },
+  { value: 'Lương khoán' },
+];
 
 const PostScreen = ({ navigation }) => {
   useFocusEffect(
@@ -65,14 +66,21 @@ const PostScreen = ({ navigation }) => {
     subtitle: '',
     price: '',
     details: '',
-    quantity: '',
-    andress: '',
-    agemin: '',
-    agemax: '',
-    wagemin: '',
-    wagemax: '',
+    sex: '',
   });
   const [errors, setErrors] = React.useState({});
+  const [validateSex, setValidateSex] = useState('');
+  const [validateCareers, setValidateCareers] = useState('');
+  const [validateWorkTypes, setValidateWorkTypes] = useState('');
+  const [validatePayForm, setValidatePayForm] = useState('');
+  const [validateAcademicLv, setValidateAcademicLv] = useState('');
+  const [validateExp, setValidateExp] = useState('');
+  
+
+  const validateAll = () => {
+    validate();
+    VLDSex();
+  }
   const validate = () => {
     Keyboard.dismiss();
     let isValid = true;
@@ -120,22 +128,15 @@ const PostScreen = ({ navigation }) => {
     if (isValid) {
       console.log(' oce ');
     }
+
   };
-  const newPost = () => {
-    const dataPost = [
-      users_id = "655dc2a2594b039e167d8e38",
-      bussiness_name = inputs.bussiness_name,
-      address = inputs.andress,
-      title = inputs.title,
-      subtitle = inputs.subtitle,
-      quantity = inputs.quantity,
-      wagemin = inputs.wagemin,
-      wagemax = inputs.wagemax,
-      agemin = inputs.agemin,
-      agemax = inputs.agemax,
-      details = inputs.describe,
-    ]
-  }
+  const VLDSex = (value) => {
+    if (!value) {
+      setValidateSex('Vui lòng chọn giới tính');
+    } else {
+      setValidateSex('');
+    }
+  };
   const handleOnchange = (text, input) => {
     setInputs(prevState => ({ ...prevState, [input]: text }));
   };
@@ -145,7 +146,7 @@ const PostScreen = ({ navigation }) => {
   const logimage = () => {
     console.log(selectedImages);
   }
-
+console.log(inputs);
   //const [images, setImages] = useState([]);
   const [selectedImages, setSelectedImages] = useState([]);
 
@@ -253,363 +254,379 @@ const uploadImages = async () => {
     const api = 'https://api.cloudinary.com/v1_1/dxrv1gdit/image/upload';
     const formData = new FormData();
 
-    formData.append("upload_preset", PRESET_NAME);
-    formData.append("folder", FOLDER_NAME);
-    selectedImages.forEach(async (image, index) => {
-      formData.append("file", {
-        uri: image.uri,
-        type: 'image/jpeg',
-        name: `image_${index + 1}.jpg`,
+      formData.append("upload_preset", PRESET_NAME);
+      formData.append("folder", FOLDER_NAME);
+      selectedImages.forEach(async (image, index) => {
+        formData.append("file", {
+          uri: image.uri,
+          type: 'image/jpeg',
+          name: `image_${index + 1}.jpg`,
+        });
       });
-      const response = await axios.post(api, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-      urls.push(response.data.secure_url);
       console.log(urls);
-    });
-    console.log(urls);
-    Alert.alert("Upload Image Succesfuly !");
-    setSelectedImages([]);
-    return urls;
-  } catch (error) {
-    console.log("Upload failed", error);
-  }
-};
+      Alert.alert("Upload Image Succesfuly !");
+      setSelectedImages([]);
+      return urls;
+    } catch (error) {
+      console.log("Upload failed", error);
+    }
+  };
 
-const BottomSheetContent = ({ isVisible, onClose }) => {
+  // Pick Images
+  const BottomSheetContent = ({ isVisible, onClose }) => {
+    return (
+      <Modal
+        isVisible={isVisible}
+        onBackdropPress={onClose}
+        style={{ justifyContent: 'flex-end', margin: 0 }}
+      >
+        <View style={styles.header}>
+          <View style={styles.panelHeader}>
+            <View style={styles.panelHandle} />
+          </View>
+        </View>
+        <View style={styles.panel}>
+          <View style={{ alignItems: 'center' }}>
+            <Text style={styles.panelTitle}>Tải ảnh lên</Text>
+            <Text style={styles.panelSubtitle}>Chọn hình ảnh nơi làm việc</Text>
+          </View>
+          <TouchableOpacity style={styles.panelButton} onPress={''}>
+            <Text style={styles.panelButtonTitle}>Camera</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.panelButton} onPress={openImagePicker}>
+            <Text style={styles.panelButtonTitle}>Chọn từ thư viện</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.panelButton}
+            onPress={onClose}>
+            <Text style={styles.panelButtonTitle}>Hủy</Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
+    );
+  };
+  const [isBottomSheetVisible, setBottomSheetVisible] = useState(false);
+
+  const toggleBottomSheet = () => {
+    setBottomSheetVisible(!isBottomSheetVisible);
+  };
   return (
-    <Modal
-      isVisible={isVisible}
-      onBackdropPress={onClose}
-      style={{ justifyContent: 'flex-end', margin: 0 }}
-    >
-      <View style={styles.header}>
-        <View style={styles.panelHeader}>
-          <View style={styles.panelHandle} />
-        </View>
-      </View>
-      <View style={styles.panel}>
-        <View style={{ alignItems: 'center' }}>
-          <Text style={styles.panelTitle}>Tải ảnh lên</Text>
-          <Text style={styles.panelSubtitle}>Chọn hình ảnh nơi làm việc</Text>
-        </View>
-        <TouchableOpacity style={styles.panelButton} onPress={''}>
-          <Text style={styles.panelButtonTitle}>Camera</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.panelButton} onPress={openImagePicker}>
-          <Text style={styles.panelButtonTitle}>Chọn từ thư viện</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.panelButton}
-          onPress={onClose}>
-          <Text style={styles.panelButtonTitle}>Hủy</Text>
-        </TouchableOpacity>
-      </View>
-    </Modal>
-  );
-};
-const [isBottomSheetVisible, setBottomSheetVisible] = useState(false);
-
-const toggleBottomSheet = () => {
-  setBottomSheetVisible(!isBottomSheetVisible);
-};
-return (
-  <SafeAreaView style={{ backgroundColor: COLORS.white, flex: 1 }}>
-    <ScrollView>
-      <View>
-        <BottomSheetContent
-          isVisible={isBottomSheetVisible}
-          onClose={toggleBottomSheet}
-        />
-        <View style={{ backgroundColor: '#D9D9D9', height: 60, justifyContent: 'center' }}>
-          <Text style={{ fontSize: 16, marginStart: 25 }}>THÔNG TIN NHÀ TUYỂN DỤNG</Text>
-        </View>
-        <View style={{ marginVertical: 22, marginHorizontal: 24 }}>
-          <Input
-            onChangeText={text => handleOnchange(text, 'bussiness_name')}
-            onFocus={() => handleError(null, 'bussiness_name')}
-            placeholder="Tên doanh nghiệp"
-            error={errors.bussiness_name}
+    <SafeAreaView style={{ backgroundColor: COLORS.white, flex: 1 }}>
+      <ScrollView>
+        <View>
+          <BottomSheetContent
+            isVisible={isBottomSheetVisible}
+            onClose={toggleBottomSheet}
           />
-          <Input
-            onChangeText={text => handleOnchange(text, 'address')}
-            onFocus={() => handleError(null, 'address')}
-            placeholder="Địa chỉ"
-            // value={route.params?.subtitle}
-            error={errors.address}
-          />
-          <View style={{
-            height: 120,
-          }}>{
-              shouldShow ? (
-                <View style={{
-                  height: 120,
-                }}>
+          <View style={{ backgroundColor: '#D9D9D9', height: 60, justifyContent: 'center' }}>
+            <Text style={{ fontSize: 16, marginStart: 25 }}>THÔNG TIN NHÀ TUYỂN DỤNG</Text>
+          </View>
+          <View style={{ marginVertical: 22, marginHorizontal: 24 }}>
+            <Input
+              onChangeText={text => handleOnchange(text, 'bussiness_name')}
+              onFocus={() => handleError(null, 'bussiness_name')}
+              placeholder="Tên doanh nghiệp"
+              error={errors.bussiness_name}
+            />
+            <Input
+              onChangeText={text => handleOnchange(text, 'address')}
+              onFocus={() => handleError(null, 'address')}
+              placeholder="Địa chỉ"
+              // value={route.params?.subtitle}
+              error={errors.address}
+            />
+            <View style={{
+              height: 120,
+            }}>{
+                shouldShow ? (
                   <View style={{
-                    width: 145,
-                    height: 22,
-                    backgroundColor: '#CFE0FE',
-                    borderRadius: 3,
-                    marginBottom: '4%',
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                  }}>
-                    <Ionicons style={{ marginStart: 4 }} name="information-circle" size={16} color="#3E7CEF" />
-                    <Text style={{ fontSize: 11, marginLeft: 3, marginBottom: 2 }}>Hình ảnh nơi làm việc</Text>
-                  </View>
-                  <View style={{
-                    flexDirection: 'row',
+                    height: 120,
                   }}>
                     <View style={{
-                      width: 70,
-                      height: 100,
-                      justifyContent: 'center',
+                      width: 145,
+                      height: 22,
+                      backgroundColor: '#CFE0FE',
+                      borderRadius: 3,
+                      marginBottom: '4%',
+                      flexDirection: 'row',
                       alignItems: 'center',
                     }}>
+                      <Ionicons style={{ marginStart: 4 }} name="information-circle" size={16} color="#3E7CEF" />
+                      <Text style={{ fontSize: 11, marginLeft: 3, marginBottom: 2 }}>Hình ảnh nơi làm việc</Text>
+                    </View>
+                    <View style={{
+                      flexDirection: 'row',
+                    }}>
                       <View style={{
-                        backgroundColor: '#D9D9D9',
-                        height: 70,
                         width: 70,
-                        borderRadius: 6,
-                        borderWidth: 1,
-                        borderStyle: 'dashed',
-                        borderColor: '#7D7A7A66',
+                        height: 100,
                         justifyContent: 'center',
                         alignItems: 'center',
                       }}>
-                        <TouchableOpacity onPress={toggleBottomSheet}>
-                          <Icon
-                            name="camera"
-                            size={40}
-                            color="#fff"
-                            style={{
-                              opacity: 0.8,
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                              borderWidth: 1,
-                              borderColor: '#fff',
-                              borderRadius: 5,
-                            }}
-                          />
-                        </TouchableOpacity>
-                      </View>
-                      <Text style={{ marginTop: '8%', fontSize: 11, color: '#7D7A7A', opacity: 0.8 }}>Thêm ảnh</Text>
-                    </View>
-                    <FlatList
-                      data={selectedImages}
-                      keyExtractor={(item) => item.uri}
-                      horizontal
-                      renderItem={({ item }) => (
                         <View style={{
+                          backgroundColor: '#D9D9D9',
+                          height: 70,
                           width: 70,
-                          marginLeft: 10,
+                          borderRadius: 6,
+                          borderWidth: 1,
+                          borderStyle: 'dashed',
+                          borderColor: '#7D7A7A66',
+                          justifyContent: 'center',
                           alignItems: 'center',
-                          flexDirection: 'column',
                         }}>
-                          <Image
-                            source={{ uri: item.uri }}
-                            style={{
-                              width: 70,
-                              height: 70,
-                              margin: 5,
-                              marginBottom: '8%',
-                              borderRadius: 5,
-                              borderWidth: 1,
-                              borderColor: '#7D7A7A66',
-                              padding: 5,
-                            }}
-                          />
-                          {/* <Text style={{fontSize: 11, color: '#7D7A7A', opacity: 0.8 }}>Ảnh {item.id}</Text> */}
+                          <TouchableOpacity onPress={toggleBottomSheet}>
+                            <Icon
+                              name="camera"
+                              size={40}
+                              color="#fff"
+                              style={{
+                                opacity: 0.8,
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                borderWidth: 1,
+                                borderColor: '#fff',
+                                borderRadius: 5,
+                              }}
+                            />
+                          </TouchableOpacity>
                         </View>
-                      )}
-                    />
+                        <Text style={{ marginTop: '8%', fontSize: 11, color: '#7D7A7A', opacity: 0.8 }}>Thêm ảnh</Text>
+                      </View>
+                      <FlatList
+                        data={selectedImages}
+                        keyExtractor={(item) => item.uri}
+                        horizontal
+                        renderItem={({ item }) => (
+                          <View style={{
+                            width: 70,
+                            marginLeft: 10,
+                            alignItems: 'center',
+                            flexDirection: 'column',
+                          }}>
+                            <Image
+                              source={{ uri: item.uri }}
+                              style={{
+                                width: 70,
+                                height: 70,
+                                margin: 5,
+                                marginBottom: '8%',
+                                borderRadius: 5,
+                                borderWidth: 1,
+                                borderColor: '#7D7A7A66',
+                                padding: 5,
+                              }}
+                            />
+                            {/* <Text style={{fontSize: 11, color: '#7D7A7A', opacity: 0.8 }}>Ảnh {item.id}</Text> */}
+                          </View>
+                        )}
+                      />
+                    </View>
+                  </View>
+                ) : <View style={{
+                  backgroundColor: '#D9D9D9',
+                  height: 120,
+                  borderRadius: 6,
+                  borderWidth: 1,
+                  borderStyle: 'dashed',
+                  borderColor: '#7D7A7A66',
+                }}>
+                  <View style={{ alignItems: 'flex-end' }}>
+                    <View style={{
+                      width: 96,
+                      height: 20,
+                      backgroundColor: '#CFE0FE',
+                      borderRadius: 3,
+                      marginRight: '2%',
+                      marginTop: '2%',
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                    }}>
+                      <Ionicons style={{ marginStart: 4 }} name="information-circle" size={16} color="#3E7CEF" />
+                      <Text style={{ fontSize: 9, marginLeft: 3, marginBottom: 2 }}>Hình ảnh hợp lệ</Text>
+                    </View>
+                  </View>
+                  <TouchableOpacity
+                    style={{
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}
+                    onPress={toggleBottomSheet}>
+                    <View style={{
+                      width: 200,
+                      height: 30,
+                      backgroundColor: '#357AF9',
+                      borderRadius: 4,
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      marginVertical: '4%',
+                      opacity: 0.8,
+                    }}>
+                      <Text style={{ fontSize: 16, color: 'white' }}>Hình nơi làm việc</Text>
+                    </View>
+                  </TouchableOpacity>
+                  <View style={{ alignItems: 'center' }}>
+                    <Text style={{ fontSize: 12, color: '#7D7A7A', opacity: 0.7 }}>ĐĂNG TỪ 01 ĐẾN 06 HÌNH</Text>
                   </View>
                 </View>
-              ) : <View style={{
-                backgroundColor: '#D9D9D9',
-                height: 120,
-                borderRadius: 6,
-                borderWidth: 1,
-                borderStyle: 'dashed',
-                borderColor: '#7D7A7A66',
-              }}>
-                <View style={{ alignItems: 'flex-end' }}>
-                  <View style={{
-                    width: 96,
-                    height: 20,
-                    backgroundColor: '#CFE0FE',
-                    borderRadius: 3,
-                    marginRight: '2%',
-                    marginTop: '2%',
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                  }}>
-                    <Ionicons style={{ marginStart: 4 }} name="information-circle" size={16} color="#3E7CEF" />
-                    <Text style={{ fontSize: 9, marginLeft: 3, marginBottom: 2 }}>Hình ảnh hợp lệ</Text>
-                  </View>
-                </View>
-                <TouchableOpacity
-                  style={{
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}
-                  onPress={toggleBottomSheet}>
-                  <View style={{
-                    width: 200,
-                    height: 30,
-                    backgroundColor: '#357AF9',
-                    borderRadius: 4,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    marginVertical: '4%',
-                    opacity: 0.8,
-                  }}>
-                    <Text style={{ fontSize: 16, color: 'white' }}>Hình nơi làm việc</Text>
-                  </View>
-                </TouchableOpacity>
-                <View style={{ alignItems: 'center' }}>
-                  <Text style={{ fontSize: 12, color: '#7D7A7A', opacity: 0.7 }}>ĐĂNG TỪ 01 ĐẾN 06 HÌNH</Text>
-                </View>
+              }
+            </View>
+          </View>
+          <View style={{ backgroundColor: '#D9D9D9', height: 60, justifyContent: 'center' }}>
+            <Text style={{ fontSize: 16, marginStart: 25 }}>NỘI DUNG ĐĂNG TUYỂN</Text>
+          </View>
+          <View style={{ marginVertical: 22, marginHorizontal: 24 }}>
+            <Input
+              onChangeText={text => handleOnchange(text, 'title')}
+              onFocus={() => handleError(null, 'title')}
+              placeholder="Tiêu đề đăng tin"
+              error={errors.title}
+            />
+            <Input
+              keyboardType="numeric"
+              onChangeText={text => handleOnchange(text, 'quantity')}
+              onFocus={() => handleError(null, 'quantity')}
+              placeholder="Số lượng tuyển dụng"
+              // value={route.params?.subtitle}
+              error={errors.quantity}
+            />
+            <Dropdown
+              style={[styles.dropdown, isFocus && { borderColor: COLORS.darkBlue }, validateSex && { borderColor: 'red' }]}
+              placeholderStyle={styles.placeholderStyle}
+              selectedTextStyle={styles.selectedTextStyle}
+              iconStyle={styles.iconStyle}
+              data={data}
+              maxHeight={300}
+              labelField="label"
+              valueField="value"
+              placeholder={!isFocus ? 'Giới tính' : '...'}
+              value={inputs.sex}
+              onFocus={() => setIsFocus(true)}
+              onBlur={() => setIsFocus(false)}
+              onChange={item => {
+                setIsFocus(false);
+                VLDSex(item.value)
+                handleOnchange(item.label, 'sex')
+              }}
+
+            />
+            {validateSex ? <Text style={styles.error}>{validateSex}</Text> : null}
+            <Dropdown
+              style={[styles.dropdown, isFocus && { borderColor: COLORS.darkBlue }]}
+              placeholderStyle={styles.placeholderStyle}
+              selectedTextStyle={styles.selectedTextStyle}
+              inputSearchStyle={styles.inputSearchStyle}
+              iconStyle={styles.iconStyle}
+              data={data}
+              search
+              maxHeight={300}
+              labelField="label"
+              valueField="value"
+              placeholder={!isFocus ? 'Ngành Nghề' : '...'}
+              searchPlaceholder="Search..."
+              value={value}
+              onFocus={() => setIsFocus(true)}
+              onBlur={() => setIsFocus(false)}
+              onChange={item => {
+                setValue(item.value);
+                setIsFocus(false);
+              }}
+            />
+            
+            <Dropdown
+              style={[styles.dropdown, isFocus && { borderColor: COLORS.darkBlue }]}
+              placeholderStyle={styles.placeholderStyle}
+              selectedTextStyle={styles.selectedTextStyle}
+              inputSearchStyle={styles.inputSearchStyle}
+              iconStyle={styles.iconStyle}
+              data={data}
+              search
+              maxHeight={300}
+              labelField="label"
+              valueField="value"
+              placeholder={!isFocus ? 'Loại công việc' : '...'}
+              searchPlaceholder="Search..."
+              value={value}
+              onFocus={() => setIsFocus(true)}
+              onBlur={() => setIsFocus(false)}
+              onChange={item => {
+                setValue(item.value);
+                setIsFocus(false);
+              }}
+            />
+            <Dropdown
+              style={[styles.dropdown, isFocus && { borderColor: COLORS.darkBlue }]}
+              placeholderStyle={styles.placeholderStyle}
+              selectedTextStyle={styles.selectedTextStyle}
+              inputSearchStyle={styles.inputSearchStyle}
+              iconStyle={styles.iconStyle}
+              data={data}
+              search
+              maxHeight={300}
+              labelField="label"
+              valueField="value"
+              placeholder={!isFocus ? 'Hình thức trả lương' : '...'}
+              searchPlaceholder="Search..."
+              value={value}
+              onFocus={() => setIsFocus(true)}
+              onBlur={() => setIsFocus(false)}
+              onChange={item => {
+                setValue(item.value);
+                setIsFocus(false);
+              }}
+            />
+            <Input
+              keyboardType="numeric"
+              onChangeText={text => handleOnchange(text, 'wagemin')}
+              onFocus={() => handleError(null, 'wagemin')}
+              placeholder="Lương tối thiểu"
+              // value={route.params?.subtitle}
+              error={errors.wagemin}
+            />
+            <Input
+              keyboardType="numeric"
+              onChangeText={text => handleOnchange(text, 'wagemax')}
+              onFocus={() => handleError(null, 'wagemax')}
+              placeholder="Lương tối đa"
+              // value={route.params?.subtitle}
+              error={errors.wagemax}
+            />
+            <InputMutiple
+              onChangeText={text => handleOnchange(text, 'subtitle')}
+              onFocus={() => handleError(null, 'subtitle')}
+              placeholder={"Mô tả công việc\nMô tả chi tiết một số đặc điểm nhân diện của công ty tuyển dụng:\n- Tên công ty, địa chỉ công ty, hình thức và mặt hàng kinh doanh."}
+              // value={route.params?.subtitle}
+              error={errors.subtitle}
+            />
+          </View>
+          <View style={{ backgroundColor: '#D9D9D9', height: 60, justifyContent: 'center' }}>
+            <Text style={{ fontSize: 16, marginStart: 25 }}>THÔNG TIN THÊM</Text>
+          </View>
+          <View style={{ marginHorizontal: 24, marginTop: 22 }}>
+            <View style={{ width: '100%', flexDirection: 'row' }}>
+              <View style={{ width: '45%', justifyContent: 'flex-start' }}>
+                <Input
+                  keyboardType="numeric"
+                  onChangeText={text => handleOnchange(text, 'agemin')}
+                  onFocus={() => handleError(null, 'agemin')}
+                  placeholder="Độ tuổi tối thiểu"
+                  // value={route.params?.subtitle}
+                  error={errors.agemin}
+                />
               </View>
-            }
-          </View>
-        </View>
-        <View style={{ backgroundColor: '#D9D9D9', height: 60, justifyContent: 'center' }}>
-          <Text style={{ fontSize: 16, marginStart: 25 }}>NỘI DUNG ĐĂNG TUYỂN</Text>
-        </View>
-        <View style={{ marginVertical: 22, marginHorizontal: 24 }}>
-          <Input
-            onChangeText={text => handleOnchange(text, 'title')}
-            onFocus={() => handleError(null, 'title')}
-            placeholder="Tiêu đề đăng tin"
-            error={errors.title}
-          />
-          <Input
-            keyboardType="numeric"
-            onChangeText={text => handleOnchange(text, 'quantity')}
-            onFocus={() => handleError(null, 'quantity')}
-            placeholder="Số lượng tuyển dụng"
-            // value={route.params?.subtitle}
-            error={errors.quantity}
-          />
-          <Dropdown
-            style={[styles.dropdown, isFocus && { borderColor: COLORS.darkBlue }]}
-            placeholderStyle={styles.placeholderStyle}
-            selectedTextStyle={styles.selectedTextStyle}
-            inputSearchStyle={styles.inputSearchStyle}
-            iconStyle={styles.iconStyle}
-            data={listCareers}
-            search
-            maxHeight={300}
-            labelField="c_title"
-            valueField="_id"
-            placeholder={!isFocus ? 'Ngành Nghề' : '...'}
-            searchPlaceholder="Search..."
-            value={value}
-            onFocus={() => setIsFocus(true)}
-            onBlur={() => setIsFocus(false)}
-            onChange={item => {
-              setValue(item.value);
-              setIsFocus(false);
-            }}
-          />
-          <Dropdown
-            style={[styles.dropdown, isFocus && { borderColor: COLORS.darkBlue }]}
-            placeholderStyle={styles.placeholderStyle}
-            selectedTextStyle={styles.selectedTextStyle}
-            inputSearchStyle={styles.inputSearchStyle}
-            iconStyle={styles.iconStyle}
-            data={listWorkType}
-            search
-            maxHeight={300}
-            labelField="wt_title"
-            valueField="_id"
-            placeholder={!isFocus ? 'Loại công việc' : '...'}
-            searchPlaceholder="Search..."
-            value={value}
-            onFocus={() => setIsFocus(true)}
-            onBlur={() => setIsFocus(false)}
-            onChange={item => {
-              setValue(item.value);
-              setIsFocus(false);
-            }}
-          />
-          <Dropdown
-            style={[styles.dropdown, isFocus && { borderColor: COLORS.darkBlue }]}
-            placeholderStyle={styles.placeholderStyle}
-            selectedTextStyle={styles.selectedTextStyle}
-            inputSearchStyle={styles.inputSearchStyle}
-            iconStyle={styles.iconStyle}
-            data={listPayform}
-            search
-            maxHeight={300}
-            labelField="pf_title"
-            valueField="_id"
-            placeholder={!isFocus ? 'Hình thức trả lương' : '...'}
-            searchPlaceholder="Search..."
-            value={value}
-            onFocus={() => setIsFocus(true)}
-            onBlur={() => setIsFocus(false)}
-            onChange={item => {
-              setValue(item.value);
-              setIsFocus(false);
-            }}
-          />
-          <Input
-            keyboardType="numeric"
-            onChangeText={text => handleOnchange(text, 'wagemin')}
-            onFocus={() => handleError(null, 'wagemin')}
-            placeholder="Lương tối thiểu"
-            // value={route.params?.subtitle}
-            error={errors.wagemin}
-          />
-          <Input
-            keyboardType="numeric"
-            onChangeText={text => handleOnchange(text, 'wagemax')}
-            onFocus={() => handleError(null, 'wagemax')}
-            placeholder="Lương tối đa"
-            // value={route.params?.subtitle}
-            error={errors.wagemax}
-          />
-          <InputMutiple
-            onChangeText={text => handleOnchange(text, 'subtitle')}
-            onFocus={() => handleError(null, 'subtitle')}
-            placeholder={"Mô tả công việc\nMô tả chi tiết một số đặc điểm nhân diện của công ty tuyển dụng:\n- Tên công ty, địa chỉ công ty, hình thức và mặt hàng kinh doanh."}
-            // value={route.params?.subtitle}
-            error={errors.subtitle}
-          />
-        </View>
-        <View style={{ backgroundColor: '#D9D9D9', height: 60, justifyContent: 'center' }}>
-          <Text style={{ fontSize: 16, marginStart: 25 }}>THÔNG TIN THÊM</Text>
-        </View>
-        <View style={{ marginHorizontal: 24, marginTop: 22 }}>
-          <View style={{ width: '100%', flexDirection: 'row' }}>
-            <View style={{ width: '45%', justifyContent: 'flex-start' }}>
-              <Input
-                keyboardType="numeric"
-                onChangeText={text => handleOnchange(text, 'agemin')}
-                onFocus={() => handleError(null, 'agemin')}
-                placeholder="Độ tuổi tối thiểu"
-                // value={route.params?.subtitle}
-                error={errors.agemin}
-              />
-            </View>
-            <View style={{ width: '45%', marginStart: '9.5%' }}>
-              <Input
-                keyboardType="numeric"
-                onChangeText={text => handleOnchange(text, 'agemax')}
-                onFocus={() => handleError(null, 'agemax')}
-                placeholder="Độ tuổi tối đa"
-                // value={route.params?.subtitle}
-                error={errors.agemax}
-              />
+              <View style={{ width: '45%', marginStart: '9.5%' }}>
+                <Input
+                  keyboardType="numeric"
+                  onChangeText={text => handleOnchange(text, 'agemax')}
+                  onFocus={() => handleError(null, 'agemax')}
+                  placeholder="Độ tuổi tối đa"
+                  // value={route.params?.subtitle}
+                  error={errors.agemax}
+                />
+              </View>
             </View>
           </View>
-        </View>
-        <View style={{ marginHorizontal: 24 }}>
-          {/* <Input
+          <View style={{ marginHorizontal: 24 }}>
+            {/* <Input
               onChangeText={text => handleOnchange(text, 'subtitle')}
               onFocus={() => handleError(null, 'subtitle')}
               placeholder="Trình độ học vấn"
@@ -665,28 +682,21 @@ return (
               // value={route.params?.subtitle}
               error={errors.subtitle}
             /> */}
-          <Input
-            onChangeText={text => handleOnchange(text, 'Engraved_benefits')}
-            onFocus={() => handleError(null, 'Engraved_benefits')}
-            placeholder="Các quyền lợi khác"
-            // value={route.params?.subtitle}
-            error={errors.Engraved_benefits}
-          />
-        </View>
-        <View style={{ marginHorizontal: 24 }}>
-          <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'center' }}>
-            <View style={{ width: '40%', justifyContent: 'flex-start' }}>
-              <Button title="Xem trước" onPress={uploadImages} />
-            </View>
-            <View style={{ width: '40%', marginStart: '10%' }}>
-              <Button title="Đăng tin" onPress={validate} />
+          </View>
+          <View style={{ marginHorizontal: 24 }}>
+            <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'center' }}>
+              <View style={{ width: '40%', justifyContent: 'flex-start' }}>
+                <Button title="Xem trước" onPress={uploadImages} />
+              </View>
+              <View style={{ width: '40%', marginStart: '10%' }}>
+                <Button title="Đăng tin" onPress={validateAll} />
+              </View>
             </View>
           </View>
         </View>
-      </View>
-    </ScrollView>
-  </SafeAreaView >
-)
+      </ScrollView>
+    </SafeAreaView >
+  )
 }
 
 const styles = StyleSheet.create({
@@ -769,7 +779,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 6,
     paddingHorizontal: 18,
-    marginBottom: 13,
+    marginBottom: 8,
   },
   icon: {
     marginRight: 5,
@@ -791,6 +801,11 @@ const styles = StyleSheet.create({
     height: 50,
     fontSize: 14,
     borderRadius: 6,
+  },
+  error: {
+    fontSize: 12,
+    color: 'red',
+    paddingBottom: 12
   },
 });
 

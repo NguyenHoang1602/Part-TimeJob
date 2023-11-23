@@ -43,7 +43,6 @@ const AuthScreen = ({ navigation }) => {
         }
     }
 
-
     return (
         <SafeAreaView
             style={{
