@@ -7,38 +7,25 @@
 /* eslint-disable eol-last */
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, Image, Checkbox, SafeAreaView, TouchableOpacity, TextInput } from 'react-native';
-import InputField from '../custom/InputField';
 import { COLORS } from '../constants/theme';
-import Button from '../custom/Button';
-import ButtonFbGg from '../custom/ButtonFbGg';
 import auth from '@react-native-firebase/auth';
 
-//icon
-import Octicons from 'react-native-vector-icons/Octicons';
 import Feather from 'react-native-vector-icons/Feather';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-
-const SignInWithPhoneNumber = ({navigation, props}) => {
+import axios from 'axios';
+const SignInWithPhoneNumber = ({ navigation, props }) => {
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [toggleCheckBox, setToggleCheckBox] = useState(false);
-  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isFocusedEmail, setIsFocusedEmail] = useState(false);
-  const [isFocusedPass, setIsFocusedPass] = useState(false);
 
   const [confirm, setConfirm] = useState(null);
 
   // verification code (OTP - One-Time-Passcode)
+  const [number, setNumber] = useState('');
   const [code, setCode] = useState('');
 
   // Handle login
   function onAuthStateChanged(user) {
     if (user) {
-      // Some Android devices can automatically process the verification code (OTP) message, and the user would NOT need to enter the code.
-      // Actually, if he/she tries to enter it, he/she will get an error message because the code was already used in the background.
-      // In this function, make sure you hide the component(s) for entering the code and/or navigate away from this screen.
-      // It is also recommended to display a message to the user informing him/her that he/she has successfully logged in.
     }
   }
 
@@ -53,11 +40,13 @@ const SignInWithPhoneNumber = ({navigation, props}) => {
     setConfirm(confirmation);
   }
 
-  async function confirmCode() {
+  async function confirmCode(codes) {
     try {
-      await confirm.confirm(code);
-      console.log("OK : " + code);
-      navigation.navigate('TabNavigator')
+      await confirm.confirm(codes);
+      // This
+      navigation.navigate('AddProfile',{
+        phoneNumber : number
+      })
     } catch (error) {
       console.log('Invalid code.');
     }
@@ -100,16 +89,14 @@ const SignInWithPhoneNumber = ({navigation, props}) => {
             <MaterialIcons name='phone' size={24} color={email === '' ? COLORS.grey : COLORS.black} />
             <TextInput
               placeholder='Phone Number'
-              onChangeText={text => setCode(text)}
+              onChangeText={text => setNumber(text)}
               onFocus={() => { setIsFocusedEmail(!isFocusedEmail) }}
               onBlur={() => { setIsFocusedEmail(!isFocusedEmail) }}
               style={{ flex: 1, fontSize: 16, color: COLORS.black, paddingHorizontal: 10 }} />
           </View>
 
-
-
           <TouchableOpacity
-            onPress={() => signInWithPhoneNumber(code)}
+            onPress={() => signInWithPhoneNumber(number)}
             style={{
               backgroundColor: COLORS.primary,
               marginVertical: 20,
@@ -132,22 +119,23 @@ const SignInWithPhoneNumber = ({navigation, props}) => {
 
   }
 
+  
 
-    return (
-      <View style={{ flex: 1, backgroundColor: "white", paddingHorizontal: 18 }}>
-        <SafeAreaView >
-          <View style={{ gap: 12, paddingTop: 50 }}>
-            <TouchableOpacity
-              onPress={() => { navigation.goBack() }}
-              style={{
-                width: 32,
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}>
-              <Feather name="arrow-left" size={20} color={COLORS.black} />
-            </TouchableOpacity>
-          </View>
-        </SafeAreaView>
+  return (
+    <View style={{ flex: 1, backgroundColor: "white", paddingHorizontal: 18 }}>
+      <SafeAreaView >
+        <View style={{ gap: 12, paddingTop: 50 }}>
+          <TouchableOpacity
+            onPress={() => { navigation.goBack() }}
+            style={{
+              width: 32,
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}>
+            <Feather name="arrow-left" size={20} color={COLORS.black} />
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
 
         <View style={{ alignItems: 'center' }}>
           <View
@@ -172,24 +160,24 @@ const SignInWithPhoneNumber = ({navigation, props}) => {
           </View>
 
 
-          <TouchableOpacity
-            onPress={() => confirmCode()}
-            style={{
-              backgroundColor: COLORS.primary,
-              marginVertical: 20,
-              height: 50,
-              width: 330,
-              alignItems: 'center',
-              justifyContent: 'center',
-              borderRadius: 64,
-              flexDirection: "row",
-            }}>
-            <Text style={{ color: COLORS.white, fontSize: 18, fontWeight: "600", }}>Sign Up</Text>
-          </TouchableOpacity>
-        </View>
+        <TouchableOpacity
+          onPress={() => confirmCode(code)}
+          style={{
+            backgroundColor: COLORS.primary,
+            marginVertical: 20,
+            height: 50,
+            width: 330,
+            alignItems: 'center',
+            justifyContent: 'center',
+            borderRadius: 64,
+            flexDirection: "row",
+          }}>
+          <Text style={{ color: COLORS.white, fontSize: 18, fontWeight: "600", }}>Verify</Text>
+        </TouchableOpacity>
       </View>
-    );
-  };
+    </View>
+  );
+};
 
 export default SignInWithPhoneNumber;
 

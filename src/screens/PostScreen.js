@@ -16,8 +16,6 @@ import axios from 'axios';
 
 import Button from '../components/Button';
 //icon
-import Octicons from 'react-native-vector-icons/Octicons';
-import Feather from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 // import BottomSheetContent from '../components/BottomSheetContent';
@@ -30,9 +28,8 @@ import Modal from 'react-native-modal';
 import { Dropdown } from 'react-native-element-dropdown';
 import { useFocusEffect } from '@react-navigation/native';
 
-
 const data = [
-  { label: 'Item 1', value: '1' },
+  { label: 'Item 1', value: 'Item 1' },
   { label: 'Item 2', value: '2' },
   { label: 'Item 3', value: '3' },
   { label: 'Item 4', value: '4' },
@@ -42,6 +39,12 @@ const data = [
   { label: 'Item 8', value: '8' },
 ];
 
+const payForm = [
+  { value: 'Theo giờ' },
+  { value: 'Theo ngày' },
+  { value: 'Theo tháng' },
+  { value: 'Lương khoán' },
+];
 
 const PostScreen = ({ navigation }) => {
 
@@ -54,8 +57,21 @@ const PostScreen = ({ navigation }) => {
     subtitle: '',
     price: '',
     details: '',
+    sex: '',
   });
   const [errors, setErrors] = React.useState({});
+  const [validateSex, setValidateSex] = useState('');
+  const [validateCareers, setValidateCareers] = useState('');
+  const [validateWorkTypes, setValidateWorkTypes] = useState('');
+  const [validatePayForm, setValidatePayForm] = useState('');
+  const [validateAcademicLv, setValidateAcademicLv] = useState('');
+  const [validateExp, setValidateExp] = useState('');
+  
+
+  const validateAll = () => {
+    validate();
+    VLDSex();
+  }
   const validate = () => {
     Keyboard.dismiss();
     let isValid = true;
@@ -103,6 +119,14 @@ const PostScreen = ({ navigation }) => {
     if (isValid) {
       console.log(' oce ');
     }
+
+  };
+  const VLDSex = (value) => {
+    if (!value) {
+      setValidateSex('Vui lòng chọn giới tính');
+    } else {
+      setValidateSex('');
+    }
   };
   const handleOnchange = (text, input) => {
     setInputs(prevState => ({ ...prevState, [input]: text }));
@@ -113,7 +137,7 @@ const PostScreen = ({ navigation }) => {
   const logimage = () => {
     console.log(selectedImages);
   }
-
+console.log(inputs);
   //const [images, setImages] = useState([]);
   const [selectedImages, setSelectedImages] = useState([]);
 
@@ -169,13 +193,6 @@ const PostScreen = ({ navigation }) => {
           type: 'image/jpeg',
           name: `image_${index + 1}.jpg`,
         });
-        const response = await axios.post(api, formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
-        urls.push(response.data.secure_url);
-        console.log(urls);
       });
       console.log(urls);
       Alert.alert("Upload Image Succesfuly !");
@@ -186,6 +203,7 @@ const PostScreen = ({ navigation }) => {
     }
   };
 
+  // Pick Images
   const BottomSheetContent = ({ isVisible, onClose }) => {
     return (
       <Modal
@@ -403,7 +421,7 @@ const PostScreen = ({ navigation }) => {
               error={errors.quantity}
             />
             <Dropdown
-              style={[styles.dropdown, isFocus && { borderColor: COLORS.darkBlue }]}
+              style={[styles.dropdown, isFocus && { borderColor: COLORS.darkBlue }, validateSex && { borderColor: 'red' }]}
               placeholderStyle={styles.placeholderStyle}
               selectedTextStyle={styles.selectedTextStyle}
               iconStyle={styles.iconStyle}
@@ -412,14 +430,17 @@ const PostScreen = ({ navigation }) => {
               labelField="label"
               valueField="value"
               placeholder={!isFocus ? 'Giới tính' : '...'}
-              value={value}
+              value={inputs.sex}
               onFocus={() => setIsFocus(true)}
               onBlur={() => setIsFocus(false)}
               onChange={item => {
-                setValue(item.value);
                 setIsFocus(false);
+                VLDSex(item.value)
+                handleOnchange(item.label, 'sex')
               }}
+
             />
+            {validateSex ? <Text style={styles.error}>{validateSex}</Text> : null}
             <Dropdown
               style={[styles.dropdown, isFocus && { borderColor: COLORS.darkBlue }]}
               placeholderStyle={styles.placeholderStyle}
@@ -441,6 +462,7 @@ const PostScreen = ({ navigation }) => {
                 setIsFocus(false);
               }}
             />
+            
             <Dropdown
               style={[styles.dropdown, isFocus && { borderColor: COLORS.darkBlue }]}
               placeholderStyle={styles.placeholderStyle}
@@ -598,7 +620,7 @@ const PostScreen = ({ navigation }) => {
                 <Button title="Xem trước" onPress={uploadImages} />
               </View>
               <View style={{ width: '40%', marginStart: '10%' }}>
-                <Button title="Đăng tin" onPress={validate} />
+                <Button title="Đăng tin" onPress={validateAll} />
               </View>
             </View>
           </View>
@@ -688,7 +710,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 6,
     paddingHorizontal: 18,
-    marginBottom: 13,
+    marginBottom: 8,
   },
   icon: {
     marginRight: 5,
@@ -710,6 +732,11 @@ const styles = StyleSheet.create({
     height: 50,
     fontSize: 14,
     borderRadius: 6,
+  },
+  error: {
+    fontSize: 12,
+    color: 'red',
+    paddingBottom: 12
   },
 });
 

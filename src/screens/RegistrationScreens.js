@@ -28,21 +28,36 @@ const data = [
     { label: 'Nữ', value: '2' },
     { label: 'Khác', value: '3' },
 ];
-const RegistrationScreen = ({ navigation }) => {
+const RegistrationScreen = ({ route,navigation }) => {
     const [values, setValues] = useState();
+    const [valuedate, setValuedate] = useState("");
 
     const [isFocus, setIsFocus] = useState(false);
+    const [validateSex, setValidateSex] = useState('');
     const [inputs, setInputs] = React.useState({
         FirtName: '',
         Name: '',
+        Birthday: '',
         PhoneNumber: '',
         Address: '',
     });
+    const validateAll = () => {
+        validate();
+        VLDSex();
+    }
+    const VLDSex = (value) => {
+        if (!value) {
+            setValidateSex('Vui lòng chọn giới tính');
+        } else {
+            setValidateSex('');
+        }
+    };
     const [errors, setErrors] = React.useState({});
     const [loading, setLoading] = React.useState(false);
 
     const validate = () => {
         Keyboard.dismiss();
+        inputs.Birthday = valuedate;
         let isValid = true;
 
         if (!inputs.FirtName) {
@@ -53,7 +68,10 @@ const RegistrationScreen = ({ navigation }) => {
             handleError('Vui lòng nhập tên', 'Name');
             isValid = false;
         }
-
+        if (!inputs.Birthday) {
+            handleError('Vui lòng nhập tên', 'Birthday');
+            isValid = false;
+        }
         if (!inputs.Address) {
             handleError('Vui lòng nhập địa chỉ', 'Address');
             isValid = false;
@@ -74,8 +92,8 @@ const RegistrationScreen = ({ navigation }) => {
                 let datatest = {
                     FirtName: inputs.FirtName,
                     Name: inputs.Name,
+                    Birthday: inputs.Birthday,
                     Gender: values,
-                    Birthday: formattedDate,
                     PhoneNumber: inputs.PhoneNumber,
                     Address: inputs.Address,
                 };
@@ -86,10 +104,9 @@ const RegistrationScreen = ({ navigation }) => {
         }, 3000);
     };
 
-    const handleOnchange = (text, input, id, formattedDate) => {
-        setInputs(prevState => ({ ...prevState, [input]: text || id || formattedDate }));
+    const handleOnchange = (text, input) => {
+        setInputs(prevState => ({ ...prevState, [input]: text }));
     };
-
     const handleError = (error, input) => {
         setErrors(prevState => ({ ...prevState, [input]: error }));
     };
@@ -100,8 +117,10 @@ const RegistrationScreen = ({ navigation }) => {
         const currentDate = selectedDate || date;
         setShowDatePicker(false);
         setDate(currentDate);
+        setValuedate(formattedDate);
         // You can do something with the selected date here
     };
+
 
     const showDatepicker = () => {
         setShowDatePicker(true);
@@ -115,7 +134,8 @@ const RegistrationScreen = ({ navigation }) => {
         <SafeAreaView style={{ backgroundColor: COLORS.white, flex: 1 }}>
             <Loader visible={loading} />
             <ScrollView
-                contentContainerStyle={{ paddingTop: 50, paddingHorizontal: 30 }}>
+                showsVerticalScrollIndicator={false}
+                contentContainerStyle={{ paddingTop: 10, paddingHorizontal: 30 }}>
                 <View style={{ marginVertical: 20 }}>
                     <Input
                         onChangeText={text => handleOnchange(text, 'FirtName')}
@@ -130,7 +150,7 @@ const RegistrationScreen = ({ navigation }) => {
                         error={errors.Name}
                     />
                     <Dropdown
-                        style={[styles.dropdown, isFocus && { borderColor: COLORS.darkBlue }]}
+                        style={[styles.dropdown, isFocus && { borderColor: COLORS.darkBlue }, validateSex && { borderColor: 'red' }]}
                         placeholderStyle={styles.placeholderStyle}
                         selectedTextStyle={styles.selectedTextStyle}
                         iconStyle={styles.iconStyle}
@@ -139,19 +159,24 @@ const RegistrationScreen = ({ navigation }) => {
                         labelField="label"
                         valueField="value"
                         placeholder={!isFocus ? 'Giới tính' : '...'}
-                        value={values}
+                        value={inputs.sex}
                         onFocus={() => setIsFocus(true)}
                         onBlur={() => setIsFocus(false)}
                         onChange={item => {
-                            setValues(item.value);
                             setIsFocus(false);
+                            VLDSex(item.value)
+                            handleOnchange(item.label, 'sex')
                         }}
+
                     />
+                    {validateSex ? <Text style={{marginTop: 7,color: COLORS.red, fontSize: 12 }}>{validateSex}</Text> : null}
                     <Input
+                        value={valuedate}
+                        onFocus={() => handleError(null, 'Birthday')}
                         placeholder="Ngày sinh"
                         iconName={'calendar-month-outline'}
                         onpress={showDatepicker}
-                        value={formattedDate}
+                        error={errors.Birthday}
                     />
                     {showDatePicker && (
                         <DateTimePicker
@@ -169,6 +194,7 @@ const RegistrationScreen = ({ navigation }) => {
                         onFocus={() => handleError(null, 'PhoneNumber')}
                         placeholder="Số điện thoại"
                         error={errors.PhoneNumber}
+                        value ={route.params?.PhoneNumber}
                     />
                     <Input
                         onChangeText={text => handleOnchange(text, 'Address')}
@@ -176,7 +202,7 @@ const RegistrationScreen = ({ navigation }) => {
                         placeholder="Địa chỉ"
                         error={errors.Address}
                     />
-                    <View style={{ width: '100%', alignItems: 'center' }}>
+                    <View style={{ width: '100%', alignItems: 'center', marginVertical: 45}}>
                         <TouchableOpacity
                             style={{
                                 width: '100%',
@@ -187,7 +213,7 @@ const RegistrationScreen = ({ navigation }) => {
                                 borderRadius: 8,
 
                             }}
-                            onPress={validate}>
+                            onPress={validateAll}>
                             <Text style={{ fontSize: 18, fontWeight: '500', color: COLORS.white }}>Hoàn tất</Text>
                         </TouchableOpacity>
                     </View>
@@ -287,7 +313,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 6,
         paddingHorizontal: 18,
-        marginBottom: 30,
+        marginTop: 30,
     },
     icon: {
         marginRight: 5,

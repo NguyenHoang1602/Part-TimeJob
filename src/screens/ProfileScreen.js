@@ -70,7 +70,7 @@ const ProfileScreen = ({ navigation }) => {
         />
         <View style={{ flex: 1, marginStart: 22 }}>
           <Text numberOfLines={1} style={{ fontSize: 20, fontWeight: '600', color: COLORS.black }}>{user.displayName}</Text>
-          <Text style={{ color: '#7D7A7A', fontSize: 16 }}>Good Morning 👋</Text>
+          <Text style={{ color: '#7D7A7A', fontSize: 16 }}>Xin chào 👋</Text>
         </View>
       </View>
       <View style={{
@@ -83,7 +83,7 @@ const ProfileScreen = ({ navigation }) => {
       }}>
         <View style={{ flexDirection: 'row' }}>
           <FontAwesome name="user" size={30} color={COLORS.primary} />
-          <Text style={{ flex: 1, fontSize: 20, fontWeight: '700', marginLeft: 25, color: COLORS.black }}>Contact Information</Text>
+          <Text style={{ flex: 1, fontSize: 20, fontWeight: '600', marginLeft: 25, color: COLORS.black }}>Thông tin cá nhân</Text>
           <TouchableOpacity onPress={() => navigation.navigate('Cập nhật thông tin cá nhân')} style={{}}>
             <Feather name="edit" size={24} color={COLORS.blue} />
           </TouchableOpacity>
