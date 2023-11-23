@@ -65,7 +65,7 @@ const HomeScreen = ({navigation}) => {
 
   const getList = () => {
     axios({
-      url: "http://192.168.9.150:3000/posts/list",
+      url: "http://192.168.1.1:3000/posts/list",
       method: "GET",
     }).then((res) => {
       var response = res.data
