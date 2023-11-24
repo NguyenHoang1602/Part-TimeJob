@@ -43,7 +43,7 @@ const TopTabScreenIsDisplay = ({ navigation }) => {
 
     async function getListJobs() {
         try {
-            const result = await axios.get('http://192.168.1.10:3000/posts/listJobsIsDisplayForApp');
+            const result = await axios.get('http://192.168.1.46:3000/posts/listJobsIsDisplayForApp');
             if (result.status === 200) {
                 //
                 setList(result.data);

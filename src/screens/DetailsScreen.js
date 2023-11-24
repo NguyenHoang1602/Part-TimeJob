@@ -5,7 +5,7 @@
 /* eslint-disable eol-last */
 /* eslint-disable semi */
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, ImageBackground, ScrollView, Image } from 'react-native';
+import { View, Text, TouchableOpacity, ImageBackground, ScrollView, Image, FlatList, Alert, Pressable } from 'react-native';
 
 //
 import Input from '../components/Input';
@@ -25,17 +25,20 @@ import IconWithBadge from '../components/IconWithBadge';
 import IconWithBadgeAntDesign from '../components/IconWithBadgeAntDesign';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AppIntroSlider from "react-native-app-intro-slider";
+import Modal from "react-native-modal";
+import CheckBoxCircle from '../components/CheckBoxCircle';
 import { SIZES } from '../constants/theme';
 
 const DetailsScreen = ({ route, navigation }) => {
-
-    const data = {
+    const datalist = {
+        postid:route.params?.postid,
         users_id: route.params?.users_id,
         address: route.params?.address,
         business_name: route.params?.business_name,
         image: route.params?.image,
         quantity: route.params?.quantity,
         title: route.params?.title,
+        gender: route.params?.gender,
         career_id: route.params?.career_id,
         payform_id: route.params?.payform_id,
         experience_id: route.params?.experience_id,
@@ -50,6 +53,58 @@ const DetailsScreen = ({ route, navigation }) => {
         date: route.params?.date,
         time: route.params?.time,
     };
+    const [ data, setdataset] = useState(datalist);
+    const CV = [
+        { id: '1', name: 'CV01' },
+        { id: '2', name: 'CV02' },
+        { id: '3', name: 'CV03' },
+        { id: '4', name: 'CV03' },
+        { id: '5', name: 'CV03' },
+        { id: '6', name: 'CV03' },
+    ];
+    const [selectedItem, setSelectedItem] = useState(null);
+    const handlePress = (itemId) => {
+        setSelectedItem(itemId === selectedItem ? null : itemId);
+    };
+    const renderCV = ({ item }) => {
+        const isSelected = item.id === selectedItem;
+        return (
+            <Pressable
+                onPress={() => handlePress(item.id)}
+                style={({ pressed }) => ({
+                    borderColor: isSelected ? COLORS.primary : 'transparent',
+                    opacity: pressed ? 0.5 : 1,
+                    marginBottom: 18,
+                    padding: 10,
+                    borderWidth: 0.8,
+                    borderRadius: 5,
+                    backgroundColor:isSelected ? 'rgba(51, 123, 255, 0.2)' : 'rgba(0, 0, 0, 0.04)',
+                })}
+            >
+                {({ pressed }) => (
+                    <View style={{flexDirection: 'row'}}>
+                        <Ionicons name="document-text-outline" size={24} color={COLORS.black} />
+                        <Text numberOfLines={1} style={{ flex: 1, fontSize: 16, fontWeight: '400', marginLeft: 25, color: COLORS.black }}>{item.name}</Text>
+                        {
+                            isSelected ? (
+                                <AntDesign name="checkcircle" size={24} color={COLORS.primary} />
+                            ) : null
+                        }
+                    </View>
+                )}
+            </Pressable>
+        );
+    };
+    const [isModalVisible, setModalVisible] = useState(false);
+
+    const toggleModal = (data) => {
+        setModalVisible(!isModalVisible);
+    };
+    const toggleModalclose = (item) => {
+        setModalVisible(!isModalVisible);
+    };
+    // datacheck();
+
     return (
         <SafeAreaView style={{ flex: 1, paddingBottom: 18, backgroundColor: COLORS.white }}>
             <View style={{ flexDirection: 'row', paddingHorizontal: 18, backgroundColor: COLORS.white, paddingVertical: 10 }}>
@@ -59,8 +114,8 @@ const DetailsScreen = ({ route, navigation }) => {
                 <View style={{ flex: 1 }}>
                     <Text></Text>
                 </View>
-                <TouchableOpacity>
-                    <Icon style={{ marginRight: 22 }} name="bookmark-plus-outline" size={30} color={COLORS.black} />
+                <TouchableOpacity onPress={console.log(data)}>
+                    <Icon  style={{ marginRight: 22 }} name="bookmark-plus-outline" size={30} color={COLORS.black} />
                 </TouchableOpacity>
                 <Ionicons name="ellipsis-horizontal-circle" size={30} color={COLORS.black} />
             </View>
@@ -79,6 +134,7 @@ const DetailsScreen = ({ route, navigation }) => {
                                         width: '100%',
                                         height: 250,
                                     }}
+                                    resizeMode="contain"
                                 />
                             </View>
                         )
@@ -147,7 +203,7 @@ const DetailsScreen = ({ route, navigation }) => {
                     </View>
                     <View style={{ flexDirection: 'row', marginTop: 10, alignItems: 'center' }}>
                         <Fontisto name="venus-mars" size={24} color={COLORS.blue} />
-                        <Text style={{ marginStart: 15, fontSize: 15, color: COLORS.black, opacity: 0.8 }}>Giới tính: Không yêu cầu</Text>
+                        <Text style={{ marginStart: 15, fontSize: 15, color: COLORS.black, opacity: 0.8 }}>Giới tính: {data.gender}</Text>
                     </View>
                     <View style={{ flexDirection: 'row', marginTop: 10, alignItems: 'center' }}>
                         <FontAwesome name="building-o" size={24} color={COLORS.blue} />
@@ -171,7 +227,7 @@ const DetailsScreen = ({ route, navigation }) => {
                     </View>
                     <View style={{ width: '100%', alignItems: 'center', paddingVertical: 50 }}>
                         <TouchableOpacity
-                            onPress={() => navigation.navigate('Thông tin tuyển dụng')}
+                            onPress={() => toggleModal(data)}
                             style={{
                                 backgroundColor: COLORS.blue,
                                 padding: 5,
@@ -198,6 +254,113 @@ const DetailsScreen = ({ route, navigation }) => {
                     </View>
                 </View>
             </ScrollView>
+            <Modal onBackdropPress={toggleModalclose} isVisible={isModalVisible} style={{ justifyContent: 'flex-end', margin: 0 }}>
+                <View style={{
+                    backgroundColor: '#FFFFFF',
+                    shadowColor: '#333333',
+                    shadowOffset: { width: -1, height: -3 },
+                    shadowRadius: 2,
+                    shadowOpacity: 0.4,
+                    // elevation: 5,
+                    paddingTop: 10,
+                    borderTopLeftRadius: 20,
+                    borderTopRightRadius: 20,
+                }}>
+                    <View style={{
+                        alignItems: 'center',
+                    }}>
+                        <View style={{
+                            width: 40,
+                            height: 6,
+                            borderRadius: 4,
+                            backgroundColor: COLORS.grey,
+                            marginBottom: 10,
+                        }} />
+                    </View>
+                </View>
+                <View style={{ backgroundColor: '#FFFFFF', }}>
+                    <View style={{
+                        padding: 20,
+                        backgroundColor: '#FFFFFF',
+                        paddingTop: 10,
+                        alignItems: 'center',
+                    }}>
+                        <Text style={{ fontSize: 18, fontWeight: '600', color: COLORS.black }}>Hồ sơ ứng tuyển</Text>
+                        <View style={{
+                            backgroundColor: 'rgba(125, 122, 122, 0.1)',
+                            height: 120,
+                            borderRadius: 6,
+                            borderWidth: 1,
+                            borderStyle: 'dashed',
+                            borderColor: '#7D7A7A66',
+                            width: '95%',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            marginTop: 20,
+                            marginBottom: 10,
+                        }}>
+                            <TouchableOpacity
+                                style={{
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    marginBottom: 5,
+                                }}
+                                onPress={() => navigation.navigate('Thông tin tuyển dụng', {
+                                   postid : data.postid,
+                                })}
+                            >
+                                <AntDesign name="addfile" size={30} color={COLORS.primary} />
+                            </TouchableOpacity>
+                            <View style={{ alignItems: 'center' }}>
+                                <Text style={{ fontSize: 14, color: '#7D7A7A', opacity: 0.7 }}>Tạo hồ sơ mới</Text>
+                            </View>
+                        </View>
+                    </View>
+                    <Text style={{ marginStart: '7%', fontSize: 16 }}>Hồ sơ của bạn</Text>
+                    <ScrollView showsVerticalScrollIndicator={false} style={{ width: '100%',height: 200, paddingHorizontal: 30, marginTop: 20}}>
+                        <FlatList
+                            data={CV}
+                            keyExtractor={(item) => item.id}
+                            renderItem={renderCV}
+                            nestedScrollEnabled={true}
+                            scrollEnabled={false}
+                        />
+                    </ScrollView>
+                    <View style={{
+                        flexDirection: 'row',
+                        justifyContent: 'center',
+                        marginVertical: 20,
+                    }}>
+                        <TouchableOpacity
+                            onPress={toggleModalclose}
+                            style={{
+                                backgroundColor: 'rgba(51, 123, 255, 0.20)',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                borderRadius: 64,
+                                position: 'relative',
+                                width: 160,
+                                paddingVertical: 15,
+                                marginEnd: 15,
+                            }}>
+                            <Text style={{ color: COLORS.primary, fontSize: 18, fontWeight: "600" }}>Hủy</Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
+                            style={{
+                                backgroundColor: COLORS.primary,
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                borderRadius: 64,
+                                position: "relative",
+                                width: 160,
+                                paddingVertical: 15,
+                            }}>
+                            <Text style={{ color: COLORS.white, fontSize: 18, fontWeight: "600" }}>Ứng tuyển</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </Modal>
         </SafeAreaView>
     );
 }

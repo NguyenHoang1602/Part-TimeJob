@@ -43,7 +43,7 @@ const TopTabScreenDenied = ({ navigation }) => {
 
     async function getListJobs() {
         try {
-            const result = await axios.get('http://192.168.1.10:3000/posts/listJobsDeniedForApp');
+            const result = await axios.get('http://192.168.1.46:3000/posts/listJobsDeniedForApp');
             if (result.status === 200) {
                 //
                 setList(result.data);
