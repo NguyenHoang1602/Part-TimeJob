@@ -33,7 +33,7 @@ const AuthScreen = ({ navigation }) => {
             await GoogleSignin.signOut();
             const userInfo = await GoogleSignin.signIn();
             const token = userInfo.idToken;
-            const result = await axios.post('http://192.168.1.46:3000/users/GoogleSignIn', {
+            const result = await axios.post('http://192.168.1.10:3000/users/GoogleSignIn', {
                 idtoken: token,
             });
             setUser(result.data);

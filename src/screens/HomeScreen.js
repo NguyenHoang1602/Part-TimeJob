@@ -43,7 +43,7 @@ const HomeScreen = ({ navigation }) => {
 
   const getListJobs = () => {
     axios({
-      url: "http://192.168.1.46:3000/posts/list",
+      url: "http://192.168.1.10:3000/posts/list",
       method: "GET",
     }).then((res) => {
       var response = res.data
@@ -53,7 +53,7 @@ const HomeScreen = ({ navigation }) => {
 
   const getListCareers = () => {
     axios({
-      url: "http://192.168.1.46:3000/careers/listCareersForApp",
+      url: "http://192.168.1.10:3000/careers/listCareersForApp",
       method: "GET",
     }).then((res) => {
       var response = res.data

@@ -258,7 +258,7 @@ const TabNavigator = () => {
                 tabBarHideOnKeyboard: true,
             }}>
             <Tab.Screen
-                name="Home"
+                name="Trang chủ"
                 component={HomeStack}
                 options={({ route }) => ({
                     tabBarStyle: {
@@ -275,7 +275,7 @@ const TabNavigator = () => {
                 })}
             />
             <Tab.Screen
-                name="Saved Jobs"
+                name="Đã lưu"
                 component={SavedStack}
                 options={({ route }) => ({
                     tabBarStyle: {
@@ -292,7 +292,7 @@ const TabNavigator = () => {
                 })}
             />
             <Tab.Screen
-                name="Post"
+                name="Đăng tin"
                 component={PostStack}
                 options={({ route }) => ({
                     tabBarStyle: {
@@ -307,7 +307,7 @@ const TabNavigator = () => {
                 })}
             />
             <Tab.Screen
-                name="Management"
+                name="Quản lí"
                 component={ManagementStack}
                 options={({ route }) => ({
                     tabBarStyle: {
@@ -324,7 +324,7 @@ const TabNavigator = () => {
                 })}
             />
             <Tab.Screen
-                name="Profile"
+                name="Menu"
                 component={ProfileStack}
                 options={({ route }) => ({
                     tabBarStyle: {
@@ -334,7 +334,7 @@ const TabNavigator = () => {
                         padding: 8,
                     },
                     tabBarIcon: ({ color, size }) => (
-                        <Feather name="user" color={color} size={size} />
+                        <Feather name="menu" color={color} size={size} />
                     ),
                     tabBarLabelStyle: {
                         marginBottom: 8,
