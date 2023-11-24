@@ -16,6 +16,7 @@ import TopTabScreenIsDisplay from './TopTabScreenIsDisplay';
 import TopTabScreenWaiting from './TopTabScreenWaiting';
 import TopTabScreenDenied from './TopTabScreenDenied';
 import UserContext from '../components/UserConText';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from '@react-navigation/native';
 
 const TopTab = createMaterialTopTabNavigator();
@@ -35,15 +36,8 @@ const ManagementScreen = ({ route, navigation }) => {
 
   async function getListIsDisplay() {
     try {
-      const result = await axios.get('http://192.168.1.10:3000/posts/listJobsIsDisplayForApp');
-      if (result.status === 200) {
-        //
-        setListIsDisplay(result.data);
-        let data = result.data;
-        if (data !== null) {
-      
-        }
-      }
+      const data = await AsyncStorage.getItem('listJobsIsDisplay');
+      setListIsDisplay(JSON.parse(data));
     } catch (error) {
       console.log("Err : ", error);
     }
@@ -51,33 +45,19 @@ const ManagementScreen = ({ route, navigation }) => {
 
   async function getListWaiting() {
     try {
-      const result = await axios.get('http://192.168.1.10:3000/posts/listJobsWaitingForApp');
-      if (result.status === 200) {
-        //
-        setListWaiting(result.data);
-        let data = result.data;
-        if (data !== null) {
-        
-        }
-      }
+      const data = await AsyncStorage.getItem('listJobsWaiting');
+      setListWaiting(JSON.parse(data));
     } catch (error) {
-
+      console.log("Err : ", error);
     }
   }
 
   async function getListDenied() {
     try {
-      const result = await axios.get('http://192.168.1.10:3000/posts/listJobsDeniedForApp');
-      if (result.status === 200) {
-        //
-        setListDenied(result.data);
-        let data = result.data;
-        if (data !== null) {
-         
-        }
-      }
+      const data = await AsyncStorage.getItem('listJobsDenied');
+      setListDenied(JSON.parse(data));
     } catch (error) {
-
+      console.log("Err : ", error);
     }
   }
 

@@ -12,6 +12,7 @@ import axios from 'axios';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useFocusEffect } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const TopTabScreenWaiting = ({ navigation }) => {
 
@@ -38,18 +39,10 @@ const TopTabScreenWaiting = ({ navigation }) => {
 
     async function getListJobs() {
         try {
-            const result = await axios.get('http://192.168.1.10:3000/posts/listJobsWaitingForApp');
-            if (result.status === 200) {
-                //
-                setList(result.data);
-                
-                let data = result.data;
-                if (data !== null) {
-                    setForm(true)
-                }
-            }
+            const data = await AsyncStorage.getItem('listJobsWaiting');
+            setList(JSON.parse(data));
         } catch (error) {
-
+            console.log("Err : ", error);
         }
     }
 

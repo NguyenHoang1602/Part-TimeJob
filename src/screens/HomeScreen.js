@@ -5,7 +5,7 @@
 /* eslint-disable eol-last */
 /* eslint-disable prettier/prettier */
 /* eslint-disable react-native/no-inline-styles */
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
 import { View, Text, SafeAreaView, TouchableOpacity, ImageBackground, ScrollView, TextInput, FlatList, Pressable } from 'react-native';
 
@@ -20,47 +20,126 @@ import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import IconWithBadge from '../components/IconWithBadge';
 import IconWithBadgeAntDesign from '../components/IconWithBadgeAntDesign';
 import UserContext from '../components/UserConText';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import axios from 'axios';
 
-const HomeScreen = ({navigation}) => {
+const HomeScreen = ({ navigation }) => {
+
+  const { user } = useContext(UserContext);
+  const [listJobs, setListJobs] = useState([]);
+  const [listCareers, setListCareers] = useState([]);
 
   useFocusEffect(
     React.useCallback(() => {
-      getListJobs()
+      getAllData()
       getListCareers()
     }, [])
   );
 
-  const { user } = useContext(UserContext);
+  const getAllData = async () => {
+    //All Post allow
+    axios({
+      url: "http://192.168.1.46:3000/posts/list",
+      method: "GET",
+    }).then((response) => {
+      if (response.status === 200) {
+        setListJobs(response.data)
+      }
+    })
+    //All Career
+    axios({
+      url: "http://192.168.1.46:3000/careers/listCareersForApp",
+      method: "GET",
+    }).then(async (response) => {
+      if (response.status === 200) {
+        const data = JSON.stringify(response.data)
+        await AsyncStorage.setItem('listCareers', data);
+      }
+    })
+    //All WorkType
+    axios({
+      url: "http://192.168.1.46:3000/workTypes/list",
+      method: "GET",
+    }).then(async (response) => {
+      if (response.status === 200) {
+        const data = JSON.stringify(response.data)
+        await AsyncStorage.setItem('listWorkTypes', data);
+      }
+    })
+    //All PayForm
+    axios({
+      url: "http://192.168.1.46:3000/payforms/list",
+      method: "GET",
+    }).then(async (response) => {
+      if (response.status === 200) {
+        const data = JSON.stringify(response.data)
+        await AsyncStorage.setItem('listPayForms', data);
+      }
+    })
+    //All Academic
+    axios({
+      url: "http://192.168.1.46:3000/acedemics/list",
+      method: "GET"
+    }).then(async (response) => {
+      if (response.status === 200) {
+        const data = JSON.stringify(response.data)
+        await AsyncStorage.setItem('listAcademics', data);
+      }
+    })
+    //All Experience
+    axios({
+      url: "http://192.168.1.46:3000/experiences/list",
+      method: "GET"
+    }).then(async (response) => {
+      if (response.status === 200) {
+        const data = JSON.stringify(response.data)
+        await AsyncStorage.setItem('listExperiences', data);
+      }
+    })
+    //All my Notification
 
-  const [listJobs, setListJobs] = useState([]);
-  const [listCareers, setListCareers] = useState([]);
+    //All my Message
+    //All CV
+    //All my Post allow
+    axios({
+      url: "http://192.168.1.46:3000/posts/listJobsIsDisplayForApp",
+      method: "GET"
+    }).then(async (response) => {
+      if (response.status === 200) {
+        const data = JSON.stringify(response.data)
+        await AsyncStorage.setItem('listJobsIsDisplay', data);
+      }
+    })
+    //All my Post waiting
+    axios({
+      url: "http://192.168.1.46:3000/posts/listJobsWaitingForApp",
+      method: "GET"
+    }).then(async (response) => {
+      if (response.status === 200) {
+        const data = JSON.stringify(response.data)
+        await AsyncStorage.setItem('listJobsWaiting', data);
+      }
+    })
+    //All my Post denied
+    axios({
+      url: "http://192.168.1.46:3000/posts/listJobsDeniedForApp",
+      method: "GET"
+    }).then(async (response) => {
+      if (response.status === 200) {
+        const data = JSON.stringify(response.data)
+        await AsyncStorage.setItem('listJobsDenied', data);
+      }
+    })
+  }
 
-  const search = () =>{
+  const search = () => {
     navigation.navigate('SearchScreen')
   }
 
-  const getListJobs = () => {
-    axios({
-      url: "http://192.168.1.10:3000/posts/list",
-      method: "GET",
-    }).then((res) => {
-      var response = res.data
-      console.log(response);
-      setListJobs(response)
-    })
-  }
-
-  const getListCareers = () => {
-    axios({
-      url: "http://192.168.1.10:3000/careers/listCareersForApp",
-      method: "GET",
-    }).then((res) => {
-      var response = res.data
-      console.log("Careers : " + response);
-      setListCareers(response)
-    })
+  const getListCareers = async () => {
+    const data = await AsyncStorage.getItem('listCareers')
+    setListCareers(JSON.parse(data));
   }
 
   const FlatLista = () => {
@@ -77,7 +156,7 @@ const HomeScreen = ({navigation}) => {
   const FlatListb = () => {
     return (
       <FlatList
-        data={listJobs.reverse()}
+        data={listJobs}
         keyExtractor={(item, index) => index.toString()}
         renderItem={renderItemJob}
         nestedScrollEnabled={true}
@@ -87,7 +166,7 @@ const HomeScreen = ({navigation}) => {
   }
 
   const renderItem = ({ item }) => (
-    <TouchableOpacity style={{ margin: 20, alignItems: 'center' }} onPress={()=>{}}>
+    <TouchableOpacity style={{ margin: 20, alignItems: 'center' }} onPress={() => { }}>
       <ImageBackground
         source={{ uri: item.image }}
         style={{ width: 46, height: 46, marginBottom: 5 }}
@@ -106,16 +185,16 @@ const HomeScreen = ({navigation}) => {
       marginBottom: 18,
       padding: 20,
     }}
-    onPress={() => navigation.navigate('DetailsScreen', {
-      title: item.title,
-      id: item.id,
-      uri: item.uri,
-      address: item.Address,
-      wage_max: item.wagemax,
-      wage_min: item.wagemin,
-      worktype: item.worktype,
-      Details: item.Details,
-    })}>
+      onPress={() => navigation.navigate('DetailsScreen', {
+        title: item.title,
+        id: item.id,
+        uri: item.uri,
+        address: item.Address,
+        wage_max: item.wagemax,
+        wage_min: item.wagemin,
+        worktype: item.worktype,
+        Details: item.Details,
+      })}>
       <View style={{ width: '100%', flexDirection: 'row' }}>
         {item.image.map((imageUrl, index) => {
           if (index === 0) {
@@ -129,7 +208,7 @@ const HomeScreen = ({navigation}) => {
             );
           }
         })}
-        
+
         <View style={{ width: '50%', height: '100%', marginStart: 20, flex: 1 }}>
           <Text style={{ fontSize: 16, fontWeight: 'bold' }}>{item.title}</Text>
           <Text style={{ fontSize: 16, fontWeight: 'bold', color: COLORS.grey }}>{item.describe}</Text>
@@ -185,7 +264,7 @@ const HomeScreen = ({navigation}) => {
               width: '68%',
             }}>
             <ImageBackground
-              source={{ uri : user.photo }}
+              source={{ uri: user.photo }}
               style={{ width: 46, height: 46 }}
               imageStyle={{ borderRadius: 46 }}
             />
@@ -244,7 +323,7 @@ const HomeScreen = ({navigation}) => {
             style={{ marginRight: 20 }}
           />
           <TextInput
-          style={{flex:1}}
+            style={{ flex: 1 }}
             placeholder="Tìm kiếm việc làm"
             onFocus={search}
           />
@@ -266,26 +345,26 @@ const HomeScreen = ({navigation}) => {
       </View>
       <View style={{ padding: 20 }}>
         <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps={'always'}>
-        <View style={{ width: '100%', alignItems: 'center', marginBottom: 15 }}>
-          <View style={{ width: '100%', marginBottom: 10 }}>
-            <Text style={{ fontSize: 20, fontStyle: 'normal', color: COLORS.black, fontWeight: 'bold' }}>Danh mục ngành nghề</Text>
+          <View style={{ width: '100%', alignItems: 'center', marginBottom: 15 }}>
+            <View style={{ width: '100%', marginBottom: 10 }}>
+              <Text style={{ fontSize: 20, fontStyle: 'normal', color: COLORS.black, fontWeight: 'bold' }}>Danh mục ngành nghề</Text>
+            </View>
+            <FlatLista />
           </View>
-          <FlatLista/>
-        </View>
-        <View style={{ width: '100%', alignItems: 'center' }}>
-          <View style={{ width: '100%', marginBottom: 20, flexDirection: 'row', alignItems: 'center' }}>
-            <Text style={{ fontSize: 20, fontStyle: 'normal', color: COLORS.black, fontWeight: 'bold' }}>Công việc mới</Text>
-            <TouchableOpacity style={{ marginStart: '49%' }}
-              onPress={() => { }}>
-              <Text style={{ fontSize: 18, color: COLORS.blue, fontWeight: 'bold' }}>Tất cả</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={{ width: '100%', paddingBottom: '50%' }}>
-            <View style={{ alignItems: 'center' }}>
-              <FlatListb/>
+          <View style={{ width: '100%', alignItems: 'center' }}>
+            <View style={{ width: '100%', marginBottom: 20, flexDirection: 'row', alignItems: 'center' }}>
+              <Text style={{ fontSize: 20, fontStyle: 'normal', color: COLORS.black, fontWeight: 'bold' }}>Công việc mới</Text>
+              <TouchableOpacity style={{ marginStart: '49%' }}
+                onPress={() => { }}>
+                <Text style={{ fontSize: 18, color: COLORS.blue, fontWeight: 'bold' }}>Tất cả</Text>
+              </TouchableOpacity>
+            </View>
+            <View style={{ width: '100%', paddingBottom: '50%' }}>
+              <View style={{ alignItems: 'center' }}>
+                <FlatListb />
+              </View>
             </View>
           </View>
-        </View>
         </ScrollView>
       </View>
     </SafeAreaView>

@@ -6,9 +6,9 @@
 /* eslint-disable semi */
 /* eslint-disable eol-last */
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, Image, Checkbox, SafeAreaView, TouchableOpacity, TextInput } from 'react-native';
+import { StyleSheet, View, Text, Image, Checkbox, SafeAreaView, TouchableOpacity, TextInput, Alert } from 'react-native';
 import { COLORS } from '../constants/theme';
-import auth from '@react-native-firebase/auth';
+import auth, { firebase } from '@react-native-firebase/auth';
 
 import Feather from 'react-native-vector-icons/Feather';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -27,16 +27,12 @@ const SignInWithPhoneNumber = ({ navigation, props }) => {
   // Handle login
   function onAuthStateChanged(user) {
     if (user) {
-      // Some Android devices can automatically process the verification code (OTP) message, and the user would NOT need to enter the code.
-      // Actually, if he/she tries to enter it, he/she will get an error message because the code was already used in the background.
-      // In this function, make sure you hide the component(s) for entering the code and/or navigate away from this screen.
-      // It is also recommended to display a message to the user informing him/her that he/she has successfully logged in.
+      console.log(number);
     }
   }
 
   useEffect(() => {
-    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
-    return subscriber; // unsubscribe on unmount
+    firebase.auth().onAuthStateChanged(onAuthStateChanged);
   }, []);
 
   // Handle the button press
@@ -46,18 +42,22 @@ const SignInWithPhoneNumber = ({ navigation, props }) => {
   }
 
   async function confirmCode(codes) {
-    console.log("OK : " + codes);
     try {
-      await confirm.confirm(codes);
+      if (confirm) {
+        await confirm.confirm(codes);
+        navigation.navigate('RegistrationScreen', number)
+      } else {
+        console.log('Confirmation object is null.');
+      }
       // This
-      
-      const result = await axios.post('http://192.168.8.124/users/PhoneNumberSignIn', {
-        phoneNumber: number,
-      });
-      setUser(result.data);
-      navigation.navigate('TabNavigator')
+
+      // const result = await axios.post('http://192.168.8.124/users/PhoneNumberSignIn', {
+      //   phoneNumber: number,
+      // });
+      // setUser(result.data);
+
     } catch (error) {
-      console.log('Invalid code.');
+      console.log('Invalid code: ', error);
     }
   }
 
@@ -124,12 +124,6 @@ const SignInWithPhoneNumber = ({ navigation, props }) => {
     );
   }
 
-  const SignIn = () => {
-
-  }
-
-  
-
   return (
     <View style={{ flex: 1, backgroundColor: "white", paddingHorizontal: 18 }}>
       <SafeAreaView >
@@ -146,27 +140,27 @@ const SignInWithPhoneNumber = ({ navigation, props }) => {
         </View>
       </SafeAreaView>
 
-        <View style={{ alignItems: 'center' }}>
-          <View
-            style={{
-              marginVertical: 20,
-              flexDirection: 'row',
-              height: 50,
-              borderRadius: 10,
-              alignItems: 'center',
-              paddingHorizontal: 18,
-              backgroundColor: !isFocusedEmail ? COLORS.lightGrey : COLORS.blue,
-              borderWidth: 1,
-              borderColor: !isFocusedEmail ? COLORS.white : COLORS.primary
-            }}>
-            <MaterialIcons name='phone' size={24} color={email === '' ? COLORS.grey : COLORS.black} />
-            <TextInput
-              placeholder='Phone Number'
-              value={code} onChangeText={text => setCode(text)}
-              onFocus={() => { setIsFocusedEmail(!isFocusedEmail) }}
-              onBlur={() => { setIsFocusedEmail(!isFocusedEmail) }}
-              style={{ flex: 1, fontSize: 16, color: COLORS.black, paddingHorizontal: 10 }} />
-          </View>
+      <View style={{ alignItems: 'center' }}>
+        <View
+          style={{
+            marginVertical: 20,
+            flexDirection: 'row',
+            height: 50,
+            borderRadius: 10,
+            alignItems: 'center',
+            paddingHorizontal: 18,
+            backgroundColor: !isFocusedEmail ? COLORS.lightGrey : COLORS.blue,
+            borderWidth: 1,
+            borderColor: !isFocusedEmail ? COLORS.white : COLORS.primary
+          }}>
+          <MaterialIcons name='phone' size={24} color={email === '' ? COLORS.grey : COLORS.black} />
+          <TextInput
+            placeholder='Phone Number'
+            value={code} onChangeText={text => setCode(text)}
+            onFocus={() => { setIsFocusedEmail(!isFocusedEmail) }}
+            onBlur={() => { setIsFocusedEmail(!isFocusedEmail) }}
+            style={{ flex: 1, fontSize: 16, color: COLORS.black, paddingHorizontal: 10 }} />
+        </View>
 
 
         <TouchableOpacity

@@ -17,6 +17,7 @@ import UserContext from '../components/UserConText';
 
 import axios from 'axios';
 import { useFocusEffect } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const TopTabScreenIsDisplay = ({ navigation }) => {
 
@@ -39,21 +40,14 @@ const TopTabScreenIsDisplay = ({ navigation }) => {
         React.useCallback(() => {
             getListJobs()
         }, [])
-    );
+    ); 
 
     async function getListJobs() {
         try {
-            const result = await axios.get('http://192.168.1.10:3000/posts/listJobsIsDisplayForApp');
-            if (result.status === 200) {
-                //
-                setList(result.data);
-                let data = result.data;
-                if (data !== null) {
-                    setForm(true)
-                }
-            }
+            const data = await AsyncStorage.getItem('listJobsIsDisplay');
+            setList(JSON.parse(data));
         } catch (error) {
-
+            console.log("Err : ", error);
         }
     }
     const FlatListJobs = () => {

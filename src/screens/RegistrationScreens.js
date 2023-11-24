@@ -28,7 +28,7 @@ const data = [
     { label: 'Nữ', value: '2' },
     { label: 'Khác', value: '3' },
 ];
-const RegistrationScreen = ({ navigation }) => {
+const RegistrationScreen = ({ navigation, route }) => {
     const [values, setValues] = useState();
 
     const [isFocus, setIsFocus] = useState(false);
@@ -56,10 +56,6 @@ const RegistrationScreen = ({ navigation }) => {
 
         if (!inputs.Address) {
             handleError('Vui lòng nhập địa chỉ', 'Address');
-            isValid = false;
-        }
-        if (!inputs.PhoneNumber) {
-            handleError('Vui lòng nhập số điện thoại', 'PhoneNumber');
             isValid = false;
         }
         if (isValid) {
@@ -113,7 +109,7 @@ const RegistrationScreen = ({ navigation }) => {
     });
     return (
         <SafeAreaView style={{ backgroundColor: COLORS.white, flex: 1 }}>
-            <Loader visible={loading} />
+            <Loader visible={loading} /> 
             <ScrollView
                 contentContainerStyle={{ paddingTop: 50, paddingHorizontal: 30 }}>
                 <View style={{ marginVertical: 20 }}>
@@ -164,10 +160,9 @@ const RegistrationScreen = ({ navigation }) => {
                         />
                     )}
                     <Input
+                        value={route.params.number}
                         keyboardType="numeric"
-                        onChangeText={text => handleOnchange(text, 'PhoneNumber')}
-                        onFocus={() => handleError(null, 'PhoneNumber')}
-                        placeholder="Số điện thoại"
+                        placeholder={route.params?.number}
                         error={errors.PhoneNumber}
                     />
                     <Input

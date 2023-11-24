@@ -17,6 +17,7 @@ import IconWithBadge from '../components/IconWithBadge';
 import IconWithBadgeAntDesign from '../components/IconWithBadgeAntDesign';
 import { useFocusEffect } from '@react-navigation/native';
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const TopTabScreenDenied = ({ navigation }) => {
 
@@ -43,17 +44,10 @@ const TopTabScreenDenied = ({ navigation }) => {
 
     async function getListJobs() {
         try {
-            const result = await axios.get('http://192.168.1.10:3000/posts/listJobsDeniedForApp');
-            if (result.status === 200) {
-                //
-                setList(result.data);
-                let data = result.data;
-                if (data !== null) {
-                    setForm(true)
-                }
-            }
+            const data = await AsyncStorage.getItem('listJobsDenied');
+            setList(JSON.parse(data));
         } catch (error) {
-
+            console.log("Err : ", error);
         }
     }
     const FlatListJobs = () => {
