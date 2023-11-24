@@ -20,6 +20,7 @@ import Modal from "react-native-modal";
 import UserContext from '../components/UserConText';
 
 import axios from 'axios';
+import { useFocusEffect } from '@react-navigation/native';
 
 const Jobdata = [
   { id: '1', title: 'Freelancer 1', Details: 'Dribble Inc.', Address: 'Quan 1, TP. HCM', wagemax: '150000', wagemin: '50000', worktype: 'Partime', uri: 'https://devforum-uploads.s3.dualstack.us-east-2.amazonaws.com/uploads/original/4X/b/7/6/b766c952bf9c722c30447824d8fc06a48f008e31.png' },
@@ -52,7 +53,7 @@ const SavedJobsScreen = ({ navigation }) => {
     setModalVisible(!isModalVisible);
   };
 
-  useEffect(() => {
+  useFocusEffect(() => {
     getListSaveJobs();
   }, []);
 

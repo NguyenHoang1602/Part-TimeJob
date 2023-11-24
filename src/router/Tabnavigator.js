@@ -53,7 +53,6 @@ const HomeStack = (props) => {
                 name="Thông tin tuyển dụng"
                 component={CVScreen}
                 options={({ route }) => ({
-                    title: route.params?.title,
                     headerShown: true,
                     headerStyle: {
                         backgroundColor: '#337BFF',
