@@ -56,7 +56,7 @@ const style = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'space-between',
-    marginBottom: 30,
+    marginTop: 30,
   },
   label: {
     marginVertical: 5,

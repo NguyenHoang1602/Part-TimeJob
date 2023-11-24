@@ -13,7 +13,6 @@ import auth, { firebase } from '@react-native-firebase/auth';
 import Feather from 'react-native-vector-icons/Feather';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import axios from 'axios';
-
 const SignInWithPhoneNumber = ({ navigation, props }) => {
   const [email, setEmail] = useState('');
   const [isFocusedEmail, setIsFocusedEmail] = useState(false);
@@ -27,7 +26,7 @@ const SignInWithPhoneNumber = ({ navigation, props }) => {
   // Handle login
   function onAuthStateChanged(user) {
     if (user) {
-      console.log(number);
+
     }
   }
 
@@ -49,12 +48,6 @@ const SignInWithPhoneNumber = ({ navigation, props }) => {
       } else {
         console.log('Confirmation object is null.');
       }
-      // This
-
-      // const result = await axios.post('http://192.168.8.124/users/PhoneNumberSignIn', {
-      //   phoneNumber: number,
-      // });
-      // setUser(result.data);
 
     } catch (error) {
       console.log('Invalid code: ', error);
