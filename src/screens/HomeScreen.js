@@ -42,6 +42,103 @@ const HomeScreen = ({ navigation }) => {
     navigation.navigate('SearchScreen')
   }
 
+  const getAllData = async () => {
+    //All Post allow
+    axios({
+      url: "http://192.168.1.46:3000/posts/list",
+      method: "GET",
+    }).then((response) => {
+      if (response.status === 200) {
+        setListJobs(response.data)
+      }
+    })
+    //All Career
+    axios({
+      url: "http://192.168.1.46:3000/careers/listCareersForApp",
+      method: "GET",
+    }).then(async (response) => {
+      if (response.status === 200) {
+        const data = JSON.stringify(response.data)
+        await AsyncStorage.setItem('listCareers', data);
+      }
+    })
+    //All WorkType
+    axios({
+      url: "http://192.168.1.46:3000/workTypes/list",
+      method: "GET",
+    }).then(async (response) => {
+      if (response.status === 200) {
+        const data = JSON.stringify(response.data)
+        await AsyncStorage.setItem('listWorkTypes', data);
+      }
+    })
+    //All PayForm
+    axios({
+      url: "http://192.168.1.46:3000/payforms/list",
+      method: "GET",
+    }).then(async (response) => {
+      if (response.status === 200) {
+        const data = JSON.stringify(response.data)
+        await AsyncStorage.setItem('listPayForms', data);
+      }
+    })
+    //All Academic
+    axios({
+      url: "http://192.168.1.46:3000/acedemics/list",
+      method: "GET"
+    }).then(async (response) => {
+      if (response.status === 200) {
+        const data = JSON.stringify(response.data)
+        await AsyncStorage.setItem('listAcademics', data);
+      }
+    })
+    //All Experience
+    axios({
+      url: "http://192.168.1.46:3000/experiences/list",
+      method: "GET"
+    }).then(async (response) => {
+      if (response.status === 200) {
+        const data = JSON.stringify(response.data)
+        await AsyncStorage.setItem('listExperiences', data);
+      }
+    })
+    //All my Notification
+
+    //All my Message
+    //All CV
+    //All my Post allow
+    axios({
+      url: "http://192.168.1.46:3000/posts/listJobsIsDisplayForApp",
+      method: "GET"
+    }).then(async (response) => {
+      if (response.status === 200) {
+        const data = JSON.stringify(response.data)
+        await AsyncStorage.setItem('listJobsIsDisplay', data);
+      }
+    })
+    //All my Post waiting
+    axios({
+      url: "http://192.168.1.46:3000/posts/listJobsWaitingForApp",
+      method: "GET"
+    }).then(async (response) => {
+      if (response.status === 200) {
+        const data = JSON.stringify(response.data)
+        await AsyncStorage.setItem('listJobsWaiting', data);
+      }
+    })
+    //All my Post denied
+    axios({
+      url: "http://192.168.1.46:3000/posts/listJobsDeniedForApp",
+      method: "GET"
+    }).then(async (response) => {
+      if (response.status === 200) {
+        const data = JSON.stringify(response.data)
+        await AsyncStorage.setItem('listJobsDenied', data);
+      }
+    })
+  }
+
+
   const getListCareers = async () => {
     const data = await AsyncStorage.getItem('listCareers')
     setListCareers(JSON.parse(data));
@@ -94,22 +191,24 @@ const HomeScreen = ({ navigation }) => {
       padding: 20,
     }}
       onPress={() => navigation.navigate('DetailsScreen', {
+        postid: item._id,
         users_id: item.users_id,
         address: item.address,
-        business_name: item.business_name,
+        business_name: item.businessName,
+        gender: item.gender,
         image: item.image,
         quantity: item.quantity,
         title: item.title,
         career_id: item.career_id,
-        payform_id: item.payform_id,
+        payform_id: item.payForm_id,
         experience_id: item.experience_id,
-        acedemic_id: item.acedemic_id,
-        worktype_id: item.worktype_id,
+        acedemic_id: item.academic_id,
+        worktype_id: item.workType_id,
         describe: item.describe,
-        age_min: item.age_min,
-        age_max: item.age_max,
-        wage_min: item.wage_min,
-        wage_max: item.wage_max,
+        age_min: item.ageMin,
+        age_max: item.ageMax,
+        wage_min: item.wageMin,
+        wage_max: item.wageMax,
         status_id: item.status_id,
         date: item.date,
         time: item.time,
@@ -127,7 +226,6 @@ const HomeScreen = ({ navigation }) => {
             );
           }
         })}
-        
         <View style={{ width: '50%', height: '100%', marginStart: 20, flex: 1 }}>
           <Text style={{ fontSize: 18, fontWeight: '400' }}>{item.title}</Text>
           <Text numberOfLines={1} style={{ fontSize: 15, fontWeight: '400', color: COLORS.grey }}>{item.address}</Text>
@@ -138,8 +236,8 @@ const HomeScreen = ({ navigation }) => {
       </View>
       <View style={{ height: 1, width: '99%', backgroundColor: COLORS.grey, opacity: 0.4, marginTop: 15, marginBottom: 8 }} />
       <View style={{ width: '100%', paddingStart: '22%' }}>
-        <Text numberOfLines={1} style={{ fontSize: 16, fontWeight: 'bold', color: COLORS.grey, width: 200, marginBottom: 5 }}>{item.business_name}</Text>
-        <Text style={{ color: COLORS.blue, fontSize: 16, marginVertical: 9 }}>${item.wage_min} - ${item.wage_max} /month</Text>
+        <Text numberOfLines={1} style={{ fontSize: 16, fontWeight: 'bold', color: COLORS.grey, width: 200, marginBottom: 5 }}>{item.businessName}</Text>
+        <Text style={{ color: COLORS.blue, fontSize: 16, marginVertical: 9 }}>${item.wageMin} - ${item.wageMax} /month</Text>
         <View style={{
           width: 60,
           height: 25,
@@ -151,7 +249,7 @@ const HomeScreen = ({ navigation }) => {
           justifyContent: 'center',
         }}>
           {
-            item.worktype_id._id == '653e66b38e88b23b41388e3c' ? (
+            item.workType_id._id == '653e66b38e88b23b41388e3c' ? (
               <Text style={{ fontSize: 10 }} >Parttime</Text>
             ) : (
               <Text style={{ fontSize: 10 }} >Fulltime</Text>
