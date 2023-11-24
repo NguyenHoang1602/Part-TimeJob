@@ -13,7 +13,6 @@ import auth, { firebase } from '@react-native-firebase/auth';
 import Feather from 'react-native-vector-icons/Feather';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import axios from 'axios';
-
 const SignInWithPhoneNumber = ({ navigation, props }) => {
   const [email, setEmail] = useState('');
   const [isFocusedEmail, setIsFocusedEmail] = useState(false);

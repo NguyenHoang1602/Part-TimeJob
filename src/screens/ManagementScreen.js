@@ -94,7 +94,7 @@ const ManagementScreen = ({ route, navigation }) => {
               imageStyle={{ borderRadius: 46 }}
             />
             <View style={{ flexDirection: 'column', height: '100%', justifyContent: 'center', marginStart: 13 }}>
-              <Text style={{ color: '#7D7A7A', fontSize: 16 }}>Good Morning 👋</Text>
+              <Text style={{ color: '#7D7A7A', fontSize: 16 }}>Xin chào 👋</Text>
               <Text numberOfLines={1} style={{ color: COLORS.black, fontSize: 20, fontWeight: '600' }}>{user.displayName}</Text>
             </View>
           </TouchableOpacity>
