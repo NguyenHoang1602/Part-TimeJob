@@ -36,6 +36,7 @@ const HomeScreen = ({navigation}) => {
 
   const [listJobs, setListJobs] = useState([]);
   const [listCareers, setListCareers] = useState([]);
+  const [listCv, setListCv] = useState([]);
 
   const search = () =>{
     navigation.navigate('SearchScreen')
@@ -43,22 +44,23 @@ const HomeScreen = ({navigation}) => {
 
   const getListJobs = () => {
     axios({
-      url: "http://192.168.1.10:3000/posts/list",
+      url: "http://192.168.1.46:3000/posts/list",
       method: "GET",
     }).then((res) => {
       var response = res.data
-      console.log(response);
+      // console.log(response);
       setListJobs(response)
+      console.log("List Jobs : " + listJobs);
     })
   }
 
   const getListCareers = () => {
     axios({
-      url: "http://192.168.1.10:3000/careers/listCareersForApp",
+      url: "http://192.168.1.46:3000/careers/listCareersForApp",
       method: "GET",
     }).then((res) => {
       var response = res.data
-      console.log("Careers : " + response);
+      // console.log("Careers : " + response);
       setListCareers(response)
     })
   }
@@ -113,11 +115,21 @@ const HomeScreen = ({navigation}) => {
       title: item.title,
       id: item.id,
       uri: item.uri,
-      address: item.Address,
-      wage_max: item.wagemax,
-      wage_min: item.wagemin,
-      worktype: item.worktype,
-      Details: item.Details,
+      address: item.address,
+      wage_max: item.wage_max,
+      wage_min: item.wage_min,
+      worktype: item.worktype_id,
+      Details: item.describe,
+      age_min: item.age_min,
+      age_max: item.age_max,
+      business_name: item.business_name,
+      payform: item.payform_id,
+      experience: item.experience_id,
+      quantity: item.quantity,
+      status: item.status_id,
+      users: item.users_id,
+      careers: item.career_id,
+      acedemics: item.acedemic_id
     })}>
       <View style={{ width: '100%', flexDirection: 'row' }}>
         {item.image.map((imageUrl, index) => {
@@ -143,10 +155,10 @@ const HomeScreen = ({navigation}) => {
       </View>
       <View style={{ height: 1, width: '99%', backgroundColor: COLORS.grey, opacity: 0.4, marginTop: 15, marginBottom: 8 }} />
       <View style={{ width: '100%', paddingStart: '22%' }}>
-        <Text style={{ fontSize: 16, fontWeight: 'bold', color: COLORS.grey }}>{item.Address}</Text>
+        <Text style={{ fontSize: 16, fontWeight: 'bold', color: COLORS.grey }}>{item.address}</Text>
         <Text style={{ color: COLORS.blue, fontSize: 16, marginVertical: 9 }}>${item.wage_min} - ${item.wage_max} /month</Text>
         <View style={{
-          width: 60,
+          width: 100,
           height: 25,
           borderWidth: 0.5,
           borderColor: COLORS.grey,
@@ -155,7 +167,7 @@ const HomeScreen = ({navigation}) => {
           alignItems: 'center',
           justifyContent: 'center',
         }}>
-          <Text style={{ fontSize: 10 }}>{item.worktype}</Text>
+          <Text style={{ fontSize: 10 }}>{ item.worktype_id.wt_title}</Text>
         </View>
       </View>
 

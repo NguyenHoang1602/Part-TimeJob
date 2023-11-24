@@ -10,6 +10,7 @@ import Input from '../components/Input';
 import COLORS from '../assets/const/colors';
 import Button from '../components/Button';
 import UserContext from '../components/UserConText';
+import axios from 'axios';
 //icon
 import Octicons from 'react-native-vector-icons/Octicons';
 import Feather from 'react-native-vector-icons/Feather';
@@ -23,9 +24,42 @@ import IconWithBadge from '../components/IconWithBadge';
 import IconWithBadgeAntDesign from '../components/IconWithBadgeAntDesign';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import EditAccount from './EditAccount';
+import { useFocusEffect } from '@react-navigation/native';
 
 const ProfileScreen = ({ navigation }) => {
+  // useFocusEffect(
+  //   React.useCallback(() => {
+  //     getListCv();
+  //   }, [])
+  // )
   const { user } = useContext(UserContext);
+  const [listCv, setListCv] = useState([]);
+  const [listCvId, setListCvId] = useState([]);
+
+  const getListCv = async () => {
+    try {
+      axios({
+        url: 'http://192.168.1.48:3000/cvs/list',
+        method: 'GET',
+      }).then((res) => {
+        var response = res.data;
+        // console.log("List CV : ", response);
+        setListCv(response);
+        result();
+      })
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const result = () => { 
+    for (let i = 0; i < listCv.length; i++) { 
+      console.log("List CV : ", listCv[i].user_id._id);
+      console.log("User : ", user._id);
+      if(listCv[i].user_id._id == user._id){
+        listCvId.push(listCv[i]);
+      }
+    }
+  };
   const CV = [
     { id: '1', name: 'CV01' },
     { id: '2', name: 'CV02' },
@@ -35,7 +69,7 @@ const ProfileScreen = ({ navigation }) => {
 
     <View style={{ marginBottom: 18, flexDirection: 'row' }}>
       <Ionicons name='document-text-outline' size={24} color={COLORS.black} />
-      <Text numberOfLines={1} style={{ flex: 1, fontSize: 16, fontWeight: '400', marginLeft: 25, color: COLORS.black }}>{item.name}</Text>
+      <Text numberOfLines={1} style={{ flex: 1, fontSize: 16, fontWeight: '400', marginLeft: 25, color: COLORS.black }}>{item.title}</Text>
     </View>
   );
   return (
@@ -53,7 +87,7 @@ const ProfileScreen = ({ navigation }) => {
         <View style={{ flex: 1, marginLeft: 20 }}>
           <Text style={{ fontSize: 23, fontWeight: '700', color: COLORS.black }}>Applications</Text>
         </View>
-        <TouchableOpacity style={{ marginEnd: 10 }}>
+        <TouchableOpacity style={{ marginEnd: 10 }} onPress={getListCv}>
           <AntDesign name="setting" size={30} color={COLORS.black} />
         </TouchableOpacity>
       </View>
@@ -123,8 +157,8 @@ const ProfileScreen = ({ navigation }) => {
           </TouchableOpacity>
         </View>
         <FlatList
-          data={CV}
-          keyExtractor={(item) => item.id}
+          data={listCvId}
+          keyExtractor={(item,index) => index.toString()}
           renderItem={renderCV}
           nestedScrollEnabled={true}
           scrollEnabled={false}

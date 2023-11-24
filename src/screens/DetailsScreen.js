@@ -24,6 +24,7 @@ import Fontisto from 'react-native-vector-icons/Fontisto';
 import IconWithBadge from '../components/IconWithBadge';
 import IconWithBadgeAntDesign from '../components/IconWithBadgeAntDesign';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { Item } from 'react-native-paper/lib/typescript/components/Drawer/Drawer';
 
 const DetailsScreen = ({ route, navigation }) => {
 
@@ -31,11 +32,21 @@ const DetailsScreen = ({ route, navigation }) => {
         title: route.params?.title,
         id: route.params?.id,
         uri: route.params?.uri,
-        address: route.params?.Address,
-        wagemax: route.params?.wagemax,
-        wagemin: route.params?.wagemin,
-        worktype: route.params?.worktype,
-        Details: route.params?.Details,
+        address: route.params?.address,
+        wage_max: route.params?.wage_max,
+        wage_min: route.params?.wage_min,
+        worktype: route.params?.worktype_id,
+        Details: route.params?.describe,
+        age_min: route.params?.age_min,
+        age_max: route.params?.age_max,
+        business_name: route.params?.business_name,
+        payform: route.params?.payform_id,
+        experience: route.params?.experience_id,
+        quantity: route.params?.quantity,
+        status: route.params?.status_id,
+        users: route.params?.users_id,
+        careers: route.params?.career_id,
+        acedemics: route.params?.acedemic_id,
     };
 
     return (
@@ -67,7 +78,7 @@ const DetailsScreen = ({ route, navigation }) => {
                         paddingLeft: 23,
                     }}>
                     <Text style={{ fontSize: 22, color: COLORS.black, fontWeight: 'bold' }}>{data.title}</Text>
-                    <Text style={{ color: '#FA1300', fontSize: 14, marginTop: 5, marginBottom: 7, fontWeight: 'bold' }}>${data.wagemin} - {data.wagemax} /month</Text>
+                    <Text style={{ color: '#FA1300', fontSize: 14, marginTop: 5, marginBottom: 7, fontWeight: 'bold' }}>${data.wage_min} - {data.wage_max} /month</Text>
                     <Text style={{ fontSize: 14, color: COLORS.grey }}>Post 10 days ago, end in 31 Dec</Text>
                     <View style={{ flexDirection: 'row', marginTop: 15, alignItems: 'center', marginBottom: 34 }}>
                         <ImageBackground
@@ -75,7 +86,7 @@ const DetailsScreen = ({ route, navigation }) => {
                             style={{ width: 48, height: 48 }}
                             imageStyle={{ borderRadius: 48 }}
                         />
-                        <Text style={{ color: COLORS.black, fontSize: 16, marginStart: 10, fontWeight: 'bold' }}>Nguyễn Văn Chức</Text>
+                        <Text style={{ color: COLORS.black, fontSize: 16, marginStart: 10, fontWeight: 'bold' }}>{data.users_id.displayName }</Text>
                     </View>
                 </View>
                 <View style={{ height: 3, width: '100%', backgroundColor: COLORS.blue, borderRadius: 50, marginBottom: 20, opacity: 0.9 }} />
@@ -105,7 +116,7 @@ const DetailsScreen = ({ route, navigation }) => {
                 </View>
                 <View style={{ flexDirection: 'row', marginTop: 20, alignItems: 'center' }}>
                     <AntDesign name="creditcard" size={24} color={COLORS.blue} />
-                    <Text style={{ marginStart: 15, fontSize: 15, color: COLORS.black, opacity: 0.8 }}>Hình thức trả lương: Theo tháng</Text>
+                    <Text style={{ marginStart: 15, fontSize: 15, color: COLORS.black, opacity: 0.8 }}>Hình thức trả lương: {data.payform }</Text>
                 </View>
                 <View style={{ flexDirection: 'row', marginTop: 10, alignItems: 'center' }}>
                     <Octicons name="log" size={24} color={COLORS.blue} />
@@ -113,15 +124,15 @@ const DetailsScreen = ({ route, navigation }) => {
                 </View>
                 <View style={{ flexDirection: 'row', marginTop: 10, alignItems: 'center' }}>
                     <SimpleLineIcons name="briefcase" size={24} color={COLORS.blue} />
-                    <Text style={{ marginStart: 15, fontSize: 15, color: COLORS.black, opacity: 0.8 }}>Ngành nghề: Phục vụ</Text>
+                    <Text style={{ marginStart: 15, fontSize: 15, color: COLORS.black, opacity: 0.8 }}>Ngành nghề: { data.careers}</Text>
                 </View>
                 <View style={{ flexDirection: 'row', marginTop: 10, alignItems: 'center' }}>
                     <AntDesign name="carryout" size={24} color={COLORS.blue} />
-                    <Text style={{ marginStart: 15, fontSize: 15, color: COLORS.black, opacity: 0.8 }}>Kinh nghiệm: Không yêu cầu</Text>
+                    <Text style={{ marginStart: 15, fontSize: 15, color: COLORS.black, opacity: 0.8 }}>Kinh nghiệm: {data.experience }</Text>
                 </View>
                 <View style={{ flexDirection: 'row', marginTop: 10, alignItems: 'center' }}>
                     <Octicons name="mortar-board" size={24} color={COLORS.blue} />
-                    <Text style={{ marginStart: 15, fontSize: 15, color: COLORS.black, opacity: 0.8 }}>Trình độ học vấn: Không yêu cầu</Text>
+                    <Text style={{ marginStart: 15, fontSize: 15, color: COLORS.black, opacity: 0.8 }}>Trình độ học vấn: {data.acedemics }</Text>
                 </View>
                 <View style={{ flexDirection: 'row', marginTop: 10, alignItems: 'center' }}>
                     <Fontisto name="venus-mars" size={24} color={COLORS.blue} />
@@ -129,23 +140,23 @@ const DetailsScreen = ({ route, navigation }) => {
                 </View>
                 <View style={{ flexDirection: 'row', marginTop: 10, alignItems: 'center' }}>
                     <FontAwesome name="building-o" size={24} color={COLORS.blue} />
-                    <Text style={{ marginStart: 15, fontSize: 15, color: COLORS.black, opacity: 0.8 }}>Tên Công ty: Windy Coffee</Text>
+                    <Text style={{ marginStart: 15, fontSize: 15, color: COLORS.black, opacity: 0.8 }}>Tên Công ty: {data.business_name}</Text>
                 </View>
                 <View style={{ flexDirection: 'row', marginTop: 10, alignItems: 'center' }}>
                     <Octicons name="people" size={24} color={COLORS.blue} />
-                    <Text style={{ marginStart: 15, fontSize: 15, color: COLORS.black, opacity: 0.8 }}>Số lượng tuyển dụng: 3</Text>
+                    <Text style={{ marginStart: 15, fontSize: 15, color: COLORS.black, opacity: 0.8 }}>Số lượng tuyển dụng: {data.quantity }</Text>
                 </View>
                 <View style={{ flexDirection: 'row', marginTop: 10, alignItems: 'center' }}>
                     <AntDesign name="leftsquareo" size={24} color={COLORS.blue} />
-                    <Text style={{ marginStart: 15, fontSize: 15, color: COLORS.black, opacity: 0.8 }}>Tuổi tối thiểu: 18</Text>
+                    <Text style={{ marginStart: 15, fontSize: 15, color: COLORS.black, opacity: 0.8 }}>Tuổi tối thiểu: {data.age_min }</Text>
                 </View>
                 <View style={{ flexDirection: 'row', marginTop: 10, alignItems: 'center' }}>
                     <AntDesign name="rightsquareo" size={24} color={COLORS.blue} />
-                    <Text style={{ marginStart: 15, fontSize: 15, color: COLORS.black, opacity: 0.8 }}>Tuổi đa: 25</Text>
+                    <Text style={{ marginStart: 15, fontSize: 15, color: COLORS.black, opacity: 0.8 }}>Tuổi đa: {data.age_max}</Text>
                 </View>
                 <View style={{ flexDirection: 'row', marginTop: 10, alignItems: 'center', width: '90%' }}>
                     <Feather name="map-pin" size={24} color={COLORS.blue} />
-                    <Text style={{ marginStart: 15, fontSize: 15, color: COLORS.black, opacity: 0.8 }}>Windy Coffee, Phan Văn Hớn, Tân Thới Nhất, Quận 12, TP. HCM</Text>
+                    <Text style={{ marginStart: 15, fontSize: 15, color: COLORS.black, opacity: 0.8 }}>{data.address}</Text>
                 </View>
                 <View style={{ width: '100%', alignItems: 'center', paddingVertical: 50 }}>
                     <TouchableOpacity

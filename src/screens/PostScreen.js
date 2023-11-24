@@ -159,7 +159,7 @@ console.log(inputs);
 
 const getList = () => {
   axios({
-    url: "http://192.168.1.10:3000/careers/list",
+    url: "http://192.168.1.46:3000/careers/list",
     method: "GET",
   }).then((res) => {
     setListCareers(res.data);
@@ -169,7 +169,7 @@ const getList = () => {
   
   const getListWorkType = () => { 
     axios({
-      url: "http://192.168.1.10:3000/worktypes/list",
+      url: "http://192.168.1.46:3000/worktypes/list",
       method: "GET"
     }).then((res) => { 
       setListWorkType(res.data);
@@ -179,7 +179,7 @@ const getList = () => {
 
   const getListPayform = () => {
     axios({
-      url: "http://192.168.1.10:3000/payforms/list",
+      url: "http://192.168.1.46:3000/payforms/list",
       method : "GET",
     }).then((res) => {
       setListPayform(res.data);
@@ -189,7 +189,7 @@ const getList = () => {
 
   const getListAcedemic = () => { 
     axios({
-      url: "http://192.168.1.10:3000/acedemics/list",
+      url: "http://192.168.1.46:3000/acedemics/list",
       method : "GET"
     }).then((res) => {
       setListAcedemic(res.data);
@@ -199,7 +199,7 @@ const getList = () => {
 
   const getListExperience = () => { 
     axios({
-      url: "http://192.168.1.10:3000/experiences/list",
+      url: "http://192.168.1.46:3000/experiences/list",
       method : "GET"
     }).then((res) => {
       setListExperience(res.data);
@@ -516,11 +516,11 @@ const uploadImages = async () => {
               selectedTextStyle={styles.selectedTextStyle}
               inputSearchStyle={styles.inputSearchStyle}
               iconStyle={styles.iconStyle}
-              data={data}
+              data={listCareers}
               search
               maxHeight={300}
-              labelField="label"
-              valueField="value"
+              labelField="c_title"
+              valueField="_id"
               placeholder={!isFocus ? 'Ngành Nghề' : '...'}
               searchPlaceholder="Search..."
               value={value}

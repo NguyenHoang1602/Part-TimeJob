@@ -6,12 +6,46 @@ import {
   TouchableOpacity,
   ImageBackground,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import COLORS from '../assets/const/colors';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {ScrollView} from 'react-native-gesture-handler';
+import { ScrollView } from 'react-native-gesture-handler';
+import { useFocusEffect } from '@react-navigation/native';
+import axios from 'axios';
 
-const EditCV = ({navigation}) => {
+const EditCV = ({ navigation }) => {
+  useFocusEffect(
+    React.useCallback(() => {
+      getListCv();
+    }, [])
+  )
+  const result = () => { 
+    for (let i = 0; i < listCv.length; i++) { 
+      console.log("List CV : ", listCv[i].user_id._id);
+      if(listCv[i].user_id._id == user._id){
+        listCvId.push(listCv[i]);
+      }
+    }
+  };
+  
+  const [listCv, setListCv] = useState([]);
+  const [listCvId, setListCvId] = useState([]); 
+  const count = 0;
+  const getListCv = async () => {
+    try {
+      axios({
+        url: 'http://192.168.1.48:3000/cvs/list',
+        method: 'GET',
+      }).then((res) => {
+        var response = res.data;
+        // console.log("List CV : ", response);
+        setListCv(response);
+        result();
+      })
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const Jobdata = [
     {
       id: '1',
@@ -67,7 +101,7 @@ const EditCV = ({navigation}) => {
   const FlatListb = () => {
     return (
       <FlatList
-        data={Jobdata}
+        data={listCv}
         keyExtractor={item => item.id}
         renderItem={renderItemJob}
         nestedScrollEnabled={true}
@@ -98,15 +132,15 @@ const EditCV = ({navigation}) => {
         })
       }>
       <View style={{width: '100%', flexDirection: 'row'}}>
-        <ImageBackground
+        {/* <ImageBackground
           source={{uri: item.uri}}
           style={{width: 46, height: 46, marginBottom: 5}}
           imageStyle={{borderRadius: 5}}
-        />
+        /> */}
         <View style={{width: '50%', height: '100%', marginStart: 20, flex: 1}}>
           <Text style={{fontSize: 16, fontWeight: 'bold'}}>{item.title}</Text>
           <Text style={{fontSize: 16, fontWeight: 'bold', color: COLORS.grey}}>
-            {item.Details}
+            {item.current_address}
           </Text>
         </View>
         <TouchableOpacity onPress={() => {}}>
@@ -125,10 +159,10 @@ const EditCV = ({navigation}) => {
       />
       <View style={{width: '100%', paddingStart: '22%'}}>
         <Text style={{fontSize: 16, fontWeight: 'bold', color: COLORS.grey}}>
-          {item.Address}
+          {item.describe}
         </Text>
         <Text style={{color: COLORS.blue, fontSize: 16, marginVertical: 9}}>
-          ${item.wagemin} - ${item.wagemax} /month
+          {item.experience_id.e_title}
         </Text>
         <View
           style={{
@@ -141,7 +175,7 @@ const EditCV = ({navigation}) => {
             alignItems: 'center',
             justifyContent: 'center',
           }}>
-          <Text style={{fontSize: 10}}>{item.worktype}</Text>
+          <Text style={{fontSize: 10}}>{item.worktype_id.wt_title}</Text>
         </View>
       </View>
     </TouchableOpacity>
