@@ -16,6 +16,7 @@ import MessageScreen from "../screens/MessageScreen";
 import ChatScreen from "../screens/ChatScreen";
 import CVScreen from "../screens/CVScreen";
 import SearchScreen from "../screens/SearchScreen";
+import SettingScreen from "../screens/SettingScreen";
 import SignInWithPhoneNumber from "../screens/SignInWithPhoneNumber";
 import RegistrationScreen from "../screens/RegistrationScreens";
 
@@ -69,7 +70,7 @@ const AuthStack = (props) =>{
 const Router = () => {
     return (
       <Stack.Navigator initialRouteName="Onboarding" screenOptions={{headerShown: false}}>
-        <Stack.Screen name="Onboarding" component={OnboardingScreen} />
+        <Stack.Screen name="Onboarding" component={SettingScreen} />
         <Stack.Screen name="Login" component={SignInScreen} />
         <Stack.Screen name="AuthStack" component={AuthStack} />
         <Stack.Screen name="TabNavigator" component={TabNavigator} />
