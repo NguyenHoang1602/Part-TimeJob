@@ -4,7 +4,7 @@
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable eol-last */
 /* eslint-disable semi */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, ImageBackground, ScrollView, Image, FlatList, Alert, Pressable } from 'react-native';
 
 //
@@ -28,6 +28,11 @@ import AppIntroSlider from "react-native-app-intro-slider";
 import Modal from "react-native-modal";
 import CheckBoxCircle from '../components/CheckBoxCircle';
 import { SIZES } from '../constants/theme';
+import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Loader from '../components/Loader';
+import axios from 'axios';
+import { API } from '../../Sever/sever';
 
 const DetailsScreen = ({ route, navigation }) => {
     const datalist = {
@@ -54,23 +59,52 @@ const DetailsScreen = ({ route, navigation }) => {
         time: route.params?.time,
     };
     const [data, setdataset] = useState(datalist);
-    const CV = [
-        { id: '1', name: 'CV01' },
-        { id: '2', name: 'CV02' },
-        { id: '3', name: 'CV03' },
-        { id: '4', name: 'CV03' },
-        { id: '5', name: 'CV03' },
-        { id: '6', name: 'CV03' },
-    ];
+    const [loading, setLoading] = React.useState(false);
+    const [cv, setCv] = useState([]);
+
     const [selectedItem, setSelectedItem] = useState(null);
+    const [sender, setSender] = useState(null);
     const handlePress = (itemId) => {
         setSelectedItem(itemId === selectedItem ? null : itemId);
     };
+
+    useEffect(() => {
+        getCV();
+    }, []);
+
+    const handleApply = async () => {
+        const apply = {
+            receiver_id: datalist.users_id._id,
+            sender_id: sender,
+            post_id: datalist.postid,
+            cv_id: selectedItem,
+        };
+        console.log("cv_ID : ", apply);
+        if (selectedItem) {
+            setModalVisible(false);
+            setLoading(true);
+            setTimeout(() => { 3000 });
+            const result = await axios.post(`${API}/apply/add`, apply);
+            if (result.status === 200) {
+                setLoading(false);
+                Alert.alert("Ứng tuyển thành công!")
+            }
+        }
+    };
+
+    const getCV = async () => {
+        const data = await AsyncStorage.getItem('listCV');
+        setCv(JSON.parse(data));
+    }
+
     const renderCV = ({ item }) => {
-        const isSelected = item.id === selectedItem;
+        const isSelected = item._id === selectedItem;
         return (
             <Pressable
-                onPress={() => handlePress(item.id)}
+                onPress={() => {
+                    handlePress(item._id);
+                    setSender(item.user_id);
+                }}
                 style={({ pressed }) => ({
                     borderColor: isSelected ? COLORS.primary : 'transparent',
                     opacity: pressed ? 0.5 : 1,
@@ -84,7 +118,7 @@ const DetailsScreen = ({ route, navigation }) => {
                 {({ pressed }) => (
                     <View style={{ flexDirection: 'row' }}>
                         <Ionicons name="document-text-outline" size={24} color={COLORS.black} />
-                        <Text numberOfLines={1} style={{ flex: 1, fontSize: 16, fontWeight: '400', marginLeft: 25, color: COLORS.black }}>{item.name}</Text>
+                        <Text numberOfLines={1} style={{ flex: 1, fontSize: 16, fontWeight: '400', marginLeft: 25, color: COLORS.black }}>{item.title}</Text>
                         {
                             isSelected ? (
                                 <AntDesign name="checkcircle" size={24} color={COLORS.primary} />
@@ -107,6 +141,7 @@ const DetailsScreen = ({ route, navigation }) => {
 
     return (
         <SafeAreaView style={{ flex: 1, paddingBottom: 18, backgroundColor: COLORS.white }}>
+            <Loader visible={loading} />
             <View style={{ flexDirection: 'row', paddingHorizontal: 18, backgroundColor: COLORS.white, paddingVertical: 10 }}>
                 <TouchableOpacity onPress={() => navigation.goBack()}>
                     <Ionicons name="arrow-back" size={30} color={COLORS.black} />
@@ -114,7 +149,7 @@ const DetailsScreen = ({ route, navigation }) => {
                 <View style={{ flex: 1 }}>
                     <Text></Text>
                 </View>
-                <TouchableOpacity onPress={console.log(data)}>
+                <TouchableOpacity>
                     <Icon style={{ marginRight: 22 }} name="bookmark-plus-outline" size={30} color={COLORS.black} />
                 </TouchableOpacity>
                 <Ionicons name="ellipsis-horizontal-circle" size={30} color={COLORS.black} />
@@ -319,8 +354,8 @@ const DetailsScreen = ({ route, navigation }) => {
                     <Text style={{ marginStart: '7%', fontSize: 16 }}>Hồ sơ của bạn</Text>
                     <ScrollView showsVerticalScrollIndicator={false} style={{ width: '100%', height: 200, paddingHorizontal: 30, marginTop: 20 }}>
                         <FlatList
-                            data={CV}
-                            keyExtractor={(item) => item.id}
+                            data={cv}
+                            keyExtractor={(item, index) => index.toString()}
                             renderItem={renderCV}
                             nestedScrollEnabled={true}
                             scrollEnabled={false}
@@ -347,6 +382,9 @@ const DetailsScreen = ({ route, navigation }) => {
                         </TouchableOpacity>
 
                         <TouchableOpacity
+                            onPress={() => {
+                                handleApply()
+                            }}
                             style={{
                                 backgroundColor: COLORS.primary,
                                 alignItems: 'center',
@@ -364,4 +402,5 @@ const DetailsScreen = ({ route, navigation }) => {
         </SafeAreaView>
     );
 }
+
 export default DetailsScreen;
