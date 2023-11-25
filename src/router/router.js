@@ -18,11 +18,14 @@ import CVScreen from "../screens/CVScreen";
 import SearchScreen from "../screens/SearchScreen";
 import SignInWithPhoneNumber from "../screens/SignInWithPhoneNumber";
 import RegistrationScreen from "../screens/RegistrationScreens";
+import RegisterPhoneScreen from "../screens/RegistrationPhoneScrees";
+import VerificationScreen from "../screens/VerificationScreen";
 
 import { TouchableOpacity } from "react-native";
 import Octicons from 'react-native-vector-icons/Octicons';
 import Feather from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import COLORS from "../assets/const/colors";
 const Stack = createNativeStackNavigator();
 
 const AuthStack = (props) =>{
@@ -37,8 +40,15 @@ const AuthStack = (props) =>{
         />
         <Stack.Screen
             name="SignInWithPhoneNumber"
-            component={SignInWithPhoneNumber}
-            options={({ route }) => ({
+            component={RegisterPhoneScreen}
+            options={() => ({
+                headerShown: false,
+            })}
+        />
+        <Stack.Screen
+            name="Verification"
+            component={VerificationScreen}
+            options={() => ({
                 headerShown: false,
             })}
         />
@@ -49,15 +59,15 @@ const AuthStack = (props) =>{
                     title: "Thêm thông tin cá nhân",
                     headerShown: true,
                     headerStyle: {
-                        backgroundColor: '#337BFF',
+                        backgroundColor: '#FFFF',
                     },
                     headerTitleStyle: {
-                        color: '#FFFFFF',
+                        color: COLORS.black,
                     },
                     headerTitleAlign: 'center',
                     headerLeft: () => (
                         <TouchableOpacity onPress={() => props.navigation.navigate('Auth')}>
-                            <Ionicons name="arrow-back" size={24} color="white" />
+                            <Ionicons name="arrow-back" size={24} color={COLORS.black} />
                         </TouchableOpacity>
                     ),
                 })}

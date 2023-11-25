@@ -33,6 +33,7 @@ const DetailsScreen = ({ route, navigation }) => {
         postid: route.params?.postid,
         users_id: route.params?.users_id,
         address: route.params?.address,
+        avatar : route.params?.avatar,
         business_name: route.params?.business_name,
         image: route.params?.image,
         quantity: route.params?.quantity,
@@ -149,7 +150,7 @@ const DetailsScreen = ({ route, navigation }) => {
                         <Text style={styles.datetime}>{data.date} {data.time}</Text>
                         <View style={styles.user}>
                             <ImageBackground
-                                source={require('../assets/images/homescreen/avatar.png')}
+                                source={{ uri: data.avatar}}
                                 style={{ width: 48, height: 48 }}
                                 imageStyle={{ borderRadius: 48 }}
                             />

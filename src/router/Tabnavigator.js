@@ -292,7 +292,7 @@ const TabNavigator = () => {
                 })}
             />
             <Tab.Screen
-                name="Đăng tin"
+                name="Post"
                 component={PostStack}
                 options={({ route }) => ({
                     tabBarStyle: {

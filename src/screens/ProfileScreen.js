@@ -46,21 +46,6 @@ const ProfileScreen = ({ route, navigation }) => {
   );
   return (
     <SafeAreaView style={{ flex: 1, paddingVertical: 18, backgroundColor: COLORS.white, paddingLeft: 30, paddingRight: 30 }}>
-      {/* Header */}
-      {/* <View
-        style={{
-          flexDirection: 'row',
-          marginVertical: 20,
-          alignItems: 'center',
-        }}>
-        <View style={{ flex: 1}}>
-          <Text style={{ fontSize: 23, fontWeight: '600', color: COLORS.black }}>Menu</Text>
-        </View>
-        <TouchableOpacity style={{ marginEnd: 10 }} onPress={() => navigation.navigate('Cài đặt')}>
-          <AntDesign name="setting" size={26} color={COLORS.black} />
-        </TouchableOpacity>
-      </View> */}
-      {/* body */}
       <ScrollView showsVerticalScrollIndicator={false} >
         <View style={{
           marginTop: '20%',

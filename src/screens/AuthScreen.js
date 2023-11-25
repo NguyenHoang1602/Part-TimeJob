@@ -99,7 +99,7 @@ const AuthScreen = ({ navigation }) => {
                             top: 3,
                             fontFamily: 'aoboshione-regular',
                         }}>
-                        Continue with Facebook
+                        Tiếp tục với Facebook
                     </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
@@ -133,7 +133,7 @@ const AuthScreen = ({ navigation }) => {
                             right: 9,
                             fontFamily: 'aoboshione-regular',
                         }}>
-                        Continue with Google
+                        Tiếp tục với Google
                     </Text>
                 </TouchableOpacity>
                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', top: '6%' }}>
@@ -142,7 +142,7 @@ const AuthScreen = ({ navigation }) => {
                     <View style={{ height: 1, width: '33%', backgroundColor: COLORS.grey }} />
                 </View>
                 <TouchableOpacity
-                    onPress={() =>  navigation.navigate('SignInWithPhoneNumber')}
+                    onPress={() =>  navigation.navigate('AddProfile')}
                     style={{
                         backgroundColor: COLORS.primary,
                         padding: 5,
@@ -165,7 +165,7 @@ const AuthScreen = ({ navigation }) => {
                             color: COLORS.white,
                             fontFamily: 'aoboshione-regular',
                         }}>
-                        Sign up with Phone Number
+                        Đăng nhập bằng SĐT
                     </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
@@ -185,14 +185,14 @@ const AuthScreen = ({ navigation }) => {
                             color: COLORS.black,
                             opacity: 0.4
                         }}>
-                        Wellcome to
+                        Wellcom to
                     </Text>
                     <Text
                         style={{
                             fontWeight: 'bold',
                             fontSize: 16,
                             color: COLORS.primary,
-                            marginStart: '1%'
+                            marginStart: '1.2%'
                         }}>
                         Part-time Jobs
                     </Text>
