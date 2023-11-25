@@ -27,7 +27,7 @@ const SignInWithPhoneNumber = ({ navigation, props }) => {
 // Handle login
   function onAuthStateChanged(user) {
     if (user) {
-      navigation.navigate('AddProfile',{ number : number})
+      console.log(number);
     }
   }
 

@@ -145,8 +145,8 @@ const ManagementScreen = ({ route, navigation }) => {
           tabBarActiveTintColor: COLORS.primary,
         }}
       >
-        <TopTab.Screen name={"Đang hiện thị (" + listIsDisplay.length + ")"} component={TopTabScreenIsDisplay} />
         <TopTab.Screen name={"Đang chờ duyệt (" + listWaiting.length + ")"} component={TopTabScreenWaiting} />
+        <TopTab.Screen name={"Đang hiện thị (" + listIsDisplay.length + ")"} component={TopTabScreenIsDisplay} />
         <TopTab.Screen name={"Bị từ chối (" + listDenied.length + ")"} component={TopTabScreenDenied} />
       </TopTab.Navigator>
     </SafeAreaView>

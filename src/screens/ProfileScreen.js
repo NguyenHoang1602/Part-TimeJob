@@ -4,7 +4,7 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable react-native/no-inline-styles */
 import React, { useState, useContext } from 'react';
-import { View, Text, StyleSheet, Image, SafeAreaView, TouchableOpacity, ImageBackground, FlatList, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, Image, SafeAreaView, TouchableOpacity, ImageBackground, FlatList, ScrollView, Alert } from 'react-native';
 //
 import Input from '../components/Input';
 import COLORS from '../assets/const/colors';
@@ -25,6 +25,8 @@ import IconWithBadgeAntDesign from '../components/IconWithBadgeAntDesign';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons'
 import EditAccount from './EditAccount';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ProfileScreen = ({ route, navigation }) => {
   const { user } = useContext(UserContext);
@@ -44,6 +46,19 @@ const ProfileScreen = ({ route, navigation }) => {
       <Text numberOfLines={1} style={{ flex: 1, fontSize: 16, fontWeight: '400', marginLeft: 25, color: COLORS.black }}>{item.name}</Text>
     </View>
   );
+  const Logout =  () => {
+    Alert.alert('Đăng xuất','Bạn muốn đăng xuất ?',[
+      {text: 'Không'},
+      {text: 'Có', onPress: ()=> out()}
+    ],
+    { cancelable: false });
+
+  };
+  const out = async () =>{
+    await GoogleSignin.signOut();
+    AsyncStorage.clear();
+    navigation.replace('AuthStack');
+  }
   return (
     <SafeAreaView style={{ flex: 1, paddingVertical: 18, backgroundColor: COLORS.white, paddingLeft: 30, paddingRight: 30 }}>
       <ScrollView showsVerticalScrollIndicator={false} >
@@ -137,7 +152,8 @@ const ProfileScreen = ({ route, navigation }) => {
             alignItems: 'center',
             paddingHorizontal: 10,
             paddingVertical: 12,
-          }}>
+          }}
+          onPress={Logout}>
             <Ionicons name="log-out-outline" size={24} color={COLORS.red} />
             <Text style={{ fontSize: 18, fontWeight: '400', marginStart: 20, flex: 1, color: COLORS.red }}>Đăng xuất</Text>
           </TouchableOpacity>

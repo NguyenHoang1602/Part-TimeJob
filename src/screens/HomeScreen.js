@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable eqeqeq */
 /* eslint-disable quotes */
 /* eslint-disable react/no-unstable-nested-components */
@@ -25,6 +26,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import axios from 'axios';
 import Loader from '../components/Loader';
+import { API } from '../../Sever/sever';
 
 const HomeScreen = ({ navigation }) => {
 
@@ -43,7 +45,7 @@ const HomeScreen = ({ navigation }) => {
   const getAllData = async () => {
     //All Post allow
     axios({
-      url: "http://192.168.1.10:3000/posts/list",
+      url: `${API}/posts/list`,
       method: "GET",
     }).then((response) => {
       if (response.status === 200) {
@@ -52,7 +54,7 @@ const HomeScreen = ({ navigation }) => {
     })
     //All Career
     axios({
-      url: "http://192.168.1.10:3000/careers/listCareersForApp",
+      url: `${API}/careers/listCareersForApp`,
       method: "GET",
     }).then(async (response) => {
       if (response.status === 200) {
@@ -62,7 +64,7 @@ const HomeScreen = ({ navigation }) => {
     })
     //All WorkType
     axios({
-      url: "http://192.168.1.10:3000/workTypes/list",
+      url: `${API}/workTypes/list`,
       method: "GET",
     }).then(async (response) => {
       if (response.status === 200) {
@@ -72,7 +74,7 @@ const HomeScreen = ({ navigation }) => {
     })
     //All PayForm
     axios({
-      url: "http://192.168.1.10:3000/payforms/list",
+      url: `${API}/payforms/list`,
       method: "GET",
     }).then(async (response) => {
       if (response.status === 200) {
@@ -82,7 +84,7 @@ const HomeScreen = ({ navigation }) => {
     })
     //All Academic
     axios({
-      url: "http://192.168.1.10:3000/acedemics/list",
+      url: `${API}/acedemics/list`,
       method: "GET"
     }).then(async (response) => {
       if (response.status === 200) {
@@ -92,7 +94,7 @@ const HomeScreen = ({ navigation }) => {
     })
     //All Experience
     axios({
-      url: "http://192.168.1.10:3000/experiences/list",
+      url: `${API}/experiences/list`,
       method: "GET"
     }).then(async (response) => {
       if (response.status === 200) {
@@ -101,12 +103,17 @@ const HomeScreen = ({ navigation }) => {
       }
     })
     //All my Notification
-
+    const response = await axios.post(`${API}/notifications/list`, { receiver_id: user._id });
+    if (response.status === 200) {
+      const data = JSON.stringify(response.data)
+      await AsyncStorage.setItem('listNotifications', data);
+    }
+  
     //All my Message
     //All CV
     //All my Post allow
     axios({
-      url: "http://192.168.1.10:3000/posts/listJobsIsDisplayForApp",
+      url: `${API}/posts/listJobsIsDisplayForApp`,
       method: "GET"
     }).then(async (response) => {
       if (response.status === 200) {
@@ -116,7 +123,7 @@ const HomeScreen = ({ navigation }) => {
     })
     //All my Post waiting
     axios({
-      url: "http://192.168.1.10:3000/posts/listJobsWaitingForApp",
+      url: `${API}/posts/listJobsWaitingForApp`,
       method: "GET"
     }).then(async (response) => {
       if (response.status === 200) {
@@ -126,12 +133,25 @@ const HomeScreen = ({ navigation }) => {
     })
     //All my Post denied
     axios({
-      url: "http://192.168.1.10:3000/posts/listJobsDeniedForApp",
+      url: `${API}/posts/listJobsDeniedForApp`,
       method: "GET"
     }).then(async (response) => {
       if (response.status === 200) {
         const data = JSON.stringify(response.data)
         await AsyncStorage.setItem('listJobsDenied', data);
+      }
+    })
+    //All my CV
+    axios({
+      url: `${API}/cvs/myCVs`,
+      method: "POST",
+      data: {
+        id: user._id,
+      }
+    }).then(async (response) => {
+      if (response.status === 200) {
+        const data = JSON.stringify(response.data)
+        await AsyncStorage.setItem('listCVs', data);
       }
     })
   }
