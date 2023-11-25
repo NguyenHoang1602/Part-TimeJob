@@ -97,7 +97,7 @@ const RegistrationScreen = ({ route, navigation }) => {
         console.log(datauser);
         setLoading(true);
         setTimeout(() => {3000});
-        const result = await axios.post('http://192.168.1.10:3000/users/PhoneNumberSignIn', { data : datauser});
+        const result = await axios.post('http://192.168.155.161:3000/users/PhoneNumberSignIn', { data : datauser});
         if (result.status === 200) {
             setLoading(false);
             setUser(result.data);

@@ -108,7 +108,6 @@ const HomeScreen = ({ navigation }) => {
       const data = JSON.stringify(response.data)
       await AsyncStorage.setItem('listNotifications', data);
     }
-  
     //All my Message
     //All CV
     //All my Post allow
@@ -155,16 +154,13 @@ const HomeScreen = ({ navigation }) => {
       }
     })
   }
-  useEffect(() => {
-    fetchData(); // Load initial data
-  }, []);
 
   const fetchData = async () => {
     setRefreshing(true);
     setTimeout(() => { 3000 })
     try {
       axios({
-        url: "http://192.168.1.10:3000/posts/list",
+        url: "http://192.168.67.160:3000/posts/list",
         method: "GET",
       }).then((response) => {
         if (response.status === 200) {
@@ -173,7 +169,7 @@ const HomeScreen = ({ navigation }) => {
       })
       //All Career
       axios({
-        url: "http://192.168.1.10:3000/careers/listCareersForApp",
+        url: "http://192.168.67.160:3000/careers/listCareersForApp",
         method: "GET",
       }).then(async (response) => {
         if (response.status === 200) {
