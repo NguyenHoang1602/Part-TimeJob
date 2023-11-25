@@ -91,7 +91,7 @@ const RegistrationScreen = ({ route, navigation }) => {
             displayName: inputs.FirtName + inputs.Name,
             birthDay: inputs.Birthday,
             gender: inputs.Gender,
-            phone: '+84379656483',
+            phone: PhoneNumber,
             address: inputs.Address,
         };
         console.log(datauser);
