@@ -24,6 +24,7 @@ import { TouchableOpacity } from "react-native";
 import Octicons from 'react-native-vector-icons/Octicons';
 import Feather from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import CVResume from "../screens/CVResume";
 const Stack = createNativeStackNavigator();
 
 const AuthStack = (props) =>{
@@ -70,7 +71,7 @@ const AuthStack = (props) =>{
 const Router = () => {
     return (
       <Stack.Navigator initialRouteName="Onboarding" screenOptions={{headerShown: false}}>
-        <Stack.Screen name="Onboarding" component={SettingScreen} />
+        <Stack.Screen name="Onboarding" component={CVResume} />
         <Stack.Screen name="Login" component={SignInScreen} />
         <Stack.Screen name="AuthStack" component={AuthStack} />
         <Stack.Screen name="TabNavigator" component={TabNavigator} />
