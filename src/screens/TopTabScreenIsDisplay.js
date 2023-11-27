@@ -29,17 +29,9 @@ const TopTabScreenIsDisplay = ({ navigation }) => {
 
     const [isModalVisible, setModalVisible] = useState(false);
 
-    const toggleModal = (item) => {
-        setModalVisible(!isModalVisible);
-        setSelectedItem(item);
-    };
-    const toggleModalclose = (item) => {
-        setModalVisible(!isModalVisible);
-    };
-
     useFocusEffect(
         React.useCallback(() => {
-            getListJobs()
+            getListJobs();
         }, [])
     );
 
@@ -129,7 +121,13 @@ const TopTabScreenIsDisplay = ({ navigation }) => {
             </View>
         </TouchableOpacity>
     );
-
+    const toggleModal = (item) => {
+        setModalVisible(!isModalVisible);
+        setSelectedItem(item);
+    };
+    const toggleModalclose = () => {
+        setModalVisible(!isModalVisible);
+    };
     return (
         <SafeAreaView
             style={{
@@ -170,28 +168,40 @@ const TopTabScreenIsDisplay = ({ navigation }) => {
                     paddingTop: 20,
                     alignItems: 'center',
                 }}>
-                    <View style={{ borderColor: COLORS.blackOpacity, marginVertical: 10, width: "100%" }} />
+                    {/* <View style={{ borderColor: COLORS.blackOpacity, marginVertical: 10, width: "100%" }} /> */}
                     <View style={{ paddingVertical: 10, width: "100%" }}>
-                        <View style={{ borderRadius: 15, borderWidth: 1, paddingHorizontal: 18, borderColor: COLORS.blackOpacity }}>
+                        <View style={{ borderRadius: 15, borderWidth: 1, paddingHorizontal: 18, borderColor: COLORS.grey }}>
                             <View style={{ flexDirection: 'row', gap: 8, paddingVertical: 18 }}>
-                                <Image source={{ uri: selectedItem?.uri }} style={{ width: 52, aspectRatio: 1, borderRadius: 52 }} />
+                                {selectedItem?.image.map((imageUrl, index) => {
+                                    if (index === 0) {
+                                        return (
+                                            <ImageBackground
+                                                key={index}
+                                                source={{ uri: imageUrl }}
+                                                style={{ width: 46, height: 46, marginBottom: 5 }}
+                                                imageStyle={{ borderRadius: 5 }}
+                                            />
+                                        );
+                                    }
+                                })}
+                                {/* <Image source={{ uri: selectedItem?.image }} style={{ width: 52, aspectRatio: 1, borderRadius: 52 }} /> */}
                                 <View style={{ flex: 1 }}>
                                     <Text style={{ fontSize: 18, color: COLORS.black, fontWeight: "600" }} numberOfLines={1}>
                                         {selectedItem?.title}
                                     </Text>
                                     <Text style={{ fontSize: 16, color: COLORS.grey, paddingTop: 4 }} numberOfLines={1}>
-                                        {selectedItem?.Details}
+                                        {selectedItem?.describe}
                                     </Text>
                                 </View>
                             </View>
-                            <View style={{ borderTopWidth: 1, borderColor: COLORS.blackOpacity }} />
+                            <View style={{ borderTopWidth: 1, borderColor: COLORS.grey }} />
                             <View style={{ flexDirection: 'row', gap: 8, paddingVertical: 12 }}>
                                 <View style={{ paddingStart: 60 }}>
-                                    <Text style={{ fontSize: 18, color: COLORS.black, fontWeight: "600" }} >
-                                        {selectedItem?.Address}
+                                    <Text numberOfLines={1} style={{ fontSize: 18, color: COLORS.black, fontWeight: "600" }} >
+                                        {selectedItem?.address}
                                     </Text>
                                     <Text style={{ fontSize: 16, color: COLORS.primary, paddingVertical: 4 }} >
-                                        ${selectedItem?.wagemin} - ${selectedItem?.wagemax} /moth
+                                        ${selectedItem?.wageMin} - ${selectedItem?.wageMax} /moth
                                     </Text>
                                     <View style={{
                                         width: 70,
@@ -202,7 +212,13 @@ const TopTabScreenIsDisplay = ({ navigation }) => {
                                         alignItems: 'center',
                                         justifyContent: 'center',
                                     }}>
-                                        <Text style={{ fontSize: 10 }}>{selectedItem?.worktype}</Text>
+                                        {
+                                            selectedItem?.workType_id._id == '653e66b38e88b23b41388e3c' ? (
+                                                <Text style={{ fontSize: 10 }} >Parttime</Text>
+                                            ) : (
+                                                <Text style={{ fontSize: 10 }} >Fulltime</Text>
+                                            )
+                                        }
                                     </View>
                                 </View>
                             </View>

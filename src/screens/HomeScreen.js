@@ -34,6 +34,7 @@ const HomeScreen = ({ navigation }) => {
   const [listJobs, setListJobs] = useState([]);
   const [listCareers, setListCareers] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
+  const [SaveJobs, setSaveJobs] = useState(false);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -154,6 +155,19 @@ const HomeScreen = ({ navigation }) => {
           await AsyncStorage.setItem('listCVs', data);
         }
       })
+      //list save
+      axios({
+        url: `${API}/savePost/list`,
+        method: "POST",
+        data: {
+          id: user._id,
+        }
+      }).then(async (response) => {
+        if (response.status === 200) {
+          const data = JSON.stringify(response.data)
+          await AsyncStorage.setItem('listMySavePost', data);
+        }
+      })
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -196,10 +210,29 @@ const HomeScreen = ({ navigation }) => {
     navigation.navigate('SearchScreen')
   }
 
-  // const getListCareers = async () => {
-  //   const data = await AsyncStorage.getItem('listCareers')
-  //   setListCareers(JSON.parse(data));
-  // }
+  const handleSaveToggle = async (itemId) => {
+    console.log(itemId);
+    console.log(user._id);
+    try {
+      const savedata = {
+        user_id: user._id,
+        post_id: itemId,
+      };
+      const result = await axios.post(`${API}/savePost/add`, savedata);
+      if (result.status === 200) {
+        console.log("Thành công");
+      }
+    } catch (error) {
+      console.log('Err: ', error);
+    }
+  };
+  const save = () => {
+    try {
+      setSaveJobs(true);
+    } catch (err) {
+      console.log('Err : ', err);
+    }
+  }
 
   const FlatLista = () => {
     return (
@@ -288,8 +321,9 @@ const HomeScreen = ({ navigation }) => {
           <Text style={{ fontSize: 18, fontWeight: '400' }}>{item.title}</Text>
           <Text numberOfLines={1} style={{ fontSize: 15, fontWeight: '400', color: COLORS.grey }}>{item.address}</Text>
         </View>
-        <TouchableOpacity onPress={() => { }}>
-          <Icon name="bookmark-plus-outline" size={30} color={COLORS.blue} />
+        <TouchableOpacity onPress={() => handleSaveToggle(item._id)}>
+          {/* <Icon name="bookmark-minus" size={30} color={COLORS.blue} /> */}
+          <Icon name="bookmark-plus" size={30} color={COLORS.blue} />
         </TouchableOpacity>
       </View>
       <View style={{ height: 1, width: '99%', backgroundColor: COLORS.grey, opacity: 0.4, marginTop: 15, marginBottom: 8 }} />
