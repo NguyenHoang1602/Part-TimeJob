@@ -108,7 +108,7 @@ const PostScreen = ({ navigation }) => {
   // Validate
   const [errors, setErrors] = React.useState({});
 
-  const validate = () => {
+  const validate = async () => {
 
     Keyboard.dismiss();
     let isValid = true;
@@ -178,7 +178,7 @@ const PostScreen = ({ navigation }) => {
       isValid = false;
     }
     if (isValid) {
-      uploadImages().then(() => {
+      await uploadImages().then(() => {
         handlePost();
       })
     }

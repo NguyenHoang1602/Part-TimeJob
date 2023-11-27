@@ -6,7 +6,7 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable react-native/no-inline-styles */
 import React, { useState, useContext, useEffect } from 'react';
-import { FlatList, Image, TextInput, ScrollView, StyleSheet, Text, TouchableHighlight, TouchableOpacity, View, Button, ImageBackground } from 'react-native';
+import { FlatList, Image, TextInput, ScrollView, StyleSheet, Text, TouchableHighlight, TouchableOpacity, View, Button, ImageBackground, RefreshControl } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS } from '../constants/theme';
 
@@ -21,6 +21,7 @@ import UserContext from '../components/UserConText';
 
 import axios from 'axios';
 import { useFocusEffect } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Jobdata = [
   { id: '1', title: 'Freelancer 1', Details: 'Dribble Inc.', Address: 'Quan 1, TP. HCM', wagemax: '150000', wagemin: '50000', worktype: 'Partime', uri: 'https://devforum-uploads.s3.dualstack.us-east-2.amazonaws.com/uploads/original/4X/b/7/6/b766c952bf9c722c30447824d8fc06a48f008e31.png' },
@@ -44,6 +45,7 @@ const SavedJobsScreen = ({ navigation }) => {
   const [isSave, setSave] = useState(false);
 
   const [isModalVisible, setModalVisible] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
 
   const toggleModal = (item) => {
     setModalVisible(!isModalVisible);
@@ -53,27 +55,35 @@ const SavedJobsScreen = ({ navigation }) => {
     setModalVisible(!isModalVisible);
   };
 
-  useFocusEffect(() => {
-    getListSaveJobs();
-  }, []);
+  useFocusEffect(
+    React.useCallback(() => {
+        getListSaveJobs()
+    }, [])
+);
+const fetchData = async () => {
+  setRefreshing(true);
+  setTimeout(() => {
+    try {
+      setRefreshing(false);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      setRefreshing(false);
+    } finally {
+      setRefreshing(false);
+    }
+    setRefreshing(false);
+  }, 1000);
+};
 
   //List
   async function getListSaveJobs() {
     try {
-      const result = await axios.post('http://192.168.1.10:3000/posts/listSaveJobsForApp', {
-        UserId: user._id,
-      });
-      if (result.status === 200) {
-        //
-        setListSaveJobs(result.data);
-        console.log(result.data);
-      }
-      if (listSaveJobs !== null) {
-        listSaveJobs.reverse();
-      }
-    } catch (error) {
-
-    }
+      const data = await AsyncStorage.getItem('listJobsDenied');
+      setListSaveJobs(JSON.parse(data));
+      console.log("data : " + JSON.parse(data));
+  } catch (error) {
+      console.log("Err : ", error);
+  }
   }
 
   const FlatListSaveJobs = () => {
@@ -90,7 +100,7 @@ const SavedJobsScreen = ({ navigation }) => {
               source={require('../assets/images/5928293_2953962.jpg')}
               style={{ width: "100%", height: 430 }}
             />
-            <Text style={{ fontSize: 22, color: COLORS.black, fontWeight: '700' }}>Empty</Text>
+            <Text style={{ fontSize: 22, color: COLORS.black, fontWeight: '600' }}>Không tìm thấy</Text>
           </View>
         )}
       />
@@ -271,7 +281,13 @@ const SavedJobsScreen = ({ navigation }) => {
         </View>
       </View>
 
-      <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps={'always'}>
+      <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps={'always'}
+        refreshControl={<RefreshControl
+          refreshing={refreshing}
+          onRefresh={fetchData}
+          colors={['#0000ff']} // Adjust the colors of the loading indicator
+        />}
+      >
         <FlatListSaveJobs />
       </ScrollView>
       <Modal onBackdropPress={toggleModalclose} isVisible={isModalVisible} style={{ justifyContent: 'flex-end', margin: 0 }}>

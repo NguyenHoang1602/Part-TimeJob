@@ -6,7 +6,7 @@
 import React, { useEffect, useState } from 'react';
 import { Button, View, StyleSheet, Text, TouchableOpacity, Image, TextInput, ImageBackground, FlatList, ScrollView } from 'react-native';
 import Modal from 'react-native-modal';
-import { COLORS } from '../constants/theme';
+import COLORS from '../assets/const/colors';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import Feather from 'react-native-vector-icons/Feather';
@@ -59,18 +59,19 @@ const TopTabScreenIsDisplay = ({ navigation }) => {
                 renderItem={renderItemJob}
                 showsVerticalScrollIndicator={false}
                 ListEmptyComponent={() => (
-                    <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+                    <View style={{ alignItems: 'center', justifyContent: 'center', paddingHorizontal: 20 }}>
                         <ImageBackground
                             source={require('../assets/images/5928293_2953962.jpg')}
-                            style={{ width: "100%", height: 430 }}
+                            style={{ width: "100%", height: 430, }}
                         />
                         <Text style={{ fontSize: 22, color: COLORS.black, fontWeight: '700' }}>Empty</Text>
+                        <Text style={{ fontSize: 16, marginTop: 7, textAlign: 'center' }}>Sorry, the keyword you entered cannot be found, please check again or search with another keyword.</Text>
                     </View>
                 )}
             />
         );
 
-    }
+    };
 
     const renderItemJob = ({ item }) => (
         <TouchableOpacity style={{
@@ -81,16 +82,7 @@ const TopTabScreenIsDisplay = ({ navigation }) => {
             marginBottom: 18,
             padding: 20,
         }}
-            onPress={() => navigation.navigate('DetailsScreen', {
-                title: item.title,
-                id: item.id,
-                uri: item.uri,
-                address: item.Address,
-                wagemax: item.wagemax,
-                wagemin: item.wagemin,
-                worktype: item.worktype,
-                Details: item.Details,
-            })}>
+            onPress={() => toggleModal(item)}>
             <View style={{ width: '100%', flexDirection: 'row' }}>
                 {item.image.map((imageUrl, index) => {
                     if (index === 0) {
@@ -105,8 +97,8 @@ const TopTabScreenIsDisplay = ({ navigation }) => {
                     }
                 })}
                 <View style={{ width: '50%', height: '100%', marginStart: 20, flex: 1 }}>
-                    <Text style={{ fontSize: 16, fontWeight: 'bold' }}>{item.title}</Text>
-                    <Text style={{ fontSize: 16, fontWeight: 'bold', color: COLORS.grey }}>{item.describe}</Text>
+                    <Text style={{ fontSize: 18, fontWeight: '400' }}>{item.title}</Text>
+                    <Text numberOfLines={1} style={{ fontSize: 15, fontWeight: '400', color: COLORS.grey }}>{item.address}</Text>
                 </View>
                 <TouchableOpacity onPress={() => { }}>
                     <Icon name="bookmark-plus-outline" size={30} color={COLORS.blue} />
@@ -114,8 +106,8 @@ const TopTabScreenIsDisplay = ({ navigation }) => {
             </View>
             <View style={{ height: 1, width: '99%', backgroundColor: COLORS.grey, opacity: 0.4, marginTop: 15, marginBottom: 8 }} />
             <View style={{ width: '100%', paddingStart: '22%' }}>
-                <Text style={{ fontSize: 16, fontWeight: 'bold', color: COLORS.grey }}>{item.Address}</Text>
-                <Text style={{ color: COLORS.blue, fontSize: 16, marginVertical: 9 }}>${item.wagemin} - ${item.wagemax} /month</Text>
+                <Text numberOfLines={1} style={{ fontSize: 16, fontWeight: 'bold', color: COLORS.grey, width: 200, marginBottom: 5 }}>{item.businessName}</Text>
+                <Text style={{ color: COLORS.blue, fontSize: 16, marginVertical: 9 }}>${item.wageMin} - ${item.wageMax} /month</Text>
                 <View style={{
                     width: 60,
                     height: 25,
@@ -126,10 +118,15 @@ const TopTabScreenIsDisplay = ({ navigation }) => {
                     alignItems: 'center',
                     justifyContent: 'center',
                 }}>
-                    <Text style={{ fontSize: 10 }}>{item.worktype}</Text>
+                    {
+                        item.workType_id._id == '653e66b38e88b23b41388e3c' ? (
+                            <Text style={{ fontSize: 10 }} >Parttime</Text>
+                        ) : (
+                            <Text style={{ fontSize: 10 }} >Fulltime</Text>
+                        )
+                    }
                 </View>
             </View>
-
         </TouchableOpacity>
     );
 

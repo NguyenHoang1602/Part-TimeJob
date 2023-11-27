@@ -80,7 +80,7 @@ const ProfileScreen = ({ route, navigation }) => {
         <View style={styles.line} />
         <View style={styles.account}>
           <Text style={styles.title}>Tài khoản</Text>
-          <TouchableOpacity style={styles.item}>
+          <TouchableOpacity style={styles.item} onPress={() => navigation.navigate('Cập nhật thông tin cá nhân')}>
             <FontAwesome name="user-o" size={24} color='rgba(125, 122, 122, 1)' />
             <Text style={styles.itemText}>Thông tin cá nhân</Text>
             <Feather name="chevron-right" size={24} color='rgba(125, 122, 122, 1)' />

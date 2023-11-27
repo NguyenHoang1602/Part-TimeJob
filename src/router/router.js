@@ -8,18 +8,16 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 import OnboardingScreen from '../screens/OnboardingScreen';
 import Auth from '../screens/AuthScreen';
-import SignInScreen from '../screens/LoginScreen';
-import RegisterScreen from '../screens/SignInWithPhoneNumber';
 import TabNavigator from "./Tabnavigator";
 import SavedJobsScreen from "../screens/SavedJobsScreen";
 import MessageScreen from "../screens/MessageScreen";
 import ChatScreen from "../screens/ChatScreen";
 import CVScreen from "../screens/CVScreen";
 import SearchScreen from "../screens/SearchScreen";
-import SignInWithPhoneNumber from "../screens/SignInWithPhoneNumber";
 import RegistrationScreen from "../screens/RegistrationScreens";
 import RegisterPhoneScreen from "../screens/RegistrationPhoneScrees";
 import VerificationScreen from "../screens/VerificationScreen";
+import EditAccount from "../screens/EditAccount";
 
 import { TouchableOpacity } from "react-native";
 import Octicons from 'react-native-vector-icons/Octicons';
@@ -80,7 +78,6 @@ const Router = () => {
     return (
       <Stack.Navigator initialRouteName="Onboarding" screenOptions={{headerShown: false}}>
         <Stack.Screen name="Onboarding" component={OnboardingScreen} />
-        <Stack.Screen name="Login" component={SignInScreen} />
         <Stack.Screen name="AuthStack" component={AuthStack} />
         <Stack.Screen name="TabNavigator" component={TabNavigator} />
         <Stack.Screen name="SavedJobsScreen" component={SavedJobsScreen} />
