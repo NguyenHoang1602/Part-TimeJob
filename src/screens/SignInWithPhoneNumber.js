@@ -26,7 +26,6 @@ const SignInWithPhoneNumber = ({ navigation, props }) => {
   // Handle login
   function onAuthStateChanged(user) {
     if (user) {
-
     }
   }
 
@@ -48,7 +47,6 @@ const SignInWithPhoneNumber = ({ navigation, props }) => {
       } else {
         console.log('Confirmation object is null.');
       }
-
     } catch (error) {
       console.log('Invalid code: ', error);
     }

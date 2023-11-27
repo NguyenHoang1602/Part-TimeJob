@@ -13,6 +13,7 @@ import Input from '../components/Input';
 import InputMutiple from '../components/InputMutiple';
 import COLORS from '../assets/const/colors';
 import axios from 'axios';
+import { API } from '../../Sever/sever';
 
 import Button from '../components/Button';
 //icon
@@ -21,7 +22,6 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 // import BottomSheetContent from '../components/BottomSheetContent';
 //picker
 import ImagePicker from 'react-native-image-crop-picker';
-
 //modal
 import Modal from 'react-native-modal';
 //slect drop-down
@@ -179,7 +179,9 @@ const PostScreen = ({ navigation }) => {
     }
     if (isValid) {
       uploadImages().then(() => {
-        handlePost();
+        if (urlImage) {
+          handlePost();
+        }
       })
     }
   };
@@ -193,7 +195,7 @@ const PostScreen = ({ navigation }) => {
   const handlePost = async () => {
     setLoading(true);
     setTimeout(() => { 3000 });
-    const result = await axios.post('http://192.168.1.46:3000/posts/postForApp', inputs);
+    const result = await axios.post(`${API}/posts/postForApp`, inputs);
     if (result.status === 200) {
       setLoading(false);
       console.log("Thành công");
@@ -534,7 +536,7 @@ const PostScreen = ({ navigation }) => {
               inputSearchStyle={styles.inputSearchStyle}
               iconStyle={styles.iconStyle}
               data={listWorkType}
-              
+          
               maxHeight={300}
               labelField="wt_title"
               valueField="_id"
