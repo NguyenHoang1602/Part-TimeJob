@@ -33,6 +33,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Loader from '../components/Loader';
 import axios from 'axios';
 import { API } from '../../Sever/sever';
+import { user } from '../Us'
 
 const DetailsScreen = ({ route, navigation }) => {
     const datalist = {
@@ -79,7 +80,7 @@ const DetailsScreen = ({ route, navigation }) => {
             post_id: datalist.postid,
             cv_id: selectedItem,
         };
-        console.log("cv_ID : ", apply);
+
         if (selectedItem) {
             setModalVisible(false);
             setLoading(true);
@@ -93,10 +94,9 @@ const DetailsScreen = ({ route, navigation }) => {
     };
 
     const getCV = async () => {
-        const data = await AsyncStorage.getItem('listCV');
+        const data = await AsyncStorage.getItem('listCVs');
         setCv(JSON.parse(data));
     }
-
     const renderCV = ({ item }) => {
         const isSelected = item._id === selectedItem;
         return (
@@ -345,10 +345,10 @@ const DetailsScreen = ({ route, navigation }) => {
                                 })}
                             >
                                 <AntDesign name="addfile" size={30} color={COLORS.primary} />
+                                <View style={{ alignItems: 'center' }}>
+                                    <Text style={{ fontSize: 14, color: '#7D7A7A', opacity: 0.7 }}>Tạo hồ sơ mới</Text>
+                                </View>
                             </TouchableOpacity>
-                            <View style={{ alignItems: 'center' }}>
-                                <Text style={{ fontSize: 14, color: '#7D7A7A', opacity: 0.7 }}>Tạo hồ sơ mới</Text>
-                            </View>
                         </View>
                     </View>
                     <Text style={{ marginStart: '7%', fontSize: 16 }}>Hồ sơ của bạn</Text>

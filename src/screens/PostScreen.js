@@ -179,7 +179,9 @@ const PostScreen = ({ navigation }) => {
     }
     if (isValid) {
       uploadImages().then(() => {
-        handlePost();
+        if (urlImage) {
+          handlePost();
+        }
       })
     }
   };
@@ -534,7 +536,7 @@ const PostScreen = ({ navigation }) => {
               inputSearchStyle={styles.inputSearchStyle}
               iconStyle={styles.iconStyle}
               data={listWorkType}
-              
+          
               maxHeight={300}
               labelField="wt_title"
               valueField="_id"

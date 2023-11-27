@@ -138,17 +138,12 @@ const HomeScreen = ({ navigation }) => {
       }
     })
     //All my CV
-    axios({
-      url: `${API}/cvs/list`,
-      method: "GET"
-    }).then(async (response) => {
-      if (response.status === 200) {
-        const data = JSON.stringify(response.data)
-        await AsyncStorage.setItem('listCV', data);
-      }
-    })
+    const responseCV = await axios.post(`${API}/cvs/myCVs`, { id: user._id });
+    if (responseCV.status === 200) {
+      const cv = JSON.stringify(responseCV.data)
+      await AsyncStorage.setItem('listCVs', cv);
+    }
   }
-
   const search = () => {
     navigation.navigate('SearchScreen')
   }

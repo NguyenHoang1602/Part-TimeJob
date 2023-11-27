@@ -2,48 +2,56 @@
 /* eslint-disable quotes */
 /* eslint-disable prettier/prettier */
 /* eslint-disable react-native/no-inline-styles */
-import { View, Text, SafeAreaView, Keyboard, ScrollView, StyleSheet, TouchableOpacity, ImageBackground, useWindowDimensions, FlatList, Image, StatusBar } from 'react-native';
-import React, { useState } from 'react';
-import {TextInput} from 'react-native-paper';
+import { View, Text, SafeAreaView, Keyboard, ScrollView, StyleSheet, TouchableOpacity, ImageBackground, useWindowDimensions, FlatList, Image, StatusBar, Alert } from 'react-native';
+import React, { useState, useContext, useEffect } from 'react';
+import { TextInput } from 'react-native-paper';
 import Input from '../components/Input';
 import InputMutiple from '../components/InputMutiple';
 import COLORS from '../assets/const/colors';
-
-import Button from '../components/Button';
-//icon
-import Octicons from 'react-native-vector-icons/Octicons';
-import Feather from 'react-native-vector-icons/Feather';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Dropdown } from 'react-native-element-dropdown';
+import UserContext from '../components/UserConText';
+import axios from 'axios';
+import { API } from '../../Sever/sever';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Loader from '../components/Loader';
 
-const data = [
-  { label: 'Item 1', value: '1' },
-  { label: 'Item 2', value: '2' },
-  { label: 'Item 3', value: '3' },
-  { label: 'Item 4', value: '4' },
-  { label: 'Item 5', value: '5' },
-  { label: 'Item 6', value: '6' },
-  { label: 'Item 7', value: '7' },
-  { label: 'Item 8', value: '8' },
-];
+const CVScreen = ({ route, navigation }) => {
 
-const CVScreen = ({ route,navigation}) => {
-
-console.log('data : '+  route.params?.postid);
-  const [value, setValue] = useState(null);
+  useEffect(() => {
+    getListAcademic()
+  }, []);
+  const [loading, setLoading] = React.useState(false);
+  const { user } = useContext(UserContext);
+  const [listAcademic, setListAcademic] = useState([]);
   const [isFocus, setIsFocus] = useState(false);
   const [inputs, setInputs] = React.useState({
-    id: '',
+    user_id: user._id,
+    post_id: route.params.postid,
     title: '',
-    subtitle: '',
-    price: '',
-    details: '',
+    name: '',
+    phone: '',
+    year: '',
+    email: '',
+    address: '',
+    experience: '',
+    introduce: '',
   });
+  console.log(inputs);
   const [errors, setErrors] = React.useState({});
+
+  const getListAcademic = async () => {
+    const data = await AsyncStorage.getItem('listAcademics');
+    setListAcademic(JSON.parse(data));
+  }
+
   const validate = () => {
     Keyboard.dismiss();
     let isValid = true;
+
+    if (!inputs.title) {
+      handleError('Vui lòng nhập tên CV', 'title');
+      isValid = false;
+    }
 
     if (!inputs.name) {
       handleError('Vui lòng nhập họ tên', 'name');
@@ -80,7 +88,7 @@ console.log('data : '+  route.params?.postid);
       isValid = false;
     }
     if (isValid) {
-      console.log(' oce ');
+      handleUpNewCv();
     }
   };
   const handleOnchange = (text, input) => {
@@ -89,180 +97,153 @@ console.log('data : '+  route.params?.postid);
   const handleError = (error, input) => {
     setErrors(prevState => ({ ...prevState, [input]: error }));
   };
+  const handleUpNewCv = async () => {
+    setLoading(true);
+    setTimeout(() => { 3000 });
+    const response = await axios.post(`${API}/cvs/new`, inputs);
+    if (response.status === 200) {
+      setLoading(false);
+      Alert.alert("Thành công");
+    }
+  }
   return (
-    <SafeAreaView style={{flex: 1}}>
+    <SafeAreaView style={{ flex: 1 }}>
+      <Loader visible={loading} />
       <ScrollView>
-          <View
-            style={{
-              backgroundColor: '#D9D9D9',
-              height: 60,
-              justifyContent: 'center',
-            }}>
-            <Text style={{fontSize: 16, marginStart: 20}}>
-              THÔNG TIN BẮT BUỘC
-            </Text>
-          </View>
-          <View style={{ marginVertical: 22, marginHorizontal: 24 }}>
-            <Input
-              onChangeText={text => handleOnchange(text, 'name')}
-              onFocus={() => handleError(null, 'name')}
-              placeholder="Họ tên"
-              value=""
-              error={errors.name}
-            />
-            <View style={{ width: '100%', flexDirection: 'row' }}>
-              <View style={{ width: '45%', justifyContent: 'flex-start' }}>
-                <Input
-                  keyboardType="numeric"
-                  onChangeText={text => handleOnchange(text, 'phone')}
-                  onFocus={() => handleError(null, 'phone')}
-                  placeholder="Số điện thoại"
-                  // value={route.params?.subtitle}
-                  error={errors.phone}
-                />
-              </View>
-              <View style={{ width: '45%', marginStart: '9.5%' }}>
-                <Input
-                  keyboardType="numeric"
-                  onChangeText={text => handleOnchange(text, 'year')}
-                  onFocus={() => handleError(null, 'year')}
-                  placeholder="Năm sinh"
-                  // value={route.params?.subtitle}
-                  error={errors.year}
-                />
-              </View>
+        <View
+          style={{
+            backgroundColor: '#D9D9D9',
+            height: 60,
+            justifyContent: 'center',
+          }}>
+          <Text style={{ fontSize: 16, marginStart: 20 }}>
+            THÔNG TIN BẮT BUỘC
+          </Text>
+        </View>
+        <View style={{ marginVertical: 22, marginHorizontal: 24 }}>
+          <Input
+            onChangeText={text => handleOnchange(text, 'title')}
+            onFocus={() => handleError(null, 'title')}
+            placeholder="Tên CV"
+            value={inputs.title}
+            error={errors.title}
+          />
+          <Input
+            onChangeText={text => handleOnchange(text, 'name')}
+            onFocus={() => handleError(null, 'name')}
+            placeholder="Họ tên"
+            value={inputs.name}
+            error={errors.name}
+          />
+          <View style={{ width: '100%', flexDirection: 'row' }}>
+            <View style={{ width: '45%', justifyContent: 'flex-start' }}>
+              <Input
+                keyboardType="numeric"
+                onChangeText={text => handleOnchange(text, 'phone')}
+                onFocus={() => handleError(null, 'phone')}
+                placeholder="Số điện thoại"
+                // value={route.params?.subtitle}
+                error={errors.phone}
+              />
             </View>
-            <Dropdown
-            style={[styles.dropdown, isFocus && { borderColor: COLORS.darkBlue }]}
-            placeholderStyle={styles.placeholderStyle}
-            selectedTextStyle={styles.selectedTextStyle}
-            inputSearchStyle={styles.inputSearchStyle}
-            iconStyle={styles.iconStyle}
-            data={data}
-            search
-            maxHeight={300}
-            labelField="label"
-            valueField="value"
-            placeholder={!isFocus ? 'Ngành Nghề' : '...'}
-            searchPlaceholder="Search..."
-            value={value}
-            onFocus={() => setIsFocus(true)}
-            onBlur={() => setIsFocus(false)}
-            onChange={item => {
-              setValue(item.value);
-              setIsFocus(false);
-            }}
-          />
+            <View style={{ width: '45%', marginStart: '9.5%' }}>
+              <Input
+                keyboardType="numeric"
+                onChangeText={text => handleOnchange(text, 'year')}
+                onFocus={() => handleError(null, 'year')}
+                placeholder="Năm sinh"
+                // value={route.params?.subtitle}
+                error={errors.year}
+              />
+            </View>
+          </View>
           <Input
-              onChangeText={text => handleOnchange(text, 'email')}
-              onFocus={() => handleError(null, 'email')}
-              placeholder="Địa chỉ email"
-              value=""
-              error={errors.email}
-            />
-          </View>
-          <View style={{ backgroundColor: '#D9D9D9', height: 60, justifyContent: 'center' }}>
-            <Text style={{ fontSize: 16, marginStart: 25 }}>THÔNG TIN THÊM</Text>
-          </View>
-          <View style={{ marginVertical: 22, marginHorizontal: 24 }}>
-            <Input
-              onChangeText={text => handleOnchange(text, 'address')}
-              onFocus={() => handleError(null, 'address')}
-              placeholder="Địa chỉ hiện tại"
-              value=""
-              error={errors.address}
-            />
-            <Dropdown
+            onChangeText={text => handleOnchange(text, 'email')}
+            onFocus={() => handleError(null, 'email')}
+            placeholder="Địa chỉ email"
+            value={inputs.email}
+            error={errors.email}
+          />
+        </View>
+        <View style={{ backgroundColor: '#D9D9D9', height: 60, justifyContent: 'center' }}>
+          <Text style={{ fontSize: 16, marginStart: 25 }}>THÔNG TIN THÊM</Text>
+        </View>
+        <View style={{ marginVertical: 22, marginHorizontal: 24 }}>
+          <Input
+            onChangeText={text => handleOnchange(text, 'address')}
+            onFocus={() => handleError(null, 'address')}
+            placeholder="Địa chỉ hiện tại"
+            value={inputs.address}
+            error={errors.address}
+          />
+          <Dropdown
             style={[styles.dropdown, isFocus && { borderColor: COLORS.darkBlue }]}
             placeholderStyle={styles.placeholderStyle}
             selectedTextStyle={styles.selectedTextStyle}
             inputSearchStyle={styles.inputSearchStyle}
             iconStyle={styles.iconStyle}
-            data={data}
-            search
+            data={listAcademic}
+            labelField="a_title"
+            valueField="_id"
             maxHeight={300}
-            labelField="label"
-            valueField="value"
             placeholder={!isFocus ? 'Trình độ học vấn' : '...'}
-            searchPlaceholder="Search..."
-            value={value}
+            value={listAcademic._id}
             onFocus={() => setIsFocus(true)}
             onBlur={() => setIsFocus(false)}
             onChange={item => {
-              setValue(item.value);
               setIsFocus(false);
+              handleOnchange(item._id, 'academic')
             }}
           />
           <Input
-              onChangeText={text => handleOnchange(text, 'experience')}
-              onFocus={() => handleError(null, 'experience')}
-              placeholder="Kinh nghiệm làm việc"
-              value=""
-              error={errors.experience}
-            />
-            <Dropdown
-            style={[styles.dropdown, isFocus && { borderColor: COLORS.darkBlue }]}
-            placeholderStyle={styles.placeholderStyle}
-            selectedTextStyle={styles.selectedTextStyle}
-            inputSearchStyle={styles.inputSearchStyle}
-            iconStyle={styles.iconStyle}
-            data={data}
-            search
-            maxHeight={300}
-            labelField="label"
-            valueField="value"
-            placeholder={!isFocus ? 'Hình thức trả lương' : '...'}
-            searchPlaceholder="Search..."
-            value={value}
-            onFocus={() => setIsFocus(true)}
-            onBlur={() => setIsFocus(false)}
-            onChange={item => {
-              setValue(item.value);
-              setIsFocus(false);
-            }}
+            onChangeText={text => handleOnchange(text, 'experience')}
+            onFocus={() => handleError(null, 'experience')}
+            placeholder="Kinh nghiệm làm việc"
+            value={inputs.experience}
+            error={errors.experience}
           />
           <InputMutiple
-              onChangeText={text => handleOnchange(text, 'introduce')}
-              onFocus={() => handleError(null, 'introduce')}
-              placeholder={"Giới thiệu bản thân\nHãy nêu ra kinh nghiệm, sở trường và mong muốn của bạn liên quan đến công việc để ghi điểm hơn trong mắt nhà tuyển dụng"}
-              // value={route.params?.subtitle}
-              error={errors.introduce}
-            />
-          </View>
-          <View
+            onChangeText={text => handleOnchange(text, 'introduce')}
+            onFocus={() => handleError(null, 'introduce')}
+            placeholder={"Giới thiệu bản thân\nHãy nêu ra kinh nghiệm, sở trường và mong muốn của bạn liên quan đến công việc để ghi điểm hơn trong mắt nhà tuyển dụng"}
+            value={inputs.introduce}
+            error={errors.introduce}
+          />
+        </View>
+        <View
+          style={{
+            width: '100%',
+            alignItems: 'center',
+            paddingVertical: 20,
+            flexDirection: 'row',
+            justifyContent: 'center',
+          }}>
+          <TouchableOpacity
+            onPress={validate}
             style={{
-              width: '100%',
-              alignItems: 'center',
-              paddingVertical: 20,
+              backgroundColor: COLORS.blue,
+              padding: 5,
+              width: '80%',
+              height: 50,
+              borderRadius: 30,
               flexDirection: 'row',
               justifyContent: 'center',
+              alignItems: 'center',
+              shadowColor: COLORS.black,
+              shadowOffset: { width: 10, height: 10 },
+              shadowOpacity: 1,
+              shadowRadius: 3,
             }}>
-            <TouchableOpacity
-              onPress={validate}
+            <Text
               style={{
-                backgroundColor: COLORS.blue,
-                padding: 5,
-                width: '80%',
-                height: 50,
-                borderRadius: 30,
-                flexDirection: 'row',
-                justifyContent: 'center',
-                alignItems: 'center',
-                shadowColor: COLORS.black,
-                shadowOffset: {width: 10, height: 10},
-                shadowOpacity: 1,
-                shadowRadius: 3,
+                fontWeight: 'bold',
+                fontSize: 18,
+                color: COLORS.white,
               }}>
-              <Text
-                style={{
-                  fontWeight: 'bold',
-                  fontSize: 18,
-                  color: COLORS.white,
-                }}>
-                Ứng tuyển
-              </Text>
-            </TouchableOpacity>
-          </View>
+              Ứng tuyển
+            </Text>
+          </TouchableOpacity>
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -302,7 +283,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 6,
     paddingHorizontal: 18,
-    marginBottom : 13,
+    marginBottom: 13,
   },
   icon: {
     marginRight: 5,
