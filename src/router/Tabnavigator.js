@@ -21,7 +21,7 @@ import SearchScreen from '../screens/SearchScreen';
 import EditPostScreen from '../screens/EditPostScreen';
 import EditAccount from '../screens/EditAccount';
 import EditCV from '../screens/EditCV';
-import SettingScreen from '../screens/SettingScreen';
+import CVResume from '../screens/CVResumeScreen';
 //icon
 import Octicons from 'react-native-vector-icons/Octicons';
 import Feather from 'react-native-vector-icons/Feather';
@@ -223,23 +223,10 @@ const ProfileStack = (props) => {
                 })}
             />
             <Stack.Screen
-                name="Cài đặt"
-                component={SettingScreen}
+                name="CVResumeScreen"
+                component={CVResume}
                 options={({ route }) => ({
-                    title: route.params?.title,
-                    headerShown: true,
-                    headerStyle: {
-                        backgroundColor: '#337BFF',
-                    },
-                    headerTitleStyle: {
-                        color: '#FFFFFF',
-                    },
-                    headerTitleAlign: 'center',
-                    headerLeft: () => (
-                        <TouchableOpacity onPress={() => props.navigation.navigate('ProfileScreen')}>
-                            <Ionicons name="arrow-back" size={24} color="white" />
-                        </TouchableOpacity>
-                    ),
+                    headerShown: false,
                 })}
             />
         </Stack.Navigator>
@@ -350,7 +337,7 @@ const getTabBarVisibility = route => {
     const routeName = getFocusedRouteNameFromRoute(route) ?? 'Feed';
     // console.log(routeName);
 
-    if (routeName == 'DetailsScreen' || routeName == 'Thông tin tuyển dụng' || routeName == 'Notifications' || routeName == 'Chỉnh sửa bài đăng' || routeName == 'Cập nhật thông tin cá nhân' || routeName == 'Cập nhật CV cá nhân' || routeName == 'Cài đặt') {
+    if (routeName == 'DetailsScreen' || routeName == 'Thông tin tuyển dụng' || routeName == 'Notifications' || routeName == 'Chỉnh sửa bài đăng' || routeName == 'Cập nhật thông tin cá nhân' || routeName == 'Cập nhật CV cá nhân' || routeName == 'CVResumeScreen') {
         return 'none';
     }
     return 'flex';

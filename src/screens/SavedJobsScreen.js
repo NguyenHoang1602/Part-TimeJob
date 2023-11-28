@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable quotes */
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/no-unstable-nested-components */
@@ -35,7 +36,7 @@ const SavedJobsScreen = ({ navigation }) => {
 
   const { user } = useContext(UserContext);
 
-  const [listSaveJobs, setListSaveJobs] = useState([]);
+  const [listSaveJobs, setListSaveJobs] = useState();
 
   const [selectedItem, setSelectedItem] = useState(null);
   const [password, setPassword] = useState('');
@@ -78,9 +79,9 @@ const fetchData = async () => {
   //List
   async function getListSaveJobs() {
     try {
-      const data = await AsyncStorage.getItem('listJobsDenied');
+      const data = await AsyncStorage.getItem('listMySavePost');
       setListSaveJobs(JSON.parse(data));
-      console.log("data : " + JSON.parse(data));
+
   } catch (error) {
       console.log("Err : ", error);
   }
