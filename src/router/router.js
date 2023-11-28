@@ -84,7 +84,7 @@ const Router = () => {
         <Stack.Screen name="MessageScreen" component={MessageScreen} />
         <Stack.Screen name="CVScreen" component={CVScreen}/>
         <Stack.Screen name="SearchScreen" component={SearchScreen} />
-        <Stack.Screen options={{headerShown: true}} name="ChatScreen" component={ChatScreen} />
+        <Stack.Screen name="ChatScreen" component={ChatScreen} />
       </Stack.Navigator>
     );
   };

@@ -66,92 +66,91 @@ const ManagementScreen = ({ route, navigation }) => {
       console.log("Err : ", error);
     }
   }
-  
+
 
   return (
     <SafeAreaView style={{ backgroundColor: 'white', flex: 1 }}>
-        <View style={{
-          paddingBottom: 5,
-          paddingLeft: 20,
-          paddingRight: 20,
-          paddingTop: 20,
-          borderBottomWidth: 0.5,
-          borderColor: 'rgba(170, 170, 170, 1)',
-        }}>
-          <View
+      <View style={{
+        paddingBottom: 5,
+        paddingLeft: 20,
+        paddingRight: 20,
+        paddingTop: 20,
+        borderBottomWidth: 0.5,
+        borderColor: 'rgba(170, 170, 170, 1)',
+      }}>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'center',
+            alignItems: 'center',
+            marginBottom: 18,
+            width: '100%',
+            height: 60,
+          }}>
+          <TouchableOpacity
             style={{
               flexDirection: 'row',
-              justifyContent: 'center',
+              marginStart: '2%',
               alignItems: 'center',
-              marginBottom: 18,
-              width: '100%',
-              height: 60,
-            }}>
-            <TouchableOpacity
-              style={{
-                flexDirection: 'row',
-                marginStart: '2%',
-                alignItems: 'center',
-                width: '68%',
-              }} onPress={() => { }}>
-              <ImageBackground
-                source={{ uri: user.photo }}
-                style={{ width: 46, height: 46 }}
-                imageStyle={{ borderRadius: 46 }} />
-              <View style={{ flexDirection: 'column', height: '100%', justifyContent: 'center', marginStart: 13 }}>
-                <Text style={{ color: '#7D7A7A', fontSize: 16 }}>Xin chào 👋</Text>
-                <Text numberOfLines={1} style={{ color: COLORS.black, fontSize: 20, fontWeight: '600' }}>{user.displayName}</Text>
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={{
-                width: 46,
-                height: 46,
-                borderWidth: 0.4,
-                borderColor: COLORS.grey,
-                borderRadius: 46,
-                alignItems: 'center',
-                marginRight: '5%',
-                justifyContent: 'center',
-              }}
-              onPress={() => navigation.navigate('Notifications')}>
-              {/* <Feather name='bell' size={24} color={COLORS.black}/> */}
-              <IconWithBadge iconName="bell" badgeText="2" />
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={{
-                width: 46,
-                height: 46,
-                borderWidth: 0.4,
-                borderColor: COLORS.grey,
-                borderRadius: 46,
-                marginEnd: '2%',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-              onPress={() => navigation.navigate('ChatScreen')}>
-              {/* <AntDesign name='message1' size={24} color={COLORS.black}/> */}
-              <IconWithBadgeAntDesign iconName="message1" badgeText="" />
-            </TouchableOpacity>
-          </View>
-        </View><TopTab.Navigator
-          screenOptions={{
-            tabBarLabelStyle: {
-              fontSize: 14,
-              fontWeight: '500',
-            },
-            tabBarItemStyle: {
-              width: 'auto',
-            },
-            lazyPreloadDistance: true,
-            tabBarScrollEnabled: true,
-            tabBarActiveTintColor: COLORS.primary,
-          }}
-        >
-            <TopTab.Screen name={"Đang hiện thị  (" + listIsDisplay.length + ")"} component={TopTabScreenIsDisplay} />
-            <TopTab.Screen name={"Đang chờ duyệt (" + listWaiting.length + ")"} component={TopTabScreenWaiting} />
-            <TopTab.Screen name={"Bị từ chối (" + listDenied.length + ")"} component={TopTabScreenDenied} />
-          </TopTab.Navigator>
+              width: '68%',
+            }} onPress={() => { }}>
+            <ImageBackground
+              source={{ uri: user.photo }}
+              style={{ width: 46, height: 46 }}
+              imageStyle={{ borderRadius: 46 }} />
+            <View style={{ flexDirection: 'column', height: '100%', justifyContent: 'center', marginStart: 13 }}>
+              <Text style={{ color: '#7D7A7A', fontSize: 16 }}>Xin chào 👋</Text>
+              <Text numberOfLines={1} style={{ color: COLORS.black, fontSize: 20, fontWeight: '600' }}>{user.displayName}</Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{
+              width: 46,
+              height: 46,
+              borderWidth: 0.4,
+              borderColor: COLORS.grey,
+              borderRadius: 46,
+              alignItems: 'center',
+              marginRight: '5%',
+              justifyContent: 'center',
+            }}
+            onPress={() => navigation.navigate('Notifications')}>
+            {/* <Feather name='bell' size={24} color={COLORS.black}/> */}
+            <IconWithBadge iconName="bell" badgeText="2" />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{
+              width: 46,
+              height: 46,
+              borderWidth: 0.4,
+              borderColor: COLORS.grey,
+              borderRadius: 46,
+              marginEnd: '2%',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+            onPress={() => navigation.navigate('ChatScreen')}>
+            {/* <AntDesign name='message1' size={24} color={COLORS.black}/> */}
+            <IconWithBadgeAntDesign iconName="message1" badgeText="" />
+          </TouchableOpacity>
+        </View>
+      </View><TopTab.Navigator
+        screenOptions={{
+          tabBarLabelStyle: {
+            fontSize: 14,
+            fontWeight: '500',
+          },
+          tabBarItemStyle: {
+            width: 'auto',
+          },
+          tabBarScrollEnabled: true,
+          tabBarActiveTintColor: COLORS.primary,
+        }}
+      >
+        <TopTab.Screen name={"Đang hiện thị  (" + listIsDisplay.length + ")"} component={TopTabScreenIsDisplay} />
+        <TopTab.Screen name={"Đang chờ duyệt (" + listWaiting.length + ")"} component={TopTabScreenWaiting} />
+        <TopTab.Screen name={"Bị từ chối (" + listDenied.length + ")"} component={TopTabScreenDenied} />
+      </TopTab.Navigator>
       {/* Header */}
     </SafeAreaView>
   );
