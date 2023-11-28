@@ -104,7 +104,8 @@ const ProfileScreen = ({ route, navigation }) => {
         <View style={styles.line} />
         <View style={styles.account}>
           <Text style={styles.title}>Cài đặt chung</Text>
-          <TouchableOpacity style={styles.item}>
+          <TouchableOpacity style={styles.item}
+          onPress={() => navigation.navigate('Notifications')}>
             <Ionicons name="notifications-outline" size={24} color='rgba(125, 122, 122, 1)' />
             <Text style={styles.itemText}>Thông báo</Text>
             <Feather name="chevron-right" size={24} color='rgba(125, 122, 122, 1)' />

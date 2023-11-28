@@ -1,3 +1,5 @@
+/* eslint-disable comma-dangle */
+/* eslint-disable no-shadow */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable eqeqeq */
 /* eslint-disable quotes */
@@ -92,6 +94,16 @@ const HomeScreen = ({ navigation }) => {
         if (response.status === 200) {
           const data = JSON.stringify(response.data)
           await AsyncStorage.setItem('listAcademics', data);
+        }
+      })
+      //allgender
+      axios({
+        url: `${API}/gender/list`,
+        method: "GET"
+      }).then(async (response) => {
+        if (response.status === 200) {
+          const data = JSON.stringify(response.data)
+          await AsyncStorage.setItem('listGender', data);
         }
       })
       //All Experience

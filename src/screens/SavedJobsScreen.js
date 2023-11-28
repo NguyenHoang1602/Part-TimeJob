@@ -16,6 +16,7 @@ import Feather from 'react-native-vector-icons/Feather';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import IconWithBadge from '../components/IconWithBadge';
 import IconWithBadgeAntDesign from '../components/IconWithBadgeAntDesign';
+import { API } from '../../Sever/sever';
 
 import Modal from "react-native-modal";
 import UserContext from '../components/UserConText';
@@ -58,32 +59,53 @@ const SavedJobsScreen = ({ navigation }) => {
 
   useFocusEffect(
     React.useCallback(() => {
-        getListSaveJobs()
+      getListSaveJobs()
     }, [])
-);
-const fetchData = async () => {
-  setRefreshing(true);
-  setTimeout(() => {
-    try {
+  );
+  const fetchData = async () => {
+    setRefreshing(true);
+    setTimeout(() => {
+      try {
+        axios({
+          url: `${API}/savePost/list`,
+          method: "POST",
+          data: {
+            id: user._id,
+          }
+        }).then(async (response) => {
+          if (response.status === 200) {
+            const data = JSON.stringify(response.data)
+            await AsyncStorage.setItem('listMySavePost', data);
+          }
+        })
+        setRefreshing(false);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        setRefreshing(false);
+      } finally {
+        setRefreshing(false);
+      }
       setRefreshing(false);
-    } catch (error) {
-      console.error('Error fetching data:', error);
-      setRefreshing(false);
-    } finally {
-      setRefreshing(false);
-    }
-    setRefreshing(false);
-  }, 1000);
-};
+    }, 1000);
+  };
 
   //List
   async function getListSaveJobs() {
     try {
       const data = await AsyncStorage.getItem('listMySavePost');
       setListSaveJobs(JSON.parse(data));
-
-  } catch (error) {
+    } catch (error) {
       console.log("Err : ", error);
+    }
+  }
+  const handlePost = async () => {
+    console.log(selectedItem._id);
+    // setLoading(true);
+    // setTimeout(() => { 3000 });
+    const result = await axios.post(`${API}/savePost/delete`, {id: selectedItem._id});
+    if (result.status === 200) {
+      // setLoading(false);
+      console.log("Thành công");
   }
   }
 
@@ -91,7 +113,7 @@ const fetchData = async () => {
     return (
       <FlatList
         data={listSaveJobs}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item, index) => index.toString()}
         renderItem={renderItemJob}
         nestedScrollEnabled={true}
         scrollEnabled={false}
@@ -106,40 +128,30 @@ const fetchData = async () => {
         )}
       />
     );
-
   }
 
   const renderItemJob = ({ item }) => (
 
-    <TouchableOpacity style={{ padding: 18 }} onPress={() => navigation.navigate('DetailsScreen', {
-      title: item.title,
-      id: item.id,
-      uri: item.uri,
-      address: item.Address,
-      wagemax: item.wagemax,
-      wagemin: item.wagemin,
-      worktype: item.worktype,
-      Details: item.Details,
-    })}>
+    <TouchableOpacity style={{ padding: 18 }}>
       <View style={{ borderRadius: 15, borderWidth: 1, paddingHorizontal: 18, borderColor: COLORS.blackOpacity }}>
         <View style={{ flexDirection: 'row', gap: 8, paddingVertical: 18 }}>
-          {item.image.map((imageUrl, index) => {
+          {item?.post_id.image.map((imageUrl, index) => {
             if (index === 0) {
               return (
                 <Image
                   key={index}
                   source={{ uri: imageUrl }}
-                  style={{ width: 52, aspectRatio: 1, borderRadius: 52 }}
+                  style={{ width: 52, aspectRatio: 1, borderRadius: 5 }}
                 />
               );
             }
           })}
           <View style={{ flex: 1 }}>
             <Text style={{ fontSize: 18, color: COLORS.black, fontWeight: "600" }} numberOfLines={1}>
-              {item.title}
+              {item.post_id.title}
             </Text>
             <Text style={{ fontSize: 16, color: COLORS.grey, paddingTop: 4 }} numberOfLines={1}>
-              {item.Details}
+              {item.post_id.address}
             </Text>
           </View>
           <TouchableOpacity onPress={() => {
@@ -154,10 +166,10 @@ const fetchData = async () => {
         <View style={{ flexDirection: 'row', gap: 8, paddingVertical: 12 }}>
           <View style={{ paddingStart: 60 }}>
             <Text style={{ fontSize: 18, color: COLORS.grey, fontWeight: "600" }} numberOfLines={1}>
-              {item.Address}
+              {item.post_id.businessName}
             </Text>
             <Text style={{ fontSize: 16, color: COLORS.primary, paddingVertical: 4 }} numberOfLines={1}>
-              ${item.wagemin} - ${item.wagemax} /month
+              ${item.post_id.wageMin} - ${item.post_id.wageMax} /month
             </Text>
             <View style={{
               width: 60,
@@ -168,7 +180,13 @@ const fetchData = async () => {
               alignItems: 'center',
               justifyContent: 'center',
             }}>
-              <Text style={{ fontSize: 10 }}>{item.worktype}</Text>
+              {
+                item.post_id.workType_id._id == '653e66b38e88b23b41388e3c' ? (
+                  <Text style={{ fontSize: 10 }} >Partime</Text>
+                ) : (
+                  <Text style={{ fontSize: 10 }} >Fulltime</Text>
+                )
+              }
             </View>
           </View>
         </View>
@@ -326,13 +344,23 @@ const fetchData = async () => {
           <View style={{ paddingVertical: 18, width: "100%" }}>
             <View style={{ borderRadius: 15, borderWidth: 1, paddingHorizontal: 18, borderColor: COLORS.blackOpacity }}>
               <View style={{ flexDirection: 'row', gap: 8, paddingVertical: 18 }}>
-                <Image source={{ uri: selectedItem?.uri }} style={{ width: 52, aspectRatio: 1, borderRadius: 52 }} />
+                {selectedItem?.post_id.image.map((imageUrl, index) => {
+                  if (index === 0) {
+                    return (
+                      <Image
+                        key={index}
+                        source={{ uri: imageUrl }}
+                        style={{ width: 52, aspectRatio: 1, borderRadius: 5 }}
+                      />
+                    );
+                  }
+                })}
                 <View style={{ flex: 1 }}>
                   <Text style={{ fontSize: 18, color: COLORS.black, fontWeight: "600" }} numberOfLines={1}>
-                    {selectedItem?.title}
+                    {selectedItem?.post_id.title}
                   </Text>
                   <Text style={{ fontSize: 16, color: COLORS.grey, paddingTop: 4 }} numberOfLines={1}>
-                    {selectedItem?.Details}
+                    {selectedItem?.post_id.address}
                   </Text>
                 </View>
                 <TouchableOpacity>
@@ -343,10 +371,10 @@ const fetchData = async () => {
               <View style={{ flexDirection: 'row', gap: 8, paddingVertical: 12 }}>
                 <View style={{ paddingStart: 60 }}>
                   <Text style={{ fontSize: 18, color: COLORS.black, fontWeight: "600" }} >
-                    {selectedItem?.Address}
+                    {selectedItem?.post_id.businessName}
                   </Text>
                   <Text style={{ fontSize: 16, color: COLORS.primary, paddingVertical: 4 }} >
-                    ${selectedItem?.wagemin} - ${selectedItem?.wagemax} /moth
+                    ${selectedItem?.post_id.wageMin} - ${selectedItem?.post_id.wageMax} /moth
                   </Text>
                   <View style={{
                     width: 70,
@@ -357,7 +385,13 @@ const fetchData = async () => {
                     alignItems: 'center',
                     justifyContent: 'center',
                   }}>
-                    <Text style={{ fontSize: 10 }}>{selectedItem?.worktype}</Text>
+                    {
+                      selectedItem?.post_id.workType_id._id == '653e66b38e88b23b41388e3c' ? (
+                        <Text style={{ fontSize: 10 }} >Partime</Text>
+                      ) : (
+                        <Text style={{ fontSize: 10 }} >Fulltime</Text>
+                      )
+                    }
                   </View>
                 </View>
               </View>
@@ -382,6 +416,7 @@ const fetchData = async () => {
             </TouchableOpacity>
 
             <TouchableOpacity
+            onPress={handlePost}
               style={{
                 backgroundColor: COLORS.primary,
                 alignItems: 'center',

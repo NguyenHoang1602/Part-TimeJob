@@ -23,7 +23,6 @@ const CVScreen = ({ route, navigation }) => {
     getListExperience()
     getListPayForm()
     getListWorkType()
-    getListGender()
   }, []);
   const [loading, setLoading] = React.useState(false);
   const { user } = useContext(UserContext);
@@ -32,16 +31,13 @@ const CVScreen = ({ route, navigation }) => {
   const [listWorkType, setListWorkType] = useState([]);
   const [listPayForm, setListPayForm] = useState([]);
   const [listExperience, setListExperience] = useState([]);
-  const [listGender, setListGender] = useState([]);
   const [isFocus, setIsFocus] = useState(false);
   const [inputs, setInputs] = React.useState({
     user_id: user._id,
-    post_id: route.params.postid,
     title: '',
     name: user.displayName,
     phone: '',
     year: '',
-    gender: '',
     email: user.email,
     address: '',
     experience: '',
@@ -61,17 +57,11 @@ const CVScreen = ({ route, navigation }) => {
     const data = await AsyncStorage.getItem('listPayForms');
     setListPayForm(JSON.parse(data));
   }
-  const getListGender = async () => {
-    const data = await AsyncStorage.getItem('listGender');
-    setListGender(JSON.parse(data));
-  }
-
 
   const getListAcademic = async () => {
     const data = await AsyncStorage.getItem('listAcademics');
     setListAcademic(JSON.parse(data));
   }
-
 
   const getListExperience = async () => {
     const data = await AsyncStorage.getItem('listExperiences');
@@ -140,16 +130,11 @@ const CVScreen = ({ route, navigation }) => {
     const response = await axios.post(`${API}/cvs/new`, inputs);
     if (response.status === 200) {
       setLoading(false);
-      Alert.alert('Thành công','Tạo CV thành công !',[
-        {text: ''},
-        {text: 'ok', onPress : () =>  navigation.navigate('DetailsScreen')},
-      ],
-      { cancelable: false });
+      Alert.alert("Thành công");
     }
   }
-
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
+    <SafeAreaView style={{ flex: 1 }}>
       <Loader visible={loading} />
       <ScrollView>
         <View
@@ -199,25 +184,6 @@ const CVScreen = ({ route, navigation }) => {
               />
             </View>
           </View>
-          <Dropdown
-            style={[styles.dropdown, isFocus && { borderColor: COLORS.darkBlue }]}
-            placeholderStyle={styles.placeholderStyle}
-            selectedTextStyle={styles.selectedTextStyle}
-            inputSearchStyle={styles.inputSearchStyle}
-            iconStyle={styles.iconStyle}
-            data={listGender}
-            labelField="gender"
-            valueField="_id"
-            maxHeight={300}
-            placeholder={!isFocus ? 'Giới tính' : '...'}
-            value={listGender._id}
-            onFocus={() => setIsFocus(true)}
-            onBlur={() => setIsFocus(false)}
-            onChange={item => {
-              setIsFocus(false);
-              handleOnchange(item._id, 'Gender')
-            }}
-          />
           <Input
             onChangeText={text => handleOnchange(text, 'email')}
             onFocus={() => handleError(null, 'email')}
@@ -301,7 +267,7 @@ const CVScreen = ({ route, navigation }) => {
                 fontSize: 18,
                 color: COLORS.white,
               }}>
-              Ứng tuyển
+              Lưu
             </Text>
           </TouchableOpacity>
         </View>

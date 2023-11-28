@@ -178,8 +178,10 @@ const PostScreen = ({ navigation }) => {
       isValid = false;
     }
     if (isValid) {
-      await uploadImages().then(() => {
-        handlePost();
+      uploadImages().then(() => {
+        if (!urlImage) {
+          handlePost();
+        }
       })
     }
   };
@@ -196,7 +198,8 @@ const PostScreen = ({ navigation }) => {
     const result = await axios.post(`${API}/posts/postForApp`, inputs);
     if (result.status === 200) {
       setLoading(false);
-      console.log("Thành công");
+      Alert.alert('thanh cong')
+      navigation.navigate('Quản lí')
     }
   }
   console.log(inputs);
@@ -534,7 +537,7 @@ const PostScreen = ({ navigation }) => {
               inputSearchStyle={styles.inputSearchStyle}
               iconStyle={styles.iconStyle}
               data={listWorkType}
-              
+          
               maxHeight={300}
               labelField="wt_title"
               valueField="_id"
