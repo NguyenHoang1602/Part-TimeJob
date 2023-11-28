@@ -33,7 +33,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Loader from '../components/Loader';
 import axios from 'axios';
 import { API } from '../../Sever/sever';
-import { user } from '../Us'
 
 const DetailsScreen = ({ route, navigation }) => {
     const datalist = {

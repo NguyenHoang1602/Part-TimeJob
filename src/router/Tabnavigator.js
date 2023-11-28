@@ -26,6 +26,7 @@ import SettingScreen from '../screens/SettingScreen';
 import Octicons from 'react-native-vector-icons/Octicons';
 import Feather from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import DetailNotification from '../screens/DetailNotification';
 
 
 
@@ -71,6 +72,13 @@ const HomeStack = (props) => {
             <Stack.Screen
                 name="Notifications"
                 component={Notification}
+                options={({ route }) => ({
+                    headerShown: false,
+                })}
+            />
+            <Stack.Screen
+                name="DetailNotification"
+                component={DetailNotification}
                 options={({ route }) => ({
                     headerShown: false,
                 })}
@@ -350,7 +358,7 @@ const getTabBarVisibility = route => {
     const routeName = getFocusedRouteNameFromRoute(route) ?? 'Feed';
     // console.log(routeName);
 
-    if (routeName == 'DetailsScreen' || routeName == 'Thông tin tuyển dụng' || routeName == 'Notifications' || routeName == 'Chỉnh sửa bài đăng' || routeName == 'Cập nhật thông tin cá nhân' || routeName == 'Cập nhật CV cá nhân' || routeName == 'Cài đặt') {
+    if (routeName == 'DetailsScreen' || routeName == 'Thông tin tuyển dụng' || routeName == 'Notifications' || routeName == 'DetailNotification' || routeName == 'Chỉnh sửa bài đăng' || routeName == 'Cập nhật thông tin cá nhân' || routeName == 'Cập nhật CV cá nhân' || routeName == 'Cài đặt') {
         return 'none';
     }
     return 'flex';

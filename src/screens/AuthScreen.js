@@ -10,6 +10,7 @@ import { COLORS, SIZES } from '../constants/theme';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { API } from '../../Sever/sever';
+import firestore from '@react-native-firebase/firestore';
 
 import UserContext from '../components/UserConText';
 import axios from 'axios';
@@ -38,14 +39,48 @@ const AuthScreen = ({ navigation }) => {
                 idtoken: token,
             });
             setUser(result.data);
+            //
+            loginUser(result.data);
             setLoading(true);
             await new Promise(resolve => setTimeout(resolve, 2000));
-            navigation.navigate('TabNavigator');
+
         } catch (error) {
             console.error(error);
             setLoading(false);
         }
     }
+
+    const loginUser = (item) => {
+        firestore()
+            .collection('users')
+            .where('email', '==', item.email)
+            .get()
+            .then(res => {
+                if (res.docs.length !== 0) {
+                    navigation.navigate('TabNavigator');
+                } else {
+                    firestore()
+                        .collection('users')
+                        .doc(item.googleId)
+                        .set({
+                            displayName: item.displayName,
+                            email: item.email,
+                            phone: item.phone,
+                            userId: item.googleId,
+                            photo: item.photo
+                        })
+                        .then(res => {
+                            navigation.navigate('TabNavigator');
+                        })
+                        .catch(error => {
+                            console.log(error);
+                        });
+                }
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    };
 
     return (
         <SafeAreaView
