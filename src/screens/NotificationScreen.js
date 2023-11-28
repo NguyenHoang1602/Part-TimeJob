@@ -1,4 +1,5 @@
 /* eslint-disable prettier/prettier */
+/* eslint-disable react/no-unstable-nested-components */
 /* eslint-disable eqeqeq */
 /* eslint-disable keyword-spacing */
 /* eslint-disable jsx-quotes */
@@ -8,7 +9,7 @@
 /* eslint-disable eol-last */
 /* eslint-disable semi */
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, ImageBackground, ScrollView, FlatList } from 'react-native';
+import { View, Text, TouchableOpacity, ImageBackground, ScrollView, FlatList, ActivityIndicator } from 'react-native';
 
 
 //
@@ -29,20 +30,33 @@ import IconWithBadge from '../components/IconWithBadge';
 import IconWithBadgeAntDesign from '../components/IconWithBadgeAntDesign';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useFocusEffect } from '@react-navigation/native';
 
 const NotificationScreen = ({ route, navigation }) => {
 
     const [notification, setNotification] = useState([]);
+    const [loading, setLoading] = useState(false);
 
-    useEffect(() => {
-        getListNotification();
-    })
+    useFocusEffect(
+        React.useCallback(() => {
+            getListNotification();
+        }, [])
+      );
 
     const getListNotification = async() => {
-        const data = await AsyncStorage.getItem('listNotifications');
-        setNotification(JSON.parse(data))
+        setLoading(true);
+        try {
+          await new Promise(resolve => setTimeout(resolve, 2000));
+          const data = await AsyncStorage.getItem('listNotifications');
+          setNotification(JSON.parse(data))
+          setLoading(false);
+        } catch (error) {
+          console.log("Err : ", error);
+          setLoading(false);
+        } finally {
+          setLoading(false);
+        }
     }
-
     const renderItem = ({ item }) => (
         <View style={{
             width: "100%",
@@ -78,43 +92,42 @@ const NotificationScreen = ({ route, navigation }) => {
     );
     return (
         <SafeAreaView style={{ flex: 1, paddingVertical: 18, backgroundColor: COLORS.white }}>
-            {/* Headers */}
-            <View
-                style={{
-                    flexDirection: 'row',
-                    paddingHorizontal: 18,
-                    paddingBottom: 15,
-                    alignItems: 'center',
-                }}>
-                <TouchableOpacity onPress={() => navigation.goBack()}>
-                    <Ionicons name="arrow-back" size={30} color={COLORS.black} />
-                </TouchableOpacity>
-                <View style={{ flex: 1, alignItems: 'center' }}>
-                    <Text style={{ fontSize: 22, fontWeight: "600", color: COLORS.black }}>Notification</Text>
+            {loading ? (
+                <View style={{width: '100%', height: '100%', justifyContent:'center'}}>
+                    <ActivityIndicator size="large" color={COLORS.primary} />
                 </View>
-                <Ionicons name="ellipsis-horizontal-circle" size={30} color={COLORS.black} />
-            </View>
-
-            <FlatList
-                data={notification}
-                keyExtractor={(item, index) => index.toString()}
-                renderItem={renderItem}
-                nestedScrollEnabled={true}
-                scrollEnabled={false}
-                ListEmptyComponent={() => {
-                    return (
-                        <View style={{ alignItems: 'center', width: '100%', height: '100%', justifyContent: 'center' }}>
-                            <ImageBackground
-                                source={require('../assets/images/5928293_2953962.jpg')}
-                                style={{ width: "108%", height: 430, marginEnd: '9%', marginBottom: -25 }}
-                            />
-                            <Text style={{ fontSize: 22, color: COLORS.black, fontWeight: '700' }}>Empty</Text>
-                            <Text style={{ fontSize: 16, marginTop: 7, marginBottom: '50%' }}>You don’t have any notifications at this time</Text>
+            ) : (
+            <><View
+                        style={{
+                            flexDirection: 'row',
+                            paddingHorizontal: 18,
+                            paddingBottom: 15,
+                            alignItems: 'center',
+                        }}>
+                        <TouchableOpacity onPress={() => navigation.goBack()}>
+                            <Ionicons name="arrow-back" size={30} color={COLORS.black} />
+                        </TouchableOpacity>
+                        <View style={{ marginLeft: 20, alignItems: 'center' }}>
+                            <Text style={{ fontSize: 22, fontWeight: "600", color: COLORS.black }}>Thông báo</Text>
                         </View>
-
-                    )
-                }}
-            />
+                    </View><FlatList
+                            data={notification}
+                            keyExtractor={(item, index) => index.toString()}
+                            renderItem={renderItem}
+                            nestedScrollEnabled={true}
+                            scrollEnabled={false}
+                            ListEmptyComponent={() => {
+                                return (
+                                    <View style={{ alignItems: 'center', width: '100%', height: '100%', justifyContent: 'center' }}>
+                                        <ImageBackground
+                                            source={require('../assets/images/5928293_2953962.jpg')}
+                                            style={{ width: "108%", height: 430, marginEnd: '9%', marginBottom: -25 }} />
+                                        <Text style={{ fontSize: 22, color: COLORS.black, fontWeight: '700' }}>Empty</Text>
+                                        <Text style={{ fontSize: 16, marginTop: 7, marginBottom: '50%' }}>You don’t have any notifications at this time</Text>
+                                    </View>
+                                );
+                            } } /></>
+            )}
         </SafeAreaView>
     );
 }

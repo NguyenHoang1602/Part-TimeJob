@@ -1,3 +1,7 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable quotes */
+/* eslint-disable react-native/no-inline-styles */
+/* eslint-disable prettier/prettier */
 import { View, Text } from "react-native";
 import React, { useEffect, useMemo, useState } from "react";
 import { useTheme } from "@react-navigation/native";
@@ -84,7 +88,7 @@ const SalaryRangeSelector = ({
     }, [barWidth]);
 
     return (
-        <View style={{ paddingVertical: 18,}}>
+        <View style={{ paddingVertical: 18, }}>
 
             <View
                 style={{

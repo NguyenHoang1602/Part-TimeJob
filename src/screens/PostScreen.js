@@ -108,7 +108,7 @@ const PostScreen = ({ navigation }) => {
   // Validate
   const [errors, setErrors] = React.useState({});
 
-  const validate = () => {
+  const validate = async () => {
 
     Keyboard.dismiss();
     let isValid = true;

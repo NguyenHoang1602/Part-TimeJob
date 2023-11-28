@@ -102,10 +102,27 @@ const CVScreen = ({ route, navigation }) => {
     setTimeout(() => { 3000 });
     const response = await axios.post(`${API}/cvs/new`, inputs);
     if (response.status === 200) {
-      setLoading(false);
-      Alert.alert("Thành công");
+      let apply = {
+        post_id: route?.params.post_id,
+        cv_id: response.data,
+      }
+      const result = await axios.post(`${API}/apply/add`, apply);
+      if (result.status === 200) {
+        setLoading(false);
+        Alert.alert("Ứng tuyển thành công!")
+      }
     }
   }
+  const handleApply = async () => {
+    setLoading(true);
+    setTimeout(() => { 3000 });
+    const result = await axios.post(`${API}/apply/add`, apply);
+    if (result.status === 200) {
+      setLoading(false);
+      Alert.alert("Ứng tuyển thành công!")
+    }
+  }
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <Loader visible={loading} />

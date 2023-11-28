@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable react-native/no-inline-styles */
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import {
     View,
     Text,
@@ -21,24 +21,27 @@ import { Dropdown } from 'react-native-element-dropdown';
 import Loader from '../components/Loader';
 import Button from '../custom/Button';
 import { useFocusEffect } from '@react-navigation/native';
-
+import axios from 'axios';
+import UserContext from '../components/UserConText';
+import { API } from '../../Sever/sever';
 
 const data = [
     { label: 'Nam', value: '1' },
     { label: 'Nữ', value: '2' },
     { label: 'Khác', value: '3' },
 ];
-const RegistrationScreen = ({ route,navigation }) => {
+const RegistrationScreen = ({ route, navigation }) => {
+    const { setUser } = useContext(UserContext);
     const [values, setValues] = useState();
-    const [valuedate, setValuedate] = useState("");
-
+    const [valuedate, setValuedate] = useState(null);
+    const [errgender, setErrGender] = useState(true);
     const [isFocus, setIsFocus] = useState(false);
     const [validateSex, setValidateSex] = useState('');
+    const PhoneNumber = route.params?.phoneNumber;
     const [inputs, setInputs] = React.useState({
         FirtName: '',
         Name: '',
         Birthday: '',
-        PhoneNumber: '',
         Address: '',
     });
     const validateAll = () => {
@@ -46,10 +49,12 @@ const RegistrationScreen = ({ route,navigation }) => {
         VLDSex();
     }
     const VLDSex = (value) => {
+        console.log('value: ', value);
         if (!value) {
-            setValidateSex('Vui lòng chọn giới tính');
+            setValidateSex('Vui long chon gioi tinh');
+            setErrGender(!errgender);
         } else {
-            setValidateSex('');
+            setErrGender(false);
         }
     };
     const [errors, setErrors] = React.useState({});
@@ -81,23 +86,25 @@ const RegistrationScreen = ({ route,navigation }) => {
         }
     };
 
-    const register = () => {
+    const register = async () => {
+
+        const datauser = {
+            displayName: inputs.FirtName + inputs.Name,
+            birthDay: inputs.Birthday,
+            gender: inputs.Gender,
+            phone: PhoneNumber,
+            address: inputs.Address,
+        };
+        console.log(datauser);
         setLoading(true);
-        setTimeout(() => {
-            try {
-                let datatest = {
-                    FirtName: inputs.FirtName,
-                    Name: inputs.Name,
-                    Birthday: inputs.Birthday,
-                    Gender: values,
-                    PhoneNumber: inputs.PhoneNumber,
-                    Address: inputs.Address,
-                };
-                console.log('data: ', datatest);
-            } catch (error) {
-                Alert.alert('Error', 'Something went wrong');
-            }
-        }, 3000);
+        setTimeout(() => {3000});
+        const result = await axios.post(`${API}/users/PhoneNumberSignIn`, { data : datauser});
+        if (result.status === 200) {
+            setLoading(false);
+            setUser(result.data);
+            console.log("Thành công");
+            navigation.navigate('TabNavigator');
+        }
     };
 
     const handleOnchange = (text, input) => {
@@ -128,7 +135,7 @@ const RegistrationScreen = ({ route,navigation }) => {
     });
     return (
         <SafeAreaView style={{ backgroundColor: COLORS.white, flex: 1 }}>
-            <Loader visible={loading} /> 
+            <Loader visible={loading} />
             <ScrollView
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={{ paddingTop: 10, paddingHorizontal: 30 }}>
@@ -146,7 +153,7 @@ const RegistrationScreen = ({ route,navigation }) => {
                         error={errors.Name}
                     />
                     <Dropdown
-                        style={[styles.dropdown, isFocus && { borderColor: COLORS.darkBlue }, validateSex && { borderColor: 'red' }]}
+                        style={[styles.dropdown, isFocus && { borderColor: COLORS.darkBlue }, !errgender && { borderColor: 'red' }]}
                         placeholderStyle={styles.placeholderStyle}
                         selectedTextStyle={styles.selectedTextStyle}
                         iconStyle={styles.iconStyle}
@@ -155,17 +162,17 @@ const RegistrationScreen = ({ route,navigation }) => {
                         labelField="label"
                         valueField="value"
                         placeholder={!isFocus ? 'Giới tính' : '...'}
-                        value={inputs.sex}
+                        value={inputs.Gender}
                         onFocus={() => setIsFocus(true)}
                         onBlur={() => setIsFocus(false)}
                         onChange={item => {
                             setIsFocus(false);
-                            VLDSex(item.value)
-                            handleOnchange(item.label, 'sex')
+                            VLDSex(item.value);
+                            handleOnchange(item.value, 'Gender');
                         }}
 
                     />
-                    {validateSex ? <Text style={{marginTop: 7,color: COLORS.red, fontSize: 12 }}>{validateSex}</Text> : null}
+                    {!errgender ? <Text style={{ marginTop: 7, color: COLORS.red, fontSize: 12 }}>{validateSex}</Text> : null}
                     <Input
                         value={valuedate}
                         onFocus={() => handleError(null, 'Birthday')}
@@ -186,9 +193,9 @@ const RegistrationScreen = ({ route,navigation }) => {
                     )}
                     <Input
                         keyboardType="numeric"
-                        placeholder={route.params?.number}
+                        placeholder={route.params?.phoneNumber}
                         error={errors.PhoneNumber}
-                        value ={route.params?.PhoneNumber}
+                        value={route.params?.PhoneNumber}
                     />
                     <Input
                         onChangeText={text => handleOnchange(text, 'Address')}
@@ -196,7 +203,7 @@ const RegistrationScreen = ({ route,navigation }) => {
                         placeholder="Địa chỉ"
                         error={errors.Address}
                     />
-                    <View style={{ width: '100%', alignItems: 'center', marginVertical: 45}}>
+                    <View style={{ width: '100%', alignItems: 'center', marginVertical: 45 }}>
                         <TouchableOpacity
                             style={{
                                 width: '100%',

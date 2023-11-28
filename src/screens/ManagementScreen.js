@@ -1,9 +1,10 @@
+/* eslint-disable quotes */
 /* eslint-disable semi */
 /* eslint-disable eol-last */
 /* eslint-disable prettier/prettier */
 /* eslint-disable react-native/no-inline-styles */
-import React, { useState, useContext } from 'react';
-import { View, StyleSheet, Text, TouchableOpacity, ImageBackground } from 'react-native';
+import React, { useState, useContext, useEffect } from 'react';
+import { View, StyleSheet, Text, TouchableOpacity, ImageBackground, ActivityIndicator } from 'react-native';
 import { COLORS } from '../constants/theme';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
@@ -25,7 +26,6 @@ const ManagementScreen = ({ route, navigation }) => {
   const [listIsDisplay, setListIsDisplay] = useState([]);
   const [listWaiting, setListWaiting] = useState([]);
   const [listDenied, setListDenied] = useState([]);
-
   useFocusEffect(
     React.useCallback(() => {
       getListIsDisplay();
@@ -33,7 +33,13 @@ const ManagementScreen = ({ route, navigation }) => {
       getListDenied();
     }, [])
   );
-
+  // useEffect(() => {
+  //   // This will select the first tab when the component mounts
+  //   const unsubscribe = navigation.addListener('focus', () => {
+  //     navigation.navigate('Tab1'); // Change 'Tab1' to the name of your first tab
+  //   });
+  //   return unsubscribe;
+  // }, []);
   async function getListIsDisplay() {
     try {
       const data = await AsyncStorage.getItem('listJobsIsDisplay');
@@ -61,9 +67,9 @@ const ManagementScreen = ({ route, navigation }) => {
     }
   }
 
+
   return (
     <SafeAreaView style={{ backgroundColor: 'white', flex: 1 }}>
-      {/* Header */}
       <View style={{
         paddingBottom: 5,
         paddingLeft: 20,
@@ -91,8 +97,7 @@ const ManagementScreen = ({ route, navigation }) => {
             <ImageBackground
               source={{ uri: user.photo }}
               style={{ width: 46, height: 46 }}
-              imageStyle={{ borderRadius: 46 }}
-            />
+              imageStyle={{ borderRadius: 46 }} />
             <View style={{ flexDirection: 'column', height: '100%', justifyContent: 'center', marginStart: 13 }}>
               <Text style={{ color: '#7D7A7A', fontSize: 16 }}>Xin chào 👋</Text>
               <Text numberOfLines={1} style={{ color: COLORS.black, fontSize: 20, fontWeight: '600' }}>{user.displayName}</Text>
@@ -129,9 +134,7 @@ const ManagementScreen = ({ route, navigation }) => {
             <IconWithBadgeAntDesign iconName="message1" badgeText="" />
           </TouchableOpacity>
         </View>
-      </View>
-
-      <TopTab.Navigator
+      </View><TopTab.Navigator
         screenOptions={{
           tabBarLabelStyle: {
             fontSize: 14,
@@ -140,15 +143,15 @@ const ManagementScreen = ({ route, navigation }) => {
           tabBarItemStyle: {
             width: 'auto',
           },
-          lazyPreloadDistance: true,
           tabBarScrollEnabled: true,
           tabBarActiveTintColor: COLORS.primary,
         }}
       >
-        <TopTab.Screen name={"Đang hiện thị (" + listIsDisplay.length + ")"} component={TopTabScreenIsDisplay} />
+        <TopTab.Screen name={"Đang hiện thị  (" + listIsDisplay.length + ")"} component={TopTabScreenIsDisplay} />
         <TopTab.Screen name={"Đang chờ duyệt (" + listWaiting.length + ")"} component={TopTabScreenWaiting} />
         <TopTab.Screen name={"Bị từ chối (" + listDenied.length + ")"} component={TopTabScreenDenied} />
       </TopTab.Navigator>
+      {/* Header */}
     </SafeAreaView>
   );
 };
