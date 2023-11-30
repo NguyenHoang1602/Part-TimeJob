@@ -1,3 +1,10 @@
+/* eslint-disable eqeqeq */
+/* eslint-disable comma-dangle */
+/* eslint-disable quotes */
+/* eslint-disable no-unused-vars */
+/* eslint-disable jsx-quotes */
+/* eslint-disable react/no-unstable-nested-components */
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable semi */
 /* eslint-disable eol-last */
 /* eslint-disable prettier/prettier */
@@ -82,7 +89,7 @@ const MessageScreen = ({ navigation }) => {
                                 aspectRatio: 1,
                                 alignItems: 'center',
                                 justifyContent: 'center',
-                                color: COLORS.white
+                                color: COLORS.white,
                             }}>
                             <Text style={{
                                 color: COLORS.white,

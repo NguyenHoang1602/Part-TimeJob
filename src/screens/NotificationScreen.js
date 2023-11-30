@@ -68,7 +68,9 @@ const NotificationScreen = ({ route, navigation }) => {
         }}>
             <TouchableOpacity
                 onPress={() => {
-                    navigation.navigate('DetailNotification', { item });
+                    navigation.navigate('DetailNotification', {
+                        _id : item._id,
+                    });
                 }}>
                 <View
                     style={{
@@ -123,7 +125,7 @@ const NotificationScreen = ({ route, navigation }) => {
                         keyExtractor={(item, index) => index.toString()}
                         renderItem={renderItem}
                         nestedScrollEnabled={true}
-                        scrollEnabled={false}
+                        showsVerticalScrollIndicator={false}
                         ListEmptyComponent={() => {
                             return (
                                 <View style={{ alignItems: 'center', width: '100%', height: '100%', justifyContent: 'center' }}>

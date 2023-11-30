@@ -185,7 +185,7 @@ const PostScreen = ({ navigation }) => {
       })
     }
   };
-  // 
+  //
   const handleOnchange = (text, input) => {
     setInputs(prevState => ({ ...prevState, [input]: text }));
   };

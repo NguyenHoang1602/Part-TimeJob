@@ -1,13 +1,17 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable react-native/no-inline-styles */
 import { View, Text, TouchableOpacity, ImageBackground } from 'react-native';
-import React from 'react'
+import React, { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import COLORS from '../assets/const/colors';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const DetailNotification = ({ route, navigation }) => {
     console.log(route.params.item.sender_id);
+    const [CV, setCV] = useState([]);
+    const data = {
+        
+    }
     return (
         <SafeAreaView
             style={{
@@ -70,7 +74,7 @@ const DetailNotification = ({ route, navigation }) => {
                 <TouchableOpacity style={{
                     borderWidth: 0.5,
                     borderColor: COLORS.grey,
-                    borderRadius: 20,
+                    borderRadius: 8,
                     marginBottom: 18,
                     padding: 15,
                 }}>
@@ -102,7 +106,7 @@ const DetailNotification = ({ route, navigation }) => {
             }}>
                 <TouchableOpacity
                     onPress={() => {
-                        navigation.navigate('ChatScreen', { item : route.params.item.sender_id })
+                        navigation.navigate('ChatScreen', { item : route.params.item.sender_id });
                      }}
                     style={{
                         backgroundColor: 'rgba(51, 123, 255, 0.20)',
