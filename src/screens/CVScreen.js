@@ -41,7 +41,6 @@ const CVScreen = ({ route, navigation }) => {
     name: user.displayName,
     phone: '',
     year: '',
-    gender: '',
     email: user.email,
     address: '',
     experience: '',
@@ -215,7 +214,7 @@ const CVScreen = ({ route, navigation }) => {
             onBlur={() => setIsFocus(false)}
             onChange={item => {
               setIsFocus(false);
-              handleOnchange(item._id, 'Gender')
+              handleOnchange(item._id, 'gender')
             }}
           />
           <Input

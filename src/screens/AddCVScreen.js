@@ -23,6 +23,7 @@ const CVScreen = ({ route, navigation }) => {
     getListExperience()
     getListPayForm()
     getListWorkType()
+    getListGender()
   }, []);
   const [loading, setLoading] = React.useState(false);
   const { user } = useContext(UserContext);
@@ -31,6 +32,7 @@ const CVScreen = ({ route, navigation }) => {
   const [listWorkType, setListWorkType] = useState([]);
   const [listPayForm, setListPayForm] = useState([]);
   const [listExperience, setListExperience] = useState([]);
+  const [listGender, setListGender] = useState([]);
   const [isFocus, setIsFocus] = useState(false);
   const [inputs, setInputs] = React.useState({
     user_id: user._id,
@@ -67,6 +69,11 @@ const CVScreen = ({ route, navigation }) => {
     const data = await AsyncStorage.getItem('listExperiences');
     setListExperience(JSON.parse(data));
   }
+  const getListGender = async () => {
+    const data = await AsyncStorage.getItem('listGender');
+    setListGender(JSON.parse(data));
+  }
+
   const [errors, setErrors] = React.useState({});
 
 
@@ -131,6 +138,7 @@ const CVScreen = ({ route, navigation }) => {
     if (response.status === 200) {
       setLoading(false);
       Alert.alert("Thành công");
+      navigation.navigate('CVResumeScreen');
     }
   }
   return (
@@ -184,6 +192,25 @@ const CVScreen = ({ route, navigation }) => {
               />
             </View>
           </View>
+          <Dropdown
+            style={[styles.dropdown, isFocus && { borderColor: COLORS.darkBlue }]}
+            placeholderStyle={styles.placeholderStyle}
+            selectedTextStyle={styles.selectedTextStyle}
+            inputSearchStyle={styles.inputSearchStyle}
+            iconStyle={styles.iconStyle}
+            data={listGender}
+            labelField="gender"
+            valueField="_id"
+            maxHeight={300}
+            placeholder={!isFocus ? 'Giới tính' : '...'}
+            value={listGender._id}
+            onFocus={() => setIsFocus(true)}
+            onBlur={() => setIsFocus(false)}
+            onChange={item => {
+              setIsFocus(false);
+              handleOnchange(item._id, 'gender')
+            }}
+          />
           <Input
             onChangeText={text => handleOnchange(text, 'email')}
             onFocus={() => handleError(null, 'email')}

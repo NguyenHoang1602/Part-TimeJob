@@ -68,7 +68,16 @@ const NotificationScreen = ({ route, navigation }) => {
         }}>
             <TouchableOpacity
                 onPress={() => {
-                    navigation.navigate('DetailNotification', { item });
+                    navigation.navigate('DetailNotification', {
+                        _id: item._id,
+                        receiver_id : item.receiver_id,
+                        sender_id : item.sender_id,
+                        post_id : item.post_id,
+                        cv_id : item.cv_id,
+                        typeNotification : item.typeNotification,
+                        date : item.date,
+                        time : item.time,
+                    });
                 }}>
                 <View
                     style={{
@@ -123,7 +132,7 @@ const NotificationScreen = ({ route, navigation }) => {
                         keyExtractor={(item, index) => index.toString()}
                         renderItem={renderItem}
                         nestedScrollEnabled={true}
-                        scrollEnabled={false}
+                        showsVerticalScrollIndicator={false}
                         ListEmptyComponent={() => {
                             return (
                                 <View style={{ alignItems: 'center', width: '100%', height: '100%', justifyContent: 'center' }}>

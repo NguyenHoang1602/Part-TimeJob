@@ -1,18 +1,30 @@
+/* eslint-disable eol-last */
+/* eslint-disable react/self-closing-comp */
 /* eslint-disable prettier/prettier */
 /* eslint-disable react-native/no-inline-styles */
-import { View, Text, TouchableOpacity, ImageBackground } from 'react-native';
-import React from 'react'
+import React, { useState } from 'react';
+import { View, Text, TouchableOpacity, ImageBackground, StyleSheet, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import COLORS from '../assets/const/colors';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const DetailNotification = ({ route, navigation }) => {
-    console.log("sender : ",route.params.item.sender_id);
+    const datalist = {
+        _id: route.params?._id,
+        receiver_id: route.params?.receiver_id,
+        sender_id: route.params?.sender_id,
+        post_id: route.params?.post_id,
+        cv_id: route.params?.cv_id,
+        typeNotification: route.params?.typeNotification,
+        date: route.params?.date,
+        time: route.params?.time,
+    };
+    const [data, setData] = useState(datalist);
     return (
         <SafeAreaView
             style={{
                 flex: 1,
-                backgroundColor: COLORS.white,
+                paddingBottom: 20,
             }}>
             <View
                 style={{
@@ -28,54 +40,59 @@ const DetailNotification = ({ route, navigation }) => {
                     <Text style={{ fontSize: 22, fontWeight: "600", color: COLORS.black }}>Thông tin người ứng tuyển</Text>
                 </View>
             </View>
-
-            <View style={{ marginVertical: 22, marginHorizontal: 24 }}>
-                <Text>
-                    {route.params.item.cv_id.name}
-                </Text>
-
-                <View style={{ width: '100%', flexDirection: 'row' }}>
-                    <View style={{ width: '45%', justifyContent: 'flex-start' }}>
-                        <Text>
-                            {route.params.item.cv_id.year}
-                        </Text>
-                    </View>
-                    <View style={{ width: '45%', marginStart: '9.5%' }}>
-                        <Text>
-                            {route.params.item.cv_id.gender}
-                        </Text>
-                    </View>
+            <ScrollView showsVerticalScrollIndicator={false}>
+            <View style={{margin: 10, paddingVertical: 22, paddingHorizontal: 24, flex: 1, backgroundColor: COLORS.white }}>
+            <View style={{width: '115%', height: 70, backgroundColor: '#FF5D01', opacity: 0.7, position: 'absolute'}}/>
+                <View style={{ width: '100%', alignItems: 'center', marginBottom: 20, flex: 1}}>
+                    <ImageBackground
+                        source={{ uri: data?.cv_id.user_id.photo }}
+                        style={{ width: 90, height: 90, marginBottom: 10 }}
+                        imageStyle={{ borderRadius: 100}} />
+                    <Text style={{ fontSize: 20, fontWeight: '600' }}>{data?.cv_id.title}</Text>
                 </View>
-
-                <View style={{}}>
-                    <Text>
-                        {route.params.item.cv_id.address}
-                    </Text>
-                    <Text>
-                        {route.params.item.cv_id.experience}
-                    </Text>
-                    <Text>
-                        {route.params.item.cv_id.introduce}
-                    </Text>
+                <View style={styles.view1}>
+                    <Text style={styles.text1}>Tên: </Text>
+                    <Text style={{ fontSize: 16 }}>{data?.cv_id.name}</Text>
                 </View>
+                <View style={styles.view1}>
+                    <Text style={styles.text2}>Số ĐT: </Text>
+                    <Text style={{ fontSize: 16, flex: 1 }}>{data?.cv_id.phone}</Text>
+                    <Text style={styles.text2}>Năm sinh: </Text>
+                    <Text style={{ fontSize: 16, marginEnd: 25 }}>{data?.cv_id.year}</Text>
+                </View>
+                <View style={styles.view1}>
+                    <Text style={styles.text2}>Email: </Text>
+                    <Text style={{ fontSize: 16 }}>{data?.cv_id.email}</Text>
+                </View>
+                <View style={styles.view1}>
+                    <Text style={styles.text2}>Địa chỉ: </Text>
+                    <Text style={{ fontSize: 16 }}>{data?.cv_id.address}</Text>
+                </View>
+                <View style={styles.view1}>
+                    <Text style={styles.text2}>Kinh nghiệm: </Text>
+                    <Text style={{ fontSize: 16 }}>{data?.cv_id.experience}</Text>
+                </View>
+                <Text style={styles.text1}>Giới thiệu bản thân: </Text>
+                <Text style={{ fontSize: 16, marginTop: 5, marginBottom: 20 }}>- {data?.cv_id.introduce}</Text>
+                <View style={{width: '100%', height: 1, backgroundColor: '#FF5D01', opacity: 0.7, position: 'relative',}}/>
             </View>
 
             <View style={{
                 paddingHorizontal: 18,
             }}>
-                <Text>
-                    Bài đăng đã được ứng tuyển
+                <Text style={{ fontSize: 16, marginBottom: 15 }}>
+                    Bài đăng đã được ứng tuyển :
                 </Text>
 
                 <TouchableOpacity style={{
                     borderWidth: 0.5,
                     borderColor: COLORS.grey,
-                    borderRadius: 20,
+                    borderRadius: 8,
                     marginBottom: 18,
                     padding: 15,
                 }}>
                     <View style={{ width: '100%', flexDirection: 'row' }}>
-                        {route.params.item.post_id.image.map((imageUrl, index) => {
+                        {data?.post_id.image.map((imageUrl, index) => {
                             if (index === 0) {
                                 return (
                                     <ImageBackground
@@ -88,8 +105,8 @@ const DetailNotification = ({ route, navigation }) => {
                             }
                         })}
                         <View style={{ width: '50%', height: '100%', marginStart: 20, flex: 1 }}>
-                            <Text style={{ fontSize: 18, fontWeight: '400' }}>{route.params.item.post_id.title}</Text>
-                            <Text numberOfLines={1} style={{ fontSize: 15, fontWeight: '400', color: COLORS.grey }}>{route.params.item.post_id.address}</Text>
+                            <Text style={{ fontSize: 18, fontWeight: '400' }}>{data?.post_id.title}</Text>
+                            <Text numberOfLines={1} style={{ fontSize: 15, fontWeight: '400', color: COLORS.grey }}>{data?.post_id.address}</Text>
                         </View>
                     </View>
                 </TouchableOpacity>
@@ -98,12 +115,12 @@ const DetailNotification = ({ route, navigation }) => {
             <View style={{
                 flexDirection: 'row',
                 alignItems: 'center',
-                justifyContent:'center'
+                justifyContent: 'center'
             }}>
                 <TouchableOpacity
                     onPress={() => {
-                        navigation.navigate('ChatScreen', { item : route.params.item.sender_id })
-                     }}
+                        navigation.navigate('ChatScreen', { item: data?.sender_id });
+                    }}
                     style={{
                         backgroundColor: 'rgba(51, 123, 255, 0.20)',
                         alignItems: 'center',
@@ -131,9 +148,26 @@ const DetailNotification = ({ route, navigation }) => {
                     <Text style={{ color: COLORS.white, fontSize: 18, fontWeight: "600" }}>Gọi điện</Text>
                 </TouchableOpacity>
             </View>
-
+            </ScrollView>
         </SafeAreaView>
-    )
-}
+    );
+};
+const styles = StyleSheet.create({
+    view1: {
+        flexDirection: 'row',
+        width: '100%',
+        marginBottom: 15,
+    },
+    text1: {
+        fontSize: 16,
+        fontWeight: '500',
+        marginRight: 20,
+    },
+    text2: {
+        fontSize: 16,
+        fontWeight: '500',
+        marginRight: 5,
+    },
+});
 
-export default DetailNotification
+export default DetailNotification;

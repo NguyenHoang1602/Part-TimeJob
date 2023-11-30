@@ -128,7 +128,10 @@ const HomeScreen = ({ navigation }) => {
       //All my Post allow
       axios({
         url: `${API}/posts/listJobsIsDisplayForApp`,
-        method: "GET"
+        method: "POST",
+        data: {
+          id: user._id,
+        },
       }).then(async (response) => {
         if (response.status === 200) {
           const data = JSON.stringify(response.data)
@@ -138,7 +141,10 @@ const HomeScreen = ({ navigation }) => {
       //All my Post waiting
       axios({
         url: `${API}/posts/listJobsWaitingForApp`,
-        method: "GET"
+        method: "POST",
+        data: {
+          id: user._id,
+        },
       }).then(async (response) => {
         if (response.status === 200) {
           const data = JSON.stringify(response.data)
@@ -148,7 +154,10 @@ const HomeScreen = ({ navigation }) => {
       //All my Post denied
       axios({
         url: `${API}/posts/listJobsDeniedForApp`,
-        method: "GET"
+        method: "POST",
+        data: {
+          id: user._id,
+        },
       }).then(async (response) => {
         if (response.status === 200) {
           const data = JSON.stringify(response.data)

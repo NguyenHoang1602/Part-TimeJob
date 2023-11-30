@@ -16,10 +16,16 @@ import Feather from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const ChatScreen = ({ route, navigation }) => {
+    const data = {
+        _id : route.params?.item._id,
+        photo : route.params?.item.photo,
+        displayName : route.params?.item.displayName,
+    };
+    const [items , setItem ] = useState(data)
     useEffect(() => {
         const subscriber = fireStore()
             .collection('chats')
-            .doc(user._id + route.params.item._id)
+            .doc(user._id + items?._id)
             .collection('messages')
             .orderBy('createdAt', 'desc');
         subscriber.onSnapshot(querySnapshot => {
@@ -33,7 +39,6 @@ const ChatScreen = ({ route, navigation }) => {
                 subscriber();
             }
         };
-
     }, []);
 
     const [messageList, setMessageList] = useState([]);
@@ -44,7 +49,7 @@ const ChatScreen = ({ route, navigation }) => {
         const myMsg = {
             ...msg,
             sendBy: user._id,
-            sendTo: route.params.item._id,
+            sendTo: items?._id,
             createdAt: Date.parse(msg.createdAt),
         };
         setMessageList(previousMessages =>
@@ -52,12 +57,12 @@ const ChatScreen = ({ route, navigation }) => {
         );
         fireStore()
             .collection('chats')
-            .doc('' + user._id + route.params.item._id)
+            .doc('' + user._id + items?._id)
             .collection('messages')
             .add(myMsg);
         fireStore()
             .collection('chats')
-            .doc('' + route.params.item._id + user._id)
+            .doc('' + items?._id + user._id)
             .collection('messages')
             .add(myMsg);
     }, []);
@@ -86,13 +91,13 @@ const ChatScreen = ({ route, navigation }) => {
         <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
             {/* Header */}
             <View style={{ paddingHorizontal: 18, paddingVertical: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
-                <TouchableOpacity onPress={() => { navigation.goBack() }}>
+                <TouchableOpacity onPress={() => navigation.navigate('MessageScreen')}>
                     <Ionicons name='arrow-back' size={26} />
                 </TouchableOpacity>
-                <Image source={{ uri: route.params.item.photo }} style={{ width: 32, aspectRatio: 1, borderRadius: 32 }} />
+                <Image source={{ uri:items?.photo }} style={{ width: 32, aspectRatio: 1, borderRadius: 32 }} />
                 <View style={{ flex: 1 }}>
                     <Text style={{ fontSize: 20, color: COLORS.black, fontWeight: "600", width: 180 }} numberOfLines={1}>
-                        {route.params.item.displayName}
+                        {items?.displayName}
                     </Text>
                 </View>
                 <TouchableOpacity>

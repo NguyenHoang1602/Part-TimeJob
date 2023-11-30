@@ -67,6 +67,7 @@ const DetailsScreen = ({ route, navigation }) => {
     const [data, setdataset] = useState(datalist);
     const [loading, setLoading] = React.useState(false);
     const [cv, setCv] = useState([]);
+    //console.log('data : ' + JSON.stringify(data));
 
     const [selectedItem, setSelectedItem] = useState(null);
     const [sender, setSender] = useState(null);
@@ -85,9 +86,9 @@ const DetailsScreen = ({ route, navigation }) => {
 
     const handleApply = async () => {
         const apply = {
-            receiver_id: datalist.users_id._id,
+            receiver_id: data.users_id._id,
             sender_id: sender,
-            post_id: datalist.postid,
+            post_id: data.postid,
             cv_id: selectedItem,
         };
 
@@ -98,7 +99,7 @@ const DetailsScreen = ({ route, navigation }) => {
             const result = await axios.post(`${API}/apply/add`, apply);
             if (result.status === 200) {
                 setLoading(false);
-                Alert.alert("Ứng tuyển thành công!")
+                Alert.alert('Ứng tuyển thành công!')
             }
         }
     };
@@ -108,16 +109,15 @@ const DetailsScreen = ({ route, navigation }) => {
         // setCv(JSON.parse(data));
         axios({
             url: `${API}/cvs/myCVs`,
-            method: "POST",
+            method: 'POST',
             data: {
               id: user._id,
-            }
+            },
           }).then(async (response) => {
             if (response.status === 200) {
             //   const data = JSON.stringify(response.data)
             //   await AsyncStorage.setItem('listCVs', data);
             setCv(response.data);
-            console.log(cv);
             }
           })
     }

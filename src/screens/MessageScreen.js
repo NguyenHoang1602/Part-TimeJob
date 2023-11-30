@@ -1,3 +1,10 @@
+/* eslint-disable eqeqeq */
+/* eslint-disable comma-dangle */
+/* eslint-disable quotes */
+/* eslint-disable no-unused-vars */
+/* eslint-disable jsx-quotes */
+/* eslint-disable react/no-unstable-nested-components */
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable semi */
 /* eslint-disable eol-last */
 /* eslint-disable prettier/prettier */
@@ -82,7 +89,7 @@ const MessageScreen = ({ navigation }) => {
                                 aspectRatio: 1,
                                 alignItems: 'center',
                                 justifyContent: 'center',
-                                color: COLORS.white
+                                color: COLORS.white,
                             }}>
                             <Text style={{
                                 color: COLORS.white,
@@ -105,7 +112,7 @@ const MessageScreen = ({ navigation }) => {
         <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
             {/* Header */}
             <View style={{ paddingHorizontal: 18, paddingVertical: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
-                <TouchableOpacity onPress={() => { navigation.goBack() }}>
+                <TouchableOpacity onPress={() => navigation.navigate('Trang chủ')}>
                     <Ionicons name='arrow-back' size={26} />
                 </TouchableOpacity>
                 <View style={{ flex: 1 }}>
