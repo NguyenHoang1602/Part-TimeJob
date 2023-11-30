@@ -66,7 +66,7 @@ const AuthScreen = ({ navigation }) => {
                             displayName: item.displayName,
                             email: item.email,
                             phone: item.phone,
-                            userId: item.googleId,
+                            _id: item.googleId,
                             photo: item.photo
                         })
                         .then(res => {

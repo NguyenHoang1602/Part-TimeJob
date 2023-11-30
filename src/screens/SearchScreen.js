@@ -33,6 +33,7 @@ import CheckBox from '../components/CheckBox';
 import CheckBoxCircle from '../components/CheckBoxCircle';
 
 import axios from 'axios';
+import { API } from '../../Sever/sever';
 
 const URL_IMG = "https://s3-alpha-sig.figma.com/img/acc1/c7a7/e9c43527e435b8c79bc8126d3d053264?Expires=1700438400&Signature=YkRmo~i-p6AZ1AulSOjpW4wA3UdrSHH2zV8WQihLw5uEordi8QWRvjnTz8mWYDq4ZkRCCVDBz1xuFXGQtgMqAStOpOvBGzkzNvHMeK4xw6AsufXB2uI2IIfmL2LgzBHgwk2l6IM3Rxb-4I9wdC8aSg1r9x9KwN~e31NOH19C3w1~A9jSJHDWJk9ECpnIqIrYRwzIfBR6nDOWxXZqjwn-Y8rg94RJb1UZYGQhSe9~MYAq1LzHKO0imJe1lpNv6dYv~amXSnfuuZW2awviacARGnYIjO~rDGmP339lgP9Df71ZKGUxsgIQpK26gCH0IoaFY1B9riTOaj2ENioGaqJurg__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4";
 
@@ -166,8 +167,7 @@ const SearchScreen = ({ navigation }) => {
   console.log(key);
   async function search(value) {
     try {
-      const API = 'http://192.168.1.10:3000/posts/list'
-      const result = await axios.post('http://192.168.1.10:3000/posts/searchByKeyForApp', { key: value });
+      const result = await axios.post(`${API}/posts/searchByKeyForApp`, { key: value });
       //const result = await axios.get(`${API}?filter=${value}`);
       if (result.status === 200) {
         //

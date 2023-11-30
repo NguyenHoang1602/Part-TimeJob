@@ -7,7 +7,7 @@ import COLORS from '../assets/const/colors';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const DetailNotification = ({ route, navigation }) => {
-    console.log(route.params.item.sender_id);
+    console.log("sender : ",route.params.item.sender_id);
     return (
         <SafeAreaView
             style={{

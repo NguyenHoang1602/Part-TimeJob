@@ -16,11 +16,11 @@ import Feather from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const ChatScreen = ({ route, navigation }) => {
-
+    console.log(route.params.item);
     useEffect(() => {
         const subscriber = fireStore()
             .collection('chats')
-            .doc(user.googleId + route.params.item.userId)
+            .doc(user.googleId + route.params.item._id)
             .collection('messages')
             .orderBy('createdAt', 'desc');
         subscriber.onSnapshot(querySnapshot => {
@@ -40,7 +40,7 @@ const ChatScreen = ({ route, navigation }) => {
         const myMsg = {
             ...msg,
             sendBy: user.googleId,
-            sendTo: route.params.item.userId,
+            sendTo: route.params.item._id,
             createdAt: Date.parse(msg.createdAt),
         };
         setMessageList(previousMessages =>
@@ -48,12 +48,12 @@ const ChatScreen = ({ route, navigation }) => {
         );
         fireStore()
             .collection('chats')
-            .doc('' + user.googleId + route.params.item.userId)
+            .doc('' + user.googleId + route.params.item._id)
             .collection('messages')
             .add(myMsg);
         fireStore()
             .collection('chats')
-            .doc('' + route.params.item.userId + user.googleId)
+            .doc('' + route.params.item._id + user.googleId)
             .collection('messages')
             .add(myMsg);
     }, []);
