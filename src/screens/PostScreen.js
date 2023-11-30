@@ -77,7 +77,7 @@ const PostScreen = ({ navigation }) => {
     ageMax: '',
     academic_id: '',
     experience_id: '',
-    status_id: '65423efa3f8e779b5ec14e51'
+    status_id: '65423efa3f8e779b5ec14e51',
   });
 
   const getListCareers = async () => {
@@ -178,11 +178,7 @@ const PostScreen = ({ navigation }) => {
       isValid = false;
     }
     if (isValid) {
-      uploadImages().then(() => {
-        if (!urlImage) {
-          handlePost();
-        }
-      })
+      uploadImages();
     }
   };
   //
@@ -193,8 +189,8 @@ const PostScreen = ({ navigation }) => {
     setErrors(prevState => ({ ...prevState, [input]: error }));
   };
   const handlePost = async () => {
-    setLoading(true);
-    setTimeout(() => { 3000 });
+    setLoading(true)
+    setTimeout(() => { 3000 })
     const result = await axios.post(`${API}/posts/postForApp`, inputs);
     if (result.status === 200) {
       setLoading(false);
@@ -202,7 +198,6 @@ const PostScreen = ({ navigation }) => {
       navigation.navigate('Quản lí')
     }
   }
-  console.log(inputs);
   useFocusEffect(
     React.useCallback(() => {
       return () => {
@@ -239,9 +234,7 @@ const PostScreen = ({ navigation }) => {
       });
   };
   // Upload image to Cloud
-  const uploadImages = async () => {
-    setLoading(true);
-    setTimeout(() => { 3000 })
+  const uploadImages = async () => {  
     try {
       const CLOUD_NAME = "dxrv1gdit";
       const PRESET_NAME = "ParttimeJobs";
@@ -265,11 +258,10 @@ const PostScreen = ({ navigation }) => {
 
         if (response.status === 200) {
           urlImage.push(response.data.secure_url);
-          setLoading(false)
-          console.log("image url :" + urlImage);
           handleOnchange(urlImage, 'image')
         }
       });
+      handlePost();
       setSelectedImages([]);
     } catch (error) {
       console.log("Upload failed", error);

@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-native/no-inline-styles */
-import { StyleSheet, Text, View, TouchableOpacity, SafeAreaView, FlatList, ActivityIndicator, Pressable } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity, SafeAreaView, FlatList, ActivityIndicator, Pressable, Alert } from 'react-native'
 import React, { useEffect, useState, useContext } from 'react'
 import Feather from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -42,12 +42,11 @@ const CVResume = ({ navigation }) => {
     };
     useFocusEffect(
         React.useCallback(() => {
-            getCV()
+            getCV();
         }, [])
     );
 
     const handleDelete = async () => {
-        toggleModalclose();
         setLoading(true);
         await new Promise(resolve => setTimeout(resolve, 1000));
         axios({
@@ -65,11 +64,13 @@ const CVResume = ({ navigation }) => {
         });
     }
 
-    const toggleModal = () => {
-        setModalVisible(!isModalVisible);
-    };
-    const toggleModalclose = () => {
-        setModalVisible(!isModalVisible);
+    const deleteCv = (item) => {
+        setSender(item._id);
+        Alert.alert('Xóa CV', 'Bạn muốn xóa CV này ?', [
+            { text: 'Không' },
+            { text: 'Có', onPress: () => handleDelete() },
+        ],
+            { cancelable: false });
     };
 
     const renderCV = ({ item }) => (
@@ -79,9 +80,8 @@ const CVResume = ({ navigation }) => {
                 <Text numberOfLines={1} style={{ fontSize: 16, color: COLORS.black }}>{item.title}</Text>
             </View>
             <TouchableOpacity onPress={() => {
-                toggleModal()
-                setSender(item._id);
-                }}>
+                deleteCv(item);
+            }}>
                 <Ionicons name="close-outline" size={26} color={COLORS.red} />
             </TouchableOpacity>
         </Pressable>
@@ -116,92 +116,9 @@ const CVResume = ({ navigation }) => {
                             renderItem={renderCV} />
                     </View></>
             )}
-            {/* <TouchableOpacity>
-                {peoples.map(eachPeople => <CVitem people={eachPeople} />)}
-            </TouchableOpacity> */}
-            {/* <TouchableOpacity
-              onPress={{}}
-              style={{
-                backgroundColor: COLORS.blue,
-                padding: 5,
-                width: '100%',
-                height: 50,
-                borderRadius: 30,
-                flexDirection: 'row',
-                justifyContent: 'center',
-                alignItems: 'center',
-                shadowColor: COLORS.black,
-                shadowOffset: {width: 10, height: 10},
-                shadowOpacity: 1,
-                shadowRadius: 3,
-                marginTop: 500
-              }}>
-              <Text
-                style={{
-                  fontWeight: 'bold',
-                  fontSize: 18,
-                  color: COLORS.white,
-                }}>
-                Lưu
-              </Text>
-        </TouchableOpacity> */}
-            <Modal
-                onBackdropPress={toggleModalclose}
-                isVisible={isModalVisible}
-                style={{
-                    justifyContent: 'flex-end',
-                    margin: 0,
-                }}>
-                <View style={styles.headerModal}>
-                    <View style={{
-                        alignItems: 'center',
-                    }}>
-                        <Text style={{ fontSize: 18, fontWeight: '700', color: COLORS.black }}>Xóa Cv này ?</Text>
-                    </View>
-                </View>
-                <View style={{ backgroundColor: '#FFFFFF' }}>
-                    <View style={{
-                        flexDirection: 'row',
-                        justifyContent: 'center',
-                        marginVertical: 20,
-                    }}>
-                        <TouchableOpacity
-                            onPress={toggleModalclose}
-                            style={{
-                                backgroundColor: 'rgba(51, 123, 255, 0.20)',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                borderRadius: 64,
-                                position: 'relative',
-                                width: 160,
-                                paddingVertical: 15,
-                                marginEnd: 15,
-                            }}>
-                            <Text style={{ color: COLORS.primary, fontSize: 18, fontWeight: '600' }}>Hủy</Text>
-                        </TouchableOpacity>
-
-                        <TouchableOpacity
-                            onPress={() => {
-                                handleDelete()
-                            }}
-                            style={{
-                                backgroundColor: COLORS.primary,
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                borderRadius: 64,
-                                position: 'relative',
-                                width: 160,
-                                paddingVertical: 15,
-                            }}>
-                            <Text style={{ color: COLORS.white, fontSize: 18, fontWeight: '600' }}>Xóa</Text>
-                        </TouchableOpacity>
-                    </View>
-                </View>
-            </Modal>
-
         </SafeAreaView>
-    )
-}
+    );
+};
 
 export default CVResume;
 

@@ -90,7 +90,7 @@ const ProfileScreen = ({ route, navigation }) => {
             <Text style={styles.itemText}>Quản lí CV</Text>
             <Feather name="chevron-right" size={24} color='rgba(125, 122, 122, 1)' />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.item1}>
+          <TouchableOpacity style={styles.item1} onPress={() => navigation.navigate('MessageScreen')}>
             <AntDesign name="message1" size={24} color='rgba(125, 122, 122, 1)' />
             <Text style={styles.itemText}>Tin nhắn</Text>
             <Feather name="chevron-right" size={24} color='rgba(125, 122, 122, 1)' />

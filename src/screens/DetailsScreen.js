@@ -67,6 +67,7 @@ const DetailsScreen = ({ route, navigation }) => {
     const [data, setdataset] = useState(datalist);
     const [loading, setLoading] = React.useState(false);
     const [cv, setCv] = useState([]);
+    //console.log('data : ' + JSON.stringify(data));
 
     const [selectedItem, setSelectedItem] = useState(null);
     const [sender, setSender] = useState(null);
@@ -117,7 +118,6 @@ const DetailsScreen = ({ route, navigation }) => {
             //   const data = JSON.stringify(response.data)
             //   await AsyncStorage.setItem('listCVs', data);
             setCv(response.data);
-            console.log(cv);
             }
           })
     }

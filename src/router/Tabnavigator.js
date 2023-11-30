@@ -111,7 +111,7 @@ const PostStack = (props) => {
     return (
         <Stack.Navigator>
             <Stack.Screen
-                name="Đăng tin"
+                name="Đăng tin tuyển dụng"
                 component={PostScreen}
                 options={({ route }) => ({
                     title: route.params?.title,

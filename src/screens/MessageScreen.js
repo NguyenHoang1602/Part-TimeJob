@@ -112,7 +112,7 @@ const MessageScreen = ({ navigation }) => {
         <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
             {/* Header */}
             <View style={{ paddingHorizontal: 18, paddingVertical: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
-                <TouchableOpacity onPress={() => { navigation.goBack() }}>
+                <TouchableOpacity onPress={() => navigation.navigate('Trang chủ')}>
                     <Ionicons name='arrow-back' size={26} />
                 </TouchableOpacity>
                 <View style={{ flex: 1 }}>

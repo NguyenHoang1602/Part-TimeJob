@@ -1,10 +1,11 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/no-unstable-nested-components */
 /* eslint-disable prettier/prettier */
 /* eslint-disable quotes */
 /* eslint-disable eol-last */
 /* eslint-disable react-native/no-inline-styles */
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Image, ImageBackground, FlatList, ScrollView } from 'react-native';
+import React, { useState, useContext } from 'react';
+import { View, Text, TouchableOpacity, Image, ImageBackground, FlatList, ScrollView, ActivityIndicator } from 'react-native';
 import Modal from 'react-native-modal';
 import COLORS from '../assets/const/colors';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -14,11 +15,15 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useFocusEffect } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { API } from '../../Sever/sever';
+import UserContext from '../components/UserConText';
 
 const TopTabScreenWaiting = ({ navigation }) => {
 
+    const { user } = useContext(UserContext);
     const [list, setList] = useState([]);
     const [isForm, setForm] = useState(false);
+    const [loading, setLoading] = React.useState(false);
 
     const [selectedItem, setSelectedItem] = useState(null);
 
@@ -39,11 +44,26 @@ const TopTabScreenWaiting = ({ navigation }) => {
     );
 
     async function getListJobs() {
+        setLoading(true);
+        await new Promise(resolve => setTimeout(resolve, 2000));
         try {
-            const data = await AsyncStorage.getItem('listJobsWaiting');
-            setList(JSON.parse(data));
+            axios({
+                url: `${API}/posts/listJobsWaitingForApp`,
+                method: "POST",
+                data: {
+                    id: user._id,
+                },
+            }).then(async (response) => {
+                if (response.status === 200) {
+                    const data = JSON.stringify(response.data);
+                    await AsyncStorage.setItem('listJobsWaiting', data);
+                    setList(response.data);
+                    setLoading(false);
+                }
+            })
         } catch (error) {
             console.log("Err : ", error);
+            setLoading(false);
         }
     }
 
@@ -56,13 +76,13 @@ const TopTabScreenWaiting = ({ navigation }) => {
                 showsVerticalScrollIndicator={false}
                 ListEmptyComponent={() => (
                     <View style={{ alignItems: 'center', justifyContent: 'center', paddingHorizontal: 20 }}>
-                    <ImageBackground
-                      source={require('../assets/images/5928293_2953962.jpg')}
-                      style={{ width: "100%", height: 430, }}
-                    />
-                    <Text style={{ fontSize: 22, color: COLORS.black, fontWeight: '700' }}>Empty</Text>
-                    <Text style={{ fontSize: 16, marginTop: 7, textAlign: 'center' }}>Sorry, the keyword you entered cannot be found, please check again or search with another keyword.</Text>
-                  </View>
+                        <ImageBackground
+                            source={require('../assets/images/5928293_2953962.jpg')}
+                            style={{ width: "100%", height: 430, }}
+                        />
+                        <Text style={{ fontSize: 22, color: COLORS.black, fontWeight: '700' }}>Empty</Text>
+                        <Text style={{ fontSize: 16, marginTop: 7, textAlign: 'center' }}>Sorry, the keyword you entered cannot be found, please check again or search with another keyword.</Text>
+                    </View>
                 )}
             />
         );
@@ -133,120 +153,125 @@ const TopTabScreenWaiting = ({ navigation }) => {
                 backgroundColor: COLORS.white,
                 paddingTop: -10,
             }}>
-            <View style={{ width: '100%', alignItems: 'center' }}>
-                <FlatListJobs />
-            </View>
-            <Modal onBackdropPress={toggleModalclose} isVisible={isModalVisible} style={{ justifyContent: 'flex-end', margin: 0 }}>
-                <View style={{
-                    backgroundColor: '#FFFFFF',
-                    shadowColor: '#333333',
-                    shadowOffset: { width: -1, height: -3 },
-                    shadowRadius: 2,
-                    shadowOpacity: 0.4,
-                    // elevation: 5,
-                    paddingTop: 10,
-                    borderTopLeftRadius: 20,
-                    borderTopRightRadius: 20,
-                }}>
-                    <View style={{
-                        alignItems: 'center',
-                    }}>
-                        <View style={{
-                            width: 40,
-                            height: 6,
-                            borderRadius: 4,
-                            backgroundColor: COLORS.grey,
-                            marginBottom: 10,
-                        }} />
-                    </View>
+            {loading ? (
+                <View style={{ width: '100%', height: '100%', justifyContent: 'center', alignItems: 'center' }}>
+                    <ActivityIndicator size="large" color={COLORS.primary} />
                 </View>
-                <View style={{
-                    padding: 20,
-                    backgroundColor: '#FFFFFF',
-                    paddingTop: 20,
-                    alignItems: 'center',
-                }}>
-                    <View style={{ borderColor: COLORS.blackOpacity, marginVertical: 10, width: "100%" }} />
-                    <View style={{ paddingVertical: 10, width: "100%" }}>
-                        <View style={{ borderRadius: 15, borderWidth: 1, paddingHorizontal: 18, borderColor: COLORS.blackOpacity }}>
-                            <View style={{ flexDirection: 'row', gap: 8, paddingVertical: 18 }}>
-                                <Image source={{ uri: selectedItem?.uri }} style={{ width: 52, aspectRatio: 1, borderRadius: 52 }} />
-                                <View style={{ flex: 1 }}>
-                                    <Text style={{ fontSize: 18, color: COLORS.black, fontWeight: "600" }} numberOfLines={1}>
-                                        {selectedItem?.title}
-                                    </Text>
-                                    <Text style={{ fontSize: 16, color: COLORS.grey, paddingTop: 4 }} numberOfLines={1}>
-                                        {selectedItem?.Details}
-                                    </Text>
-                                </View>
+            ) : (
+                <><View style={{ width: '100%', alignItems: 'center' }}>
+                    <FlatListJobs />
+                </View><Modal onBackdropPress={toggleModalclose} isVisible={isModalVisible} style={{ justifyContent: 'flex-end', margin: 0 }}>
+                        <View style={{
+                            backgroundColor: '#FFFFFF',
+                            shadowColor: '#333333',
+                            shadowOffset: { width: -1, height: -3 },
+                            shadowRadius: 2,
+                            shadowOpacity: 0.4,
+                            // elevation: 5,
+                            paddingTop: 10,
+                            borderTopLeftRadius: 20,
+                            borderTopRightRadius: 20,
+                        }}>
+                            <View style={{
+                                alignItems: 'center',
+                            }}>
+                                <View style={{
+                                    width: 40,
+                                    height: 6,
+                                    borderRadius: 4,
+                                    backgroundColor: COLORS.grey,
+                                    marginBottom: 10,
+                                }} />
                             </View>
-                            <View style={{ borderTopWidth: 1, borderColor: COLORS.blackOpacity }} />
-                            <View style={{ flexDirection: 'row', gap: 8, paddingVertical: 12 }}>
-                                <View style={{ paddingStart: 60 }}>
-                                    <Text style={{ fontSize: 18, color: COLORS.black, fontWeight: "600" }} >
-                                        {selectedItem?.Address}
-                                    </Text>
-                                    <Text style={{ fontSize: 16, color: COLORS.primary, paddingVertical: 4 }} >
-                                        ${selectedItem?.wagemin} - ${selectedItem?.wagemax} /moth
-                                    </Text>
-                                    <View style={{
-                                        width: 70,
-                                        borderWidth: 0.5,
-                                        borderColor: COLORS.grey,
-                                        borderRadius: 7,
-                                        padding: 5,
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                    }}>
-                                        <Text style={{ fontSize: 10 }}>{selectedItem?.worktype}</Text>
+                        </View>
+                        <View style={{
+                            padding: 20,
+                            backgroundColor: '#FFFFFF',
+                            paddingTop: 20,
+                            alignItems: 'center',
+                        }}>
+                            <View style={{ borderColor: COLORS.blackOpacity, marginVertical: 10, width: "100%" }} />
+                            <View style={{ paddingVertical: 10, width: "100%" }}>
+                                <View style={{ borderRadius: 15, borderWidth: 1, paddingHorizontal: 18, borderColor: COLORS.blackOpacity }}>
+                                    <View style={{ flexDirection: 'row', gap: 8, paddingVertical: 18 }}>
+                                        <Image source={{ uri: selectedItem?.uri }} style={{ width: 52, aspectRatio: 1, borderRadius: 52 }} />
+                                        <View style={{ flex: 1 }}>
+                                            <Text style={{ fontSize: 18, color: COLORS.black, fontWeight: "600" }} numberOfLines={1}>
+                                                {selectedItem?.title}
+                                            </Text>
+                                            <Text style={{ fontSize: 16, color: COLORS.grey, paddingTop: 4 }} numberOfLines={1}>
+                                                {selectedItem?.Details}
+                                            </Text>
+                                        </View>
+                                    </View>
+                                    <View style={{ borderTopWidth: 1, borderColor: COLORS.blackOpacity }} />
+                                    <View style={{ flexDirection: 'row', gap: 8, paddingVertical: 12 }}>
+                                        <View style={{ paddingStart: 60 }}>
+                                            <Text style={{ fontSize: 18, color: COLORS.black, fontWeight: "600" }}>
+                                                {selectedItem?.Address}
+                                            </Text>
+                                            <Text style={{ fontSize: 16, color: COLORS.primary, paddingVertical: 4 }}>
+                                                ${selectedItem?.wagemin} - ${selectedItem?.wagemax} /moth
+                                            </Text>
+                                            <View style={{
+                                                width: 70,
+                                                borderWidth: 0.5,
+                                                borderColor: COLORS.grey,
+                                                borderRadius: 7,
+                                                padding: 5,
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                            }}>
+                                                <Text style={{ fontSize: 10 }}>{selectedItem?.worktype}</Text>
+                                            </View>
+                                        </View>
                                     </View>
                                 </View>
                             </View>
-                        </View>
-                    </View>
-                    <View style={{
-                        flexDirection: 'row', marginTop: 18,
-                    }}>
-                        <TouchableOpacity
-                            onPress={toggleModalclose}
-                            style={{
-                                backgroundColor: 'rgba(51, 123, 255, 0.20)',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                borderRadius: 64,
-                                position: 'relative',
-                                width: 160,
-                                paddingVertical: 15,
-                                marginEnd: 15,
+                            <View style={{
+                                flexDirection: 'row', marginTop: 18,
                             }}>
-                            <Text style={{ color: COLORS.primary, fontSize: 18, fontWeight: '600' }}>Xóa tin</Text>
-                        </TouchableOpacity>
+                                <TouchableOpacity
+                                    onPress={toggleModalclose}
+                                    style={{
+                                        backgroundColor: 'rgba(51, 123, 255, 0.20)',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        borderRadius: 64,
+                                        position: 'relative',
+                                        width: 160,
+                                        paddingVertical: 15,
+                                        marginEnd: 15,
+                                    }}>
+                                    <Text style={{ color: COLORS.primary, fontSize: 18, fontWeight: '600' }}>Xóa tin</Text>
+                                </TouchableOpacity>
 
-                        <TouchableOpacity
-                            style={{
-                                backgroundColor: COLORS.primary,
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                borderRadius: 64,
-                                position: 'relative',
-                                width: 160,
-                                paddingVertical: 15,
-                            }}
-                            onPress={() => navigation.navigate('Chỉnh sửa bài đăng', {
-                                title: selectedItem?.title,
-                                id: selectedItem?.id,
-                                uri: selectedItem?.uri,
-                                address: selectedItem?.Address,
-                                wagemax: selectedItem?.wagemax,
-                                wagemin: selectedItem?.wagemin,
-                                worktype: selectedItem?.worktype,
-                                Details: selectedItem?.Details,
-                            })}>
-                            <Text style={{ color: COLORS.white, fontSize: 18, fontWeight: '600' }}>Sửa tin</Text>
-                        </TouchableOpacity>
-                    </View>
-                </View>
-            </Modal>
+                                <TouchableOpacity
+                                    style={{
+                                        backgroundColor: COLORS.primary,
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        borderRadius: 64,
+                                        position: 'relative',
+                                        width: 160,
+                                        paddingVertical: 15,
+                                    }}
+                                    onPress={() => navigation.navigate('Chỉnh sửa bài đăng', {
+                                        title: selectedItem?.title,
+                                        id: selectedItem?.id,
+                                        uri: selectedItem?.uri,
+                                        address: selectedItem?.Address,
+                                        wagemax: selectedItem?.wagemax,
+                                        wagemin: selectedItem?.wagemin,
+                                        worktype: selectedItem?.worktype,
+                                        Details: selectedItem?.Details,
+                                    })}>
+                                    <Text style={{ color: COLORS.white, fontSize: 18, fontWeight: '600' }}>Sửa tin</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    </Modal></>
+            )}
         </SafeAreaView>
     );
 };
