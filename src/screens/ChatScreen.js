@@ -16,11 +16,10 @@ import Feather from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const ChatScreen = ({ route, navigation }) => {
-    console.log(route.params.item);
     useEffect(() => {
         const subscriber = fireStore()
             .collection('chats')
-            .doc(user.googleId + route.params.item._id)
+            .doc(user._id + route.params.item._id)
             .collection('messages')
             .orderBy('createdAt', 'desc');
         subscriber.onSnapshot(querySnapshot => {
@@ -29,7 +28,12 @@ const ChatScreen = ({ route, navigation }) => {
             });
             setMessageList(allMessages);
         });
-        return () => subscriber();
+        return () => {
+            if (typeof subscriber === 'function') {
+                subscriber();
+            }
+        };
+
     }, []);
 
     const [messageList, setMessageList] = useState([]);
@@ -39,7 +43,7 @@ const ChatScreen = ({ route, navigation }) => {
         const msg = messages[0];
         const myMsg = {
             ...msg,
-            sendBy: user.googleId,
+            sendBy: user._id,
             sendTo: route.params.item._id,
             createdAt: Date.parse(msg.createdAt),
         };
@@ -48,12 +52,12 @@ const ChatScreen = ({ route, navigation }) => {
         );
         fireStore()
             .collection('chats')
-            .doc('' + user.googleId + route.params.item._id)
+            .doc('' + user._id + route.params.item._id)
             .collection('messages')
             .add(myMsg);
         fireStore()
             .collection('chats')
-            .doc('' + route.params.item._id + user.googleId)
+            .doc('' + route.params.item._id + user._id)
             .collection('messages')
             .add(myMsg);
     }, []);
@@ -68,6 +72,15 @@ const ChatScreen = ({ route, navigation }) => {
         );
     };
 
+    const renderImage = (props) => {
+        const { currentMessage } = props;
+        return (
+            <Image
+                source={{ uri: currentMessage.user.avatar }}
+                style={{ width: 4, height: 40, borderRadius: 20 }}
+            />
+        );
+    };
     return (
 
         <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
@@ -89,14 +102,15 @@ const ChatScreen = ({ route, navigation }) => {
 
             <View style={{ flex: 1, }}>
                 <GiftedChat
-                    imageStyle={{ aspectRatio: 1 }}
                     placeholder='Nhập tin nhắn'
                     renderSend={renderSend}
+                    renderMessageImage={renderImage}
                     isTyping={true}
                     messages={messageList}
                     onSend={messages => onSend(messages)}
                     user={{
-                        _id: user.googleId,
+                        _id: user._id,
+                        avatar: user.photo,  
                     }}
                 />
             </View>

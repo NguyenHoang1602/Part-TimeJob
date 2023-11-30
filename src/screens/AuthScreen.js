@@ -61,12 +61,12 @@ const AuthScreen = ({ navigation }) => {
                 } else {
                     firestore()
                         .collection('users')
-                        .doc(item.googleId)
+                        .doc(item._id)
                         .set({
                             displayName: item.displayName,
                             email: item.email,
                             phone: item.phone,
-                            _id: item.googleId,
+                            _id: item._id,
                             photo: item.photo
                         })
                         .then(res => {

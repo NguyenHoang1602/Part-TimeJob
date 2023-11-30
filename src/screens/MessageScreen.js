@@ -27,7 +27,7 @@ const MessageScreen = ({ navigation }) => {
         let tempData = [];
         firestore()
             .collection('users')
-            .where('_id', '!=', user.googleId)
+            .where('_id', '!=', user._id)
             .get()
             .then(res => {
                 if (res.docs.length != 0) {
