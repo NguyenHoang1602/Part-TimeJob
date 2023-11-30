@@ -69,7 +69,14 @@ const NotificationScreen = ({ route, navigation }) => {
             <TouchableOpacity
                 onPress={() => {
                     navigation.navigate('DetailNotification', {
-                        _id : item._id,
+                        _id: item._id,
+                        receiver_id : item.receiver_id,
+                        sender_id : item.sender_id,
+                        post_id : item.post_id,
+                        cv_id : item.cv_id,
+                        typeNotification : item.typeNotification,
+                        date : item.date,
+                        time : item.time,
                     });
                 }}>
                 <View

@@ -7,11 +7,17 @@ import COLORS from '../assets/const/colors';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const DetailNotification = ({ route, navigation }) => {
-    console.log(route.params.item.sender_id);
-    const [CV, setCV] = useState([]);
-    const data = {
-        
-    }
+    const datalist = {
+        _id: route.params?._id,
+        receiver_id: route.params?.receiver_id,
+        sender_id: route.params?.sender_id,
+        post_id: route.params?.post_id,
+        cv_id: route.params?.cv_id,
+        typeNotification: route.params?.typeNotification,
+        date: route.params?.date,
+        time: route.params?.time,
+    };
+    const [data, setData] = useState(datalist);
     return (
         <SafeAreaView
             style={{
@@ -35,31 +41,31 @@ const DetailNotification = ({ route, navigation }) => {
 
             <View style={{ marginVertical: 22, marginHorizontal: 24 }}>
                 <Text>
-                    {route.params.item.cv_id.name}
+                    {data?.cv_id.name}
                 </Text>
 
                 <View style={{ width: '100%', flexDirection: 'row' }}>
                     <View style={{ width: '45%', justifyContent: 'flex-start' }}>
                         <Text>
-                            {route.params.item.cv_id.year}
+                            {data?.cv_id.year}
                         </Text>
                     </View>
                     <View style={{ width: '45%', marginStart: '9.5%' }}>
                         <Text>
-                            {route.params.item.cv_id.gender}
+                            {data?.cv_id.gender}
                         </Text>
                     </View>
                 </View>
 
                 <View style={{}}>
                     <Text>
-                        {route.params.item.cv_id.address}
+                        {data?.cv_id.address}
                     </Text>
                     <Text>
-                        {route.params.item.cv_id.experience}
+                        {data?.cv_id.experience}
                     </Text>
                     <Text>
-                        {route.params.item.cv_id.introduce}
+                        {data?.cv_id.introduce}
                     </Text>
                 </View>
             </View>
@@ -79,7 +85,7 @@ const DetailNotification = ({ route, navigation }) => {
                     padding: 15,
                 }}>
                     <View style={{ width: '100%', flexDirection: 'row' }}>
-                        {route.params.item.post_id.image.map((imageUrl, index) => {
+                        {data?.post_id.image.map((imageUrl, index) => {
                             if (index === 0) {
                                 return (
                                     <ImageBackground
@@ -92,8 +98,8 @@ const DetailNotification = ({ route, navigation }) => {
                             }
                         })}
                         <View style={{ width: '50%', height: '100%', marginStart: 20, flex: 1 }}>
-                            <Text style={{ fontSize: 18, fontWeight: '400' }}>{route.params.item.post_id.title}</Text>
-                            <Text numberOfLines={1} style={{ fontSize: 15, fontWeight: '400', color: COLORS.grey }}>{route.params.item.post_id.address}</Text>
+                            <Text style={{ fontSize: 18, fontWeight: '400' }}>{data?.post_id.title}</Text>
+                            <Text numberOfLines={1} style={{ fontSize: 15, fontWeight: '400', color: COLORS.grey }}>{data?.post_id.address}</Text>
                         </View>
                     </View>
                 </TouchableOpacity>
@@ -102,12 +108,12 @@ const DetailNotification = ({ route, navigation }) => {
             <View style={{
                 flexDirection: 'row',
                 alignItems: 'center',
-                justifyContent:'center'
+                justifyContent: 'center'
             }}>
                 <TouchableOpacity
                     onPress={() => {
-                        navigation.navigate('ChatScreen', { item : route.params.item.sender_id });
-                     }}
+                        navigation.navigate('ChatScreen', {item : data?.sender_id});
+                    }}
                     style={{
                         backgroundColor: 'rgba(51, 123, 255, 0.20)',
                         alignItems: 'center',

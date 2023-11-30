@@ -16,11 +16,16 @@ import Feather from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const ChatScreen = ({ route, navigation }) => {
-
+    const data = {
+        _id : route.params?._id,
+        photo : route.params?.photo,
+        displayName : route.params?.displayName,
+    };
+    const [items , setItem ] = useState(data)
     useEffect(() => {
         const subscriber = fireStore()
             .collection('chats')
-            .doc(user.googleId + route.params.item.userId)
+            .doc(user.googleId + items?._id)
             .collection('messages')
             .orderBy('createdAt', 'desc');
         subscriber.onSnapshot(querySnapshot => {
@@ -29,7 +34,11 @@ const ChatScreen = ({ route, navigation }) => {
             });
             setMessageList(allMessages);
         });
-        return () => subscriber();
+        return () => {
+            if (typeof subscriber === 'function') {
+                subscriber();
+            }
+        };
     }, []);
 
     const [messageList, setMessageList] = useState([]);
@@ -40,7 +49,7 @@ const ChatScreen = ({ route, navigation }) => {
         const myMsg = {
             ...msg,
             sendBy: user.googleId,
-            sendTo: route.params.item.userId,
+            sendTo: items?._id,
             createdAt: Date.parse(msg.createdAt),
         };
         setMessageList(previousMessages =>
@@ -48,12 +57,12 @@ const ChatScreen = ({ route, navigation }) => {
         );
         fireStore()
             .collection('chats')
-            .doc('' + user.googleId + route.params.item.userId)
+            .doc('' + user.googleId + items?._id)
             .collection('messages')
             .add(myMsg);
         fireStore()
             .collection('chats')
-            .doc('' + route.params.item.userId + user.googleId)
+            .doc('' + items?._id + user.googleId)
             .collection('messages')
             .add(myMsg);
     }, []);
@@ -73,13 +82,13 @@ const ChatScreen = ({ route, navigation }) => {
         <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
             {/* Header */}
             <View style={{ paddingHorizontal: 18, paddingVertical: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
-                <TouchableOpacity onPress={() => { navigation.goBack() }}>
+                <TouchableOpacity onPress={() => navigation.navigate('MessageScreen')}>
                     <Ionicons name='arrow-back' size={26} />
                 </TouchableOpacity>
-                <Image source={{ uri: route.params.item.photo }} style={{ width: 32, aspectRatio: 1, borderRadius: 32 }} />
+                <Image source={{ uri:items?.photo }} style={{ width: 32, aspectRatio: 1, borderRadius: 32 }} />
                 <View style={{ flex: 1 }}>
                     <Text style={{ fontSize: 20, color: COLORS.black, fontWeight: "600", width: 180 }} numberOfLines={1}>
-                        {route.params.item.displayName}
+                        {items?.displayName}
                     </Text>
                 </View>
                 <TouchableOpacity>
@@ -90,7 +99,7 @@ const ChatScreen = ({ route, navigation }) => {
             <View style={{ flex: 1, }}>
                 <GiftedChat
                     imageStyle={{ aspectRatio: 1 }}
-                    placeholder='Nhập tin nhắn'
+                    placeholder="Nhập tin nhắn"
                     renderSend={renderSend}
                     isTyping={true}
                     messages={messageList}

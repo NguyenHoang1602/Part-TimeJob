@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-native/no-inline-styles */
-import { StyleSheet, Text, View, TouchableOpacity, SafeAreaView, FlatList, ActivityIndicator } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity, SafeAreaView, FlatList, ActivityIndicator, Pressable } from 'react-native'
 import React, { useEffect, useState, useContext } from 'react'
 import Feather from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -13,8 +13,7 @@ import axios from 'axios';
 import { API } from '../../Sever/sever';
 import UserContext from '../components/UserConText';
 import { useFocusEffect } from '@react-navigation/native';
-
-
+import Modal from "react-native-modal";
 
 const CVResume = ({ navigation }) => {
     // useEffect(() => {
@@ -23,6 +22,8 @@ const CVResume = ({ navigation }) => {
     const { user } = useContext(UserContext);
     const [cv, setCv] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [isModalVisible, setModalVisible] = useState(false);
+    const [sender, setSender] = useState(null);
     const getCV = async () => {
         setLoading(true);
         await new Promise(resolve => setTimeout(resolve, 2000));
@@ -45,14 +46,45 @@ const CVResume = ({ navigation }) => {
         }, [])
     );
 
+    const handleDelete = async () => {
+        toggleModalclose();
+        setLoading(true);
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        axios({
+            url: `${API}/cvs/delete`,
+            method: "POST",
+            data: {
+                id: sender,
+            }
+        }).then(async (response) => {
+            if (response.status === 200) {
+                setCv(response.data);
+                setLoading(false);
+                getCV();
+            }
+        });
+    }
+
+    const toggleModal = () => {
+        setModalVisible(!isModalVisible);
+    };
+    const toggleModalclose = () => {
+        setModalVisible(!isModalVisible);
+    };
+
     const renderCV = ({ item }) => (
-        <TouchableOpacity style={{ flexDirection: 'row', backgroundColor: '#EEE0E5', height: 80, borderRadius: 10, alignItems: 'center', padding: 15, marginBottom: 10 }}>
+        <Pressable style={{ flexDirection: 'row', backgroundColor: '#EEE0E5', height: 80, borderRadius: 10, alignItems: 'center', padding: 15, marginBottom: 10 }}>
             <AntDesign name="filetext1" size={26} color={COLORS.red} />
             <View style={{ marginLeft: 15, flex: 1 }}>
                 <Text numberOfLines={1} style={{ fontSize: 16, color: COLORS.black }}>{item.title}</Text>
             </View>
-            <Ionicons name="close-outline" size={26} color={COLORS.red} />
-        </TouchableOpacity>
+            <TouchableOpacity onPress={() => {
+                toggleModal()
+                setSender(item._id);
+                }}>
+                <Ionicons name="close-outline" size={26} color={COLORS.red} />
+            </TouchableOpacity>
+        </Pressable>
     );
 
     return (
@@ -113,6 +145,59 @@ const CVResume = ({ navigation }) => {
                 Lưu
               </Text>
         </TouchableOpacity> */}
+            <Modal
+                onBackdropPress={toggleModalclose}
+                isVisible={isModalVisible}
+                style={{
+                    justifyContent: 'flex-end',
+                    margin: 0,
+                }}>
+                <View style={styles.headerModal}>
+                    <View style={{
+                        alignItems: 'center',
+                    }}>
+                        <Text style={{ fontSize: 18, fontWeight: '700', color: COLORS.black }}>Xóa Cv này ?</Text>
+                    </View>
+                </View>
+                <View style={{ backgroundColor: '#FFFFFF' }}>
+                    <View style={{
+                        flexDirection: 'row',
+                        justifyContent: 'center',
+                        marginVertical: 20,
+                    }}>
+                        <TouchableOpacity
+                            onPress={toggleModalclose}
+                            style={{
+                                backgroundColor: 'rgba(51, 123, 255, 0.20)',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                borderRadius: 64,
+                                position: 'relative',
+                                width: 160,
+                                paddingVertical: 15,
+                                marginEnd: 15,
+                            }}>
+                            <Text style={{ color: COLORS.primary, fontSize: 18, fontWeight: '600' }}>Hủy</Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
+                            onPress={() => {
+                                handleDelete()
+                            }}
+                            style={{
+                                backgroundColor: COLORS.primary,
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                borderRadius: 64,
+                                position: 'relative',
+                                width: 160,
+                                paddingVertical: 15,
+                            }}>
+                            <Text style={{ color: COLORS.white, fontSize: 18, fontWeight: '600' }}>Xóa</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </Modal>
 
         </SafeAreaView>
     )
