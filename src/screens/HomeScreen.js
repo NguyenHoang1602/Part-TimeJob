@@ -447,10 +447,10 @@ const HomeScreen = ({ navigation }) => {
           style={{
             flexDirection: 'row',
             borderColor: '#C6C6C6',
-            borderWidth: 1,
             borderRadius: 10,
             paddingHorizontal: 10,
             alignItems: 'center',
+            backgroundColor: '#F5F5F5',
           }}>
           <Feather
             name="search"

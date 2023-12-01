@@ -57,7 +57,7 @@ const AuthScreen = ({ navigation }) => {
             .get()
             .then(res => {
                 if (res.docs.length !== 0) {
-                    navigation.navigate('TabNavigator');
+                    navigation.navigate('TabNavigatorUser');
                 } else {
                     firestore()
                         .collection('users')

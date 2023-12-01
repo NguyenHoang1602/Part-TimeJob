@@ -261,7 +261,6 @@ const PostScreen = ({ navigation }) => {
           handleOnchange(urlImage, 'image')
         }
       });
-      handlePost();
       setSelectedImages([]);
     } catch (error) {
       console.log("Upload failed", error);

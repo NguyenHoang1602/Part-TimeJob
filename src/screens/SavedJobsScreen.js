@@ -95,11 +95,11 @@ const SavedJobsScreen = ({ navigation }) => {
     console.log(selectedItem._id);
     // setLoading(true);
     // setTimeout(() => { 3000 });
-    const result = await axios.post(`${API}/savePost/delete`, {id: selectedItem._id});
+    const result = await axios.post(`${API}/savePost/delete`, { id: selectedItem._id });
     if (result.status === 200) {
       // setLoading(false);
       console.log("Thành công");
-  }
+    }
   }
 
   const FlatListSaveJobs = () => {
@@ -191,108 +191,56 @@ const SavedJobsScreen = ({ navigation }) => {
 
     <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
       {/* Header */}
-      <View style={{
-        paddingBottom: 5,
-        paddingLeft: 20,
-        paddingRight: 20,
-        paddingTop: 20,
-      }}>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'center',
-            alignItems: 'center',
-            marginBottom: 18,
-            width: '100%',
-            height: 60,
-          }}>
-          <TouchableOpacity
-            style={{
-              flexDirection: 'row',
-              marginStart: '2%',
-              alignItems: 'center',
-              width: '68%',
-            }} onPress={() => { }}>
+      <View style={styles.header}>
+        <View style={styles.headera}>
+          <View style={styles.headeraLeft}>
             <ImageBackground
-              source={{ uri: user.photo }}
-              style={{ width: 46, height: 46 }}
-              imageStyle={{ borderRadius: 46 }}
-            />
-            <View style={{ flexDirection: 'column', height: '100%', justifyContent: 'center', marginStart: 13 }}>
-              <Text style={{ color: '#7D7A7A', fontSize: 16 }}>Xin chào 👋</Text>
-              <Text numberOfLines={1} style={{ color: COLORS.black, fontSize: 20, fontWeight: "600" }}>{user.displayName}</Text>
+              source={require('../assets/images/SignIn/LogoSignInUp.png')}
+              style={{ width: 26, height: 26 }}
+              imageStyle={{ borderRadius: 46 }} />
+            <View style={{ flexDirection: 'column', height: '100%', marginStart: 15 }}>
+              <Text style={{ color: COLORS.black, fontSize: 24, fontWeight: '600' }} numberOfLines={1}>Save Jobs</Text>
             </View>
-          </TouchableOpacity>
+          </View>
           <TouchableOpacity
-            style={{
-              width: 46,
-              height: 46,
-              borderWidth: 0.4,
-              borderColor: COLORS.grey,
-              borderRadius: 46,
-              alignItems: 'center',
-              marginRight: '5%',
-              justifyContent: 'center',
-            }}
+            style={styles.headerRight}
             onPress={() => navigation.navigate('Notifications')}>
-            {/* <Feather name='bell' size={24} color={COLORS.black}/> */}
             <IconWithBadge iconName="bell" badgeText="2" />
           </TouchableOpacity>
-          <TouchableOpacity
-            style={{
-              width: 46,
-              height: 46,
-              borderWidth: 0.4,
-              borderColor: COLORS.grey,
-              borderRadius: 46,
-              marginEnd: '2%',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-            onPress={() => navigation.navigate('MessageScreen')}>
-            {/* <AntDesign name='message1' size={24} color={COLORS.black}/> */}
-            <IconWithBadgeAntDesign iconName="message1" badgeText="" />
-          </TouchableOpacity>
         </View>
-        {/* Search */}
         <View
           style={{
             flexDirection: 'row',
             borderColor: '#C6C6C6',
-            borderWidth: 1,
             borderRadius: 10,
             paddingHorizontal: 10,
             alignItems: 'center',
+            backgroundColor: '#F5F5F5',
           }}>
           <Feather
             name="search"
             size={20}
             color="#C6C6C6"
-            style={{ marginRight: 20 }}
-          />
+            style={{ marginRight: 20 }} />
           <TextInput
             style={{ flex: 1 }}
             placeholder="Tìm kiếm việc làm"
-            onChangeText={value => {
-              setsearch(value);
-            }} />
+          />
           <TouchableOpacity
             style={{
-              marginEnd: '3%',
+              marginEnd: '2%',
             }}
             onPress={() => { }}>
             <FontAwesome6
               name="sliders"
               size={20}
-              color={COLORS.primary}
+              color={COLORS.blue}
               style={{
                 opacity: 0.95,
-              }}
-            />
+              }} />
           </TouchableOpacity>
         </View>
       </View>
-
       <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps={'always'}
         refreshControl={<RefreshControl
           refreshing={refreshing}
@@ -409,7 +357,7 @@ const SavedJobsScreen = ({ navigation }) => {
             </TouchableOpacity>
 
             <TouchableOpacity
-            onPress={handlePost}
+              onPress={handlePost}
               style={{
                 backgroundColor: COLORS.primary,
                 alignItems: 'center',
@@ -429,5 +377,52 @@ const SavedJobsScreen = ({ navigation }) => {
 
   )
 }
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    color: COLORS.blue,
+    backgroundColor: COLORS.white,
+  },
+  header: {
+    paddingBottom: 5,
+    paddingLeft: 20,
+    paddingRight: 20,
+    paddingTop: 5,
+
+  },
+  headera: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 18,
+    width: '100%',
+    height: 60,
+  },
+  headeraLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginStart: '1%',
+    width: '68%',
+  },
+  headerRight: {
+    width: 40,
+    height: 40,
+    borderWidth: 0.4,
+    borderColor: COLORS.grey,
+    borderRadius: 40,
+    alignItems: 'center',
+    marginRight: '1%',
+    justifyContent: 'center',
+    marginStart: '18%',
+  },
+  body: {
+    paddingTop: 15,
+    paddingLeft: 20,
+    paddingRight: 20,
+    width: '100%',
+  },
+  items: {
+    marginTop: '3%',
+  },
+});
 
 export default SavedJobsScreen;

@@ -18,6 +18,7 @@ import RegistrationScreen from "../screens/RegistrationScreens";
 import RegisterPhoneScreen from "../screens/RegistrationPhoneScrees";
 import VerificationScreen from "../screens/VerificationScreen";
 import EditAccount from "../screens/EditAccount";
+import TabNavigatorUser from './TabnavigatorUser';
 
 import { TouchableOpacity } from "react-native";
 import Octicons from 'react-native-vector-icons/Octicons';
@@ -80,6 +81,7 @@ const Router = () => {
         <Stack.Screen name="Onboarding" component={OnboardingScreen} />
         <Stack.Screen name="AuthStack" component={AuthStack} />
         <Stack.Screen name="TabNavigator" component={TabNavigator} />
+        <Stack.Screen name="TabNavigatorUser" component={TabNavigatorUser}/>
         <Stack.Screen name="SavedJobsScreen" component={SavedJobsScreen} />
         <Stack.Screen name="MessageScreen" component={MessageScreen} />
         <Stack.Screen name="CVScreen" component={CVScreen}/>
