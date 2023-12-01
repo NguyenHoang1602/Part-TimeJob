@@ -52,7 +52,7 @@ const SavedJobsScreen = ({ navigation }) => {
 
   useFocusEffect(
     React.useCallback(() => {
-      getListSaveJobs()
+      getListSave()
     }, [])
   );
   const fetchData = async () => {
@@ -69,6 +69,7 @@ const SavedJobsScreen = ({ navigation }) => {
           if (response.status === 200) {
             const data = JSON.stringify(response.data)
             await AsyncStorage.setItem('listMySavePost', data);
+            setListSaveJobs(response.data);
           }
         })
         setRefreshing(false);
@@ -79,16 +80,25 @@ const SavedJobsScreen = ({ navigation }) => {
         setRefreshing(false);
       }
       setRefreshing(false);
-    }, 1000);
+    }, 2000);
   };
 
   //List
-  async function getListSaveJobs() {
+  const getListSave = async () => {
     try {
-      const data = await AsyncStorage.getItem('listMySavePost');
-      setListSaveJobs(JSON.parse(data));
+      axios({
+        url: `${API}/savePost/list`,
+        method: "POST",
+        data: {
+          id: user._id,
+        }
+      }).then(async (response) => {
+        if (response.status === 200) {
+          setListSaveJobs(response.data);
+        }
+      })
     } catch (error) {
-      console.log("Err : ", error);
+      console.log("err", error);
     }
   }
   const handlePost = async () => {
@@ -98,10 +108,11 @@ const SavedJobsScreen = ({ navigation }) => {
     const result = await axios.post(`${API}/savePost/delete`, { id: selectedItem._id });
     if (result.status === 200) {
       // setLoading(false);
+      toggleModalclose();
+      fetchData();
       console.log("Thành công");
     }
   }
-
   const FlatListSaveJobs = () => {
     return (
       <FlatList

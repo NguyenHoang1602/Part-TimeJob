@@ -19,6 +19,8 @@ import RegisterPhoneScreen from "../screens/RegistrationPhoneScrees";
 import VerificationScreen from "../screens/VerificationScreen";
 import EditAccount from "../screens/EditAccount";
 import TabNavigatorUser from './TabnavigatorUser';
+import SelectRoleScreen from "../screens/SelectRoleScreen";
+import FillProfileScreen from "../screens/FillProfileScreen";
 
 import { TouchableOpacity } from "react-native";
 import Octicons from 'react-native-vector-icons/Octicons';
@@ -34,6 +36,20 @@ const AuthStack = (props) =>{
             name="Auth"
             component={Auth}
             options={({ }) => ({
+                headerShown: false,
+            })}
+        />
+        <Stack.Screen
+            name="SelectRole"
+            component={SelectRoleScreen}
+            options={({}) => ({
+                headerShown: false,
+            })}
+        />
+        <Stack.Screen
+            name="FillProfile"
+            component={FillProfileScreen}
+            options={({}) => ({
                 headerShown: false,
             })}
         />
@@ -73,7 +89,7 @@ const AuthStack = (props) =>{
         />
     </Stack.Navigator>
 );
-}
+};
 
 const Router = () => {
     return (
