@@ -181,7 +181,7 @@ const PostScreen = ({ navigation }) => {
       uploadImages();
     }
   };
-  //
+  console.log(inputs);
   const handleOnchange = (text, input) => {
     setInputs(prevState => ({ ...prevState, [input]: text }));
   };

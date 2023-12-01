@@ -16,12 +16,14 @@ import Feather from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const ChatScreen = ({ route, navigation }) => {
+    
     const data = {
         _id : route.params?.item._id,
         photo : route.params?.item.photo,
         displayName : route.params?.item.displayName,
     };
     const [items , setItem ] = useState(data)
+
     useEffect(() => {
         const subscriber = fireStore()
             .collection('chats')

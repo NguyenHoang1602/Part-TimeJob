@@ -119,9 +119,6 @@ const TopTabScreenDenied = ({ navigation }) => {
                     <Text style={{ fontSize: 18, fontWeight: '400' }}>{item.title}</Text>
                     <Text numberOfLines={1} style={{ fontSize: 15, fontWeight: '400', color: COLORS.grey }}>{item.address}</Text>
                 </View>
-                <TouchableOpacity onPress={() => { }}>
-                    <Icon name="bookmark-plus-outline" size={30} color={COLORS.blue} />
-                </TouchableOpacity>
             </View>
             <View style={{ height: 1, width: '99%', backgroundColor: COLORS.grey, opacity: 0.4, marginTop: 15, marginBottom: 8 }} />
             <View style={{ width: '100%', paddingStart: '22%' }}>
@@ -139,9 +136,9 @@ const TopTabScreenDenied = ({ navigation }) => {
                 }}>
                     {
                         item.workType_id._id == '653e66b38e88b23b41388e3c' ? (
-                            <Text style={{ fontSize: 10 }} >Parttime</Text>
-                        ) : (
                             <Text style={{ fontSize: 10 }} >Fulltime</Text>
+                        ) : (
+                            <Text style={{ fontSize: 10 }} >Parttime</Text>
                         )
                     }
                 </View>
