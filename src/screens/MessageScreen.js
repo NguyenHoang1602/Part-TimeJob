@@ -10,7 +10,7 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable react-native/no-inline-styles */
 import React, { useState, useEffect, useContext } from 'react';
-import { FlatList, Image, Text, ImageBackground, TouchableOpacity, View, } from 'react-native';
+import { FlatList, Image, Text, ImageBackground, TouchableOpacity, View, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS } from '../constants/theme';
 import firestore from '@react-native-firebase/firestore';
@@ -121,21 +121,24 @@ const MessageScreen = ({ navigation }) => {
 
         <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
             {/* Header */}
-            <View style={{ paddingHorizontal: 18, paddingVertical: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
-                <TouchableOpacity onPress={() => navigation.navigate('Trang chủ')}>
-                    <Ionicons name='arrow-back' size={26} />
-                </TouchableOpacity>
-                <View style={{ flex: 1 }}>
-                    <Text style={{ fontSize: 20, color: COLORS.black, fontWeight: "600", }} numberOfLines={1}>
-                        Message
-                    </Text>
+            <View style={styles.header}>
+                <View style={styles.headera}>
+                    <View style={styles.headeraLeft}>
+                        <ImageBackground
+                            source={require('../assets/images/SignIn/LogoSignInUp.png')}
+                            style={{ width: 26, height: 26 }}
+                            imageStyle={{ borderRadius: 46 }} />
+                        <View style={{ flexDirection: 'column', height: '100%', marginStart: 15 }}>
+                            <Text style={{ color: COLORS.black, fontSize: 26, fontWeight: '600' }} numberOfLines={1}>Message</Text>
+                        </View>
+                    </View>
+                    <TouchableOpacity>
+                        <Feather name="search" size={26} color="#212121" style={{ marginRight: 15 }} />
+                    </TouchableOpacity>
+                    <TouchableOpacity>
+                    <MaterialCommunityIcons name='dots-horizontal-circle-outline' size={26} color= "#212121"/>
+                    </TouchableOpacity>
                 </View>
-                <TouchableOpacity>
-                    <Feather name='search' size={26} color={COLORS.black} />
-                </TouchableOpacity>
-                <TouchableOpacity>
-                    <MaterialCommunityIcons name='dots-horizontal-circle-outline' size={26} color={COLORS.black} />
-                </TouchableOpacity>
             </View>
 
             <FlatListb />
@@ -146,5 +149,53 @@ const MessageScreen = ({ navigation }) => {
 
     )
 }
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        color: COLORS.blue,
+        backgroundColor: COLORS.white,
+    },
+    header: {
+        paddingBottom: 5,
+        paddingLeft: 20,
+        paddingRight: 20,
+        paddingTop: 5,
+
+    },
+    headera: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: 18,
+        width: '100%',
+        height: 60,
+    },
+    headeraLeft: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginStart: '1%',
+        width: '68%',
+        flex: 1,
+    },
+    headerRight: {
+        width: 40,
+        height: 40,
+        borderWidth: 0.4,
+        borderColor: COLORS.grey,
+        borderRadius: 40,
+        alignItems: 'center',
+        marginRight: '1%',
+        justifyContent: 'center',
+        marginStart: '18%',
+    },
+    body: {
+        paddingTop: 15,
+        paddingLeft: 20,
+        paddingRight: 20,
+        width: '100%',
+    },
+    items: {
+        marginTop: '3%',
+    },
+});
 
 export default MessageScreen;

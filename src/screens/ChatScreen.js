@@ -93,7 +93,7 @@ const ChatScreen = ({ route, navigation }) => {
         <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
             {/* Header */}
             <View style={{ paddingHorizontal: 18, paddingVertical: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
-                <TouchableOpacity onPress={() => navigation.navigate('MessageScreen')}>
+                <TouchableOpacity onPress={() => navigation.goBack()}>
                     <Ionicons name='arrow-back' size={26} />
                 </TouchableOpacity>
                 <Image source={{ uri:items?.photo }} style={{ width: 32, aspectRatio: 1, borderRadius: 32 }} />

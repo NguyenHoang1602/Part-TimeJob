@@ -54,6 +54,7 @@ const PostScreen = ({ navigation }) => {
   const [isFocus, setIsFocus] = useState(false);
   const [selectedImages, setSelectedImages] = useState([]);
   const urlImage = [];
+  const imageurl = [];
   const [listCareers, setListCareers] = useState([]);
   const [listWorkType, setListWorkType] = useState([]);
   const [listPayForm, setListPayForm] = useState([]);
@@ -179,6 +180,7 @@ const PostScreen = ({ navigation }) => {
     }
     if (isValid) {
       uploadImages();
+      setTimeout(handlePost, 4000);
     }
   };
   console.log(inputs);
@@ -260,8 +262,7 @@ const PostScreen = ({ navigation }) => {
           urlImage.push(response.data.secure_url);
           handleOnchange(urlImage, 'image')
         }
-      });
-      handlePost();
+      })
       setSelectedImages([]);
     } catch (error) {
       console.log("Upload failed", error);

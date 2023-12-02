@@ -50,7 +50,7 @@ const CVResume = ({ navigation }) => {
         await new Promise(resolve => setTimeout(resolve, 2000));
         try {
             console.log("Ra : ", data);
-            const result = await axios.post(`${API}/cvs/myCVs`, { data });
+            const result = await axios.post(`${API}/cvs/myCVsByCareer`, { data });
             if (result.status === 200) {
                 setCv(result.data);
                 setLoading(false);

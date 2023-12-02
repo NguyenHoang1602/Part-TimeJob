@@ -21,63 +21,54 @@ const CVScreen = ({ route, navigation }) => {
     getListAcademic()
     getListCareers()
     getListExperience()
-    getListPayForm()
-    getListWorkType()
     getListGender()
   }, []);
-  const [loading, setLoading] = React.useState(false);
+
   const { user } = useContext(UserContext);
   const [listAcademic, setListAcademic] = useState([]);
   const [listCareers, setListCareers] = useState([]);
-  const [listWorkType, setListWorkType] = useState([]);
-  const [listPayForm, setListPayForm] = useState([]);
   const [listExperience, setListExperience] = useState([]);
   const [listGender, setListGender] = useState([]);
-  const [isFocus, setIsFocus] = useState(false);
   const [inputs, setInputs] = React.useState({
     user_id: user._id,
-    post_id: route.params.postid,
     title: '',
     name: user.displayName,
     phone: '',
     year: '',
+    gender_id: '',
     email: user.email,
+    career_id: '',
     address: '',
-    experience: '',
+    experience_id: '',
+    academic_id: '',
     introduce: '',
   });
+
+  const [errors, setErrors] = React.useState({});
+  const [loading, setLoading] = React.useState(false);
+  const [isFocusGender, setIsFocusGender] = useState(false);
+  const [isFocusCareer, setIsFocusCareer] = useState(false);
+  const [isFocusExp, setIsFocusExp] = useState(false);
+  const [isFocusAcademic, setIsFocusAcademic] = useState(false);
+
   const getListCareers = async () => {
     const data = await AsyncStorage.getItem('listCareers')
     setListCareers(JSON.parse(data));
   }
-
-  const getListWorkType = async () => {
-    const data = await AsyncStorage.getItem('listWorkTypes');
-    setListWorkType(JSON.parse(data));
-  }
-
-  const getListPayForm = async () => {
-    const data = await AsyncStorage.getItem('listPayForms');
-    setListPayForm(JSON.parse(data));
-  }
-  const getListGender = async () => {
-    const data = await AsyncStorage.getItem('listGender');
-    setListGender(JSON.parse(data));
-  }
-
 
   const getListAcademic = async () => {
     const data = await AsyncStorage.getItem('listAcademics');
     setListAcademic(JSON.parse(data));
   }
 
-
   const getListExperience = async () => {
     const data = await AsyncStorage.getItem('listExperiences');
     setListExperience(JSON.parse(data));
   }
-  const [errors, setErrors] = React.useState({});
-
+  const getListGender = async () => {
+    const data = await AsyncStorage.getItem('listGenders');
+    setListGender(JSON.parse(data));
+  }
 
   const validate = () => {
     Keyboard.dismiss();
@@ -102,22 +93,26 @@ const CVScreen = ({ route, navigation }) => {
       handleError('Vui lòng nhập năm sinh', 'year');
       isValid = false;
     }
-
-    if (!inputs.email) {
-      handleError('Vui lòng nhập email', 'email');
+    if (!inputs.gender_id) {
+      handleError('Vui lòng chọn giới tính', 'gender_id');
       isValid = false;
     }
-
+    if (!inputs.career_id) {
+      handleError('Vui lòng chọn ngành nghề', 'career_id');
+      isValid = false;
+    }
     if (!inputs.address) {
       handleError('Vui lòng nhập địa chỉ', 'address');
       isValid = false;
     }
-
-    if (!inputs.experience) {
-      handleError('Vui lòng nhập kinh nghiệm', 'experience');
+    if (!inputs.experience_id) {
+      handleError('Vui lòng nhập kinh nghiệm', 'experience_id');
       isValid = false;
     }
-
+    if (!inputs.academic_id) {
+      handleError('Vui lòng chọn trình độ học vấn', 'academic_id');
+      isValid = false;
+    }
     if (!inputs.introduce) {
       handleError('Vui lòng nhập giới thiệu bản thân', 'introduce');
       isValid = false;
@@ -199,24 +194,26 @@ const CVScreen = ({ route, navigation }) => {
             </View>
           </View>
           <Dropdown
-            style={[styles.dropdown, isFocus && { borderColor: COLORS.darkBlue }]}
+            style={[styles.dropdown, isFocusGender && { borderColor: COLORS.darkBlue }, errors.gender_id && { borderColor: 'red' }]}
             placeholderStyle={styles.placeholderStyle}
             selectedTextStyle={styles.selectedTextStyle}
             inputSearchStyle={styles.inputSearchStyle}
             iconStyle={styles.iconStyle}
             data={listGender}
-            labelField="gender"
+            labelField="title"
             valueField="_id"
             maxHeight={300}
-            placeholder={!isFocus ? 'Giới tính' : '...'}
+            placeholder={!isFocusGender ? 'Giới tính' : '...'}
             value={listGender._id}
-            onFocus={() => setIsFocus(true)}
-            onBlur={() => setIsFocus(false)}
+            onFocus={() => setIsFocusGender(true)}
+            onBlur={() => setIsFocusGender(false)}
             onChange={item => {
-              setIsFocus(false);
-              handleOnchange(item._id, 'gender')
+              setIsFocusGender(false);
+              handleOnchange(item._id, 'gender_id')
+              handleError(null, 'gender_id')
             }}
           />
+          {errors.gender_id ? <Text style={styles.error}>{errors.gender_id}</Text> : null}
           <Input
             onChangeText={text => handleOnchange(text, 'email')}
             onFocus={() => handleError(null, 'email')}
@@ -224,6 +221,28 @@ const CVScreen = ({ route, navigation }) => {
             value={user?.email}
             error={errors.email}
           />
+          <Dropdown
+            style={[styles.dropdown, isFocusCareer && { borderColor: COLORS.darkBlue }, errors.career_id && { borderColor: 'red' }]}
+            placeholderStyle={styles.placeholderStyle}
+            selectedTextStyle={styles.selectedTextStyle}
+            inputSearchStyle={styles.inputSearchStyle}
+            iconStyle={styles.iconStyle}
+            data={listCareers}
+            maxHeight={300}
+            labelField="title"
+            valueField="_id"
+            placeholder={!isFocusCareer ? 'Ngành Nghề' : '...'}
+            searchPlaceholder="Search..."
+            value={listCareers._id}
+            onFocus={() => setIsFocusCareer(true)}
+            onBlur={() => setIsFocusCareer(false)}
+            onChange={item => {
+              setIsFocusCareer(false);
+              handleOnchange(item._id, 'career_id')
+              handleError(null, 'career_id')
+            }}
+          />
+          {errors.career_id ? <Text style={styles.error}>{errors.career_id}</Text> : null}
         </View>
         <View style={{ backgroundColor: '#D9D9D9', height: 60, justifyContent: 'center' }}>
           <Text style={{ fontSize: 16, marginStart: 25 }}>THÔNG TIN THÊM</Text>
@@ -237,31 +256,48 @@ const CVScreen = ({ route, navigation }) => {
             error={errors.address}
           />
           <Dropdown
-            style={[styles.dropdown, isFocus && { borderColor: COLORS.darkBlue }]}
+            style={[styles.dropdown, isFocusExp && { borderColor: COLORS.darkBlue }, errors.experience_id && { borderColor: 'red' }]}
+            placeholderStyle={styles.placeholderStyle}
+            selectedTextStyle={styles.selectedTextStyle}
+            inputSearchStyle={styles.inputSearchStyle}
+            iconStyle={styles.iconStyle}
+            data={listExperience}
+            maxHeight={300}
+            labelField="title"
+            valueField="_id"
+            placeholder={!isFocusExp ? 'Kinh nghiệm' : '...'}
+            searchPlaceholder="Search..."
+            value={listExperience._id}
+            onFocus={() => setIsFocusExp(true)}
+            onBlur={() => setIsFocusExp(false)}
+            onChange={item => {
+              setIsFocusExp(false);
+              handleOnchange(item._id, 'experience_id')
+              handleError(null, 'experience_id')
+            }}
+          />
+          {errors.experience_id ? <Text style={styles.error}>{errors.experience_id}</Text> : null}
+          <Dropdown
+            style={[styles.dropdown, isFocusAcademic && { borderColor: COLORS.darkBlue }, errors.academic_id && { borderColor: 'red' }]}
             placeholderStyle={styles.placeholderStyle}
             selectedTextStyle={styles.selectedTextStyle}
             inputSearchStyle={styles.inputSearchStyle}
             iconStyle={styles.iconStyle}
             data={listAcademic}
-            labelField="a_title"
+            labelField="title"
             valueField="_id"
             maxHeight={300}
-            placeholder={!isFocus ? 'Trình độ học vấn' : '...'}
+            placeholder={!isFocusAcademic ? 'Trình độ học vấn' : '...'}
             value={listAcademic._id}
-            onFocus={() => setIsFocus(true)}
-            onBlur={() => setIsFocus(false)}
+            onFocus={() => setIsFocusAcademic(true)}
+            onBlur={() => setIsFocusAcademic(false)}
             onChange={item => {
-              setIsFocus(false);
-              handleOnchange(item._id, 'academic')
+              setIsFocusAcademic(false);
+              handleOnchange(item._id, 'academic_id')
+              handleError(null, 'academic_id')
             }}
           />
-          <Input
-            onChangeText={text => handleOnchange(text, 'experience')}
-            onFocus={() => handleError(null, 'experience')}
-            placeholder="Kinh nghiệm làm việc"
-            value={inputs.experience}
-            error={errors.experience}
-          />
+          {errors.academic_id ? <Text style={styles.error}>{errors.academic_id}</Text> : null}
           <InputMutiple
             onChangeText={text => handleOnchange(text, 'introduce')}
             onFocus={() => handleError(null, 'introduce')}
@@ -300,7 +336,7 @@ const CVScreen = ({ route, navigation }) => {
                 fontSize: 18,
                 color: COLORS.white,
               }}>
-              Ứng tuyển
+              Lưu
             </Text>
           </TouchableOpacity>
         </View>

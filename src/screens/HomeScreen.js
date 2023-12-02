@@ -11,7 +11,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, { useState, useContext, useEffect } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
-import { View, Text, SafeAreaView, TouchableOpacity, ImageBackground, ScrollView, ActivityIndicator, TextInput, FlatList, Pressable, RefreshControl } from 'react-native';
+import { View, Text, SafeAreaView, TouchableOpacity, ImageBackground, ScrollView, Alert,ActivityIndicator, TextInput, FlatList, Pressable, RefreshControl } from 'react-native';
 
 //
 import Input from '../components/Input';
@@ -37,16 +37,41 @@ const HomeScreen = ({ navigation }) => {
   const [listCareers, setListCareers] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
   const [SaveJobs, setSaveJobs] = useState(false);
+  const [followedProducts, setFollowedProducts] = useState([]);
 
   useFocusEffect(
     React.useCallback(() => {
       getAllData()
     }, [])
   );
-
-
+    
   const getAllData = async () => {
     try {
+      //list save
+      axios({
+        url: `${API}/savePost/list`,
+        method: "POST",
+        data: {
+          id: user._id,
+        }
+      }).then(async (response) => {
+        if (response.status === 200) {
+          const data = JSON.stringify(response.data)
+          await AsyncStorage.setItem('listMySavePost', data);
+        }
+      })
+      //list save id
+      axios({
+        url: `${API}/savePost/list1`,
+        method: "POST",
+        data: {
+          id: user._id,
+        }
+      }).then(async (response) => {
+        if (response.status === 200) {
+          setFollowedProducts(response.data);
+        }
+      })
       //All Post allow
       axios({
         url: `${API}/posts/list`,
@@ -122,6 +147,7 @@ const HomeScreen = ({ navigation }) => {
       if (response.status === 200) {
         const data = JSON.stringify(response.data)
         await AsyncStorage.setItem('listNotifications', data);
+        
       }
       //All my Message
       //All CV
@@ -177,19 +203,6 @@ const HomeScreen = ({ navigation }) => {
           await AsyncStorage.setItem('listCVs', data);
         }
       })
-      //list save
-      axios({
-        url: `${API}/savePost/list`,
-        method: "POST",
-        data: {
-          id: user._id,
-        }
-      }).then(async (response) => {
-        if (response.status === 200) {
-          const data = JSON.stringify(response.data)
-          await AsyncStorage.setItem('listMySavePost', data);
-        }
-      })
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -218,6 +231,19 @@ const HomeScreen = ({ navigation }) => {
             setListCareers(response.data);
           }
         })
+        axios({
+          url: `${API}/savePost/list`,
+          method: "POST",
+          data: {
+            id: user._id,
+          }
+        }).then(async (response) => {
+          if (response.status === 200) {
+            const data = JSON.stringify(response.data)
+            await AsyncStorage.setItem('listMySavePost', data);
+            setFollowedProducts(response.data);
+          }
+        })
         setRefreshing(false);
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -231,10 +257,24 @@ const HomeScreen = ({ navigation }) => {
   const search = () => {
     navigation.navigate('SearchScreen')
   }
-
+  const getListSave = async () => {
+    try {
+      axios({
+        url: `${API}/savePost/list1`,
+        method: "POST",
+        data: {
+          id: user._id,
+        }
+      }).then(async (response) => {
+        if (response.status === 200) {
+          setFollowedProducts(response.data);
+        }
+      })
+    } catch (error) {
+      console.log("err", error);
+    }
+  }
   const handleSaveToggle = async (itemId) => {
-    console.log(itemId);
-    console.log(user._id);
     try {
       const savedata = {
         user_id: user._id,
@@ -242,19 +282,19 @@ const HomeScreen = ({ navigation }) => {
       };
       const result = await axios.post(`${API}/savePost/add`, savedata);
       if (result.status === 200) {
+        getListSave();
+        Alert.alert('Lưu tin thành công !')
         console.log("Thành công");
       }
     } catch (error) {
       console.log('Err: ', error);
     }
   };
-  const save = () => {
-    try {
-      setSaveJobs(true);
-    } catch (err) {
-      console.log('Err : ', err);
-    }
-  }
+
+  const isFollowed = (productId) => {
+    const savePostIDlist = followedProducts.map(item => item.post_id);
+    return savePostIDlist.some(post_id => post_id === productId);
+  };
 
   const FlatLista = () => {
     return (
@@ -288,7 +328,7 @@ const HomeScreen = ({ navigation }) => {
           style={{ width: 46, height: 46, marginBottom: 5 }}
           imageStyle={{ borderRadius: 5 }}
         />
-        <Text style={{ textAlign: 'center' }}>{item.c_title}</Text>
+        <Text style={{ textAlign: 'center' }}>{item.title}</Text>
       </TouchableOpacity>
     </View>
   );
@@ -344,8 +384,10 @@ const HomeScreen = ({ navigation }) => {
           <Text numberOfLines={1} style={{ fontSize: 15, fontWeight: '400', color: COLORS.grey }}>{item.address}</Text>
         </View>
         <TouchableOpacity onPress={() => handleSaveToggle(item._id)}>
-          {/* <Icon name="bookmark-minus" size={30} color={COLORS.blue} /> */}
-          <Icon name="bookmark-plus" size={30} color={COLORS.blue} />
+          {isFollowed(item._id) ? (
+            <Icon name="bookmark-minus" size={30} color={COLORS.blue} />
+          ) : <Icon name="bookmark-plus" size={30} color={COLORS.blue} />
+          }
         </TouchableOpacity>
       </View>
       <View style={{ height: 1, width: '99%', backgroundColor: COLORS.grey, opacity: 0.4, marginTop: 15, marginBottom: 8 }} />
@@ -447,10 +489,10 @@ const HomeScreen = ({ navigation }) => {
           style={{
             flexDirection: 'row',
             borderColor: '#C6C6C6',
-            borderWidth: 1,
             borderRadius: 10,
             paddingHorizontal: 10,
             alignItems: 'center',
+            backgroundColor: '#F5F5F5',
           }}>
           <Feather
             name="search"
