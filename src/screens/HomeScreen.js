@@ -187,30 +187,9 @@ const HomeScreen = ({ navigation }) => {
     navigation.navigate('SearchScreen')
   }
 
-<<<<<<< HEAD
-  const getListJobs = () => {
-    axios({
-      url: "http://192.168.1.46:3000/posts/list",
-      method: "GET",
-    }).then((res) => {
-      var response = res.data
-      setListJobs(response)
-    })
-  }
-
-  const getListCareers = () => {
-    axios({
-      url: "worktype",
-      method: "GET",
-    }).then((res) => {
-      var response = res.data
-      setListCareers(response)
-    })
-=======
   const getListCareers = async () => {
     const data = await AsyncStorage.getItem('listCareers')
     setListCareers(JSON.parse(data));
->>>>>>> origin/nguyenhoang
   }
 
   const FlatLista = () => {

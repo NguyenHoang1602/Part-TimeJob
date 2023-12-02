@@ -1,8 +1,5 @@
 /* eslint-disable prettier/prettier */
-<<<<<<< HEAD
-=======
 /* eslint-disable react-native/no-inline-styles */
->>>>>>> origin/nguyenhoang
 import {
   View,
   Text,
@@ -73,11 +70,7 @@ const SettingScreen = () => {
             <Text style={{fontSize: 16, fontWeight: 500, marginStart: 20, flex: 1, color: COLORS.black}}>Trung tâm trợ giúp</Text>
             <Feather name="chevron-right" size={26} color = {COLORS.black} />
         </TouchableOpacity>
-<<<<<<< HEAD
-        <View style={{borderColor: COLORS.grey, width: '90%', borderRadius: 1, borderWidth: 0.5, marginTop: 20}}></View>
-=======
         <View style={{borderColor: COLORS.grey, width: '90%', borderRadius: 1, borderWidth: 0.5, marginTop: 20}}/>
->>>>>>> origin/nguyenhoang
         <TouchableOpacity style={{width: '100%', flexDirection: 'row', marginTop: 15, alignItems: 'center'}}>
             <Ionicons name="lock-closed-outline" size={26} color = {COLORS.red} />
             <Text style={{fontSize: 16, fontWeight: 500, marginStart: 20, flex: 1, color: COLORS.red}}>Huỷ kích hoạt tài khoản của tôi</Text>
@@ -89,16 +82,8 @@ const SettingScreen = () => {
             <Feather name="chevron-right" size={26} color = {COLORS.black} />
         </TouchableOpacity>
       </View>
-<<<<<<< HEAD
-      
-=======
->>>>>>> origin/nguyenhoang
     </SafeAreaView>
   );
 };
 
-<<<<<<< HEAD
 export default SettingScreen;
-=======
-export default SettingScreen;
->>>>>>> origin/nguyenhoang
