@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable eqeqeq */
 /* eslint-disable quotes */
 /* eslint-disable react/no-unstable-nested-components */
 /* eslint-disable no-unused-vars */
@@ -5,9 +7,9 @@
 /* eslint-disable eol-last */
 /* eslint-disable prettier/prettier */
 /* eslint-disable react-native/no-inline-styles */
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
-import { View, Text, SafeAreaView, TouchableOpacity, ImageBackground, ScrollView, TextInput, FlatList, Pressable } from 'react-native';
+import { View, Text, SafeAreaView, TouchableOpacity, ImageBackground, ScrollView, TextInput, FlatList, Pressable, RefreshControl } from 'react-native';
 
 //
 import Input from '../components/Input';
@@ -20,27 +22,172 @@ import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import IconWithBadge from '../components/IconWithBadge';
 import IconWithBadgeAntDesign from '../components/IconWithBadgeAntDesign';
 import UserContext from '../components/UserConText';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import axios from 'axios';
+import Loader from '../components/Loader';
+import { API } from '../../Sever/sever';
 
 const HomeScreen = ({ navigation }) => {
 
+  const { user } = useContext(UserContext);
+  const [listJobs, setListJobs] = useState([]);
+  const [listCareers, setListCareers] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
+
   useFocusEffect(
     React.useCallback(() => {
-      getListJobs()
+      getAllData()
       getListCareers()
     }, [])
   );
 
-  const { user } = useContext(UserContext);
+  const getAllData = async () => {
+    //All Post allow
+    axios({
+      url: `${API}/posts/list`,
+      method: "GET",
+    }).then((response) => {
+      if (response.status === 200) {
+        setListJobs(response.data)
+      }
+    })
+    //All Career
+    axios({
+      url: `${API}/careers/listCareersForApp`,
+      method: "GET",
+    }).then(async (response) => {
+      if (response.status === 200) {
+        const data = JSON.stringify(response.data)
+        await AsyncStorage.setItem('listCareers', data);
+      }
+    })
+    //All WorkType
+    axios({
+      url: `${API}/workTypes/list`,
+      method: "GET",
+    }).then(async (response) => {
+      if (response.status === 200) {
+        const data = JSON.stringify(response.data)
+        await AsyncStorage.setItem('listWorkTypes', data);
+      }
+    })
+    //All PayForm
+    axios({
+      url: `${API}/payforms/list`,
+      method: "GET",
+    }).then(async (response) => {
+      if (response.status === 200) {
+        const data = JSON.stringify(response.data)
+        await AsyncStorage.setItem('listPayForms', data);
+      }
+    })
+    //All Academic
+    axios({
+      url: `${API}/acedemics/list`,
+      method: "GET"
+    }).then(async (response) => {
+      if (response.status === 200) {
+        const data = JSON.stringify(response.data)
+        await AsyncStorage.setItem('listAcademics', data);
+      }
+    })
+    //All Experience
+    axios({
+      url: `${API}/experiences/list`,
+      method: "GET"
+    }).then(async (response) => {
+      if (response.status === 200) {
+        const data = JSON.stringify(response.data)
+        await AsyncStorage.setItem('listExperiences', data);
+      }
+    })
+    //All my Notification
+    const response = await axios.post(`${API}/notifications/list`, { receiver_id: user._id });
+    if (response.status === 200) {
+      const data = JSON.stringify(response.data)
+      await AsyncStorage.setItem('listNotifications', data);
+    }
+    //All my Message
+    //All CV
+    //All my Post allow
+    axios({
+      url: `${API}/posts/listJobsIsDisplayForApp`,
+      method: "GET"
+    }).then(async (response) => {
+      if (response.status === 200) {
+        const data = JSON.stringify(response.data)
+        await AsyncStorage.setItem('listJobsIsDisplay', data);
+      }
+    })
+    //All my Post waiting
+    axios({
+      url: `${API}/posts/listJobsWaitingForApp`,
+      method: "GET"
+    }).then(async (response) => {
+      if (response.status === 200) {
+        const data = JSON.stringify(response.data)
+        await AsyncStorage.setItem('listJobsWaiting', data);
+      }
+    })
+    //All my Post denied
+    axios({
+      url: `${API}/posts/listJobsDeniedForApp`,
+      method: "GET"
+    }).then(async (response) => {
+      if (response.status === 200) {
+        const data = JSON.stringify(response.data)
+        await AsyncStorage.setItem('listJobsDenied', data);
+      }
+    })
+    //All my CV
+    axios({
+      url: `${API}/cvs/myCVs`,
+      method: "POST",
+      data: {
+        id: user._id,
+      }
+    }).then(async (response) => {
+      if (response.status === 200) {
+        const data = JSON.stringify(response.data)
+        await AsyncStorage.setItem('listCVs', data);
+      }
+    })
+  }
 
-  const [listJobs, setListJobs] = useState([]);
-  const [listCareers, setListCareers] = useState([]);
-
+  const fetchData = async () => {
+    setRefreshing(true);
+    setTimeout(() => { 3000 })
+    try {
+      axios({
+        url: "http://192.168.67.160:3000/posts/list",
+        method: "GET",
+      }).then((response) => {
+        if (response.status === 200) {
+          setListJobs(response.data)
+        }
+      })
+      //All Career
+      axios({
+        url: "http://192.168.67.160:3000/careers/listCareersForApp",
+        method: "GET",
+      }).then(async (response) => {
+        if (response.status === 200) {
+          const data = JSON.stringify(response.data)
+          await AsyncStorage.setItem('listCareers', data);
+        }
+      })
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    } finally {
+      setRefreshing(false);
+    }
+  };
   const search = () => {
     navigation.navigate('SearchScreen')
   }
 
+<<<<<<< HEAD
   const getListJobs = () => {
     axios({
       url: "http://192.168.1.46:3000/posts/list",
@@ -59,6 +206,11 @@ const HomeScreen = ({ navigation }) => {
       var response = res.data
       setListCareers(response)
     })
+=======
+  const getListCareers = async () => {
+    const data = await AsyncStorage.getItem('listCareers')
+    setListCareers(JSON.parse(data));
+>>>>>>> origin/nguyenhoang
   }
 
   const FlatLista = () => {
@@ -76,7 +228,7 @@ const HomeScreen = ({ navigation }) => {
   const FlatListb = () => {
     return (
       <FlatList
-        data={listJobs.reverse()}
+        data={listJobs}
         keyExtractor={(item, index) => index.toString()}
         renderItem={renderItemJob}
         nestedScrollEnabled={true}
@@ -108,22 +260,25 @@ const HomeScreen = ({ navigation }) => {
       padding: 20,
     }}
       onPress={() => navigation.navigate('DetailsScreen', {
+        postid: item._id,
         users_id: item.users_id,
+        avatar: item.users_id.photo,
         address: item.address,
-        business_name: item.business_name,
+        business_name: item.businessName,
+        gender: item.gender,
         image: item.image,
         quantity: item.quantity,
         title: item.title,
         career_id: item.career_id,
-        payform_id: item.payform_id,
+        payform_id: item.payForm_id,
         experience_id: item.experience_id,
-        acedemic_id: item.acedemic_id,
-        worktype_id: item.worktype_id,
+        acedemic_id: item.academic_id,
+        worktype_id: item.workType_id,
         describe: item.describe,
-        age_min: item.age_min,
-        age_max: item.age_max,
-        wage_min: item.wage_min,
-        wage_max: item.wage_max,
+        age_min: item.ageMin,
+        age_max: item.ageMax,
+        wage_min: item.wageMin,
+        wage_max: item.wageMax,
         status_id: item.status_id,
         date: item.date,
         time: item.time,
@@ -151,8 +306,8 @@ const HomeScreen = ({ navigation }) => {
       </View>
       <View style={{ height: 1, width: '99%', backgroundColor: COLORS.grey, opacity: 0.4, marginTop: 15, marginBottom: 8 }} />
       <View style={{ width: '100%', paddingStart: '22%' }}>
-        <Text numberOfLines={1} style={{ fontSize: 16, fontWeight: 'bold', color: COLORS.grey, width: 200, marginBottom: 5 }}>{item.business_name}</Text>
-        <Text style={{ color: COLORS.blue, fontSize: 16, marginVertical: 9 }}>${item.wage_min} - ${item.wage_max} /month</Text>
+        <Text numberOfLines={1} style={{ fontSize: 16, fontWeight: 'bold', color: COLORS.grey, width: 200, marginBottom: 5 }}>{item.businessName}</Text>
+        <Text style={{ color: COLORS.blue, fontSize: 16, marginVertical: 9 }}>${item.wageMin} - ${item.wageMax} /month</Text>
         <View style={{
           width: 60,
           height: 25,
@@ -164,7 +319,7 @@ const HomeScreen = ({ navigation }) => {
           justifyContent: 'center',
         }}>
           {
-            item.worktype_id._id == '653e66b38e88b23b41388e3c' ? (
+            item.workType_id._id == '653e66b38e88b23b41388e3c' ? (
               <Text style={{ fontSize: 10 }} >Parttime</Text>
             ) : (
               <Text style={{ fontSize: 10 }} >Fulltime</Text>
@@ -178,6 +333,7 @@ const HomeScreen = ({ navigation }) => {
 
   return (
     <SafeAreaView style={{ flex: 1, color: COLORS.blue, backgroundColor: COLORS.white }}>
+      <Loader visible={refreshing}/>
       <View style={{
         paddingBottom: 5,
         paddingLeft: 20,
@@ -282,7 +438,14 @@ const HomeScreen = ({ navigation }) => {
         </Pressable>
       </View>
       <View style={{ padding: 20 }}>
-        <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps={'always'}>
+        <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps={'always'}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={fetchData}
+            colors={['#0000ff']} // Adjust the colors of the loading indicator
+          />
+        }>
           <View style={{ width: '100%', alignItems: 'center', marginBottom: 15 }}>
             <View style={{ width: '100%', marginBottom: 10 }}>
               <Text style={{ fontSize: 20, fontStyle: 'normal', color: COLORS.black, fontWeight: 'bold' }}>Danh mục ngành nghề</Text>

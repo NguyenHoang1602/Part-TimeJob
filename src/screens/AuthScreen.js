@@ -7,9 +7,9 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, StatusBar, Image, TouchableOpacity, ScrollView } from 'react-native';
 import { COLORS, SIZES } from '../constants/theme';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { API } from '../../Sever/sever';
 
 import UserContext from '../components/UserConText';
 import axios from 'axios';
@@ -33,7 +33,7 @@ const AuthScreen = ({ navigation }) => {
             await GoogleSignin.signOut();
             const userInfo = await GoogleSignin.signIn();
             const token = userInfo.idToken;
-            const result = await axios.post('http://192.168.1.45:3000/users/GoogleSignIn', {
+            const result = await axios.post(`${API}/users/GoogleSignIn`, {
                 idtoken: token,
             });
             setUser(result.data);
@@ -76,7 +76,7 @@ const AuthScreen = ({ navigation }) => {
                     </Text>
                 </View>
                 <TouchableOpacity
-                    onPress={() =>{}}
+                    onPress={() => { }}
                     style={{
                         backgroundColor: COLORS.white,
                         padding: 10,
@@ -90,7 +90,7 @@ const AuthScreen = ({ navigation }) => {
                         justifyContent: 'center',
                         marginTop: 20
                     }}>
-                   <Ionicons name="logo-facebook" size={30} color={COLORS.primary}/>
+                    <Ionicons name="logo-facebook" size={30} color={COLORS.primary} />
                     <Text
                         style={{
                             fontSize: 18,
@@ -99,7 +99,7 @@ const AuthScreen = ({ navigation }) => {
                             top: 3,
                             fontFamily: 'aoboshione-regular',
                         }}>
-                        Continue with Facebook
+                        Tiếp tục với Facebook
                     </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
@@ -122,7 +122,7 @@ const AuthScreen = ({ navigation }) => {
                             width: 24,
                             height: 24,
                             justifyContent: 'flex-start',
-                            right:11,
+                            right: 11,
                         }}
                     />
                     <Text
@@ -133,7 +133,7 @@ const AuthScreen = ({ navigation }) => {
                             right: 9,
                             fontFamily: 'aoboshione-regular',
                         }}>
-                        Continue with Google
+                        Tiếp tục với Google
                     </Text>
                 </TouchableOpacity>
                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', top: '6%' }}>
@@ -142,7 +142,7 @@ const AuthScreen = ({ navigation }) => {
                     <View style={{ height: 1, width: '33%', backgroundColor: COLORS.grey }} />
                 </View>
                 <TouchableOpacity
-                    onPress={() =>  navigation.navigate('SignInWithPhoneNumber')}
+                    onPress={() => navigation.navigate('SignInWithPhoneNumber')}
                     style={{
                         backgroundColor: COLORS.primary,
                         padding: 5,
@@ -165,7 +165,7 @@ const AuthScreen = ({ navigation }) => {
                             color: COLORS.white,
                             fontFamily: 'aoboshione-regular',
                         }}>
-                        Sign up with Phone Number
+                        Đăng nhập bằng SĐT
                     </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
@@ -185,14 +185,14 @@ const AuthScreen = ({ navigation }) => {
                             color: COLORS.black,
                             opacity: 0.4
                         }}>
-                        Wellcome to
+                        Wellcom to
                     </Text>
                     <Text
                         style={{
                             fontWeight: 'bold',
                             fontSize: 16,
                             color: COLORS.primary,
-                            marginStart: '1%'
+                            marginStart: '1.2%'
                         }}>
                         Part-time Jobs
                     </Text>
