@@ -19,10 +19,15 @@ import CVScreen from '../screens/CVScreen';
 import Notification from '../screens/NotificationScreen'
 import SearchScreen from '../screens/SearchScreen';
 import EditPostScreen from '../screens/EditPostScreen';
+import EditAccount from '../screens/EditAccount';
+import EditCV from '../screens/EditCV';
+import CVResume from '../screens/CVResumeScreen';
+import AddCVScreen from '../screens/AddCVScreen';
 //icon
 import Octicons from 'react-native-vector-icons/Octicons';
 import Feather from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import DetailNotification from '../screens/DetailNotification';
 
 
 
@@ -50,7 +55,6 @@ const HomeStack = (props) => {
                 name="Thông tin tuyển dụng"
                 component={CVScreen}
                 options={({ route }) => ({
-                    title: route.params?.title,
                     headerShown: true,
                     headerStyle: {
                         backgroundColor: '#337BFF',
@@ -69,6 +73,13 @@ const HomeStack = (props) => {
             <Stack.Screen
                 name="Notifications"
                 component={Notification}
+                options={({ route }) => ({
+                    headerShown: false,
+                })}
+            />
+            <Stack.Screen
+                name="DetailNotification"
+                component={DetailNotification}
                 options={({ route }) => ({
                     headerShown: false,
                 })}
@@ -100,7 +111,7 @@ const PostStack = (props) => {
     return (
         <Stack.Navigator>
             <Stack.Screen
-                name="Đăng tin"
+                name="Đăng tin tuyển dụng"
                 component={PostScreen}
                 options={({ route }) => ({
                     title: route.params?.title,
@@ -113,7 +124,7 @@ const PostStack = (props) => {
                     },
                     headerTitleAlign: 'center',
                     headerLeft: () => (
-                        <TouchableOpacity onPress={() => props.navigation.goBack()}>
+                        <TouchableOpacity onPress={() => props.navigation.navigate('HomeScreen')}>
                             <Ionicons name="arrow-back" size={24} color="white" />
                         </TouchableOpacity>
                     ),
@@ -144,7 +155,6 @@ const ManagementStack = (props) => {
                 name="Chỉnh sửa bài đăng"
                 component={EditPostScreen}
                 options={({ route }) => ({
-                    title: route.params?.title,
                     headerShown: true,
                     headerStyle: {
                         backgroundColor: '#337BFF',
@@ -163,7 +173,7 @@ const ManagementStack = (props) => {
         </Stack.Navigator>
     );
 };
-const ProfileStack = () => {
+const ProfileStack = (props) => {
     return (
         <Stack.Navigator>
             <Stack.Screen
@@ -171,6 +181,59 @@ const ProfileStack = () => {
                 component={ProfileScreen}
                 options={({ route }) => ({
                     title: route.params?.title,
+                    headerShown: false,
+                })}
+            />
+            <Stack.Screen
+                name="Cập nhật thông tin cá nhân"
+                component={EditAccount}
+                options={({ route }) => ({
+                    title: route.params?.title,
+                    headerShown: true,
+                    headerStyle: {
+                        backgroundColor: '#337BFF',
+                    },
+                    headerTitleStyle: {
+                        color: '#FFFFFF',
+                    },
+                    headerTitleAlign: 'center',
+                    headerLeft: () => (
+                        <TouchableOpacity onPress={() => props.navigation.navigate('ProfileScreen')}>
+                            <Ionicons name="arrow-back" size={24} color="white" />
+                        </TouchableOpacity>
+                    ),
+                })}
+            />
+            <Stack.Screen
+                name="Tạo CV cá nhân"
+                component={AddCVScreen}
+                options={({ route }) => ({
+                    headerShown: true,
+                    headerStyle: {
+                        backgroundColor: '#337BFF',
+                    },
+                    headerTitleStyle: {
+                        color: '#FFFFFF',
+                    },
+                    headerTitleAlign: 'center',
+                    headerLeft: () => (
+                        <TouchableOpacity onPress={() => props.navigation.navigate('ProfileScreen')}>
+                            <Ionicons name="arrow-back" size={24} color="white" />
+                        </TouchableOpacity>
+                    ),
+                })}
+            />
+            <Stack.Screen
+                name="DetailsScreen"
+                component={DetailsScreen}
+                options={({ route }) => ({
+                    headerShown: false,
+                })}
+            />
+            <Stack.Screen
+                name="CVResumeScreen"
+                component={CVResume}
+                options={({ route }) => ({
                     headerShown: false,
                 })}
             />
@@ -190,13 +253,14 @@ const TabNavigator = () => {
                 tabBarHideOnKeyboard: true,
             }}>
             <Tab.Screen
-                name="Home"
+                name="Trang chủ"
                 component={HomeStack}
                 options={({ route }) => ({
                     tabBarStyle: {
                         display: getTabBarVisibility(route),
                         height: 60,
                         padding: 8,
+                        // paddingBottom: 10,
                     },
                     tabBarIcon: ({ color, size }) => (
                         <Octicons name="home" color={color} size={size} />
@@ -207,7 +271,7 @@ const TabNavigator = () => {
                 })}
             />
             <Tab.Screen
-                name="Saved Jobs"
+                name="Đã lưu"
                 component={SavedStack}
                 options={({ route }) => ({
                     tabBarStyle: {
@@ -224,7 +288,7 @@ const TabNavigator = () => {
                 })}
             />
             <Tab.Screen
-                name="Post"
+                name="Đăng tin"
                 component={PostStack}
                 options={({ route }) => ({
                     tabBarStyle: {
@@ -239,7 +303,7 @@ const TabNavigator = () => {
                 })}
             />
             <Tab.Screen
-                name="Management"
+                name="Quản lí"
                 component={ManagementStack}
                 options={({ route }) => ({
                     tabBarStyle: {
@@ -256,7 +320,7 @@ const TabNavigator = () => {
                 })}
             />
             <Tab.Screen
-                name="Profile"
+                name="Menu"
                 component={ProfileStack}
                 options={({ route }) => ({
                     tabBarStyle: {
@@ -266,7 +330,7 @@ const TabNavigator = () => {
                         padding: 8,
                     },
                     tabBarIcon: ({ color, size }) => (
-                        <Feather name="user" color={color} size={size} />
+                        <Feather name="menu" color={color} size={size} />
                     ),
                     tabBarLabelStyle: {
                         marginBottom: 8,
@@ -282,7 +346,7 @@ const getTabBarVisibility = route => {
     const routeName = getFocusedRouteNameFromRoute(route) ?? 'Feed';
     // console.log(routeName);
 
-    if (routeName == 'DetailsScreen' || routeName == 'Thông tin tuyển dụng' || routeName == 'Notifications' || routeName == 'Chỉnh sửa bài đăng') {
+    if (routeName == 'DetailsScreen' || routeName == 'Thông tin tuyển dụng' || routeName == 'Notifications' || routeName == 'Chỉnh sửa bài đăng' || routeName == 'Cập nhật thông tin cá nhân' || routeName == 'Cập nhật CV cá nhân' || routeName == 'CVResumeScreen' || routeName == '"Tạo CV cá nhân' || routeName == 'DetailNotification') {
         return 'none';
     }
     return 'flex';
