@@ -183,7 +183,7 @@ const PostScreen = ({ navigation }) => {
       setTimeout(handlePost, 4000);
     }
   };
-  //
+  console.log(inputs);
   const handleOnchange = (text, input) => {
     setInputs(prevState => ({ ...prevState, [input]: text }));
   };

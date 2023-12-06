@@ -122,14 +122,14 @@ const HomeScreen = ({ navigation }) => {
           await AsyncStorage.setItem('listAcademics', data);
         }
       })
-      //allgender
+      //All Gender
       axios({
         url: `${API}/gender/list`,
         method: "GET"
       }).then(async (response) => {
         if (response.status === 200) {
           const data = JSON.stringify(response.data)
-          await AsyncStorage.setItem('listGender', data);
+          await AsyncStorage.setItem('listGenders', data);
         }
       })
       //All Experience
@@ -392,7 +392,7 @@ const HomeScreen = ({ navigation }) => {
       <View style={{ height: 1, width: '99%', backgroundColor: COLORS.grey, opacity: 0.4, marginTop: 15, marginBottom: 8 }} />
       <View style={{ width: '100%', paddingStart: '22%' }}>
         <Text numberOfLines={1} style={{ fontSize: 16, fontWeight: 'bold', color: COLORS.grey, width: 200, marginBottom: 5 }}>{item.businessName}</Text>
-        <Text style={{ color: COLORS.blue, fontSize: 16, marginVertical: 9 }}>${item.wageMin} - ${item.wageMax} /month</Text>
+        <Text style={{ color: COLORS.blue, fontSize: 16, marginVertical: 9 }}>{item.wageMin} - {item.wageMax}đ/h</Text>
         <View style={{
           width: 60,
           height: 25,

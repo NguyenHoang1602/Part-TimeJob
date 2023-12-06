@@ -21,12 +21,15 @@ import EditAccount from "../screens/EditAccount";
 import TabNavigatorUser from './TabnavigatorUser';
 import SelectRoleScreen from "../screens/SelectRoleScreen";
 import FillProfileScreen from "../screens/FillProfileScreen";
+import DetailsCVScreen from "../screens/DetailsCVScreen";
+import UpdateCvScreen from "../screens/UpdateCvScreen";
 
 import { TouchableOpacity } from "react-native";
 import Octicons from 'react-native-vector-icons/Octicons';
 import Feather from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import COLORS from "../assets/const/colors";
+
 const Stack = createNativeStackNavigator();
 
 const AuthStack = (props) =>{
@@ -101,10 +104,13 @@ const Router = () => {
         <Stack.Screen name="SavedJobsScreen" component={SavedJobsScreen} />
         <Stack.Screen name="MessageScreen" component={MessageScreen} />
         <Stack.Screen name="CVScreen" component={CVScreen}/>
+        <Stack.Screen name="DetailsCVScreen" component={DetailsCVScreen} />
+        <Stack.Screen name="UpdateCvScreen" component={UpdateCvScreen} />
         <Stack.Screen name="SearchScreen" component={SearchScreen} />
         <Stack.Screen name="ChatScreen" component={ChatScreen} />
       </Stack.Navigator>
     );
-  };
+};
+
 
 export default Router;

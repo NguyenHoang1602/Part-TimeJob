@@ -31,6 +31,17 @@ const MessageScreen = ({ navigation }) => {
     const { user } = useContext(UserContext);
 
     const getUsers = async () => {
+        // const id = user._id;
+        // const chatRef = firestore().collection('chats');
+        // const chatSnapshot = await chatRef.where('participants', 'array-contains', id).get();
+        // console.log(chatSnapshot);
+        // const userIds = chatSnapshot.docs.map(doc => {
+        //     const participants = doc.data().participants;
+        //     return participants.filter(participantId => participantId !== user._id)[0];
+        // });
+        // const usersSnapshot = await firestore().collection('users').where('_id', 'in', userIds).get();
+        // const users = usersSnapshot.docs.map(doc => doc.data());
+        // setUsers(users);
         let tempData = [];
         firestore()
             .collection('users')
@@ -45,7 +56,6 @@ const MessageScreen = ({ navigation }) => {
                 setUsers(tempData);
             });
     };
-
     const FlatListb = () => {
         return (
             <FlatList
