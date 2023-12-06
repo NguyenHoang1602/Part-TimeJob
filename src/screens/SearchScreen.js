@@ -9,10 +9,10 @@
 /* eslint-disable eol-last */
 /* eslint-disable prettier/prettier */
 /* eslint-disable react-native/no-inline-styles */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { FlatList, Image, TextInput, ScrollView, StyleSheet, Text, TouchableOpacity, View, ImageBackground, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { COLORS } from '../constants/theme';
+import COLORS from '../assets/const/colors';
 
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -35,6 +35,7 @@ import CheckBoxCircle from '../components/CheckBoxCircle';
 import axios from 'axios';
 import { API } from '../../Sever/sever';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import UserContext from '../components/UserConText';
 
 const URL_IMG = "https://s3-alpha-sig.figma.com/img/acc1/c7a7/e9c43527e435b8c79bc8126d3d053264?Expires=1700438400&Signature=YkRmo~i-p6AZ1AulSOjpW4wA3UdrSHH2zV8WQihLw5uEordi8QWRvjnTz8mWYDq4ZkRCCVDBz1xuFXGQtgMqAStOpOvBGzkzNvHMeK4xw6AsufXB2uI2IIfmL2LgzBHgwk2l6IM3Rxb-4I9wdC8aSg1r9x9KwN~e31NOH19C3w1~A9jSJHDWJk9ECpnIqIrYRwzIfBR6nDOWxXZqjwn-Y8rg94RJb1UZYGQhSe9~MYAq1LzHKO0imJe1lpNv6dYv~amXSnfuuZW2awviacARGnYIjO~rDGmP339lgP9Df71ZKGUxsgIQpK26gCH0IoaFY1B9riTOaj2ENioGaqJurg__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4";
 
@@ -72,7 +73,52 @@ const SearchScreen = ({ navigation }) => {
 
   useEffect(() => {
     getData();
+    getListSave();
   }, []);
+
+
+  const { user } = useContext(UserContext);
+  const [listJobs, setListJobs] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
+  const [SaveJobs, setSaveJobs] = useState(false);
+  const [followedProducts, setFollowedProducts] = useState([]);
+  const getListSave = async () => {
+    try {
+      axios({
+        url: `${API}/savePost/list1`,
+        method: "POST",
+        data: {
+          id: user._id,
+        }
+      }).then(async (response) => {
+        if (response.status === 200) {
+          setFollowedProducts(response.data);
+        }
+      })
+    } catch (error) {
+      console.log("err", error);
+    }
+  }
+  const handleSaveToggle = async (itemId) => {
+    try {
+      const savedata = {
+        user_id: user._id,
+        post_id: itemId,
+      };
+      const result = await axios.post(`${API}/savePost/add`, savedata);
+      if (result.status === 200) {
+        getListSave();
+        Alert.alert('Lưu tin thành công !')
+        console.log("Thành công");
+      }
+    } catch (error) {
+      console.log('Err: ', error);
+    }
+  };
+  const isFollowed = (productId) => {
+    const savePostIDlist = followedProducts.map(item => item.post_id);
+    return savePostIDlist.some(post_id => post_id === productId);
+  };
 
   const [list, setList] = useState([]);
   const [isFocusedSearch, setIsFocusedSearch] = useState(false);
@@ -241,7 +287,7 @@ const SearchScreen = ({ navigation }) => {
               source={require('../assets/images/5928293_2953962.jpg')}
               style={{ width: "100%", height: 430, }}
             />
-            <Text style={{ fontSize: 22, color: COLORS.black, fontWeight: '700' }}>Empty</Text>
+            <Text style={{ fontSize: 22, color: '#000000', fontWeight: '700' }}>Empty</Text>
             <Text style={{ fontSize: 16, marginTop: 7, textAlign: 'center' }}>Sorry, the keyword you entered cannot be found, please check again or search with another keyword.</Text>
           </View>
         )}
@@ -249,7 +295,6 @@ const SearchScreen = ({ navigation }) => {
     );
 
   }
-
   const renderItemJob = ({ item }) => (
     <TouchableOpacity style={{
       width: 340,
@@ -260,14 +305,28 @@ const SearchScreen = ({ navigation }) => {
       padding: 20,
     }}
       onPress={() => navigation.navigate('DetailsScreen', {
+        postid: item._id,
+        users_id: item.users_id,
+        avatar: item.users_id.photo,
+        address: item.address,
+        business_name: item.businessName,
+        gender: item.gender,
+        image: item.image,
+        quantity: item.quantity,
         title: item.title,
-        id: item.id,
-        uri: item.uri,
-        address: item.Address,
-        wagemax: item.wagemax,
-        wagemin: item.wagemin,
-        worktype: item.worktype,
-        Details: item.Details,
+        career_id: item.career_id,
+        payform_id: item.payForm_id,
+        experience_id: item.experience_id,
+        acedemic_id: item.academic_id,
+        worktype_id: item.workType_id,
+        describe: item.describe,
+        age_min: item.ageMin,
+        age_max: item.ageMax,
+        wage_min: item.wageMin,
+        wage_max: item.wageMax,
+        status_id: item.status_id,
+        date: item.date,
+        time: item.time,
       })}>
       <View style={{ width: '100%', flexDirection: 'row' }}>
         {item.image.map((imageUrl, index) => {
@@ -283,17 +342,20 @@ const SearchScreen = ({ navigation }) => {
           }
         })}
         <View style={{ width: '50%', height: '100%', marginStart: 20, flex: 1 }}>
-          <Text style={{ fontSize: 16, fontWeight: 'bold' }}>{item.title}</Text>
-          <Text style={{ fontSize: 16, fontWeight: 'bold', color: COLORS.grey }}>{item.describe}</Text>
+          <Text style={{ fontSize: 18, fontWeight: '400' }}>{item.title}</Text>
+          <Text numberOfLines={1} style={{ fontSize: 15, fontWeight: '400', color: COLORS.grey }}>{item.address}</Text>
         </View>
-        <TouchableOpacity onPress={() => { }}>
-          <Icon name="bookmark-plus-outline" size={30} color={COLORS.blue} />
+        <TouchableOpacity onPress={() => handleSaveToggle(item._id)}>
+          {isFollowed(item._id) ? (
+            <Icon name="bookmark-minus" size={30} color={COLORS.blue} />
+          ) : <Icon name="bookmark-plus" size={30} color={COLORS.blue} />
+          }
         </TouchableOpacity>
       </View>
       <View style={{ height: 1, width: '99%', backgroundColor: COLORS.grey, opacity: 0.4, marginTop: 15, marginBottom: 8 }} />
       <View style={{ width: '100%', paddingStart: '22%' }}>
-        <Text style={{ fontSize: 16, fontWeight: 'bold', color: COLORS.grey }}>{item.Address}</Text>
-        <Text style={{ color: COLORS.blue, fontSize: 16, marginVertical: 9 }}>${item.wagemin} - ${item.wagemax} /month</Text>
+        <Text numberOfLines={1} style={{ fontSize: 16, fontWeight: 'bold', color: COLORS.grey, width: 200, marginBottom: 5 }}>{item.businessName}</Text>
+        <Text style={{ color: COLORS.blue, fontSize: 16, marginVertical: 9 }}>{item.wageMin} - {item.wageMax}đ/h</Text>
         <View style={{
           width: 60,
           height: 25,
@@ -304,12 +366,19 @@ const SearchScreen = ({ navigation }) => {
           alignItems: 'center',
           justifyContent: 'center',
         }}>
-          <Text style={{ fontSize: 10 }}>{item.worktype}</Text>
+          {
+            item.workType_id._id == '653e66b38e88b23b41388e3c' ? (
+              <Text style={{ fontSize: 10 }} >Parttime</Text>
+            ) : (
+              <Text style={{ fontSize: 10 }} >Fulltime</Text>
+            )
+          }
         </View>
       </View>
 
     </TouchableOpacity>
   );
+
   return (
 
     <SafeAreaView style={{ flex: 1, paddingVertical: 18, gap: 16, backgroundColor: 'white' }}>
@@ -338,7 +407,7 @@ const SearchScreen = ({ navigation }) => {
             alignItems: 'center',
             paddingHorizontal: 18,
             backgroundColor: "#F5F5F5",
-            backgroundColor: !isFocusedSearch ? COLORS.lightGrey : COLORS.blue,
+            backgroundColor: !isFocusedSearch ? COLORS.lightGrey : '#E9F0FF',
             borderWidth: 1,
             borderColor: !isFocusedSearch ? COLORS.white : COLORS.primary
           }}>
@@ -482,7 +551,7 @@ const SearchScreen = ({ navigation }) => {
               <View style={{ alignItems: 'center' }}>
                 {/* Location & Salary */}
                 <Pressable style={{ paddingVertical: 18, width: "100%" }} onPress={toggleSelect1}>
-                  <View style={{ borderRadius: 15, borderWidth: 1, paddingHorizontal: 18, borderColor: COLORS.blackOpacity }}>
+                  <View style={{ borderRadius: 15, borderWidth: 1, paddingHorizontal: 18, borderColor: COLORS.grey }}>
                     <View style={{ flexDirection: 'row', gap: 8, paddingVertical: 15 }}>
                       <View style={{ flex: 1 }}>
                         <Text style={{ fontSize: 18, color: COLORS.black, fontWeight: "700", }} numberOfLines={1}>
@@ -492,7 +561,7 @@ const SearchScreen = ({ navigation }) => {
                       <Feather name={!isSelect1 ? 'chevron-up' : 'chevron-down'} size={24} color={COLORS.primary} />
                     </View>
                     <Collapsible collapsed={collapsed1}>
-                      <View style={{ borderTopWidth: 1, borderColor: COLORS.blackOpacity }} />
+                      <View style={{ borderTopWidth: 1, borderColor: COLORS.grey }} />
                       <View style={{ gap: 8, paddingVertical: 12 }}>
                         <Dropdown
                           style={[styles.dropdown, isFocus && { borderColor: COLORS.darkBlue }]}
@@ -553,7 +622,7 @@ const SearchScreen = ({ navigation }) => {
 
                 {/* Career Type */}
                 <Pressable style={{ paddingVertical: 18, width: "100%" }} onPress={toggleSelectCareers}>
-                  <View style={{ borderRadius: 15, borderWidth: 1, paddingHorizontal: 18, borderColor: COLORS.blackOpacity }}>
+                  <View style={{ borderRadius: 15, borderWidth: 1, paddingHorizontal: 18, borderColor: COLORS.grey }}>
                     <View style={{ flexDirection: 'row', gap: 8, paddingVertical: 15 }}>
                       <View style={{ flex: 1 }}>
                         <Text style={{ fontSize: 18, color: COLORS.black, fontWeight: "700", fontFamily: 'Inter-VariableFont_slnt,wght' }} numberOfLines={1}>
@@ -563,7 +632,7 @@ const SearchScreen = ({ navigation }) => {
                       <Feather name={!isSelectCareers ? 'chevron-up' : 'chevron-down'} size={24} color={COLORS.primary} />
                     </View>
                     <Collapsible collapsed={careers}>
-                      <View style={{ borderTopWidth: 1, borderColor: COLORS.blackOpacity }} />
+                      <View style={{ borderTopWidth: 1, borderColor: COLORS.grey }} />
                       <View style={{ gap: 8, paddingVertical: 12 }}>
                         <CheckBox options={listCareers} multiple={true} onchange={op => setFilter({ ...filter, career_id: op })} />
                       </View>
@@ -573,7 +642,7 @@ const SearchScreen = ({ navigation }) => {
 
                 {/* Work Type */}
                 <Pressable style={{ paddingVertical: 18, width: "100%" }} onPress={toggleSelectWorkTypes}>
-                  <View style={{ borderRadius: 15, borderWidth: 1, paddingHorizontal: 18, borderColor: COLORS.blackOpacity }}>
+                  <View style={{ borderRadius: 15, borderWidth: 1, paddingHorizontal: 18, borderColor: COLORS.grey }}>
                     <View style={{ flexDirection: 'row', gap: 8, paddingVertical: 15 }}>
                       <View style={{ flex: 1 }}>
                         <Text style={{ fontSize: 18, color: COLORS.black, fontWeight: "700", fontFamily: 'Inter-VariableFont_slnt,wght' }} numberOfLines={1}>
@@ -583,7 +652,7 @@ const SearchScreen = ({ navigation }) => {
                       <Feather name={!isSelectWorkTypes ? 'chevron-up' : 'chevron-down'} size={24} color={COLORS.primary} />
                     </View>
                     <Collapsible collapsed={workTypes}>
-                      <View style={{ borderTopWidth: 1, borderColor: COLORS.blackOpacity }} />
+                      <View style={{ borderTopWidth: 1, borderColor: COLORS.grey }} />
                       <View style={{ gap: 8, paddingVertical: 12 }}>
                         <CheckBoxCircle options={listWorkTypes} multiple={false} onchange={op => setFilter({ ...filter, workType_id: op })} />
                       </View>
@@ -593,7 +662,7 @@ const SearchScreen = ({ navigation }) => {
 
                 {/* Gender Type */}
                 <Pressable style={{ paddingVertical: 18, width: "100%" }} onPress={toggleSelectGenders}>
-                  <View style={{ borderRadius: 15, borderWidth: 1, paddingHorizontal: 18, borderColor: COLORS.blackOpacity }}>
+                  <View style={{ borderRadius: 15, borderWidth: 1, paddingHorizontal: 18, borderColor: COLORS.grey }}>
                     <View style={{ flexDirection: 'row', gap: 8, paddingVertical: 15 }}>
                       <View style={{ flex: 1 }}>
                         <Text style={{ fontSize: 18, color: COLORS.black, fontWeight: "700", fontFamily: 'Inter-VariableFont_slnt,wght' }} numberOfLines={1}>
@@ -603,7 +672,7 @@ const SearchScreen = ({ navigation }) => {
                       <Feather name={!isSelectGenders ? 'chevron-up' : 'chevron-down'} size={24} color={COLORS.primary} />
                     </View>
                     <Collapsible collapsed={genders}>
-                      <View style={{ borderTopWidth: 1, borderColor: COLORS.blackOpacity }} />
+                      <View style={{ borderTopWidth: 1, borderColor: COLORS.grey }} />
                       <View style={{ gap: 8, paddingVertical: 12 }}>
                         <CheckBoxCircle options={listGenders} multiple={false} onchange={op => setFilter({ ...filter, gender_id: op })} />
                       </View>
@@ -613,7 +682,7 @@ const SearchScreen = ({ navigation }) => {
 
                 {/* Education */}
                 <Pressable style={{ paddingVertical: 18, width: "100%" }} onPress={toggleSelectAcademics}>
-                  <View style={{ borderRadius: 15, borderWidth: 1, paddingHorizontal: 18, borderColor: COLORS.blackOpacity }}>
+                  <View style={{ borderRadius: 15, borderWidth: 1, paddingHorizontal: 18, borderColor: COLORS.grey }}>
                     <View style={{ flexDirection: 'row', gap: 8, paddingVertical: 15 }}>
                       <View style={{ flex: 1 }}>
                         <Text style={{ fontSize: 18, color: COLORS.black, fontWeight: "700", fontFamily: 'Inter-VariableFont_slnt,wght' }} numberOfLines={1}>
@@ -623,7 +692,7 @@ const SearchScreen = ({ navigation }) => {
                       <Feather name={!isSelectAcademic ? 'chevron-up' : 'chevron-down'} size={24} color={COLORS.primary} />
                     </View>
                     <Collapsible collapsed={academic}>
-                      <View style={{ borderTopWidth: 1, borderColor: COLORS.blackOpacity }} />
+                      <View style={{ borderTopWidth: 1, borderColor: COLORS.grey }} />
                       <View style={{ gap: 8, paddingVertical: 12 }}>
                         <CheckBoxCircle options={listAcademics} multiple={false} onchange={op => setFilter({ ...filter, academic_id: op })} />
                       </View>
@@ -633,7 +702,7 @@ const SearchScreen = ({ navigation }) => {
 
                 {/* Experence */}
                 <Pressable style={{ paddingVertical: 18, width: "100%" }} onPress={toggleSelectExperiences}>
-                  <View style={{ borderRadius: 15, borderWidth: 1, paddingHorizontal: 18, borderColor: COLORS.blackOpacity }}>
+                  <View style={{ borderRadius: 15, borderWidth: 1, paddingHorizontal: 18, borderColor: COLORS.grey }}>
                     <View style={{ flexDirection: 'row', gap: 8, paddingVertical: 15 }}>
                       <View style={{ flex: 1 }}>
                         <Text style={{ fontSize: 18, color: COLORS.black, fontWeight: "700", fontFamily: 'Inter-VariableFont_slnt,wght' }} numberOfLines={1}>
@@ -643,7 +712,7 @@ const SearchScreen = ({ navigation }) => {
                       <Feather name={!listExperiences ? 'chevron-up' : 'chevron-down'} size={24} color={COLORS.primary} />
                     </View>
                     <Collapsible collapsed={experiences}>
-                      <View style={{ borderTopWidth: 1, borderColor: COLORS.blackOpacity }} />
+                      <View style={{ borderTopWidth: 1, borderColor: COLORS.grey }} />
                       <View style={{ gap: 8, paddingVertical: 12 }}>
                         <CheckBoxCircle options={listExperiences} multiple={false} onchange={op => setFilter({ ...filter, experience_id: op })} />
                       </View>
@@ -723,12 +792,12 @@ const styles = StyleSheet.create({
   textFound: {
     fontSize: 16,
     fontWeight: '700',
-    color: COLORS.black,
+    color: '#000000',
   },
   titleNoFound: {
     fontSize: 20,
     fontWeight: '700',
-    color: COLORS.black,
+    color: '#000000',
   },
   show: {
     paddingHorizontal: 20,
@@ -742,7 +811,7 @@ const styles = StyleSheet.create({
   },
   textNoFound: {
     fontSize: 18,
-    color: COLORS.black,
+    color: '#000000',
     textAlign: 'center'
   },
   dropdown: {
@@ -759,7 +828,7 @@ const styles = StyleSheet.create({
   },
   selectedTextStyle: {
     fontSize: 16,
-    color: COLORS.black,
+    color: '#000000',
     fontWeight: '500'
   },
   iconStyle: {
@@ -772,7 +841,7 @@ const styles = StyleSheet.create({
     borderRadius: 6,
   },
   textWorkType: {
-    color: COLORS.black,
+    color: '#000000',
     fontSize: 16,
     fontWeight: '500',
   },

@@ -40,7 +40,7 @@ const VerificationScreen = ({ navigation, route }) => {
         try {
           if (confirm) {
             await confirm.confirm(confirmOTP);
-            navigation.navigate('AddProfile',{ phoneNumber : route.params?.phoneNumber});
+            navigation.navigate('AddProfile',{ item : route.params?.phoneNumber});
           } else {
             console.log('Confirmation object is null.');
           }

@@ -44,7 +44,7 @@ const HomeScreen = ({ navigation }) => {
       getAllData()
     }, [])
   );
-
+    
   const getAllData = async () => {
     try {
       //list save
@@ -147,6 +147,7 @@ const HomeScreen = ({ navigation }) => {
       if (response.status === 200) {
         const data = JSON.stringify(response.data)
         await AsyncStorage.setItem('listNotifications', data);
+        
       }
       //All my Message
       //All CV
@@ -327,7 +328,7 @@ const HomeScreen = ({ navigation }) => {
           style={{ width: 46, height: 46, marginBottom: 5 }}
           imageStyle={{ borderRadius: 5 }}
         />
-        <Text style={{ textAlign: 'center' }}>{item.c_title}</Text>
+        <Text style={{ textAlign: 'center' }}>{item.title}</Text>
       </TouchableOpacity>
     </View>
   );

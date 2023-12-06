@@ -6,7 +6,6 @@ import React, { useContext, useState } from 'react'
 import COLORS from '../assets/const/colors';
 import UserContext from '../components/UserConText';
 
-
 import Input from '../components/Input';
 import Button from '../components/Button';
 //icon
@@ -17,9 +16,14 @@ import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import IconWithBadge from '../components/IconWithBadge';
 import IconWithBadgeAntDesign from '../components/IconWithBadgeAntDesign';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useFocusEffect } from '@react-navigation/native';
+import axios from 'axios';
+import { Layout } from 'react-native-reanimated';
+import { API } from '../../Sever/sever';
 
-const ApplicationsScreen = ({route ,navigation }) => {
+const ApplicationsScreen = ({ route, navigation }) => {
     const { user } = useContext(UserContext);
+    const [listApplied, setListApplied] = useState([]);
     const data = [
         { id: '1', title: 'UI/UX Designer', bussiness_Name: 'Google LLC', address: 'Binh Tan, TP. HCM', wageMin: '10000', wageMax: '25000', workType: '1', status: '1', image: 'https://th.bing.com/th/id/OIP.S3ZsU5iH6e3Z2K7lXlES7AHaFj?w=230&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7' },
         { id: '2', title: 'Software Engineer', bussiness_Name: 'Google LLC', address: 'Binh Tan, TP. HCM', wageMin: '10000', wageMax: '25000', workType: '2', status: '2', image: 'https://th.bing.com/th/id/OIP.YEEjAJNNzW_bB2imEBlRywHaD8?w=304&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7' },
@@ -28,38 +32,63 @@ const ApplicationsScreen = ({route ,navigation }) => {
         { id: '5', title: 'UI/UX Designer', bussiness_Name: 'Google LLC', address: 'Binh Tan, TP. HCM', wageMin: '10000', wageMax: '25000', workType: '1', status: '1', image: 'https://th.bing.com/th/id/OIP.09F15WCuEz8e1c1OwXN1GgHaHa?w=178&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7' },
         { id: '6', title: 'UI/UX Designer', bussiness_Name: 'Google LLC', address: 'Binh Tan, TP. HCM', wageMin: '10000', wageMax: '25000', workType: '1', status: '4', image: 'https://th.bing.com/th/id/OIP.eJPdCWFGsFPki_c_tK0xmQHaFX?w=253&h=183&c=7&r=0&o=5&dpr=1.3&pid=1.7' },
     ];
+
+    useFocusEffect(
+        React.useCallback(() => {
+            getAllApplied()
+        }, [])
+    );
+    const getAllApplied = async () => {
+        try {
+            const response = await axios.post(`${API}/apply/listMyApplied`, {
+                id: user._id
+            });
+            setListApplied(response.data);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
     const renderItemApplications = ({ item }) => (
         <TouchableOpacity style={styles.items}
-        onPress={() => navigation.navigate('ApplicationsStage', {
-            id : item.id,
-            title: item.title,
-            bussiness_Name: item.bussiness_Name,
-            address: item.address,
-            wageMin: item.wageMin,
-            wageMax: item.wageMax,
-            workType_ID: item.workType,
-            status: item.status,
-            image: item.image,
+            onPress={() => navigation.navigate('ApplicationsStage', {
+                id: item._id,
+                title: item?.post_id?.title,
+                businessName: item?.post_id?.businessName,
+                address: item?.post_id?.address,
+                wageMin: item?.post_id?.wageMin,
+                wageMax: item?.post_id?.wageMax,
+                workType_id: item?.post_id?.workType_id,
+                status: item?.status,
+                image: item?.post_id?.image,
 
-        })}>
+            })}>
             <View style={{ flexDirection: 'row', width: '100%', alignItems: 'center' }}>
-                <ImageBackground
-                    source={{ uri: item?.image }}
-                    style={{ width: 52, height: 52, marginBottom: 5}}
-                    imageStyle={{ borderRadius: 8 , borderWidth: 0.5, borderColor: COLORS.grey}}
-                />
+
+                {item?.post_id?.image.map((imageUrl, index) => {
+                    if (index === 0) {
+                        return (
+                            <ImageBackground
+                                key={index}
+                                source={{ uri: imageUrl }}
+                                style={{ width: 46, height: 46, marginBottom: 5 }}
+                                imageStyle={{ borderRadius: 5 }}
+                            />
+                        );
+                    }
+                })}
                 <View style={{ flex: 1, marginLeft: '5%' }}>
-                    <Text style={{ fontSize: 18, fontWeight: '600', color:'#212121' }}>{item.title}</Text>
-                    <Text style={{ fontSize: 15, fontWeight: '600', color: '#616161', marginTop: 5}}>{item.bussiness_Name}</Text>
+                    <Text style={{ fontSize: 18, fontWeight: '600', color: '#212121' }}>{item?.post_id?.title}</Text>
+                    <Text style={{ fontSize: 15, fontWeight: '600', color: '#616161', marginTop: 5 }} numberOfLines={1}>{item?.post_id?.businessName}</Text>
                 </View>
                 <TouchableOpacity
                     style={{
                     }}>
-                    <AntDesign name="right" size={21} color="#212121"/>
+                    <AntDesign name="right" size={21} color="#212121" />
                 </TouchableOpacity>
             </View>
             {
-                item.status === '1' ? (
+                item?.status === 0 ? (
                     <View style={{
                         width: 90,
                         backgroundColor: '#E7EFFF',
@@ -70,9 +99,35 @@ const ApplicationsScreen = ({route ,navigation }) => {
                         marginStart: '20%',
                         marginTop: '2%',
                     }}>
-                        <Text style={{ fontSize: 9.5, color: '#246BFE'}} >Application Sent</Text>
+                        <Text style={{ fontSize: 9.5, color: '#246BFE' }} >Application Sent</Text>
                     </View>
-                ) : item.status === '2' ? (
+                ) : item.status === 1 ? (
+                    <View style={{
+                        width: 110,
+                        backgroundColor: '#FFF4CD',
+                        borderRadius: 6,
+                        padding: 5,
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        marginStart: '20%',
+                        marginTop: '3%',
+                    }}>
+                        <Text style={{ fontSize: 9.5, color: '#FBCA17' }} >Application Pending</Text>
+                    </View>
+                ) : item.status === 2 ? (
+                    <View style={{
+                        width: 105,
+                        backgroundColor: '#FDD9DA',
+                        borderRadius: 6,
+                        padding: 5,
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        marginStart: '20%',
+                        marginTop: '2%',
+                    }}>
+                        <Text style={{ fontSize: 9.5, color: '#F75656' }} >Application Rejected</Text>
+                    </View>
+                ) :
                     <View style={{
                         width: 110,
                         backgroundColor: '#E7FEEE',
@@ -85,33 +140,8 @@ const ApplicationsScreen = ({route ,navigation }) => {
                     }}>
                         <Text style={{ fontSize: 9.5, color: '#08BE75' }} >Application Accepted</Text>
                     </View>
-                ) : item.status === '3' ? (
-                    <View style={{
-                        width: 105,
-                        backgroundColor: '#FDD9DA',
-                        borderRadius: 6,
-                        padding: 5,
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        marginStart: '20%',
-                        marginTop: '2%',
-                    }}>
-                        <Text style={{ fontSize: 9.5, color: '#F75656'}} >Application Rejected</Text>
-                    </View>
-                ) : <View style={{
-                    width: 110,
-                    backgroundColor: '#FFF4CD',
-                    borderRadius: 6,
-                    padding: 5,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    marginStart: '20%',
-                    marginTop: '3%',
-                }}>
-                    <Text style={{ fontSize: 9.5, color: '#FBCA17' }} >Application Pending</Text>
-                </View>
             }
-             <View style={{ height: 1, width: '99%', backgroundColor: COLORS.grey, opacity: 0.4, marginTop: 15, marginBottom: 8 }} />
+            <View style={{ height: 1, width: '99%', backgroundColor: COLORS.grey, opacity: 0.4, marginTop: 15, marginBottom: 8 }} />
 
 
         </TouchableOpacity>
@@ -170,11 +200,21 @@ const ApplicationsScreen = ({route ,navigation }) => {
             </View>
             <ScrollView showsVerticalScrollIndicator={false} style={styles.body}>
                 <FlatList
-                    data={data}
+                    data={listApplied}
                     keyExtractor={(item, index) => index.toString()}
                     renderItem={renderItemApplications}
                     nestedScrollEnabled={true}
                     scrollEnabled={false}
+                    ListEmptyComponent={() => (
+                        <View style={{ alignItems: 'center', justifyContent: 'center', paddingHorizontal: 20 }}>
+                            <ImageBackground
+                                source={require('../assets/images/5928293_2953962.jpg')}
+                                style={{ width: "100%", height: 430, }}
+                            />
+                            <Text style={{ fontSize: 22, color: COLORS.black, fontWeight: '700' }}>Empty</Text>
+                            <Text style={{ fontSize: 16, marginTop: 7, textAlign: 'center' }}>Sorry, the keyword you entered cannot be found, please check again or search with another keyword.</Text>
+                        </View>
+                    )}
                 />
             </ScrollView>
         </SafeAreaView>

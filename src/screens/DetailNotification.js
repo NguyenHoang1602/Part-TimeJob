@@ -19,6 +19,7 @@ const DetailNotification = ({ route, navigation }) => {
         date: route.params?.date,
         time: route.params?.time,
     };
+    console.log(datalist)
     const [data, setData] = useState(datalist);
     return (
         <SafeAreaView
@@ -41,113 +42,128 @@ const DetailNotification = ({ route, navigation }) => {
                 </View>
             </View>
             <ScrollView showsVerticalScrollIndicator={false}>
-            <View style={{margin: 10, paddingVertical: 22, paddingHorizontal: 24, flex: 1, backgroundColor: COLORS.white }}>
-            <View style={{width: '115%', height: 70, backgroundColor: '#FF5D01', opacity: 0.7, position: 'absolute'}}/>
-                <View style={{ width: '100%', alignItems: 'center', marginBottom: 20, flex: 1}}>
-                    <ImageBackground
-                        source={{ uri: data?.cv_id.user_id.photo }}
-                        style={{ width: 90, height: 90, marginBottom: 10 }}
-                        imageStyle={{ borderRadius: 100}} />
-                    <Text style={{ fontSize: 20, fontWeight: '600' }}>{data?.cv_id.title}</Text>
-                </View>
-                <View style={styles.view1}>
-                    <Text style={styles.text1}>Tên: </Text>
-                    <Text style={{ fontSize: 16 }}>{data?.cv_id.name}</Text>
-                </View>
-                <View style={styles.view1}>
-                    <Text style={styles.text2}>Số ĐT: </Text>
-                    <Text style={{ fontSize: 16, flex: 1 }}>{data?.cv_id.phone}</Text>
-                    <Text style={styles.text2}>Năm sinh: </Text>
-                    <Text style={{ fontSize: 16, marginEnd: 25 }}>{data?.cv_id.year}</Text>
-                </View>
-                <View style={styles.view1}>
-                    <Text style={styles.text2}>Email: </Text>
-                    <Text style={{ fontSize: 16 }}>{data?.cv_id.email}</Text>
-                </View>
-                <View style={styles.view1}>
-                    <Text style={styles.text2}>Địa chỉ: </Text>
-                    <Text style={{ fontSize: 16 }}>{data?.cv_id.address}</Text>
-                </View>
-                <View style={styles.view1}>
-                    <Text style={styles.text2}>Kinh nghiệm: </Text>
-                    <Text style={{ fontSize: 16 }}>{data?.cv_id.experience}</Text>
-                </View>
-                <Text style={styles.text1}>Giới thiệu bản thân: </Text>
-                <Text style={{ fontSize: 16, marginTop: 5, marginBottom: 20 }}>- {data?.cv_id.introduce}</Text>
-                <View style={{width: '100%', height: 1, backgroundColor: '#FF5D01', opacity: 0.7, position: 'relative',}}/>
-            </View>
-
-            <View style={{
-                paddingHorizontal: 18,
-            }}>
-                <Text style={{ fontSize: 16, marginBottom: 15 }}>
-                    Bài đăng đã được ứng tuyển :
-                </Text>
-
-                <TouchableOpacity style={{
-                    borderWidth: 0.5,
-                    borderColor: COLORS.grey,
-                    borderRadius: 8,
-                    marginBottom: 18,
-                    padding: 15,
-                }}>
-                    <View style={{ width: '100%', flexDirection: 'row' }}>
-                        {data?.post_id.image.map((imageUrl, index) => {
-                            if (index === 0) {
-                                return (
-                                    <ImageBackground
-                                        key={index}
-                                        source={{ uri: imageUrl }}
-                                        style={{ width: 46, height: 46, marginBottom: 5 }}
-                                        imageStyle={{ borderRadius: 5 }}
-                                    />
-                                );
-                            }
-                        })}
-                        <View style={{ width: '50%', height: '100%', marginStart: 20, flex: 1 }}>
-                            <Text style={{ fontSize: 18, fontWeight: '400' }}>{data?.post_id.title}</Text>
-                            <Text numberOfLines={1} style={{ fontSize: 15, fontWeight: '400', color: COLORS.grey }}>{data?.post_id.address}</Text>
-                        </View>
+                <View style={{ margin: 10, paddingVertical: 22, paddingHorizontal: 24, flex: 1, backgroundColor: COLORS.white }}>
+                    <View style={{ width: '115%', height: 70, backgroundColor: '#FF5D01', opacity: 0.7, position: 'absolute' }} />
+                    <View style={{ width: '100%', alignItems: 'center', marginBottom: 20, flex: 1 }}>
+                        <ImageBackground
+                            source={{ uri: data?.cv_id.user_id.photo }}
+                            style={{ width: 90, height: 90, marginBottom: 10 }}
+                            imageStyle={{ borderRadius: 100 }} />
+                        <Text style={{ fontSize: 20, fontWeight: '600' }}>{data?.cv_id.title}</Text>
                     </View>
-                </TouchableOpacity>
-            </View>
+                    <View style={styles.view1}>
+                        <Text style={styles.text1}>Tên: </Text>
+                        <Text style={{ fontSize: 16 }}>{data?.cv_id.name}</Text>
+                    </View>
+                    <View style={styles.view1}>
+                        <Text style={styles.text2}>Năm sinh: </Text>
+                        <Text style={{ fontSize: 16, marginEnd: 25 }}>{data?.cv_id.year}</Text>
+                        <Text style={{
+                            fontSize: 16,
+                            fontWeight: '500',
+                            marginRight: 5,
+                            marginLeft: '15%',
+                        }}>Giới tính: </Text>
+                        {
+                            data?.cv_id.gender_id === '655f260103fd0dec424b970d' ? (
+                                <Text style={{ fontSize: 16, marginEnd: 25 }}>Nam</Text>
+                            ) : data?.cv_id.gender_id === '655f261603fd0dec424b970e' ? (
+                                <Text style={{ fontSize: 16, marginEnd: 25 }}>Nữ</Text>
+                            ) : <Text style={{ fontSize: 16, marginEnd: 25 }}>Khác</Text>
+                        }
+                    </View>
+                    <View style={styles.view1}>
+                        <Text style={styles.text2}>Số ĐT: </Text>
+                        <Text style={{ fontSize: 16, flex: 1 }}>{data?.cv_id.phone}</Text>
+                    </View>
+                    <View style={styles.view1}>
+                        <Text style={styles.text2}>Email: </Text>
+                        <Text style={{ fontSize: 16 }}>{data?.cv_id.email}</Text>
+                    </View>
+                    <View style={styles.view1}>
+                        <Text style={styles.text2}>Địa chỉ: </Text>
+                        <Text style={{ fontSize: 16 }}>{data?.cv_id.address}</Text>
+                    </View>
+                    <View style={styles.view1}>
+                        <Text style={styles.text2}>Kinh nghiệm: </Text>
+                        <Text style={{ fontSize: 16 }}>{data?.cv_id.experience}</Text>
+                    </View>
+                    <Text style={styles.text1}>Giới thiệu bản thân: </Text>
+                    <Text style={{ fontSize: 16, marginTop: 5, marginBottom: 20 }}>- {data?.cv_id.introduce}</Text>
+                    <View style={{ width: '100%', height: 1, backgroundColor: '#FF5D01', opacity: 0.7, position: 'relative', }} />
+                </View>
 
-            <View style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'center'
-            }}>
-                <TouchableOpacity
-                    onPress={() => {
-                        navigation.navigate('ChatScreen', { item: data?.sender_id });
-                    }}
-                    style={{
-                        backgroundColor: 'rgba(51, 123, 255, 0.20)',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        borderRadius: 64,
-                        position: "relative",
-                        width: 160,
-                        paddingVertical: 15,
-                        marginEnd: 15,
-                    }}>
-                    <Text style={{ color: COLORS.primary, fontSize: 18, fontWeight: "600" }}>Nhắn tin</Text>
-                </TouchableOpacity>
+                <View style={{
+                    paddingHorizontal: 18,
+                }}>
+                    <Text style={{ fontSize: 16, marginBottom: 15 }}>
+                        Bài đăng đã được ứng tuyển :
+                    </Text>
 
-                <TouchableOpacity
-                    onPress={() => { }}
-                    style={{
-                        backgroundColor: COLORS.primary,
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        borderRadius: 64,
-                        position: "relative",
-                        width: 160,
-                        paddingVertical: 15,
+                    <TouchableOpacity style={{
+                        borderWidth: 0.5,
+                        borderColor: COLORS.grey,
+                        borderRadius: 8,
+                        marginBottom: 18,
+                        padding: 15,
                     }}>
-                    <Text style={{ color: COLORS.white, fontSize: 18, fontWeight: "600" }}>Gọi điện</Text>
-                </TouchableOpacity>
-            </View>
+                        <View style={{ width: '100%', flexDirection: 'row' }}>
+                            {data?.post_id.image.map((imageUrl, index) => {
+                                if (index === 0) {
+                                    return (
+                                        <ImageBackground
+                                            key={index}
+                                            source={{ uri: imageUrl }}
+                                            style={{ width: 46, height: 46, marginBottom: 5 }}
+                                            imageStyle={{ borderRadius: 5 }}
+                                        />
+                                    );
+                                }
+                            })}
+                            <View style={{ width: '50%', height: '100%', marginStart: 20, flex: 1 }}>
+                                <Text style={{ fontSize: 18, fontWeight: '400' }}>{data?.post_id.title}</Text>
+                                <Text numberOfLines={1} style={{ fontSize: 15, fontWeight: '400', color: COLORS.grey }}>{data?.post_id.address}</Text>
+                            </View>
+                        </View>
+                    </TouchableOpacity>
+                </View>
+
+                <View style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                }}>
+                    <TouchableOpacity
+                        onPress={() => {
+                            navigation.navigate('ChatScreen', { item: data?.sender_id });
+                        }}
+                        style={{
+                            backgroundColor: 'rgba(51, 123, 255, 0.20)',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            borderRadius: 64,
+                            position: "relative",
+                            width: 160,
+                            paddingVertical: 15,
+                            marginEnd: 15,
+                        }}>
+                        <Text style={{ color: COLORS.primary, fontSize: 18, fontWeight: "600" }}>Nhắn tin</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                        onPress={() => { }}
+                        style={{
+                            backgroundColor: COLORS.primary,
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            borderRadius: 64,
+                            position: "relative",
+                            width: 160,
+                            paddingVertical: 15,
+                        }}>
+                        <Text style={{ color: COLORS.white, fontSize: 18, fontWeight: "600" }}>Gọi điện</Text>
+                    </TouchableOpacity>
+                </View>
             </ScrollView>
         </SafeAreaView>
     );

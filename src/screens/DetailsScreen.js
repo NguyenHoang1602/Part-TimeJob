@@ -43,18 +43,18 @@ const DetailsScreen = ({ route, navigation }) => {
         postid: route.params?.postid,
         users_id: route.params?.users_id,
         address: route.params?.address,
-        avatar : route.params?.avatar,
-        displayName : route.params?.users_id.displayName,
+        avatar: route.params?.avatar,
+        displayName: route.params?.users_id.displayName,
         business_name: route.params?.business_name,
         image: route.params?.image,
         quantity: route.params?.quantity,
         title: route.params?.title,
         gender: route.params?.gender,
-        career_id: route.params?.career_id.c_title,
-        payform_id: route.params?.payform_id.pf_title,
-        experience_id: route.params?.experience_id.e_title,
-        acedemic_id: route.params?.acedemic_id.a_title,
-        worktype_id: route.params?.worktype_id.wt_title,
+        career_id: route.params?.career_id.title,
+        payform_id: route.params?.payform_id?.title,
+        experience_id: route.params?.experience_id.title,
+        acedemic_id: route.params?.acedemic_id.title,
+        worktype_id: route.params?.worktype_id.title,
         describe: route.params?.describe,
         age_min: route.params?.age_min,
         age_max: route.params?.age_max,
@@ -71,8 +71,19 @@ const DetailsScreen = ({ route, navigation }) => {
 
     const [selectedItem, setSelectedItem] = useState(null);
     const [sender, setSender] = useState(null);
+    const [listApplied, setListApplied] = useState([]);
     const handlePress = (itemId) => {
         setSelectedItem(itemId === selectedItem ? null : itemId);
+    };
+    const getAllApplied = async () => {
+        try {
+            const response = await axios.post(`${API}/apply/listMyApplied`, {
+                id: user._id
+            });
+            setListApplied(response.data);
+        } catch (error) {
+            console.log(error);
+        }
     };
 
     // useEffect(() => {
@@ -80,9 +91,10 @@ const DetailsScreen = ({ route, navigation }) => {
     // },[]);
     useFocusEffect(
         React.useCallback(() => {
-          getCV()
+            getCV()
+            getAllApplied()
         }, [])
-      );
+    );
 
     const handleApply = async () => {
         const apply = {
@@ -98,9 +110,11 @@ const DetailsScreen = ({ route, navigation }) => {
             setTimeout(() => { 3000 });
             const result = await axios.post(`${API}/apply/add`, apply);
             if (result.status === 200) {
+                getAllApplied();
                 setLoading(false);
                 Alert.alert('Ứng tuyển thành công!')
             }
+            
         }
     };
 
@@ -111,16 +125,20 @@ const DetailsScreen = ({ route, navigation }) => {
             url: `${API}/cvs/myCVs`,
             method: 'POST',
             data: {
-              id: user._id,
+                id: user._id,
             },
-          }).then(async (response) => {
+        }).then(async (response) => {
             if (response.status === 200) {
-            //   const data = JSON.stringify(response.data)
-            //   await AsyncStorage.setItem('listCVs', data);
-            setCv(response.data);
+                //   const data = JSON.stringify(response.data)
+                //   await AsyncStorage.setItem('listCVs', data);
+                setCv(response.data);
             }
-          })
+        })
     }
+    const isFollowed = (productId) => {
+        const savePostIDlist = listApplied.map(item => item.post_id._id);
+        return savePostIDlist.some(post_id => post_id === productId);
+    };
     const renderCV = ({ item }) => {
         const isSelected = item._id === selectedItem;
         return (
@@ -162,7 +180,7 @@ const DetailsScreen = ({ route, navigation }) => {
         setModalVisible(!isModalVisible);
     };
     // datacheck();
-    const cvscreen = () =>{
+    const cvscreen = () => {
         navigation.navigate('Thông tin tuyển dụng', {
             postid: data.postid,
         })
@@ -214,7 +232,7 @@ const DetailsScreen = ({ route, navigation }) => {
                         <Text style={styles.datetime}>{data.date} {data.time}</Text>
                         <View style={styles.user}>
                             <ImageBackground
-                                source={{ uri: data.avatar}}
+                                source={{ uri: data.avatar }}
                                 style={{ width: 48, height: 48 }}
                                 imageStyle={{ borderRadius: 48 }}
                             />
@@ -270,7 +288,20 @@ const DetailsScreen = ({ route, navigation }) => {
                         <Text style={styles.itemText}>{data.address}</Text>
                     </View>
                     <View style={{ width: '100%', alignItems: 'center', paddingVertical: 50 }}>
-                        <TouchableOpacity
+                        {isFollowed(data?.postid) ? (
+                            <TouchableOpacity
+                                onPress={() => navigation.navigate('Application')}
+                                style={styles.btnApply}>
+                                <Text
+                                    style={{
+                                        fontWeight: 'bold',
+                                        fontSize: 18,
+                                        color: COLORS.white,
+                                    }}>
+                                    Xem trạng thái ứng tuyển
+                                </Text>
+                            </TouchableOpacity>
+                        ) : <TouchableOpacity
                             onPress={() => toggleModal()}
                             style={styles.btnApply}>
                             <Text
@@ -282,6 +313,8 @@ const DetailsScreen = ({ route, navigation }) => {
                                 Nộp hồ sơ
                             </Text>
                         </TouchableOpacity>
+                        }
+
                     </View>
                 </View>
             </ScrollView>
@@ -396,7 +429,6 @@ const styles = StyleSheet.create({
     },
     postHeaders: {
         width: '100%',
-        height: 165,
         marginBottom: 25,
         borderWidth: 0.8,
         borderColor: COLORS.grey,

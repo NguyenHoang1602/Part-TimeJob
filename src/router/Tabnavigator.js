@@ -23,6 +23,8 @@ import EditAccount from '../screens/EditAccount';
 import EditCV from '../screens/EditCV';
 import CVResume from '../screens/CVResumeScreen';
 import AddCVScreen from '../screens/AddCVScreen';
+import CurriculumVitae from '../screens/CurriculumVitae';
+import StageCurriculum from '../screens/StageCurriculumScreen';
 //icon
 import Octicons from 'react-native-vector-icons/Octicons';
 import Feather from 'react-native-vector-icons/Feather';
@@ -237,6 +239,20 @@ const ProfileStack = (props) => {
                     headerShown: false,
                 })}
             />
+            <Stack.Screen
+                name="StageCurriculumScreen"
+                component={StageCurriculum}
+                options={({ route }) => ({
+                    headerShown: false,
+                })}
+            />
+            <Stack.Screen
+                name="CurriculumVitaeScreen"
+                component={CurriculumVitae}
+                options={({ route }) => ({
+                    headerShown: false,
+                })}
+            />
         </Stack.Navigator>
     );
 };
@@ -346,7 +362,9 @@ const getTabBarVisibility = route => {
     const routeName = getFocusedRouteNameFromRoute(route) ?? 'Feed';
     // console.log(routeName);
 
-    if (routeName == 'DetailsScreen' || routeName == 'Thông tin tuyển dụng' || routeName == 'Notifications' || routeName == 'Chỉnh sửa bài đăng' || routeName == 'Cập nhật thông tin cá nhân' || routeName == 'Cập nhật CV cá nhân' || routeName == 'CVResumeScreen' || routeName == '"Tạo CV cá nhân' || routeName == 'DetailNotification') {
+    if (routeName == 'DetailsScreen' || routeName == 'Thông tin tuyển dụng' || routeName == 'Notifications' || routeName == 'Chỉnh sửa bài đăng' || routeName == 'Cập nhật thông tin cá nhân' 
+    || routeName == 'Cập nhật CV cá nhân' || routeName == 'CVResumeScreen' || routeName == '"Tạo CV cá nhân' 
+        || routeName == 'DetailNotification' || routeName == 'CurriculumVitaeScreen' || routeName == 'StageCurriculumScreen') {
         return 'none';
     }
     return 'flex';
