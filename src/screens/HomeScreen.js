@@ -35,6 +35,7 @@ const HomeScreen = ({ navigation }) => {
   const { user } = useContext(UserContext);
   const [listJobs, setListJobs] = useState([]);
   const [listCareers, setListCareers] = useState([]);
+  const [listSuggestion, setListSuggestion] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
   const [SaveJobs, setSaveJobs] = useState(false);
   const [followedProducts, setFollowedProducts] = useState([]);
@@ -79,6 +80,18 @@ const HomeScreen = ({ navigation }) => {
       }).then((response) => {
         if (response.status === 200) {
           setListJobs(response.data)
+        }
+      })
+      //All my Suggestion
+      axios({
+        url: `${API}/posts/listSuggestionForApp`,
+        method: "POST",
+        data: {
+          data: user.favoriteCareers,
+        }
+      }).then((response) => {
+        if (response.status === 200) {
+          setListSuggestion(response.data)
         }
       })
       //All Career
@@ -149,7 +162,6 @@ const HomeScreen = ({ navigation }) => {
         await AsyncStorage.setItem('listNotifications', data);
         
       }
-      //All my Message
       //All CV
       //All my Post allow
       axios({
