@@ -1,4 +1,5 @@
 /* eslint-disable prettier/prettier */
+/* eslint-disable quotes */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/self-closing-comp */
 /* eslint-disable no-unused-vars */
@@ -6,7 +7,7 @@
 /* eslint-disable eol-last */
 /* eslint-disable semi */
 import React, { useState, useEffect, useContext } from 'react';
-import { View, Text, TouchableOpacity, ImageBackground, ScrollView, Image, FlatList, Alert, Pressable, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, ImageBackground, ScrollView, Image, FlatList, Alert, Pressable, StyleSheet, TextInput } from 'react-native';
 
 //
 import Input from '../components/Input';
@@ -67,6 +68,7 @@ const DetailsScreen = ({ route, navigation }) => {
     const [data, setdataset] = useState(datalist);
     const [loading, setLoading] = React.useState(false);
     const [cv, setCv] = useState([]);
+    const [salary, setSalary] = useState('');
     //console.log('data : ' + JSON.stringify(data));
 
     const [selectedItem, setSelectedItem] = useState(null);
@@ -95,13 +97,16 @@ const DetailsScreen = ({ route, navigation }) => {
             getAllApplied()
         }, [])
     );
-
+    const handleOnChangeSalary = (value) => {
+        setSalary(value);
+    }
     const handleApply = async () => {
         const apply = {
             receiver_id: data.users_id._id,
             sender_id: sender,
             post_id: data.postid,
             cv_id: selectedItem,
+            salary: salary,
         };
 
         if (selectedItem) {
@@ -114,7 +119,6 @@ const DetailsScreen = ({ route, navigation }) => {
                 setLoading(false);
                 Alert.alert('Ứng tuyển thành công!')
             }
-            
         }
     };
 
@@ -361,6 +365,18 @@ const DetailsScreen = ({ route, navigation }) => {
                             scrollEnabled={false}
                         />
                     </ScrollView>
+                    {
+                        selectedItem != null ? (
+                            <View style={{ alignItems: 'center' }}>
+                                <TextInput
+                                    keyboardType='numeric'
+                                    style={{ backgroundColor: "#F5F5F5", width: '80%', paddingHorizontal: 13, paddingVertical: 11, borderRadius: 5 }}
+                                    placeholder="Nhập lương mong muốn"
+                                    onChangeText={handleOnChangeSalary}
+                                />
+                            </View>
+                        ) : null
+                    }
                     <View style={{
                         flexDirection: 'row',
                         justifyContent: 'center',

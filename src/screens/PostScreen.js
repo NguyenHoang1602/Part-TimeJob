@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable quotes */
 /* eslint-disable eqeqeq */
 /* eslint-disable react/no-unstable-nested-components */
@@ -53,8 +54,6 @@ const PostScreen = ({ navigation }) => {
 
   const [isFocus, setIsFocus] = useState(false);
   const [selectedImages, setSelectedImages] = useState([]);
-  const urlImage = [];
-  const imageurl = [];
   const [listCareers, setListCareers] = useState([]);
   const [listWorkType, setListWorkType] = useState([]);
   const [listPayForm, setListPayForm] = useState([]);
@@ -66,16 +65,16 @@ const PostScreen = ({ navigation }) => {
     address: '',
     image: [],
     title: '',
-    quantity: '',
+    quantity: null,
     gender: '',
     career_id: '',
     workType_id: '',
     payForm_id: '',
-    wageMin: '',
-    wageMax: '',
+    wageMin: null,
+    wageMax: null,
     describe: '',
-    ageMin: '',
-    ageMax: '',
+    ageMin: null,
+    ageMax: null,
     academic_id: '',
     experience_id: '',
     status_id: '65423efa3f8e779b5ec14e51',
@@ -129,13 +128,22 @@ const PostScreen = ({ navigation }) => {
     if (!inputs.quantity) {
       handleError('Vui lòng nhập số lượng', 'quantity');
       isValid = false;
+    } else if (inputs.quantity <= 0) {
+      handleError('Số lượng tuyển dụng phải lớn hơn 0', 'quantity');
+      isValid = false;
     }
     if (!inputs.wageMin) {
       handleError('Vui lòng nhập lương', 'wageMin');
       isValid = false;
+    } else if (inputs.wageMin <= 0) {
+      handleError('Lương tối thiểu phải lớn hơn 0', 'wageMin');
+      isValid = false;
     }
     if (!inputs.wageMax) {
       handleError('Vui lòng nhập lương', 'wageMax');
+      isValid = false;
+    } else if (inputs.wageMax < inputs.wageMin) {
+      handleError('Lương tối đa phải >= lương tối thiểu', 'wageMax');
       isValid = false;
     }
     if (!inputs.describe) {
@@ -145,9 +153,15 @@ const PostScreen = ({ navigation }) => {
     if (!inputs.ageMin) {
       handleError('Vui lòng nhập tuổi', 'ageMin');
       isValid = false;
+    } else if (inputs.ageMin < 15) {
+      handleError('Độ tuổi lao động tối thiểu phải đủ 15 tuổi', 'ageMin');
+      isValid = false;
     }
     if (!inputs.ageMax) {
       handleError('Vui lòng nhập tuổi', 'ageMax');
+      isValid = false;
+    } else if (inputs.ageMax < inputs.ageMin || inputs.ageMax < 10) {
+      handleError('Tuổi tối đa phải >= tuổi tối thiểu', 'ageMax');
       isValid = false;
     }
     if (!inputs.image) {
@@ -180,32 +194,51 @@ const PostScreen = ({ navigation }) => {
     }
     if (isValid) {
       uploadImages();
-      setTimeout(handlePost, 4000);
     }
   };
-  console.log(inputs);
+
   const handleOnchange = (text, input) => {
     setInputs(prevState => ({ ...prevState, [input]: text }));
   };
   const handleError = (error, input) => {
     setErrors(prevState => ({ ...prevState, [input]: error }));
   };
+
   const handlePost = async () => {
-    setLoading(true)
-    setTimeout(() => { 3000 })
-    const result = await axios.post(`${API}/posts/postForApp`, inputs);
-    if (result.status === 200) {
-      setLoading(false);
-      Alert.alert('thanh cong')
-      navigation.navigate('Quản lí')
-    }
+      const result = await axios.post(`${API}/posts/postForApp`, inputs);
+      if (result.status === 200) {
+        setLoading(false);
+        Alert.alert('Đăng tin thành công !', 'Đi tới trang quản lí tin?', [
+          { text: 'Không' },
+          { text: 'Có', onPress: () => navigation.navigate('Quản lí') },
+        ],
+          { cancelable: false });
+      }
   }
   useFocusEffect(
     React.useCallback(() => {
-      return () => {
-        // Clean up the state when the component loses focus
-        setSelectedImages([]);
-      };
+      setSelectedImages([]);
+      setInputs({
+        users_id: user._id,
+        businessName: '',
+        address: '',
+        image: [],
+        title: '',
+        quantity: '',
+        gender: '',
+        career_id: '',
+        workType_id: '',
+        payForm_id: '',
+        wageMin: '',
+        wageMax: '',
+        describe: '',
+        ageMin: '',
+        ageMax: '',
+        academic_id: '',
+        experience_id: '',
+        status_id: '65423efa3f8e779b5ec14e51',
+      });
+      setErrors([]);
     }, [])
   );
   const Checkdataimage = () => {
@@ -236,7 +269,8 @@ const PostScreen = ({ navigation }) => {
       });
   };
   // Upload image to Cloud
-  const uploadImages = async () => {  
+  const uploadImages = () => {
+    setLoading(true)
     try {
       const CLOUD_NAME = "dxrv1gdit";
       const PRESET_NAME = "ParttimeJobs";
@@ -259,11 +293,13 @@ const PostScreen = ({ navigation }) => {
         })
 
         if (response.status === 200) {
-          urlImage.push(response.data.secure_url);
-          handleOnchange(urlImage, 'image')
+          inputs.image.push(response.data.secure_url);
+          if (inputs.image.length === selectedImages.length) {
+            handlePost();
+            setSelectedImages([]);
+          }
         }
       })
-      setSelectedImages([]);
     } catch (error) {
       console.log("Upload failed", error);
     }
@@ -325,13 +361,14 @@ const PostScreen = ({ navigation }) => {
               onChangeText={text => handleOnchange(text, 'businessName')}
               onFocus={() => handleError(null, 'businessName')}
               placeholder="Tên doanh nghiệp"
+              value={inputs.businessName}
               error={errors.businessName}
             />
             <Input
               onChangeText={text => handleOnchange(text, 'address')}
               onFocus={() => handleError(null, 'address')}
               placeholder="Địa chỉ"
-              // value={route.params?.subtitle}
+              value={inputs.address}
               error={errors.address}
             />
             <View style={{
@@ -463,7 +500,7 @@ const PostScreen = ({ navigation }) => {
             </View>
             {errors.image ? <Text style={styles.error}>{errors.image}</Text> : null}
           </View>
-          <View style={{ backgroundColor: '#D9D9D9', height: 60, justifyContent: 'center' }}>
+          <View style={{ backgroundColor: '#D9D9D9', height: 60, justifyContent: 'center', marginTop: 10 }}>
             <Text style={{ fontSize: 16, marginStart: 25 }}>NỘI DUNG ĐĂNG TUYỂN</Text>
           </View>
           <View style={{ marginVertical: 22, marginHorizontal: 24 }}>
@@ -471,6 +508,7 @@ const PostScreen = ({ navigation }) => {
               onChangeText={text => handleOnchange(text, 'title')}
               onFocus={() => handleError(null, 'title')}
               placeholder="Tiêu đề đăng tin"
+              value={inputs.title}
               error={errors.title}
             />
             <Input
@@ -478,7 +516,7 @@ const PostScreen = ({ navigation }) => {
               onChangeText={text => handleOnchange(text, 'quantity')}
               onFocus={() => handleError(null, 'quantity')}
               placeholder="Số lượng tuyển dụng"
-              // value={route.params?.subtitle}
+              value={inputs.quantity}
               error={errors.quantity}
             />
             <Dropdown
@@ -509,7 +547,7 @@ const PostScreen = ({ navigation }) => {
               iconStyle={styles.iconStyle}
               data={listCareers}
               maxHeight={300}
-              labelField="c_title"
+              labelField="title"
               valueField="_id"
               placeholder={!isFocus ? 'Ngành Nghề' : '...'}
               searchPlaceholder="Search..."
@@ -530,9 +568,8 @@ const PostScreen = ({ navigation }) => {
               inputSearchStyle={styles.inputSearchStyle}
               iconStyle={styles.iconStyle}
               data={listWorkType}
-          
               maxHeight={300}
-              labelField="wt_title"
+              labelField="title"
               valueField="_id"
               placeholder={!isFocus ? 'Loại công việc' : '...'}
               searchPlaceholder="Search..."
@@ -553,9 +590,8 @@ const PostScreen = ({ navigation }) => {
               inputSearchStyle={styles.inputSearchStyle}
               iconStyle={styles.iconStyle}
               data={listPayForm}
-              
               maxHeight={300}
-              labelField="pf_title"
+              labelField="title"
               valueField="_id"
               placeholder={!isFocus ? 'Hình thức trả lương' : '...'}
               searchPlaceholder="Search..."
@@ -574,7 +610,7 @@ const PostScreen = ({ navigation }) => {
               onChangeText={text => handleOnchange(text, 'wageMin')}
               onFocus={() => handleError(null, 'wageMin')}
               placeholder="Lương tối thiểu"
-              // value={route.params?.subtitle}
+              value={inputs.wageMin}
               error={errors.wageMin}
             />
             <Input
@@ -582,14 +618,14 @@ const PostScreen = ({ navigation }) => {
               onChangeText={text => handleOnchange(text, 'wageMax')}
               onFocus={() => handleError(null, 'wageMax')}
               placeholder="Lương tối đa"
-              // value={route.params?.subtitle}
+              value={inputs.wageMax}
               error={errors.wageMax}
             />
             <InputMutiple
               onChangeText={text => handleOnchange(text, 'describe')}
               onFocus={() => handleError(null, 'describe')}
               placeholder={"Mô tả công việc\nMô tả chi tiết một số đặc điểm nhân diện của công ty tuyển dụng:\n- Tên công ty, địa chỉ công ty, hình thức và mặt hàng kinh doanh."}
-              // value={route.params?.subtitle}
+              value={inputs.describe}
               error={errors.describe}
             />
           </View>
@@ -604,7 +640,7 @@ const PostScreen = ({ navigation }) => {
                   onChangeText={text => handleOnchange(text, 'ageMin')}
                   onFocus={() => handleError(null, 'ageMin')}
                   placeholder="Độ tuổi tối thiểu"
-                  // value={route.params?.subtitle}
+                  value={inputs.ageMin}
                   error={errors.ageMin}
                 />
               </View>
@@ -614,7 +650,7 @@ const PostScreen = ({ navigation }) => {
                   onChangeText={text => handleOnchange(text, 'ageMax')}
                   onFocus={() => handleError(null, 'ageMax')}
                   placeholder="Độ tuổi tối đa"
-                  // value={route.params?.subtitle}
+                  value={inputs.ageMax}
                   error={errors.ageMax}
                 />
               </View>
@@ -635,9 +671,8 @@ const PostScreen = ({ navigation }) => {
               inputSearchStyle={styles.inputSearchStyle}
               iconStyle={styles.iconStyle}
               data={listAcademic}
-              
               maxHeight={300}
-              labelField="a_title"
+              labelField="title"
               valueField="_id"
               placeholder={!isFocus ? 'Trình độ học vấn' : '...'}
               searchPlaceholder="Search..."
@@ -658,9 +693,8 @@ const PostScreen = ({ navigation }) => {
               inputSearchStyle={styles.inputSearchStyle}
               iconStyle={styles.iconStyle}
               data={listExperience}
-              
               maxHeight={300}
-              labelField="e_title"
+              labelField="title"
               valueField="_id"
               placeholder={!isFocus ? 'Kinh nghiệm' : '...'}
               searchPlaceholder="Search..."
@@ -678,7 +712,7 @@ const PostScreen = ({ navigation }) => {
           <View style={{ marginHorizontal: 24 }}>
             <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'center' }}>
               <View style={{ width: '40%', justifyContent: 'flex-start' }}>
-                <Button title="Xem trước" onPress={uploadImages} />
+                <Button title="Hủy" onPress={() => navigation.navigate('Trang chủ')} />
               </View>
               <View style={{ width: '40%', marginStart: '10%' }}>
                 <Button title="Đăng tin" onPress={validate} />

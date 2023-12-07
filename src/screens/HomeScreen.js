@@ -11,7 +11,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, { useState, useContext, useEffect } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
-import { View, Text, SafeAreaView, TouchableOpacity, ImageBackground, ScrollView, Alert,ActivityIndicator, TextInput, FlatList, Pressable, RefreshControl } from 'react-native';
+import { View, Text, SafeAreaView, TouchableOpacity, ImageBackground, ScrollView, Alert, ActivityIndicator, TextInput, FlatList, Pressable, RefreshControl } from 'react-native';
 
 //
 import Input from '../components/Input';
@@ -20,11 +20,13 @@ import Button from '../components/Button';
 //icon
 import Feather from 'react-native-vector-icons/Feather';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import IconWithBadge from '../components/IconWithBadge';
 import IconWithBadgeAntDesign from '../components/IconWithBadgeAntDesign';
 import UserContext from '../components/UserConText';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Vector from '../assets/images/undraw_festivities_tvvj.svg';
 
 import axios from 'axios';
 import Loader from '../components/Loader';
@@ -35,16 +37,17 @@ const HomeScreen = ({ navigation }) => {
   const { user } = useContext(UserContext);
   const [listJobs, setListJobs] = useState([]);
   const [listCareers, setListCareers] = useState([]);
+  const [listSuggestion, setListSuggestion] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
   const [SaveJobs, setSaveJobs] = useState(false);
   const [followedProducts, setFollowedProducts] = useState([]);
+  const [categoryIndex, setCategoryIndex] = useState(0);
 
   useFocusEffect(
     React.useCallback(() => {
       getAllData()
     }, [])
   );
-    
   const getAllData = async () => {
     try {
       //list save
@@ -79,6 +82,18 @@ const HomeScreen = ({ navigation }) => {
       }).then((response) => {
         if (response.status === 200) {
           setListJobs(response.data)
+        }
+      })
+      //All my Suggestion
+      axios({
+        url: `${API}/posts/listSuggestionForApp`,
+        method: "POST",
+        data: {
+          data: user.favoriteCareers,
+        }
+      }).then((response) => {
+        if (response.status === 200) {
+          setListSuggestion(response.data)
         }
       })
       //All Career
@@ -147,9 +162,7 @@ const HomeScreen = ({ navigation }) => {
       if (response.status === 200) {
         const data = JSON.stringify(response.data)
         await AsyncStorage.setItem('listNotifications', data);
-        
       }
-      //All my Message
       //All CV
       //All my Post allow
       axios({
@@ -290,6 +303,22 @@ const HomeScreen = ({ navigation }) => {
       console.log('Err: ', error);
     }
   };
+  const getCV = async (item) => {
+    const data = {
+        userId: user._id,
+        career_id: item._id,
+    };
+    console.log(data);
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    try {
+        const result = await axios.post(`${API}/cvs/myCVsByCareer`, { data });
+        if (result.status === 200) {
+            // setListJobs(result.data);
+        }
+    } catch (error) {
+        console.log("Err : ", error);
+    }
+};
 
   const isFollowed = (productId) => {
     const savePostIDlist = followedProducts.map(item => item.post_id);
@@ -299,7 +328,7 @@ const HomeScreen = ({ navigation }) => {
   const FlatLista = () => {
     return (
       <FlatList
-        data={listCareers}
+        data={listSuggestion}
         keyExtractor={(item, index) => index.toString()}
         renderItem={renderItem}
         horizontal={true}
@@ -319,18 +348,91 @@ const HomeScreen = ({ navigation }) => {
       />
     );
   }
-
   const renderItem = ({ item }) => (
-    <View style={{ alignItems: 'center' }}>
-      <TouchableOpacity style={{ margin: 5, alignItems: 'center', width: 70, marginTop: 15, marginBottom: 10 }} onPress={() => { }}>
-        <ImageBackground
-          source={{ uri: item.image }}
-          style={{ width: 46, height: 46, marginBottom: 5 }}
-          imageStyle={{ borderRadius: 5 }}
-        />
-        <Text style={{ textAlign: 'center' }}>{item.title}</Text>
+    <TouchableOpacity>
+      <TouchableOpacity style={{
+        width: 340,
+        borderWidth: 0.5,
+        borderColor: COLORS.grey,
+        borderRadius: 20,
+        marginBottom: 18,
+        padding: 20,
+        marginRight: 10,
+      }}
+        onPress={() => navigation.navigate('DetailsScreen', {
+          postid: item._id,
+          users_id: item.users_id,
+          avatar: item.users_id.photo,
+          address: item.address,
+          business_name: item.businessName,
+          gender: item.gender,
+          image: item.image,
+          quantity: item.quantity,
+          title: item.title,
+          career_id: item.career_id,
+          payform_id: item.payForm_id,
+          experience_id: item.experience_id,
+          acedemic_id: item.academic_id,
+          worktype_id: item.workType_id,
+          describe: item.describe,
+          age_min: item.ageMin,
+          age_max: item.ageMax,
+          wage_min: item.wageMin,
+          wage_max: item.wageMax,
+          status_id: item.status_id,
+          date: item.date,
+          time: item.time,
+        })}>
+        <View style={{ width: '100%', flexDirection: 'row' }}>
+          {item.image.map((imageUrl, index) => {
+            if (index === 0) {
+              return (
+                <ImageBackground
+                  key={index}
+                  source={{ uri: imageUrl }}
+                  style={{ width: 46, height: 46, marginBottom: 5 }}
+                  imageStyle={{ borderRadius: 5 }}
+                />
+              );
+            }
+          })}
+          <View style={{ width: '50%', height: '100%', marginStart: 20, flex: 1 }}>
+            <Text numberOfLines={2} style={{ fontSize: 18, fontWeight: '400' }}>{item.title}</Text>
+            <Text numberOfLines={1} style={{ fontSize: 15, fontWeight: '400', color: COLORS.grey }}>{item.address}</Text>
+          </View>
+          <TouchableOpacity onPress={() => handleSaveToggle(item._id)}>
+            {isFollowed(item._id) ? (
+              <MaterialIcons name="bookmark-remove" size={30} color={COLORS.blue} />
+            ) : <MaterialIcons name="bookmark-add" size={30} color={COLORS.blue} />
+            }
+          </TouchableOpacity>
+        </View>
+        <View style={{ height: 1, width: '99%', backgroundColor: COLORS.grey, opacity: 0.4, marginTop: 15, marginBottom: 8 }} />
+        <View style={{ width: '100%', paddingStart: '22%' }}>
+          <Text numberOfLines={1} style={{ fontSize: 16, fontWeight: 'bold', color: COLORS.grey, width: 200, marginBottom: 5 }}>{item.businessName}</Text>
+          <Text style={{ color: COLORS.blue, fontSize: 16, marginVertical: 9 }}>${item.wageMin} - ${item.wageMax}/month</Text>
+          <View style={{
+            width: 60,
+            height: 25,
+            borderWidth: 0.5,
+            borderColor: COLORS.grey,
+            borderRadius: 7,
+            padding: 5,
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}>
+            {
+              item.workType_id._id == '653e66b38e88b23b41388e3c' ? (
+                <Text style={{ fontSize: 10 }} >Parttime</Text>
+              ) : (
+                <Text style={{ fontSize: 10 }} >Fulltime</Text>
+              )
+            }
+          </View>
+        </View>
+
       </TouchableOpacity>
-    </View>
+    </TouchableOpacity>
   );
 
   const renderItemJob = ({ item }) => (
@@ -380,7 +482,7 @@ const HomeScreen = ({ navigation }) => {
           }
         })}
         <View style={{ width: '50%', height: '100%', marginStart: 20, flex: 1 }}>
-          <Text style={{ fontSize: 18, fontWeight: '400' }}>{item.title}</Text>
+          <Text numberOfLines={2} style={{ fontSize: 18, fontWeight: '400' }}>{item.title}</Text>
           <Text numberOfLines={1} style={{ fontSize: 15, fontWeight: '400', color: COLORS.grey }}>{item.address}</Text>
         </View>
         <TouchableOpacity onPress={() => handleSaveToggle(item._id)}>
@@ -393,7 +495,7 @@ const HomeScreen = ({ navigation }) => {
       <View style={{ height: 1, width: '99%', backgroundColor: COLORS.grey, opacity: 0.4, marginTop: 15, marginBottom: 8 }} />
       <View style={{ width: '100%', paddingStart: '22%' }}>
         <Text numberOfLines={1} style={{ fontSize: 16, fontWeight: 'bold', color: COLORS.grey, width: 200, marginBottom: 5 }}>{item.businessName}</Text>
-        <Text style={{ color: COLORS.blue, fontSize: 16, marginVertical: 9 }}>{item.wageMin} - {item.wageMax}đ/h</Text>
+        <Text style={{ color: COLORS.blue, fontSize: 16, marginVertical: 9 }}>${item.wageMin} - ${item.wageMax}/month</Text>
         <View style={{
           width: 60,
           height: 25,
@@ -517,16 +619,24 @@ const HomeScreen = ({ navigation }) => {
               }} />
           </TouchableOpacity>
         </Pressable>
-      </View><View style={{ padding: 20 }}>
+      </View><View style={{ paddingHorizontal: 20, paddingBottom: 20 }}>
         <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps={'always'}
           refreshControl={<RefreshControl
             refreshing={refreshing}
             onRefresh={fetchData}
             colors={['#0000ff']} // Adjust the colors of the loading indicator
           />}>
-          <View style={{ width: '100%', alignItems: 'center', marginBottom: 15 }}>
+          <View style={{ marginTop: 15, height: 150, backgroundColor: '#3A7AFE', borderRadius: 30 }}>
+            {/* <Text style={{ marginTop: 30,fontWeight: '700', fontSize: 18, color: COLORS.white, width: '60%', textAlign:'center', marginStart: 10, marginRight: -15}}>Chào mừng bạn đến với Part-time Jobs</Text> */}
+            {/* <ImageBackground ImageBackground
+              source={require('../assets/images/undraw_festivities_tvvj.svg')}
+              style={{ width: '100%', height: 130 }}
+              imageStyle={{ position: 'absolute' }} /> */}
+
+          </View>
+          <View style={{ width: '100%', alignItems: 'center', marginBottom: 15, marginTop: 15 }}>
             <View style={{ width: '100%', marginBottom: 10 }}>
-              <Text style={{ fontSize: 20, fontStyle: 'normal', color: COLORS.black, fontWeight: 'bold' }}>Danh mục ngành nghề</Text>
+              <Text style={{ fontSize: 20, fontStyle: 'normal', color: COLORS.black, fontWeight: 'bold' }}>Công việc đề xuất</Text>
             </View>
             <FlatLista />
           </View>
@@ -538,7 +648,42 @@ const HomeScreen = ({ navigation }) => {
                 <Text style={{ fontSize: 18, color: COLORS.blue, fontWeight: 'bold' }}>Tất cả</Text>
               </TouchableOpacity>
             </View>
-            <View style={{ width: '100%', paddingBottom: '50%' }}>
+            <FlatList
+              data={listCareers}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={{
+                gap: 10,
+              }}
+              renderItem={({ item, index }) => {
+                const isSelected = categoryIndex === index;
+                return (
+                  <TouchableOpacity
+                    onPress={async () => {
+                      setCategoryIndex(index);
+                      await getCV(item);
+                    }}
+                    style={{
+                      backgroundColor: isSelected ? COLORS.primary : COLORS.card,
+                      borderWidth: 1,
+                      borderColor: isSelected ? COLORS.white : COLORS.primary,
+                      borderRadius: 100,
+                      paddingHorizontal: 24,
+                      paddingVertical: 12,
+                    }}>
+                    <Text
+                      style={{
+                        color: isSelected ? COLORS.white : COLORS.primary,
+                        fontSize: 14,
+                        fontWeight: "600",
+                      }}>
+                      {item.title}
+                    </Text>
+                  </TouchableOpacity>
+                )
+              }}
+            />
+            <View style={{ width: '100%', paddingBottom: '50%', marginTop: 30}}>
               <View style={{ alignItems: 'center' }}>
                 <FlatListb />
               </View>

@@ -45,10 +45,10 @@ const FillProfileScreen = ({ navigation, route }) => {
         phone: route?.params?.item?.phone,
         gender: route?.params?.item?.gender,
         role: route?.params?.item?.role,
-        favoriteCareers: [],
+        favoriteCareers: route?.params?.item?.favoriteCareers,
         status: false,
     });
-
+    console.log(inputs);
     const getGender = async () => {
         const result = await axios.get(`${API}/gender/list`);
         setGender(result.data);

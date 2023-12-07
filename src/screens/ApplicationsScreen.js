@@ -1,4 +1,5 @@
 /* eslint-disable prettier/prettier */
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable eol-last */
 /* eslint-disable react-native/no-inline-styles */
 import { View, Text, StyleSheet, SafeAreaView, ImageBackground, TouchableOpacity, TextInput, Pressable, FlatList, Image, ScrollView } from 'react-native';
@@ -59,9 +60,11 @@ const ApplicationsScreen = ({ route, navigation }) => {
                 wageMin: item?.post_id?.wageMin,
                 wageMax: item?.post_id?.wageMax,
                 workType_id: item?.post_id?.workType_id,
+                cv_id: item?.cv_id._id,
                 status: item?.status,
                 image: item?.post_id?.image,
-
+                bargain_Salary : item?.bargain_salary,
+                feedback: item?.feedback,
             })}>
             <View style={{ flexDirection: 'row', width: '100%', alignItems: 'center' }}>
 
@@ -71,14 +74,14 @@ const ApplicationsScreen = ({ route, navigation }) => {
                             <ImageBackground
                                 key={index}
                                 source={{ uri: imageUrl }}
-                                style={{ width: 46, height: 46, marginBottom: 5 }}
+                                style={{ width: 54, height: 54, marginBottom: 5 }}
                                 imageStyle={{ borderRadius: 5 }}
                             />
                         );
                     }
                 })}
                 <View style={{ flex: 1, marginLeft: '5%' }}>
-                    <Text style={{ fontSize: 18, fontWeight: '600', color: '#212121' }}>{item?.post_id?.title}</Text>
+                    <Text numberOfLines={2} style={{ fontSize: 18, fontWeight: '600', color: '#212121', width: '99%' }}>{item?.post_id?.title}</Text>
                     <Text style={{ fontSize: 15, fontWeight: '600', color: '#616161', marginTop: 5 }} numberOfLines={1}>{item?.post_id?.businessName}</Text>
                 </View>
                 <TouchableOpacity
@@ -126,6 +129,19 @@ const ApplicationsScreen = ({ route, navigation }) => {
                         marginTop: '2%',
                     }}>
                         <Text style={{ fontSize: 9.5, color: '#F75656' }} >Application Rejected</Text>
+                    </View>
+                ) : item.status === 4 ? (
+                    <View style={{
+                        width: 120,
+                        backgroundColor: '#FFCAA3',
+                        borderRadius: 6,
+                        padding: 5,
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        marginStart: '20%',
+                        marginTop: '2%',
+                    }}>
+                        <Text style={{ fontSize: 9.5, color: '#FF6B00' }} >Application Negotiation</Text>
                     </View>
                 ) :
                     <View style={{
