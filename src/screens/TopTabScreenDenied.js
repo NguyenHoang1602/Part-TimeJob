@@ -91,6 +91,12 @@ const TopTabScreenDenied = ({ navigation }) => {
         );
 
     };
+    //Format tiền
+  //const amount = 1000000; // Số tiền cần định dạng
+  // const formattedAmount = amount.toLocaleString('vi-VN', {
+  //   style: 'currency',
+  //   currency: 'VND',
+  // });
 
     const renderItemJob = ({ item }) => (
         <TouchableOpacity style={{
@@ -123,7 +129,16 @@ const TopTabScreenDenied = ({ navigation }) => {
             <View style={{ height: 1, width: '99%', backgroundColor: COLORS.grey, opacity: 0.4, marginTop: 15, marginBottom: 8 }} />
             <View style={{ width: '100%', paddingStart: '22%' }}>
                 <Text numberOfLines={1} style={{ fontSize: 16, fontWeight: 'bold', color: COLORS.grey, width: 200, marginBottom: 5 }}>{item.businessName}</Text>
-                <Text style={{ color: COLORS.blue, fontSize: 16, marginVertical: 9 }}>${item.wageMin} - ${item.wageMax} /month</Text>
+                <View style={{ flexDirection: 'row' }}>
+                    <Text style={{ color: COLORS.blue, fontSize: 16, marginVertical: 9 }}>${item.wageMin} - ${item.wageMax}</Text>
+                    {
+                        item.payForm_id === '655de22b9a5b0ffa7ffd5132' ? (
+                            <Text style={{ color: COLORS.blue, fontSize: 16, marginVertical: 9 }}>/h</Text>
+                        ) : item.payForm_id === '655de22b9a5b0ffa7ffd5132' ? (
+                            <Text style={{ color: COLORS.blue, fontSize: 16, marginVertical: 9 }}>/month</Text>
+                        ) : null
+                    }
+                </View>
                 <View style={{
                     width: 60,
                     height: 25,
@@ -135,11 +150,11 @@ const TopTabScreenDenied = ({ navigation }) => {
                     justifyContent: 'center',
                 }}>
                     {
-                        item.workType_id._id == '653e66b38e88b23b41388e3c' ? (
-                            <Text style={{ fontSize: 10 }} >Fulltime</Text>
-                        ) : (
+                        item.workType_id === "653e66b38e88b23b41388e3c" ? (
                             <Text style={{ fontSize: 10 }} >Parttime</Text>
-                        )
+                        ) : item.workType_id === "6558634415be344ac80a3b40" ? (
+                            <Text style={{ fontSize: 10 }} >Fulltime</Text>
+                        ) : null
                     }
                 </View>
             </View>

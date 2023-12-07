@@ -55,7 +55,6 @@ const AuthScreen = ({ navigation }) => {
             //setUser(result.data);
             //
             //loginUser(result.data);
-            
 
         } catch (error) {
             console.error(error);

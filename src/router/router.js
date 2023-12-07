@@ -21,15 +21,16 @@ import EditAccount from "../screens/EditAccount";
 import TabNavigatorUser from './TabnavigatorUser';
 import SelectRoleScreen from "../screens/SelectRoleScreen";
 import FillProfileScreen from "../screens/FillProfileScreen";
+import DetailsCVScreen from "../screens/DetailsCVScreen";
+import UpdateCvScreen from "../screens/UpdateCvScreen";
+import FavoriteCareersScreen from "../screens/FavoriteCareersScreen";
 
 import { TouchableOpacity } from "react-native";
 import Octicons from 'react-native-vector-icons/Octicons';
 import Feather from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import COLORS from "../assets/const/colors";
-import DetailsCVScreen from "../screens/DetailsCVScreen";
-import UpdateCvScreen from "../screens/UpdateCvScreen";
-import FavoriteCareersScreen from "../screens/FavoriteCareersScreen";
+
 const Stack = createNativeStackNavigator();
 
 const AuthStack = (props) => {
@@ -96,10 +97,10 @@ const AuthStack = (props) => {
                         </TouchableOpacity>
                     ),
                 })}
-            />
-        </Stack.Navigator>
-    );
-}
+        />
+    </Stack.Navigator>
+);
+};
 
 const Router = () => {
     return (
@@ -119,5 +120,6 @@ const Router = () => {
         </Stack.Navigator>
     );
 };
+
 
 export default Router;

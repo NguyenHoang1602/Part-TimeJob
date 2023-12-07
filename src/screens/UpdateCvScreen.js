@@ -1,3 +1,5 @@
+/* eslint-disable react-native/no-inline-styles */
+/* eslint-disable prettier/prettier */
 import { View, Text, Keyboard, ScrollView, StyleSheet, TouchableOpacity, ImageBackground, useWindowDimensions, FlatList, Image, StatusBar, Alert } from 'react-native';
 import React, { useState, useContext, useEffect } from 'react';
 import Input from '../components/Input';

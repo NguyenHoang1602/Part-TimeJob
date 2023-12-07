@@ -1,7 +1,8 @@
 /* eslint-disable prettier/prettier */
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-native/no-inline-styles */
 import { View, Text, SafeAreaView, TouchableOpacity, ImageBackground } from 'react-native';
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import COLORS from '../assets/const/colors';
 
 import Feather from 'react-native-vector-icons/Feather';
@@ -11,11 +12,16 @@ import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import IconWithBadge from '../components/IconWithBadge';
 import IconWithBadgeAntDesign from '../components/IconWithBadgeAntDesign';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Modal from "react-native-modal";
+import axios from 'axios';
+import { API } from '../../Sever/sever';
+import UserContext from '../components/UserConText';
+import { useFocusEffect } from '@react-navigation/native';
 
 
 const ApplicationsStageScreen = ({ route, navigation }) => {
   const datalist = {
-    id: route.params?._id,
+    id: route.params?.id,
     title: route.params?.title,
     businessName: route.params?.businessName,
     address: route.params?.address,
@@ -24,9 +30,53 @@ const ApplicationsStageScreen = ({ route, navigation }) => {
     workType_id: route.params?.workType_id,
     status: route.params?.status,
     image: route.params?.image,
+    bargain_Salary: route.params?.bargain_Salary,
+    feedback: route.params?.feedback,
+    cv_id: route.params?.cv_id,
 
   };
   const [data, setData] = useState(datalist);
+  const { user } = useContext(UserContext);
+  useFocusEffect(
+    React.useCallback(() => {
+      getCVApply();
+    }, [])
+  );
+  const [CvApply, setCvApply] = useState([]);
+  const handleAccept = async () => {
+    const response = await axios.post(`${API}/apply/updateAccept`, { id: data.id });
+    if (response.status === 200) {
+      console.log('thanh cong');
+      getCVApply();
+      toggleModalclose();
+    }
+
+  }
+  const getCVApply = async () => {
+    axios({
+      url: `${API}/apply//CvApplySender`,
+      method: "POST",
+      data: {
+        id: user._id,
+        cv_id: data.cv_id,
+      },
+    }).then(async (response) => {
+      if (response.status === 200) {
+        setCvApply(response.data);
+      }
+    });
+  };
+  const status = CvApply.map((item) => {
+    return item.status;
+  });
+  console.log(data?.id);
+  const [isModalVisible, setModalVisible] = useState(false);
+  const toggleModal = () => {
+    setModalVisible(!isModalVisible);
+  };
+  const toggleModalclose = () => {
+    setModalVisible(!isModalVisible);
+  };
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white, paddingTop: 25 }}>
       {/* header */}
@@ -78,18 +128,34 @@ const ApplicationsStageScreen = ({ route, navigation }) => {
         <View style={{ height: 1, width: '90%', backgroundColor: COLORS.grey, opacity: 0.4, marginTop: '7%', marginBottom: '6%' }} />
         <Text style={{ fontSize: 17, fontWeight: '500', color: '#414141' }}>Trạng thái ứng tuyển</Text>
         {
-          data.status === 0 ? (
+          status == 0 ? (
             <View style={{ marginTop: '8%', width: '90%', height: 50, borderRadius: 10, backgroundColor: '#E7EFFF', alignItems: 'center', justifyContent: 'center', marginBottom: '20%' }}>
               <Text style={{ fontSize: 17, fontWeight: '500', color: '#246BFE' }}>Application Sent</Text>
             </View>
-          ) : data.status === 1 ? (
+          ) : status == 1 ? (
             <View style={{ marginTop: '8%', width: '90%', height: 50, borderRadius: 10, backgroundColor: '#FFF4CD', alignItems: 'center', justifyContent: 'center', marginBottom: '20%' }}>
               <Text style={{ fontSize: 17, fontWeight: '500', color: '#FBCA17' }}>Application Pending</Text>
             </View>
 
-          ) : data.status === 2 ? (
-            <View style={{ marginTop: '8%', width: '90%', height: 50, borderRadius: 10, backgroundColor: '#FDD9DA', alignItems: 'center', justifyContent: 'center', marginBottom: '20%' }}>
+          ) : status == 2 ? (
+            <View style={{ width: '100%', alignItems: 'center' }}>
+            <View style={{ marginTop: '8%', width: '90%', height: 50, borderRadius: 10, backgroundColor: '#FDD9DA', alignItems: 'center', justifyContent: 'center', marginBottom: '5%' }}>
               <Text style={{ fontSize: 17, fontWeight: '500', color: '#F75656' }}>Application Rejected</Text>
+            </View>
+            <View style={{ flexDirection: 'row', marginBottom: '20%' }}>
+              <Text style={{ fontSize: 18, fontWeight: '600' }}>Lý do: </Text>
+              <Text style={{ fontSize: 18, fontWeight: '600', color: COLORS.primary }}>{data.feedback}</Text>
+            </View>
+          </View>
+          ) : status == 4 ? (
+            <View style={{ width: '100%', alignItems: 'center' }}>
+              <View style={{ marginTop: '8%', width: '90%', height: 50, borderRadius: 10, backgroundColor: '#FFDCC3', alignItems: 'center', justifyContent: 'center', marginBottom: '20%' }}>
+                <Text style={{ fontSize: 17, fontWeight: '500', color: '#FF6B00' }}>Application Negotiation</Text>
+              </View>
+              <View style={{ flexDirection: 'row' }}>
+                <Text style={{ fontSize: 18, fontWeight: '600' }}>Lương thương lượng: </Text>
+                <Text style={{ fontSize: 18, fontWeight: '600', color: COLORS.primary }}>{data.bargain_Salary}</Text>
+              </View>
             </View>
           ) : <View style={{ marginTop: '8%', width: '90%', height: 50, borderRadius: 10, backgroundColor: '#E7FEEE', alignItems: 'center', justifyContent: 'center', marginBottom: '20%' }}>
             <Text style={{ fontSize: 17, fontWeight: '500', color: '#08BE75' }}>Application Accept</Text>
@@ -99,7 +165,7 @@ const ApplicationsStageScreen = ({ route, navigation }) => {
       </View>
       <View style={{ width: '100%', height: 100, borderWidth: 0.3, borderColor: COLORS.grey, justifyContent: 'center', alignItems: 'center' }}>
         {
-          data.status === 0 || data.status === 2 ? (
+          status == 0 || status == 2 ? (
             <TouchableOpacity
               style={{
                 width: '90%',
@@ -113,7 +179,7 @@ const ApplicationsStageScreen = ({ route, navigation }) => {
               <Text style={{ color: COLORS.white, fontSize: 18, fontWeight: '500' }}>Waiting...</Text>
             </TouchableOpacity>
 
-          ) : data.status === 1 ? (
+          ) : status == 1 ? (
             <TouchableOpacity
               style={{
                 width: '90%',
@@ -125,6 +191,20 @@ const ApplicationsStageScreen = ({ route, navigation }) => {
                 paddingVertical: 10,
               }}>
               <Text style={{ color: COLORS.white, fontSize: 18, fontWeight: '500' }}>Discover Another Job</Text>
+            </TouchableOpacity>
+          ) : status == 4 ? (
+            <TouchableOpacity
+              onPress={() => toggleModal()}
+              style={{
+                width: '90%',
+                height: 50,
+                backgroundColor: '#246BFD',
+                borderRadius: 50,
+                alignItems: 'center',
+                justifyContent: 'center',
+                paddingVertical: 10,
+              }}>
+              <Text style={{ color: COLORS.white, fontSize: 18, fontWeight: '500' }}>Confirm</Text>
             </TouchableOpacity>
           ) : <TouchableOpacity
             style={{
@@ -140,6 +220,75 @@ const ApplicationsStageScreen = ({ route, navigation }) => {
           </TouchableOpacity>
         }
       </View>
+      <Modal
+        onBackdropPress={toggleModalclose}
+        isVisible={isModalVisible}
+        style={{
+          justifyContent: 'flex-end',
+          margin: 0,
+        }}>
+        <View style={{
+          backgroundColor: '#FFFFFF',
+          shadowColor: '#333333',
+          shadowOffset: { width: -1, height: -3 },
+          shadowRadius: 2,
+          shadowOpacity: 0.4,
+          // elevation: 5,
+          paddingTop: 10,
+          borderTopLeftRadius: 20,
+          borderTopRightRadius: 20,
+        }}>
+          <View style={{
+            alignItems: 'center',
+          }}>
+            <View style={{
+              width: 40,
+              height: 6,
+              borderRadius: 4,
+              backgroundColor: COLORS.grey,
+              marginBottom: 10,
+            }} />
+          </View>
+        </View>
+        <View style={{ backgroundColor: '#FFFFFF' }}>
+          <View style={{
+            flexDirection: 'row',
+            justifyContent: 'center',
+            marginVertical: 20,
+          }}>
+            <TouchableOpacity
+              onPress={toggleModalclose}
+              style={{
+                backgroundColor: 'rgba(51, 123, 255, 0.20)',
+                alignItems: 'center',
+                justifyContent: 'center',
+                borderRadius: 64,
+                position: 'relative',
+                width: 160,
+                paddingVertical: 15,
+                marginEnd: 15,
+              }}>
+              <Text style={{ color: COLORS.primary, fontSize: 18, fontWeight: '600' }}>Thương lượng</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              onPress={() => {
+                handleAccept();
+              }}
+              style={{
+                backgroundColor: COLORS.primary,
+                alignItems: 'center',
+                justifyContent: 'center',
+                borderRadius: 64,
+                position: 'relative',
+                width: 160,
+                paddingVertical: 15,
+              }}>
+              <Text style={{ color: COLORS.white, fontSize: 18, fontWeight: '600' }}>Chấp nhận</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 };

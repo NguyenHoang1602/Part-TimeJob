@@ -60,7 +60,7 @@ const ProfileScreen = ({ route, navigation }) => {
     await GoogleSignin.signOut();
     AsyncStorage.clear();
     navigation.replace('AuthStack');
-  }
+  };
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white, paddingHorizontal: 20 }}>
       <ScrollView showsVerticalScrollIndicator={false} >
@@ -87,11 +87,15 @@ const ProfileScreen = ({ route, navigation }) => {
             <Text style={styles.itemText}>Thông tin cá nhân</Text>
             <Feather name="chevron-right" size={24} color='rgba(125, 122, 122, 1)' />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.item1} onPress={() => navigation.navigate('CVResumeScreen')}>
-            <Ionicons name="document-text-outline" size={24} color='rgba(125, 122, 122, 1)' />
-            <Text style={styles.itemText}>Quản lí CV</Text>
-            <Feather name="chevron-right" size={24} color='rgba(125, 122, 122, 1)' />
-          </TouchableOpacity>
+          {
+            user?.role === 0 ? (
+              <TouchableOpacity style={styles.item1} onPress={() => navigation.navigate('CVResumeScreen')}>
+                <Ionicons name="document-text-outline" size={24} color='rgba(125, 122, 122, 1)' />
+                <Text style={styles.itemText}>Quản lí CV</Text>
+                <Feather name="chevron-right" size={24} color='rgba(125, 122, 122, 1)' />
+              </TouchableOpacity>
+            ) : null
+          }
           <TouchableOpacity style={styles.item1} onPress={() => navigation.navigate('MessageScreen')}>
             <AntDesign name="message1" size={24} color='rgba(125, 122, 122, 1)' />
             <Text style={styles.itemText}>Tin nhắn</Text>
@@ -101,7 +105,7 @@ const ProfileScreen = ({ route, navigation }) => {
             user?.role === 1 ? (
               <TouchableOpacity
                 onPress={() => navigation.navigate('CurriculumVitaeScreen')}
-               style={styles.item1}>
+                style={styles.item1}>
                 <AntDesign name="pdffile1" size={24} color='rgba(125, 122, 122, 1)' />
                 <Text style={styles.itemText}>Hồ sơ ứng tuyển</Text>
                 <Feather name="chevron-right" size={24} color='rgba(125, 122, 122, 1)' />

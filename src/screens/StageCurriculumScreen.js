@@ -1,42 +1,121 @@
+/* eslint-disable semi */
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable eol-last */
 /* eslint-disable react/self-closing-comp */
 /* eslint-disable prettier/prettier */
 /* eslint-disable react-native/no-inline-styles */
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, ImageBackground, StyleSheet, ScrollView, Alert } from 'react-native';
+import React, { useState, useContext, useEffect } from 'react';
+import { View, Text, TouchableOpacity, ImageBackground, StyleSheet, ScrollView, Alert, TextInput } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import COLORS from '../assets/const/colors';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import axios from 'axios';
 import { API } from '../../Sever/sever';
+import UserContext from '../components/UserConText';
+import { useFocusEffect } from '@react-navigation/native';
+import Modal from "react-native-modal";
 
-const StageCurriculumScreen = ({ route,navigation}) => {
-    const datalist = { 
-        _id : route.params?.item._id,
-        cv_id: route.params?.item.cv_id, 
+const StageCurriculumScreen = ({ route, navigation }) => {
+    const { user } = useContext(UserContext);
+    useFocusEffect(
+        React.useCallback(() => {
+            getCVApply();
+        }, [])
+    );
+    // useEffect(() => {
+    //     getCVApply();
+    // },[]);
+
+    const datalist = {
+        _id: route.params?.item._id,
+        cv_id: route.params?.item.cv_id,
         title: route.params?.item.cv_id?.title,
-        name : route.params?.item.cv_id?.name,
-        phone : route.params?.item.cv_id?.phone,
-        year : route.params?.item.cv_id?.year,
-        gender_id : route.params?.item.cv_id?.gender_id,
-        email : route.params?.item.cv_id?.email,
-        address : route.params?.item.cv_id?.address,
-        introduce : route.params?.item.cv_id?.introduce,
+        name: route.params?.item.cv_id?.name,
+        phone: route.params?.item.cv_id?.phone,
+        year: route.params?.item.cv_id?.year,
+        gender_id: route.params?.item.cv_id?.gender_id,
+        email: route.params?.item.cv_id?.email,
+        address: route.params?.item.cv_id?.address,
+        introduce: route.params?.item.cv_id?.introduce,
     };
-   
     const [data, setData] = useState(datalist);
+    const [CvApply, setCvApply] = useState([]);
+    const [bargainSalary, setBargainSalary] = useState('');
+    const [feedbacks, setFeedBack] = useState('');
+    const handleOnChangeSalary = (value) => {
+        setBargainSalary(value);
+    }
+    const handleOnChangeFeedback = (value) => {
+        setFeedBack(value);
+    }
+    const handleAccept = async () => {
 
-    const handleAccept = async() => {
-        
         const response = await axios.post(`${API}/apply/updateAccept`, { id: data._id });
         if (response.status === 200) {
             console.log('thanh cong');
+            getCVApply();
         }
 
     }
-    const handleReject = async() => {
-        const response = await axios.post(`${API}/apply/updateReject`, { id: data._id });
+    const [isModalVisible, setModalVisible] = useState(false);
+    const toggleModal = () => {
+        setModalVisible(!isModalVisible);
+    };
+    const toggleModalclose = () => {
+        setModalVisible(!isModalVisible);
+    };
+    const [isModalVisible1, setModalVisible1] = useState(false);
+    const toggleModal1 = () => {
+        setModalVisible1(!isModalVisible1);
+    };
+    const toggleModalclose1 = () => {
+        setModalVisible1(!isModalVisible1);
+    };
+    const status = CvApply.map((item) => {
+        return item.status;
+    });
+    const getCVApply = async () => {
+        axios({
+            url: `${API}/apply//CvApply`,
+            method: "POST",
+            data: {
+                id: user._id,
+                cv_id: data.cv_id._id,
+            },
+        }).then(async (response) => {
+            if (response.status === 200) {
+                setCvApply(response.data);
+            }
+        });
+    };
+    const handleReject = async () => {
+        Alert.alert('Từ chối CV', 'Bạn có muốn thương lượng với người ứng tuyển ?', [
+            { text: 'Không', onPress: () => toggleModal1() },
+            { text: 'Có', onPress: () => toggleModal() },
+        ]);
+    };
+    const bargain = async () => {
+        const bragaindata = {
+            id: data._id,
+            bargain_salary: bargainSalary,
+        };
+        const response = await axios.post(`${API}/apply/updateBargain`, bragaindata);
         if (response.status === 200) {
+            console.log('thanh cong');
+            getCVApply();
+            toggleModalclose();
+        }
+    }
+
+    const Reject = async () => {
+        const Feedback = {
+            id: data._id,
+            feedback: feedbacks,
+        };
+        const response = await axios.post(`${API}/apply/updateReject`, Feedback);
+        if (response.status === 200) {
+            getCVApply();
+            toggleModalclose1();
             console.log('thanh cong');
         }
     }
@@ -65,11 +144,7 @@ const StageCurriculumScreen = ({ route,navigation}) => {
             <ScrollView showsVerticalScrollIndicator={false}>
                 <View style={{ margin: 10, paddingVertical: 22, paddingHorizontal: 24, flex: 1, backgroundColor: COLORS.white }}>
                     <View style={{ width: '115%', height: 70, backgroundColor: '#FF5D01', opacity: 0.7, position: 'absolute' }} />
-                    <View style={{ width: '100%', alignItems: 'center', marginBottom: 20, flex: 1 }}>
-                        {/* <ImageBackground
-              source={{ uri: data?.cv_id.user_id.photo }}
-              style={{ width: 90, height: 90, marginBottom: 10 }}
-              imageStyle={{ borderRadius: 100 }} /> */}
+                    <View style={{ width: '100%', alignItems: 'center', marginBottom: 30, flex: 1 }}>
                         <Text style={{ fontSize: 20, fontWeight: '600', color: "white" }}>{data?.title}</Text>
                     </View>
                     <View style={styles.view1}>
@@ -84,7 +159,13 @@ const StageCurriculumScreen = ({ route,navigation}) => {
                     </View>
                     <View style={styles.view1}>
                         <Text style={styles.text2}>Giới tính: </Text>
-                        <Text style={{ fontSize: 16 }}>{data?.gender_id?.title}</Text>
+                        {
+                            data?.gender_id === '655f260103fd0dec424b970d' ? (
+                                <Text style={{ fontSize: 16 }}>Nam</Text>
+                            ) : data?.gender_id === '655f261603fd0dec424b970e' ? (
+                                <Text style={{ fontSize: 16 }}>Nữ</Text>
+                            ) : <Text style={{ fontSize: 16 }}>Khác</Text>
+                        }
                     </View>
                     <View style={styles.view1}>
                         <Text style={styles.text2}>Email: </Text>
@@ -93,6 +174,10 @@ const StageCurriculumScreen = ({ route,navigation}) => {
                     <View style={styles.view1}>
                         <Text style={styles.text2}>Địa chỉ: </Text>
                         <Text style={{ fontSize: 16 }}>{data?.address}</Text>
+                    </View>
+                    <View style={styles.view1}>
+                        <Text style={styles.text2}>Lương mong muốn: </Text>
+                        <Text style={{ fontSize: 16 }}>{data?.salary}</Text>
                     </View>
                     {/* <View style={styles.view1}>
                         <Text style={styles.text2}>Ngành nghề: </Text>
@@ -110,46 +195,268 @@ const StageCurriculumScreen = ({ route,navigation}) => {
                     <Text style={{ fontSize: 16, marginTop: 5, marginBottom: 20 }}>- {data?.introduce}</Text>
                     <View style={{ width: '100%', height: 1, backgroundColor: '#FF5D01', opacity: 0.7, position: 'relative', }} />
                 </View>
-
-                <View style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    justifyContent: 'center'
-                }}>
-                    <TouchableOpacity
-                        onPress={() => {
-                            handleReject()
-                        }}
-                        style={{
-                            backgroundColor: 'rgba(51, 123, 255, 0.20)',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            borderRadius: 64,
-                            position: "relative",
-                            width: 160,
-                            paddingVertical: 15,
-                            marginEnd: 15,
-                        }}>
-                        <Text style={{ color: COLORS.primary, fontSize: 18, fontWeight: "600" }}>Từ chối</Text>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity
-                        onPress={() => {
-                            handleAccept()
-                        }}
-                        style={{
-                            backgroundColor: COLORS.primary,
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            borderRadius: 64,
-                            position: "relative",
-                            width: 160,
-                            paddingVertical: 15,
-                        }}>
-                        <Text style={{ color: COLORS.white, fontSize: 18, fontWeight: "600" }}>Chấp nhận</Text>
-                    </TouchableOpacity>
-                </View>
             </ScrollView>
+            <Modal
+                onBackdropPress={toggleModalclose}
+                isVisible={isModalVisible}
+                style={{
+                    justifyContent: 'flex-end',
+                    margin: 0,
+                }}>
+                <View style={{
+                    backgroundColor: '#FFFFFF',
+                    shadowColor: '#333333',
+                    shadowOffset: { width: -1, height: -3 },
+                    shadowRadius: 2,
+                    shadowOpacity: 0.4,
+                    // elevation: 5,
+                    paddingTop: 10,
+                    borderTopLeftRadius: 20,
+                    borderTopRightRadius: 20,
+                }}>
+                    <View style={{
+                        alignItems: 'center',
+                    }}>
+                        <View style={{
+                            width: 40,
+                            height: 6,
+                            borderRadius: 4,
+                            backgroundColor: COLORS.grey,
+                            marginBottom: 10,
+                        }} />
+                    </View>
+                </View>
+                <View style={{ backgroundColor: '#FFFFFF' }}>
+                    <View style={{ alignItems: 'center', marginVertical: 30 }}>
+                        <TextInput
+                            keyboardType='numeric'
+                            style={{ backgroundColor: "#F5F5F5", width: '80%', paddingHorizontal: 13, paddingVertical: 11, borderRadius: 5 }}
+                            placeholder="Nhập lương sẽ trả"
+                            onChangeText={handleOnChangeSalary}
+                        />
+                    </View>
+                    <View style={{
+                        flexDirection: 'row',
+                        justifyContent: 'center',
+                        marginVertical: 20,
+                    }}>
+                        <TouchableOpacity
+                            onPress={toggleModalclose}
+                            style={{
+                                backgroundColor: 'rgba(51, 123, 255, 0.20)',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                borderRadius: 64,
+                                position: 'relative',
+                                width: 160,
+                                paddingVertical: 15,
+                                marginEnd: 15,
+                            }}>
+                            <Text style={{ color: COLORS.primary, fontSize: 18, fontWeight: '600' }}>Hủy</Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
+                            onPress={() => {
+                                bargain()
+                            }}
+                            style={{
+                                backgroundColor: COLORS.primary,
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                borderRadius: 64,
+                                position: 'relative',
+                                width: 160,
+                                paddingVertical: 15,
+                            }}>
+                            <Text style={{ color: COLORS.white, fontSize: 18, fontWeight: '600' }}>Thương lượng</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </Modal>
+            <Modal
+                onBackdropPress={toggleModalclose1}
+                isVisible={isModalVisible1}
+                style={{
+                    justifyContent: 'flex-end',
+                    margin: 0,
+                }}>
+                <View style={{
+                    backgroundColor: '#FFFFFF',
+                    shadowColor: '#333333',
+                    shadowOffset: { width: -1, height: -3 },
+                    shadowRadius: 2,
+                    shadowOpacity: 0.4,
+                    // elevation: 5,
+                    paddingTop: 10,
+                    borderTopLeftRadius: 20,
+                    borderTopRightRadius: 20,
+                }}>
+                    <View style={{
+                        alignItems: 'center',
+                    }}>
+                        <View style={{
+                            width: 40,
+                            height: 6,
+                            borderRadius: 4,
+                            backgroundColor: COLORS.grey,
+                            marginBottom: 10,
+                        }} />
+                    </View>
+                </View>
+                <View style={{ backgroundColor: '#FFFFFF' }}>
+                    <View style={{ alignItems: 'center', marginVertical: 30 }}>
+                        <TextInput
+                            style={{ backgroundColor: "#F5F5F5", width: '80%', paddingHorizontal: 13, paddingVertical: 11, borderRadius: 5 }}
+                            placeholder="Nhập lí do từ chối"
+                            onChangeText={handleOnChangeFeedback}
+                        />
+                    </View>
+                    <View style={{
+                        flexDirection: 'row',
+                        justifyContent: 'center',
+                        marginVertical: 20,
+                    }}>
+                        <TouchableOpacity
+                            onPress={toggleModalclose1}
+                            style={{
+                                backgroundColor: 'rgba(51, 123, 255, 0.20)',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                borderRadius: 64,
+                                position: 'relative',
+                                width: 160,
+                                paddingVertical: 15,
+                                marginEnd: 15,
+                            }}>
+                            <Text style={{ color: COLORS.primary, fontSize: 18, fontWeight: '600' }}>Hủy</Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
+                            onPress={() => {
+                                Reject();
+                            }}
+                            style={{
+                                backgroundColor: COLORS.primary,
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                borderRadius: 64,
+                                position: 'relative',
+                                width: 160,
+                                paddingVertical: 15,
+                            }}>
+                            <Text style={{ color: COLORS.white, fontSize: 18, fontWeight: '600' }}>Xác nhận</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </Modal>
+            {
+                status == 1 ? (
+                    <View style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                    }}>
+                        <TouchableOpacity
+                            onPress={() => {
+                                handleReject();
+                            }}
+                            style={{
+                                backgroundColor: 'rgba(51, 123, 255, 0.20)',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                borderRadius: 64,
+                                position: "relative",
+                                width: 160,
+                                paddingVertical: 15,
+                                marginEnd: 15,
+                            }}>
+                            <Text style={{ color: COLORS.primary, fontSize: 18, fontWeight: "600" }}>Từ chối</Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
+                            onPress={() => {
+                                handleAccept()
+                            }}
+                            style={{
+                                backgroundColor: COLORS.primary,
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                borderRadius: 64,
+                                position: "relative",
+                                width: 160,
+                                paddingVertical: 15,
+                            }}>
+                            <Text style={{ color: COLORS.white, fontSize: 18, fontWeight: "600" }}>Chấp nhận</Text>
+                        </TouchableOpacity>
+                    </View>
+                ) : status == 2 ? (
+                    <View style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                    }}>
+                        <TouchableOpacity
+                            // onPress={() => {
+                            //     handleAccept()
+                            // }}
+                            style={{
+                                backgroundColor: '#FDD9DA',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                borderRadius: 64,
+                                position: "relative",
+                                width: '90%',
+                                paddingVertical: 15,
+                            }}>
+                            <Text style={{ color: '#F75656', fontSize: 18, fontWeight: "600" }}>Bạn đã từ chối CV</Text>
+                        </TouchableOpacity>
+                    </View>
+                ) : status == 3 ? (
+                    <View style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                    }}>
+                        <TouchableOpacity
+                            // onPress={() => {
+                            //     handleAccept()
+                            // }}
+                            style={{
+                                backgroundColor: '#E7FEEE',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                borderRadius: 64,
+                                position: "relative",
+                                width: '90%',
+                                paddingVertical: 15,
+                            }}>
+                            <Text style={{ color: '#08BE75', fontSize: 18, fontWeight: "600" }}>CV đã được chấp nhận</Text>
+                        </TouchableOpacity>
+                    </View>
+                ) : status == 4 ? (
+                    <View style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                    }}>
+                        <TouchableOpacity
+                            // onPress={() => {
+                            //     handleAccept()
+                            // }}
+                            style={{
+                                backgroundColor: '#FFAB6E',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                borderRadius: 64,
+                                position: "relative",
+                                width: '90%',
+                                paddingVertical: 15,
+                            }}>
+                            <Text style={{ color: COLORS.white, fontSize: 18, fontWeight: "600" }}>Đang thương lượng</Text>
+                        </TouchableOpacity>
+                    </View>
+                ) : null
+            }
         </SafeAreaView>
     );
 }
