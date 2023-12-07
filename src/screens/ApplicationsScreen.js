@@ -24,14 +24,6 @@ import { API } from '../../Sever/sever';
 const ApplicationsScreen = ({ route, navigation }) => {
     const { user } = useContext(UserContext);
     const [listApplied, setListApplied] = useState([]);
-    const data = [
-        { id: '1', title: 'UI/UX Designer', bussiness_Name: 'Google LLC', address: 'Binh Tan, TP. HCM', wageMin: '10000', wageMax: '25000', workType: '1', status: '1', image: 'https://th.bing.com/th/id/OIP.S3ZsU5iH6e3Z2K7lXlES7AHaFj?w=230&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7' },
-        { id: '2', title: 'Software Engineer', bussiness_Name: 'Google LLC', address: 'Binh Tan, TP. HCM', wageMin: '10000', wageMax: '25000', workType: '2', status: '2', image: 'https://th.bing.com/th/id/OIP.YEEjAJNNzW_bB2imEBlRywHaD8?w=304&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7' },
-        { id: '3', title: 'Applications Developer', bussiness_Name: 'Google LLC', address: 'Binh Tan, TP. HCM', wageMin: '10000', wageMax: '25000', workType: '1', status: '3', image: 'https://th.bing.com/th/id/OIP.UEXTt6nVBMLf5I8rQh8U_wHaFj?w=208&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7' },
-        { id: '4', title: 'UI/UX Designer', bussiness_Name: 'Google LLC', address: 'Binh Tan, TP. HCM', wageMin: '10000', wageMax: '25000', workType: '2', status: '4', image: 'https://th.bing.com/th/id/OIP.eJPdCWFGsFPki_c_tK0xmQHaFX?w=253&h=183&c=7&r=0&o=5&dpr=1.3&pid=1.7' },
-        { id: '5', title: 'UI/UX Designer', bussiness_Name: 'Google LLC', address: 'Binh Tan, TP. HCM', wageMin: '10000', wageMax: '25000', workType: '1', status: '1', image: 'https://th.bing.com/th/id/OIP.09F15WCuEz8e1c1OwXN1GgHaHa?w=178&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7' },
-        { id: '6', title: 'UI/UX Designer', bussiness_Name: 'Google LLC', address: 'Binh Tan, TP. HCM', wageMin: '10000', wageMax: '25000', workType: '1', status: '4', image: 'https://th.bing.com/th/id/OIP.eJPdCWFGsFPki_c_tK0xmQHaFX?w=253&h=183&c=7&r=0&o=5&dpr=1.3&pid=1.7' },
-    ];
 
     useFocusEffect(
         React.useCallback(() => {

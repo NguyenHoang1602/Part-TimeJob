@@ -203,8 +203,8 @@ const SavedJobsScreen = ({ navigation }) => {
     <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
       {/* Header */}
       <View style={styles.header}>
-        <View style={styles.headera}>
-          <View style={styles.headeraLeft}>
+        <View style={styles.headerA}>
+          <View style={styles.headerLeft}>
             <ImageBackground
               source={require('../assets/images/SignIn/LogoSignInUp.png')}
               style={{ width: 26, height: 26 }}
@@ -219,6 +219,7 @@ const SavedJobsScreen = ({ navigation }) => {
             <IconWithBadge iconName="bell" badgeText="2" />
           </TouchableOpacity>
         </View>
+        {/* Search */}
         <View
           style={{
             flexDirection: 'row',
@@ -401,14 +402,14 @@ const styles = StyleSheet.create({
     paddingTop: 5,
 
   },
-  headera: {
+  headerA: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 18,
     width: '100%',
     height: 60,
   },
-  headeraLeft: {
+  headerLeft: {
     flexDirection: 'row',
     alignItems: 'center',
     marginStart: '1%',
