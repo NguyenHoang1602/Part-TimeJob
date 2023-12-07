@@ -138,9 +138,15 @@ const ApplicationsStageScreen = ({ route, navigation }) => {
             </View>
 
           ) : status == 2 ? (
-            <View style={{ marginTop: '8%', width: '90%', height: 50, borderRadius: 10, backgroundColor: '#FDD9DA', alignItems: 'center', justifyContent: 'center', marginBottom: '20%' }}>
+            <View style={{ width: '100%', alignItems: 'center' }}>
+            <View style={{ marginTop: '8%', width: '90%', height: 50, borderRadius: 10, backgroundColor: '#FDD9DA', alignItems: 'center', justifyContent: 'center', marginBottom: '5%' }}>
               <Text style={{ fontSize: 17, fontWeight: '500', color: '#F75656' }}>Application Rejected</Text>
             </View>
+            <View style={{ flexDirection: 'row', marginBottom: '20%' }}>
+              <Text style={{ fontSize: 18, fontWeight: '600' }}>Lý do: </Text>
+              <Text style={{ fontSize: 18, fontWeight: '600', color: COLORS.primary }}>{data.feedback}</Text>
+            </View>
+          </View>
           ) : status == 4 ? (
             <View style={{ width: '100%', alignItems: 'center' }}>
               <View style={{ marginTop: '8%', width: '90%', height: 50, borderRadius: 10, backgroundColor: '#FFDCC3', alignItems: 'center', justifyContent: 'center', marginBottom: '20%' }}>
