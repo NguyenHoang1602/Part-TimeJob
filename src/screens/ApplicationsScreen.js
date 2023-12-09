@@ -2,7 +2,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable eol-last */
 /* eslint-disable react-native/no-inline-styles */
-import { View, Text, StyleSheet, SafeAreaView, ImageBackground, TouchableOpacity, TextInput, Pressable, FlatList, Image, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ImageBackground, TouchableOpacity, TextInput, Pressable, FlatList, Image, ScrollView } from 'react-native';
 import React, { useContext, useState } from 'react'
 import COLORS from '../assets/const/colors';
 import UserContext from '../components/UserConText';
@@ -21,10 +21,13 @@ import { useFocusEffect } from '@react-navigation/native';
 import axios from 'axios';
 import { Layout } from 'react-native-reanimated';
 import { API } from '../../Sever/sever';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const ApplicationsScreen = ({ route, navigation }) => {
     const { user } = useContext(UserContext);
     const [listApplied, setListApplied] = useState([]);
+    const [list, setList] = useState([]);
+    const [isFocusedSearch, setIsFocusedSearch] = useState(false);
 
     useFocusEffect(
         React.useCallback(() => {
@@ -36,11 +39,34 @@ const ApplicationsScreen = ({ route, navigation }) => {
             const response = await axios.post(`${API}/apply/listMyApplied`, {
                 id: user._id
             });
-            setListApplied(response.data);
+            if (response.status === 200) {
+                const data = JSON.stringify(response.data);
+                await AsyncStorage.setItem('listMyApplied', data)
+                setListApplied(response.data);
+            }
         } catch (error) {
             console.log(error);
         }
     };
+    const handleSearch = async (key) => {
+        const data = await AsyncStorage.getItem('listMyApplied');
+        if (key === "") {
+            setListApplied(JSON.parse(data));
+            setList(JSON.parse(data));
+        } else {
+            try {
+                const filteredData = list.filter((apply) => {
+                    const titleA = apply.post_id.title.toLowerCase();
+                    const keyA = key.toLowerCase();
+                    const find = titleA.indexOf(keyA) !== -1;
+                    return find
+                });
+                setListApplied(filteredData);
+            } catch (error) {
+                console.log(error);
+            }
+        }
+    }
 
     const renderItemApplications = ({ item }) => (
         <TouchableOpacity style={styles.items}
@@ -55,7 +81,7 @@ const ApplicationsScreen = ({ route, navigation }) => {
                 cv_id: item?.cv_id._id,
                 status: item?.status,
                 image: item?.post_id?.image,
-                bargain_Salary : item?.bargain_salary,
+                bargain_Salary: item?.bargain_salary,
                 feedback: item?.feedback,
             })}>
             <View style={{ flexDirection: 'row', width: '100%', alignItems: 'center' }}>
@@ -155,10 +181,11 @@ const ApplicationsScreen = ({ route, navigation }) => {
         </TouchableOpacity>
     );
     return (
-        <SafeAreaView style={styles.container}>
+        <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
+            {/* Header */}
             <View style={styles.header}>
-                <View style={styles.headera}>
-                    <View style={styles.headeraLeft}>
+                <View style={styles.headerA}>
+                    <View style={styles.headerLeft}>
                         <ImageBackground
                             source={require('../assets/images/SignIn/LogoSignInUp.png')}
                             style={{ width: 26, height: 26 }}
@@ -173,38 +200,33 @@ const ApplicationsScreen = ({ route, navigation }) => {
                         <IconWithBadge iconName="bell" badgeText="2" />
                     </TouchableOpacity>
                 </View>
-                <Pressable
+                {/* Search */}
+                <View
                     style={{
                         flexDirection: 'row',
-                        borderColor: '#C6C6C6',
-                        borderRadius: 10,
-                        paddingHorizontal: 10,
+                        height: 50,
+                        borderRadius: 15,
                         alignItems: 'center',
-                        backgroundColor: '#F5F5F5',
+                        paddingHorizontal: 18,
+                        backgroundColor: !isFocusedSearch ? COLORS.lightGrey : '#E9F0FF',
+                        borderWidth: 1,
+                        borderColor: !isFocusedSearch ? COLORS.white : COLORS.primary
                     }}>
-                    <Feather
-                        name="search"
-                        size={20}
-                        color="#C6C6C6"
-                        style={{ marginRight: 20 }} />
+                    <Feather name='search' size={24} color={!isFocusedSearch ? COLORS.grey : COLORS.primary} />
                     <TextInput
-                        style={{ flex: 1 }}
-                        placeholder="Tìm kiếm việc làm"
-                    />
-                    <TouchableOpacity
-                        style={{
-                            marginEnd: '2%',
+                        placeholder="Tìm kiếm . . ."
+                        onChangeText={value => {
+                            handleSearch(value)
                         }}
-                        onPress={() => { }}>
-                        <FontAwesome6
-                            name="sliders"
-                            size={20}
-                            color={COLORS.blue}
-                            style={{
-                                opacity: 0.95,
-                            }} />
+                        onFocus={() => { setIsFocusedSearch(!isFocusedSearch) }}
+                        onBlur={() => { setIsFocusedSearch(!isFocusedSearch) }}
+                        style={{ flex: 1, fontSize: 16, color: COLORS.black, paddingHorizontal: 10, }} />
+                    <TouchableOpacity onPress={() => {
+
+                    }}>
+                        <FontAwesome6 name='sliders' size={20} color={COLORS.primary} />
                     </TouchableOpacity>
-                </Pressable>
+                </View>
             </View>
             <ScrollView showsVerticalScrollIndicator={false} style={styles.body}>
                 <FlatList
@@ -235,20 +257,18 @@ const styles = StyleSheet.create({
         backgroundColor: COLORS.white,
     },
     header: {
-        paddingBottom: 5,
-        paddingLeft: 20,
-        paddingRight: 20,
-        paddingTop: 5,
+        paddingHorizontal: 18,
+        paddingTop: 10,
+        gap: 5,
     },
-    headera: {
+    headerA: {
         flexDirection: 'row',
         alignItems: 'center',
         marginBottom: 18,
-        marginTop: '10%',
         width: '100%',
         height: 60,
     },
-    headeraLeft: {
+    headerLeft: {
         flexDirection: 'row',
         alignItems: 'center',
         marginStart: '1%',

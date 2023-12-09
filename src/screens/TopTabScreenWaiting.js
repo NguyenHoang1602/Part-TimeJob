@@ -94,7 +94,6 @@ const TopTabScreenWaiting = ({ navigation }) => {
         const formattedWageMax = item.wageMax.toLocaleString('vi-VN');
         return (
             <TouchableOpacity style={{
-                width: 340,
                 borderWidth: 0.5,
                 borderColor: COLORS.grey,
                 borderRadius: 20,
@@ -127,9 +126,9 @@ const TopTabScreenWaiting = ({ navigation }) => {
                         <Text style={{ color: COLORS.blue, fontSize: 16, marginVertical: 9 }}>{formattedWageMin}đ - {formattedWageMax}đ</Text>
                         {
                             item.payForm_id === '655de22b9a5b0ffa7ffd5132' ? (
-                                <Text style={{ color: COLORS.blue, fontSize: 16, marginVertical: 9 }}>/h</Text>
+                                <Text style={{ color: COLORS.blue, fontSize: 16, marginVertical: 9 }}> /giờ</Text>
                             ) : item.payForm_id === '355de22b9a5b0ffa7ffd5132' ? (
-                                <Text style={{ color: COLORS.blue, fontSize: 16, marginVertical: 9 }}>/th</Text>
+                                <Text style={{ color: COLORS.blue, fontSize: 16, marginVertical: 9 }}> /tháng</Text>
                             ) : null
                         }
                     </View>
@@ -168,9 +167,11 @@ const TopTabScreenWaiting = ({ navigation }) => {
                     <ActivityIndicator size="large" color={COLORS.primary} />
                 </View>
             ) : (
-                <><View style={{ width: '100%', alignItems: 'center' }}>
-                    <FlatListJobs />
-                </View><Modal onBackdropPress={toggleModalclose} isVisible={isModalVisible} style={{ justifyContent: 'flex-end', margin: 0 }}>
+                <>
+                    <View style={{ paddingHorizontal: 20 }}>
+                        <FlatListJobs />
+                    </View>
+                    <Modal onBackdropPress={toggleModalclose} isVisible={isModalVisible} style={{ justifyContent: 'flex-end', margin: 0 }}>
                         <View style={{
                             backgroundColor: '#FFFFFF',
                             shadowColor: '#333333',
@@ -280,7 +281,8 @@ const TopTabScreenWaiting = ({ navigation }) => {
                                 </TouchableOpacity>
                             </View>
                         </View>
-                    </Modal></>
+                    </Modal>
+                </>
             )}
         </SafeAreaView>
     );

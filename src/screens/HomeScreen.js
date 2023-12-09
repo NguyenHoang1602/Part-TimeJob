@@ -11,7 +11,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, { useState, useContext, useEffect } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
-import { View, Text, SafeAreaView, TouchableOpacity, ImageBackground, ScrollView, Alert, ActivityIndicator, TextInput, FlatList, Pressable, RefreshControl } from 'react-native';
+import { View, Text, TouchableOpacity, ImageBackground, ScrollView, Alert, ActivityIndicator, TextInput, FlatList, Pressable, RefreshControl } from 'react-native';
 
 //
 import Input from '../components/Input';
@@ -31,6 +31,7 @@ import Vector from '../assets/images/undraw_festivities_tvvj.svg';
 import axios from 'axios';
 import Loader from '../components/Loader';
 import { API } from '../../Sever/sever';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const HomeScreen = ({ navigation }) => {
 
@@ -305,20 +306,20 @@ const HomeScreen = ({ navigation }) => {
   };
   const getCV = async (item) => {
     const data = {
-        userId: user._id,
-        career_id: item._id,
+      userId: user._id,
+      career_id: item._id,
     };
     console.log(data);
     await new Promise(resolve => setTimeout(resolve, 2000));
     try {
-        const result = await axios.post(`${API}/cvs/myCVsByCareer`, { data });
-        if (result.status === 200) {
-            // setListJobs(result.data);
-        }
+      const result = await axios.post(`${API}/cvs/myCVsByCareer`, { data });
+      if (result.status === 200) {
+        // setListJobs(result.data);
+      }
     } catch (error) {
-        console.log("Err : ", error);
+      console.log("Err : ", error);
     }
-};
+  };
 
   const isFollowed = (productId) => {
     const savePostIDlist = followedProducts.map(item => item.post_id);
@@ -348,16 +349,16 @@ const HomeScreen = ({ navigation }) => {
       />
     );
   }
-  const renderItem = ({ item }) => (
-    <TouchableOpacity>
+  const renderItem = ({ item }) => {
+    const formattedWageMin = item.wageMin.toLocaleString('vi-VN');
+    const formattedWageMax = item.wageMax.toLocaleString('vi-VN');
+    return (
       <TouchableOpacity style={{
-        width: 340,
         borderWidth: 0.5,
         borderColor: COLORS.grey,
         borderRadius: 20,
         marginBottom: 18,
         padding: 20,
-        marginRight: 10,
       }}
         onPress={() => navigation.navigate('DetailsScreen', {
           postid: item._id,
@@ -408,9 +409,18 @@ const HomeScreen = ({ navigation }) => {
           </TouchableOpacity>
         </View>
         <View style={{ height: 1, width: '99%', backgroundColor: COLORS.grey, opacity: 0.4, marginTop: 15, marginBottom: 8 }} />
-        <View style={{ width: '100%', paddingStart: '22%' }}>
+        <View style={{ width: '100%', paddingStart: '21%' }}>
           <Text numberOfLines={1} style={{ fontSize: 16, fontWeight: 'bold', color: COLORS.grey, width: 200, marginBottom: 5 }}>{item.businessName}</Text>
-          <Text style={{ color: COLORS.blue, fontSize: 16, marginVertical: 9 }}>${item.wageMin} - ${item.wageMax}/month</Text>
+          <View style={{ flexDirection: 'row' }}>
+            <Text style={{ color: COLORS.blue, fontSize: 16, marginVertical: 9 }}>{formattedWageMin}đ - {formattedWageMax}đ</Text>
+            {
+              item.payForm_id === '655de22b9a5b0ffa7ffd5132' ? (
+                <Text style={{ color: COLORS.blue, fontSize: 16, marginVertical: 9 }}> /giờ</Text>
+              ) : (
+                <Text style={{ color: COLORS.blue, fontSize: 16, marginVertical: 9 }}> /tháng</Text>
+              )
+            }
+          </View>
           <View style={{
             width: 60,
             height: 25,
@@ -432,207 +442,173 @@ const HomeScreen = ({ navigation }) => {
         </View>
 
       </TouchableOpacity>
-    </TouchableOpacity>
-  );
 
-  const renderItemJob = ({ item }) => (
-    <TouchableOpacity style={{
-      width: 340,
-      borderWidth: 0.5,
-      borderColor: COLORS.grey,
-      borderRadius: 20,
-      marginBottom: 18,
-      padding: 20,
-    }}
-      onPress={() => navigation.navigate('DetailsScreen', {
-        postid: item._id,
-        users_id: item.users_id,
-        avatar: item.users_id.photo,
-        address: item.address,
-        business_name: item.businessName,
-        gender: item.gender,
-        image: item.image,
-        quantity: item.quantity,
-        title: item.title,
-        career_id: item.career_id,
-        payform_id: item.payForm_id,
-        experience_id: item.experience_id,
-        acedemic_id: item.academic_id,
-        worktype_id: item.workType_id,
-        describe: item.describe,
-        age_min: item.ageMin,
-        age_max: item.ageMax,
-        wage_min: item.wageMin,
-        wage_max: item.wageMax,
-        status_id: item.status_id,
-        date: item.date,
-        time: item.time,
-      })}>
-      <View style={{ width: '100%', flexDirection: 'row' }}>
-        {item.image.map((imageUrl, index) => {
-          if (index === 0) {
-            return (
-              <ImageBackground
-                key={index}
-                source={{ uri: imageUrl }}
-                style={{ width: 46, height: 46, marginBottom: 5 }}
-                imageStyle={{ borderRadius: 5 }}
-              />
-            );
-          }
-        })}
-        <View style={{ width: '50%', height: '100%', marginStart: 20, flex: 1 }}>
-          <Text numberOfLines={2} style={{ fontSize: 18, fontWeight: '400' }}>{item.title}</Text>
-          <Text numberOfLines={1} style={{ fontSize: 15, fontWeight: '400', color: COLORS.grey }}>{item.address}</Text>
-        </View>
-        <TouchableOpacity onPress={() => handleSaveToggle(item._id)}>
-          {isFollowed(item._id) ? (
-            <Icon name="bookmark-minus" size={30} color={COLORS.blue} />
-          ) : <Icon name="bookmark-plus" size={30} color={COLORS.blue} />
-          }
-        </TouchableOpacity>
-      </View>
-      <View style={{ height: 1, width: '99%', backgroundColor: COLORS.grey, opacity: 0.4, marginTop: 15, marginBottom: 8 }} />
-      <View style={{ width: '100%', paddingStart: '22%' }}>
-        <Text numberOfLines={1} style={{ fontSize: 16, fontWeight: 'bold', color: COLORS.grey, width: 200, marginBottom: 5 }}>{item.businessName}</Text>
-        <Text style={{ color: COLORS.blue, fontSize: 16, marginVertical: 9 }}>${item.wageMin} - ${item.wageMax}/month</Text>
-        <View style={{
-          width: 60,
-          height: 25,
-          borderWidth: 0.5,
-          borderColor: COLORS.grey,
-          borderRadius: 7,
-          padding: 5,
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}>
-          {
-            item.workType_id._id == '653e66b38e88b23b41388e3c' ? (
-              <Text style={{ fontSize: 10 }} >Parttime</Text>
-            ) : (
-              <Text style={{ fontSize: 10 }} >Fulltime</Text>
-            )
-          }
-        </View>
-      </View>
+    )
 
-    </TouchableOpacity>
-  );
+  };
+
+  const renderItemJob = ({ item }) => {
+    const formattedWageMin = item.wageMin.toLocaleString('vi-VN');
+    const formattedWageMax = item.wageMax.toLocaleString('vi-VN');
+    return (
+      <TouchableOpacity style={{
+        borderWidth: 0.5,
+        borderColor: COLORS.grey,
+        borderRadius: 20,
+        marginBottom: 18,
+        padding: 20,
+      }}
+        onPress={() => navigation.navigate('DetailsScreen', {
+          postid: item._id,
+          users_id: item.users_id,
+          avatar: item.users_id.photo,
+          address: item.address,
+          business_name: item.businessName,
+          gender: item.gender,
+          image: item.image,
+          quantity: item.quantity,
+          title: item.title,
+          career_id: item.career_id,
+          payform_id: item.payForm_id,
+          experience_id: item.experience_id,
+          acedemic_id: item.academic_id,
+          worktype_id: item.workType_id,
+          describe: item.describe,
+          age_min: item.ageMin,
+          age_max: item.ageMax,
+          wage_min: item.wageMin,
+          wage_max: item.wageMax,
+          status_id: item.status_id,
+          date: item.date,
+          time: item.time,
+        })}>
+        <View style={{ flexDirection: 'row' }}>
+          {item.image.map((imageUrl, index) => {
+            if (index === 0) {
+              return (
+                <ImageBackground
+                  key={index}
+                  source={{ uri: imageUrl }}
+                  style={{ width: 46, height: 46, marginBottom: 5 }}
+                  imageStyle={{ borderRadius: 5 }}
+                />
+              );
+            }
+          })}
+          <View style={{ width: '50%', height: '100%', marginStart: 20, flex: 1 }}>
+            <Text numberOfLines={2} style={{ fontSize: 18, fontWeight: '400' }}>{item.title}</Text>
+            <Text numberOfLines={1} style={{ fontSize: 15, fontWeight: '400', color: COLORS.grey }}>{item.address}</Text>
+          </View>
+          <TouchableOpacity onPress={() => handleSaveToggle(item._id)}>
+            {isFollowed(item._id) ? (
+              <Icon name="bookmark-minus" size={30} color={COLORS.blue} />
+            ) : <Icon name="bookmark-plus" size={30} color={COLORS.blue} />
+            }
+          </TouchableOpacity>
+        </View>
+        <View style={{ height: 1, width: '99%', backgroundColor: COLORS.grey, opacity: 0.4, marginTop: 15, marginBottom: 8 }} />
+        <View style={{ width: '100%', paddingStart: '21%' }}>
+          <Text numberOfLines={1} style={{ fontSize: 16, fontWeight: 'bold', color: COLORS.grey, width: 200, marginBottom: 5 }}>{item.businessName}</Text>
+          <View style={{ flexDirection: 'row' }}>
+            <Text style={{ color: COLORS.blue, fontSize: 16, marginVertical: 9 }}>{formattedWageMin}đ - {formattedWageMax}đ</Text>
+            {
+              item.payForm_id === '655de22b9a5b0ffa7ffd5132' ? (
+                <Text style={{ color: COLORS.blue, fontSize: 16, marginVertical: 9 }}> /giờ</Text>
+              ) : (
+                <Text style={{ color: COLORS.blue, fontSize: 16, marginVertical: 9 }}> /tháng</Text>
+              )
+            }
+          </View>
+          <View style={{
+            width: 80,
+            height: 25,
+            borderWidth: 0.5,
+            borderColor: COLORS.grey,
+            borderRadius: 7,
+            padding: 5,
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}>
+            {
+              item.workType_id._id == '653e66b38e88b23b41388e3c' ? (
+                <Text style={{ fontSize: 10 }} >Bán thời gian</Text>
+              ) : (
+                <Text style={{ fontSize: 10 }} >Toàn thời gian</Text>
+              )
+            }
+          </View>
+        </View>
+
+      </TouchableOpacity>
+    )
+  };
 
   return (
-    <SafeAreaView style={{ flex: 1, color: COLORS.blue, backgroundColor: COLORS.white }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
+      {/* Header */}
       <View style={{
         paddingBottom: 5,
-        paddingLeft: 20,
-        paddingRight: 20,
+        paddingHorizontal: 18,
         paddingTop: 20,
+        gap: 26,
       }}>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'center',
-            alignItems: 'center',
-            marginBottom: 18,
-            marginTop: '10%',
-            width: '100%',
-            height: 60,
-          }}>
-          <TouchableOpacity
-            style={{
-              flexDirection: 'row',
-              marginStart: '2%',
-              alignItems: 'center',
-              width: '68%',
-            }}>
-            <ImageBackground
-              source={{ uri: user.photo }}
-              style={{ width: 46, height: 46 }}
-              imageStyle={{ borderRadius: 46 }} />
-            <View style={{ flexDirection: 'column', height: '100%', justifyContent: 'center', marginStart: 13 }}>
-              <Text style={{ color: '#7D7A7A', fontSize: 16 }}>Xin chào 👋</Text>
-              <Text style={{ color: COLORS.black, fontSize: 20, fontWeight: "600" }} numberOfLines={1}>{user.displayName}</Text>
-            </View>
-          </TouchableOpacity>
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, }}>
+          <ImageBackground
+            source={{ uri: user.photo }}
+            style={{ width: 46, height: 46 }}
+            imageStyle={{ borderRadius: 46 }} />
+          <View style={{ flex: 1, height: 46 }}>
+            <Text style={{ color: '#7D7A7A', fontSize: 16 }} numberOfLines={1}>
+              Xin chào 👋
+            </Text>
+            <Text style={{ color: COLORS.black, fontSize: 20, fontWeight: "600" }} numberOfLines={1}>
+              {user.displayName}
+            </Text>
+          </View>
           <TouchableOpacity
             style={{
               width: 46,
-              height: 46,
-              borderWidth: 0.4,
-              borderColor: COLORS.grey,
-              borderRadius: 46,
+              aspectRatio: 1,
+              borderRadius: 52,
               alignItems: 'center',
-              marginRight: '5%',
               justifyContent: 'center',
+              borderWidth: 1,
+              borderColor: COLORS.grey,
             }}
             onPress={() => navigation.navigate('Notifications')}>
-            {/* <Feather name='bell' size={24} color={COLORS.black}/> */}
             <IconWithBadge iconName="bell" badgeText="2" />
           </TouchableOpacity>
-          <TouchableOpacity
-            style={{
-              width: 46,
-              height: 46,
-              borderWidth: 0.4,
-              borderColor: COLORS.grey,
-              borderRadius: 46,
-              marginEnd: '2%',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-            onPress={() => navigation.navigate('MessageScreen')}>
-            {/* <AntDesign name='message1' size={24} color={COLORS.black}/> */}
-            <IconWithBadgeAntDesign iconName="message1" badgeText="" />
-          </TouchableOpacity>
         </View>
+        {/* Search */}
         <Pressable
           onPress={() => {
             navigation.navigate('SearchScreen');
           }}
           style={{
             flexDirection: 'row',
-            borderColor: '#C6C6C6',
-            borderRadius: 10,
-            paddingHorizontal: 10,
+            height: 50,
+            borderRadius: 15,
             alignItems: 'center',
-            backgroundColor: '#F5F5F5',
+            paddingHorizontal: 18,
+            backgroundColor: COLORS.lightGrey,
+            borderWidth: 1,
+            borderColor: COLORS.white
           }}>
-          <Feather
-            name="search"
-            size={20}
-            color="#C6C6C6"
-            style={{ marginRight: 20 }} />
-          <TextInput
-            style={{ flex: 1 }}
-            placeholder="Tìm kiếm việc làm"
-            onFocus={search} />
-          <TouchableOpacity
-            style={{
-              marginEnd: '2%',
-            }}
-            onPress={() => { }}>
-            <FontAwesome6
-              name="sliders"
-              size={20}
-              color={COLORS.blue}
-              style={{
-                opacity: 0.95,
-              }} />
-          </TouchableOpacity>
+          <Feather name='search' size={24} color={COLORS.grey} />
+          <Text style={{ flex: 1, fontSize: 16, color: COLORS.grey, paddingHorizontal: 10, }} >
+            Tìm kiếm . . .
+          </Text>
+          <FontAwesome6 name='sliders' size={20} color={COLORS.primary} />
         </Pressable>
-      </View><View style={{ paddingHorizontal: 20, paddingBottom: 20 }}>
+      </View>
+      <View style={{ paddingHorizontal: 20, paddingVertical: 24 }}>
         <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps={'always'}
           refreshControl={<RefreshControl
             refreshing={refreshing}
             onRefresh={fetchData}
             colors={['#0000ff']} // Adjust the colors of the loading indicator
           />}>
-          <View style={{ marginTop: 15, height: 150, backgroundColor: '#3A7AFE', borderRadius: 30 }}>
-            {/* <Text style={{ marginTop: 30,fontWeight: '700', fontSize: 18, color: COLORS.white, width: '60%', textAlign:'center', marginStart: 10, marginRight: -15}}>Chào mừng bạn đến với Part-time Jobs</Text> */}
-            {/* <ImageBackground ImageBackground
-              source={require('../assets/images/undraw_festivities_tvvj.svg')}
-              style={{ width: '100%', height: 130 }}
-              imageStyle={{ position: 'absolute' }} /> */}
-
+          <View style={{ height: 150, backgroundColor: '#6295FF', borderRadius: 30 }}>
           </View>
           <View style={{ width: '100%', alignItems: 'center', marginBottom: 15, marginTop: 15 }}>
             <View style={{ width: '100%', marginBottom: 10 }}>
@@ -640,54 +616,51 @@ const HomeScreen = ({ navigation }) => {
             </View>
             <FlatLista />
           </View>
-          <View style={{ width: '100%', alignItems: 'center' }}>
-            <View style={{ width: '100%', marginBottom: 20, flexDirection: 'row', alignItems: 'center' }}>
-              <Text style={{ fontSize: 20, fontStyle: 'normal', color: COLORS.black, fontWeight: 'bold' }}>Công việc mới</Text>
-              <TouchableOpacity style={{ marginStart: '49%' }}
-                onPress={() => { }}>
-                <Text style={{ fontSize: 18, color: COLORS.blue, fontWeight: 'bold' }}>Tất cả</Text>
-              </TouchableOpacity>
-            </View>
-            <FlatList
-              data={listCareers}
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={{
-                gap: 10,
-              }}
-              renderItem={({ item, index }) => {
-                const isSelected = categoryIndex === index;
-                return (
-                  <TouchableOpacity
-                    onPress={async () => {
-                      setCategoryIndex(index);
-                      await getCV(item);
-                    }}
+          {/* All post */}
+          <View style={{ width: '100%', marginBottom: 20, flexDirection: 'row', alignItems: 'center' }}>
+            <Text style={{ fontSize: 20, fontStyle: 'normal', color: COLORS.black, fontWeight: 'bold' }}>Công việc mới</Text>
+            <TouchableOpacity style={{ marginStart: '49%' }}
+              onPress={() => { }}>
+              <Text style={{ fontSize: 18, color: COLORS.blue, fontWeight: 'bold' }}>Tất cả</Text>
+            </TouchableOpacity>
+          </View>
+          <FlatList
+            data={listCareers}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={{
+              gap: 10,
+            }}
+            renderItem={({ item, index }) => {
+              const isSelected = categoryIndex === index;
+              return (
+                <TouchableOpacity
+                  onPress={async () => {
+                    setCategoryIndex(index);
+                    await getCV(item);
+                  }}
+                  style={{
+                    backgroundColor: isSelected ? COLORS.primary : COLORS.card,
+                    borderWidth: 1,
+                    borderColor: isSelected ? COLORS.white : COLORS.primary,
+                    borderRadius: 100,
+                    paddingHorizontal: 24,
+                    paddingVertical: 12,
+                  }}>
+                  <Text
                     style={{
-                      backgroundColor: isSelected ? COLORS.primary : COLORS.card,
-                      borderWidth: 1,
-                      borderColor: isSelected ? COLORS.white : COLORS.primary,
-                      borderRadius: 100,
-                      paddingHorizontal: 24,
-                      paddingVertical: 12,
+                      color: isSelected ? COLORS.white : COLORS.primary,
+                      fontSize: 14,
+                      fontWeight: "600",
                     }}>
-                    <Text
-                      style={{
-                        color: isSelected ? COLORS.white : COLORS.primary,
-                        fontSize: 14,
-                        fontWeight: "600",
-                      }}>
-                      {item.title}
-                    </Text>
-                  </TouchableOpacity>
-                )
-              }}
-            />
-            <View style={{ width: '100%', paddingBottom: '50%', marginTop: 30}}>
-              <View style={{ alignItems: 'center' }}>
-                <FlatListb />
-              </View>
-            </View>
+                    {item.title}
+                  </Text>
+                </TouchableOpacity>
+              )
+            }}
+          />
+          <View style={{ width: '100%', paddingBottom: '50%', marginTop: 30 }}>
+            <FlatListb />
           </View>
         </ScrollView>
       </View>

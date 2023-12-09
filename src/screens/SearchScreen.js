@@ -241,7 +241,6 @@ const SearchScreen = ({ navigation }) => {
   const toggleModalclose = (item) => {
     setModalVisibleFiler(!isModalVisibleFilter);
   };
-
   async function search(value) {
     try {
       const result = await axios.post(`${API}/posts/searchByKeyForApp`, { key: value });
@@ -257,7 +256,6 @@ const SearchScreen = ({ navigation }) => {
       console.log("Err : ", error);
     }
   }
-
   async function handleFilter() {
     try {
       const result = await axios.post(`${API}/posts/filterForApp`, { filter });
@@ -273,7 +271,6 @@ const SearchScreen = ({ navigation }) => {
       console.log("Err : ", error);
     }
   }
-  console.log(filter);
   const FlatListb = () => {
     return (
       <FlatList
@@ -378,11 +375,8 @@ const SearchScreen = ({ navigation }) => {
 
     </TouchableOpacity>
   );
-
   return (
-
     <SafeAreaView style={{ flex: 1, paddingVertical: 18, gap: 16, backgroundColor: 'white' }}>
-
       {/* Search */}
       <View
         style={{
@@ -411,7 +405,7 @@ const SearchScreen = ({ navigation }) => {
             borderWidth: 1,
             borderColor: !isFocusedSearch ? COLORS.white : COLORS.primary
           }}>
-          <AntDesign name='search1' size={24} color={!isFocusedSearch ? COLORS.grey : COLORS.primary} />
+          <Feather name='search' size={24} color={!isFocusedSearch ? COLORS.grey : COLORS.primary} />
           <TextInput
             placeholder="Search . . ."
             onChangeText={value => {
