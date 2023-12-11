@@ -30,7 +30,7 @@ const CVResume = ({ navigation }) => {
     });
     const getFirst = async () => {
         setLoading(true);
-        await new Promise(resolve => setTimeout(resolve, 2000));
+        await new Promise(resolve => setTimeout(resolve, 1000));
         try {
             const result = await axios.post(`${API}/cvs/first`, { id : user._id});
             if (result.status === 200) {
@@ -48,7 +48,7 @@ const CVResume = ({ navigation }) => {
         };
         console.log(data);
         setLoading(true);
-        await new Promise(resolve => setTimeout(resolve, 2000));
+        await new Promise(resolve => setTimeout(resolve, 1000));
         try {
             console.log("Ra : ", data);
             const result = await axios.post(`${API}/cvs/myCVsByCareer`, { data });

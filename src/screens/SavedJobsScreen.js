@@ -151,7 +151,7 @@ const SavedJobsScreen = ({ navigation }) => {
     return (
       <TouchableOpacity
         style={{
-          paddingHorizontal: 18, paddingTop: 18
+          padding: 20,
         }}
         onPress={() => navigation.navigate('DetailsScreen', {
           postid: item._id,
@@ -177,24 +177,24 @@ const SavedJobsScreen = ({ navigation }) => {
           date: item.post_id.date,
           time: item.post_id.time,
         })}>
-        <View style={{ borderRadius: 15, borderWidth: 1, paddingHorizontal: 18, borderColor: COLORS.grey }}>
-          <View style={{ flexDirection: 'row', gap: 20, paddingVertical: 18 }}>
+        <View style={{ borderRadius: 15, borderWidth: 0.5, padding: 18, borderColor: COLORS.grey }}>
+          <View style={{ flexDirection: 'row', gap: 20 }}>
             {item?.post_id.image.map((imageUrl, index) => {
               if (index === 0) {
                 return (
                   <Image
                     key={index}
                     source={{ uri: imageUrl }}
-                    style={{ width: 46, aspectRatio: 1, borderRadius: 5 }}
+                    style={{ width: 46, aspectRatio: 1, borderRadius: 12 }}
                   />
                 );
               }
             })}
             <View style={{ flex: 1 }}>
-              <Text style={{ fontSize: 18, color: COLORS.black, fontWeight: "600" }} numberOfLines={2}>
+              <Text numberOfLines={2} style={{ fontSize: 18, fontWeight: '500', color: COLORS.black }}>
                 {item.post_id.title}
               </Text>
-              <Text style={{ fontSize: 16, color: COLORS.grey, paddingTop: 4 }} numberOfLines={1}>
+              <Text numberOfLines={1} style={{ fontSize: 15, fontWeight: 'normal', color: COLORS.black, opacity: 0.5 }}>
                 {item.post_id.address}
               </Text>
             </View>
@@ -205,11 +205,11 @@ const SavedJobsScreen = ({ navigation }) => {
             </TouchableOpacity>
           </View>
 
-          <View style={{ borderTopWidth: 1, borderColor: COLORS.grey }} />
+          <View style={{ borderTopWidth: 0.5, borderColor: COLORS.grey, marginVertical: 8 }} />
 
-          <View style={{ flexDirection: 'row', gap: 8, paddingVertical: 12 }}>
+          <View style={{ flexDirection: 'row', gap: 10, }}>
             <View style={{ paddingStart: '21%' }}>
-              <Text style={{ fontSize: 18, color: COLORS.grey, fontWeight: "600" }} numberOfLines={1}>
+              <Text numberOfLines={1} style={{ fontSize: 16, fontWeight: '400', color: COLORS.black, opacity: 0.6, }}>
                 {item.post_id.businessName}
               </Text>
               <View style={{ flexDirection: 'row' }}>
@@ -223,8 +223,9 @@ const SavedJobsScreen = ({ navigation }) => {
                 }
               </View>
               <View style={{
-                width: 60,
-                borderWidth: 0.5,
+                width: 80,
+                height: 25,
+                borderWidth: 1,
                 borderColor: COLORS.grey,
                 borderRadius: 7,
                 padding: 5,
@@ -232,10 +233,10 @@ const SavedJobsScreen = ({ navigation }) => {
                 justifyContent: 'center',
               }}>
                 {
-                  item.post_id.workType_id._id == '653e66b38e88b23b41388e3c' ? (
-                    <Text style={{ fontSize: 10 }} >Partime</Text>
+                  item.workType_id == '653e66b38e88b23b41388e3c' ? (
+                    <Text style={{ fontSize: 10 }} >Bán thời gian</Text>
                   ) : (
-                    <Text style={{ fontSize: 10 }} >Fulltime</Text>
+                    <Text style={{ fontSize: 10 }} >Toàn thời gian</Text>
                   )
                 }
               </View>

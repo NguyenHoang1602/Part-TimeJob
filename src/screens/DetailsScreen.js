@@ -71,13 +71,31 @@ const DetailsScreen = ({ route, navigation }) => {
     const [loading, setLoading] = React.useState(false);
     const [cv, setCv] = useState([]);
     const [salary, setSalary] = useState('');
-    //console.log('data : ' + JSON.stringify(data));
+    
 
     const [selectedItem, setSelectedItem] = useState(null);
     const [sender, setSender] = useState(null);
     const [listApplied, setListApplied] = useState([]);
+    const isCheckSave = (productId) => {
+        const savePostIDlist = followedProducts.map(item => item.post_id);
+        return savePostIDlist.some(post_id => post_id === productId);
+    };
     const handlePress = (itemId) => {
         setSelectedItem(itemId === selectedItem ? null : itemId);
+    };
+    const handleSaveToggle = async (itemId) => {
+        try {
+            const savedata = {
+                user_id: user._id,
+                post_id: itemId,
+            };
+            const result = await axios.post(`${API}/savePost/add`, savedata);
+            if (result.status === 200) {
+              
+            }
+        } catch (error) {
+            console.log('Err: ', error);
+        }
     };
     const getAllApplied = async () => {
         try {
@@ -90,9 +108,6 @@ const DetailsScreen = ({ route, navigation }) => {
         }
     };
 
-    // useEffect(() => {
-    //     getCV()
-    // },[]);
     useFocusEffect(
         React.useCallback(() => {
             getCV()
@@ -125,8 +140,6 @@ const DetailsScreen = ({ route, navigation }) => {
     };
 
     const getCV = async () => {
-        // const data = await AsyncStorage.getItem('listCVs');
-        // setCv(JSON.parse(data));
         axios({
             url: `${API}/cvs/myCVs`,
             method: 'POST',
@@ -135,8 +148,6 @@ const DetailsScreen = ({ route, navigation }) => {
             },
         }).then(async (response) => {
             if (response.status === 200) {
-                //   const data = JSON.stringify(response.data)
-                //   await AsyncStorage.setItem('listCVs', data);
                 setCv(response.data);
             }
         })

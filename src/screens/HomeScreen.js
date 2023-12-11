@@ -37,18 +37,20 @@ const HomeScreen = ({ navigation }) => {
 
   const { user } = useContext(UserContext);
   const [listJobs, setListJobs] = useState([]);
-  const [listCareers, setListCareers] = useState([]);
+  const [listData, setListData] = useState([]);
+  const [listCareers, setListCareers] = useState([{ title: 'Tất cả' }]);
   const [listSuggestion, setListSuggestion] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
   const [SaveJobs, setSaveJobs] = useState(false);
   const [followedProducts, setFollowedProducts] = useState([]);
-  const [categoryIndex, setCategoryIndex] = useState(0);
+  const [postIndex, setPostIndex] = useState(0);
 
   useFocusEffect(
     React.useCallback(() => {
       getAllData()
     }, [])
   );
+  console.log(listCareers);
   const getAllData = async () => {
     try {
       //list save
@@ -83,6 +85,7 @@ const HomeScreen = ({ navigation }) => {
       }).then((response) => {
         if (response.status === 200) {
           setListJobs(response.data)
+          setListData(response.data);
         }
       })
       //All my Suggestion
@@ -98,16 +101,32 @@ const HomeScreen = ({ navigation }) => {
         }
       })
       //All Career
-      axios({
-        url: `${API}/careers/listCareersForApp`,
-        method: "GET",
-      }).then(async (response) => {
-        if (response.status === 200) {
-          const data = JSON.stringify(response.data)
-          await AsyncStorage.setItem('listCareers', data);
-          setListCareers(response.data);
-        }
-      })
+      const storedCareer = await AsyncStorage.getItem('listCareers');
+      setPostIndex(0);
+      if (!storedCareer) {
+        axios({
+          url: `${API}/careers/listCareersForApp`,
+          method: "GET",
+        }).then(async (response) => {
+          if (response.status === 200) {
+            const data = JSON.stringify(response.data);
+            await AsyncStorage.setItem('listCareers', data);
+            setListCareers([...listCareers, ...response.data]);
+          }
+        });
+      } else if (listCareers.length === 1) {
+        axios({
+          url: `${API}/careers/listCareersForApp`,
+          method: "GET",
+        }).then(async (response) => {
+          if (response.status === 200) {
+            const data = JSON.stringify(response.data);
+            await AsyncStorage.setItem('listCareers', data);
+            setListCareers([...listCareers, ...response.data]);
+          }
+        });
+      }
+
       //All WorkType
       axios({
         url: `${API}/workTypes/list`,
@@ -221,7 +240,19 @@ const HomeScreen = ({ navigation }) => {
       console.error('Error fetching data:', error);
     }
   }
-
+  const getPost = async (item) => {
+    if (item.title === "Tất cả") {
+      setListJobs(listData);
+    } else {
+      try {
+        const career_id = item?._id;
+        const filteredJobs = listData.filter(job => job.career_id?._id === career_id);
+        setListJobs(filteredJobs);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  }
   const fetchData = async () => {
     setRefreshing(true);
     setTimeout(() => {
@@ -240,24 +271,14 @@ const HomeScreen = ({ navigation }) => {
           method: "GET",
         }).then(async (response) => {
           if (response.status === 200) {
-            const data = JSON.stringify(response.data)
+            const data = JSON.stringify(response.data);
             await AsyncStorage.setItem('listCareers', data);
-            setListCareers(response.data);
+            const newData = [{ title: "Tất cả" }, ...response.data];
+            setListCareers(newData);
+            setPostIndex(0);
           }
         })
-        axios({
-          url: `${API}/savePost/list`,
-          method: "POST",
-          data: {
-            id: user._id,
-          }
-        }).then(async (response) => {
-          if (response.status === 200) {
-            const data = JSON.stringify(response.data)
-            await AsyncStorage.setItem('listMySavePost', data);
-            setFollowedProducts(response.data);
-          }
-        })
+        getListSave();
         setRefreshing(false);
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -268,9 +289,6 @@ const HomeScreen = ({ navigation }) => {
       setRefreshing(false);
     }, 1000);
   };
-  const search = () => {
-    navigation.navigate('SearchScreen')
-  }
   const getListSave = async () => {
     try {
       axios({
@@ -297,27 +315,9 @@ const HomeScreen = ({ navigation }) => {
       const result = await axios.post(`${API}/savePost/add`, savedata);
       if (result.status === 200) {
         getListSave();
-        Alert.alert('Lưu tin thành công !')
-        console.log("Thành công");
       }
     } catch (error) {
       console.log('Err: ', error);
-    }
-  };
-  const getCV = async (item) => {
-    const data = {
-      userId: user._id,
-      career_id: item._id,
-    };
-    console.log(data);
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    try {
-      const result = await axios.post(`${API}/cvs/myCVsByCareer`, { data });
-      if (result.status === 200) {
-        // setListJobs(result.data);
-      }
-    } catch (error) {
-      console.log("Err : ", error);
     }
   };
 
@@ -334,6 +334,9 @@ const HomeScreen = ({ navigation }) => {
         renderItem={renderItem}
         horizontal={true}
         showsHorizontalScrollIndicator={false}
+        contentContainerStyle={{
+          gap: 20,
+        }}
       />
     );
 
@@ -346,6 +349,15 @@ const HomeScreen = ({ navigation }) => {
         renderItem={renderItemJob}
         nestedScrollEnabled={true}
         scrollEnabled={false}
+        ListEmptyComponent={() => (
+          <View style={{ alignItems: 'center', justifyContent: 'center', gap: 10 }}>
+            <ImageBackground
+              source={require('../assets/images/5928293_2953962.jpg')}
+              style={{ width: "100%", height: 260 }}
+            />
+            <Text style={{ fontSize: 16, color: COLORS.primary, fontWeight: '500' }}>Không tìm thấy bài viết liên quan</Text>
+          </View>
+        )}
       />
     );
   }
@@ -359,6 +371,7 @@ const HomeScreen = ({ navigation }) => {
         borderRadius: 20,
         marginBottom: 18,
         padding: 20,
+        width: 350,
       }}
         onPress={() => navigation.navigate('DetailsScreen', {
           postid: item._id,
@@ -384,7 +397,7 @@ const HomeScreen = ({ navigation }) => {
           date: item.date,
           time: item.time,
         })}>
-        <View style={{ width: '100%', flexDirection: 'row' }}>
+        <View style={{ flexDirection: 'row' }}>
           {item.image.map((imageUrl, index) => {
             if (index === 0) {
               return (
@@ -392,39 +405,39 @@ const HomeScreen = ({ navigation }) => {
                   key={index}
                   source={{ uri: imageUrl }}
                   style={{ width: 46, height: 46, marginBottom: 5 }}
-                  imageStyle={{ borderRadius: 5 }}
+                  imageStyle={{ borderRadius: 12 }}
                 />
               );
             }
           })}
-          <View style={{ width: '50%', height: '100%', marginStart: 20, flex: 1 }}>
-            <Text numberOfLines={2} style={{ fontSize: 18, fontWeight: '400' }}>{item.title}</Text>
-            <Text numberOfLines={1} style={{ fontSize: 15, fontWeight: '400', color: COLORS.grey }}>{item.address}</Text>
+          <View style={{ height: '100%', marginStart: 20, flex: 1 }}>
+            <Text numberOfLines={2} style={{ fontSize: 18, fontWeight: '500', color: COLORS.black }}>{item.title}</Text>
+            <Text numberOfLines={1} style={{ fontSize: 15, fontWeight: 'normal', color: COLORS.black, opacity: 0.5 }}>{item.address}</Text>
           </View>
           <TouchableOpacity onPress={() => handleSaveToggle(item._id)}>
             {isFollowed(item._id) ? (
-              <MaterialIcons name="bookmark-remove" size={30} color={COLORS.blue} />
-            ) : <MaterialIcons name="bookmark-add" size={30} color={COLORS.blue} />
+              <Icon name="bookmark-minus" size={30} color={COLORS.blue} />
+            ) : <Icon name="bookmark-minus-outline" size={30} color={COLORS.blue} />
             }
           </TouchableOpacity>
         </View>
-        <View style={{ height: 1, width: '99%', backgroundColor: COLORS.grey, opacity: 0.4, marginTop: 15, marginBottom: 8 }} />
-        <View style={{ width: '100%', paddingStart: '21%' }}>
-          <Text numberOfLines={1} style={{ fontSize: 16, fontWeight: 'bold', color: COLORS.grey, width: 200, marginBottom: 5 }}>{item.businessName}</Text>
+        <View style={{ height: 1, width: '99%', backgroundColor: COLORS.grey, opacity: 0.4, marginTop: 10, marginBottom: 10 }} />
+        <View style={{ width: '100%', paddingStart: '21%', gap: 10 }}>
+          <Text numberOfLines={1} style={{ fontSize: 16, fontWeight: '400', color: COLORS.black, opacity: 0.6, }}>{item.businessName}</Text>
           <View style={{ flexDirection: 'row' }}>
-            <Text style={{ color: COLORS.blue, fontSize: 16, marginVertical: 9 }}>{formattedWageMin}đ - {formattedWageMax}đ</Text>
+            <Text style={{ color: COLORS.blue, fontSize: 16 }}>{formattedWageMin}đ - {formattedWageMax}đ</Text>
             {
               item.payForm_id === '655de22b9a5b0ffa7ffd5132' ? (
-                <Text style={{ color: COLORS.blue, fontSize: 16, marginVertical: 9 }}> /giờ</Text>
+                <Text style={{ color: COLORS.blue, fontSize: 16 }}> /giờ</Text>
               ) : (
-                <Text style={{ color: COLORS.blue, fontSize: 16, marginVertical: 9 }}> /tháng</Text>
+                <Text style={{ color: COLORS.blue, fontSize: 16 }}> /tháng</Text>
               )
             }
           </View>
           <View style={{
-            width: 60,
+            width: 80,
             height: 25,
-            borderWidth: 0.5,
+            borderWidth: 1,
             borderColor: COLORS.grey,
             borderRadius: 7,
             padding: 5,
@@ -433,16 +446,14 @@ const HomeScreen = ({ navigation }) => {
           }}>
             {
               item.workType_id._id == '653e66b38e88b23b41388e3c' ? (
-                <Text style={{ fontSize: 10 }} >Parttime</Text>
+                <Text style={{ fontSize: 10 }} >Bán thời gian</Text>
               ) : (
-                <Text style={{ fontSize: 10 }} >Fulltime</Text>
+                <Text style={{ fontSize: 10 }} >Toàn thời gian</Text>
               )
             }
           </View>
         </View>
-
       </TouchableOpacity>
-
     )
 
   };
@@ -490,39 +501,39 @@ const HomeScreen = ({ navigation }) => {
                   key={index}
                   source={{ uri: imageUrl }}
                   style={{ width: 46, height: 46, marginBottom: 5 }}
-                  imageStyle={{ borderRadius: 5 }}
+                  imageStyle={{ borderRadius: 12 }}
                 />
               );
             }
           })}
-          <View style={{ width: '50%', height: '100%', marginStart: 20, flex: 1 }}>
-            <Text numberOfLines={2} style={{ fontSize: 18, fontWeight: '400' }}>{item.title}</Text>
-            <Text numberOfLines={1} style={{ fontSize: 15, fontWeight: '400', color: COLORS.grey }}>{item.address}</Text>
+          <View style={{ height: '100%', marginStart: 20, flex: 1 }}>
+            <Text numberOfLines={2} style={{ fontSize: 18, fontWeight: '500', color: COLORS.black }}>{item.title}</Text>
+            <Text numberOfLines={1} style={{ fontSize: 15, fontWeight: 'normal', color: COLORS.black, opacity: 0.5 }}>{item.address}</Text>
           </View>
           <TouchableOpacity onPress={() => handleSaveToggle(item._id)}>
             {isFollowed(item._id) ? (
               <Icon name="bookmark-minus" size={30} color={COLORS.blue} />
-            ) : <Icon name="bookmark-plus" size={30} color={COLORS.blue} />
+            ) : <Icon name="bookmark-minus-outline" size={30} color={COLORS.blue} />
             }
           </TouchableOpacity>
         </View>
-        <View style={{ height: 1, width: '99%', backgroundColor: COLORS.grey, opacity: 0.4, marginTop: 15, marginBottom: 8 }} />
-        <View style={{ width: '100%', paddingStart: '21%' }}>
-          <Text numberOfLines={1} style={{ fontSize: 16, fontWeight: 'bold', color: COLORS.grey, width: 200, marginBottom: 5 }}>{item.businessName}</Text>
+        <View style={{ height: 1, width: '99%', backgroundColor: COLORS.grey, opacity: 0.4, marginTop: 10, marginBottom: 10 }} />
+        <View style={{ width: '100%', paddingStart: '21%', gap: 10 }}>
+          <Text numberOfLines={1} style={{ fontSize: 16, fontWeight: '400', color: COLORS.black, opacity: 0.6, }}>{item.businessName}</Text>
           <View style={{ flexDirection: 'row' }}>
-            <Text style={{ color: COLORS.blue, fontSize: 16, marginVertical: 9 }}>{formattedWageMin}đ - {formattedWageMax}đ</Text>
+            <Text style={{ color: COLORS.blue, fontSize: 16 }}>{formattedWageMin}đ - {formattedWageMax}đ</Text>
             {
               item.payForm_id === '655de22b9a5b0ffa7ffd5132' ? (
-                <Text style={{ color: COLORS.blue, fontSize: 16, marginVertical: 9 }}> /giờ</Text>
+                <Text style={{ color: COLORS.blue, fontSize: 16 }}> /giờ</Text>
               ) : (
-                <Text style={{ color: COLORS.blue, fontSize: 16, marginVertical: 9 }}> /tháng</Text>
+                <Text style={{ color: COLORS.blue, fontSize: 16 }}> /tháng</Text>
               )
             }
           </View>
           <View style={{
             width: 80,
             height: 25,
-            borderWidth: 0.5,
+            borderWidth: 1,
             borderColor: COLORS.grey,
             borderRadius: 7,
             padding: 5,
@@ -610,12 +621,14 @@ const HomeScreen = ({ navigation }) => {
           />}>
           <View style={{ height: 150, backgroundColor: '#6295FF', borderRadius: 30 }}>
           </View>
-          <View style={{ width: '100%', alignItems: 'center', marginBottom: 15, marginTop: 15 }}>
-            <View style={{ width: '100%', marginBottom: 10 }}>
-              <Text style={{ fontSize: 20, fontStyle: 'normal', color: COLORS.black, fontWeight: 'bold' }}>Công việc đề xuất</Text>
-            </View>
-            <FlatLista />
+          <View style={{ alignItems: 'center', marginBottom: 15, marginTop: 15, flexDirection: 'row' }}>
+            <Text style={{ flex: 1, fontSize: 20, fontStyle: 'normal', color: COLORS.black, fontWeight: 'bold' }}>Công việc đề xuất</Text>
+            <TouchableOpacity
+              onPress={() => { }}>
+              <Text style={{ fontSize: 18, color: COLORS.blue, fontWeight: 'bold' }}>Tất cả</Text>
+            </TouchableOpacity>
           </View>
+          <FlatLista />
           {/* All post */}
           <View style={{ width: '100%', marginBottom: 20, flexDirection: 'row', alignItems: 'center' }}>
             <Text style={{ fontSize: 20, fontStyle: 'normal', color: COLORS.black, fontWeight: 'bold' }}>Công việc mới</Text>
@@ -632,12 +645,12 @@ const HomeScreen = ({ navigation }) => {
               gap: 10,
             }}
             renderItem={({ item, index }) => {
-              const isSelected = categoryIndex === index;
+              const isSelected = postIndex === index;
               return (
                 <TouchableOpacity
                   onPress={async () => {
-                    setCategoryIndex(index);
-                    await getCV(item);
+                    setPostIndex(index);
+                    await getPost(item);
                   }}
                   style={{
                     backgroundColor: isSelected ? COLORS.primary : COLORS.card,
@@ -659,7 +672,7 @@ const HomeScreen = ({ navigation }) => {
               )
             }}
           />
-          <View style={{ width: '100%', paddingBottom: '50%', marginTop: 30 }}>
+          <View style={{ width: '100%', paddingBottom: '35%', marginTop: 30 }}>
             <FlatListb />
           </View>
         </ScrollView>
