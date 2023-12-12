@@ -136,7 +136,32 @@ const SavedJobsScreen = ({ navigation }) => {
 
   const renderItemJob = ({ item }) => (
 
-    <TouchableOpacity style={{ padding: 18 }}>
+    <TouchableOpacity style={{ padding: 18 }}
+      onPress={() => navigation.navigate('DetailsScreen', {
+        postid: item?.post_id._id,
+        users_id: item.post_id.users_id,
+        avatar: item.post_id.users_id.photo,
+        address: item?.post_id.address,
+        business_name: item?.post_id.businessName,
+        gender: item?.post_id.gender,
+        image: item?.post_id.image,
+        quantity: item?.post_id.quantity,
+        title: item?.post_id.title,
+        career_id: item?.post_id.career_id,
+        payform_id: item?.post_id.payForm_id,
+        experience_id: item?.post_id.experience_id,
+        acedemic_id: item?.post_id.academic_id,
+        worktype_id: item?.post_id.workType_id,
+        describe: item?.post_id.describe,
+        age_min: item?.post_id.ageMin,
+        age_max: item?.post_id.ageMax,
+        wage_min: item?.post_id.wageMin,
+        wage_max: item?.post_id.wageMax,
+        status_id: item?.post_id.status_id,
+        date: item?.post_id.date,
+        time: item?.post_id.time,
+      })}
+      >
       <View style={{ borderRadius: 15, borderWidth: 1, paddingHorizontal: 18, borderColor: COLORS.blackOpacity }}>
         <View style={{ flexDirection: 'row', gap: 8, paddingVertical: 18 }}>
           {item?.post_id.image.map((imageUrl, index) => {

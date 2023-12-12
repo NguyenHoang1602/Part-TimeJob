@@ -308,7 +308,6 @@ const HomeScreen = ({ navigation }) => {
         userId: user._id,
         career_id: item._id,
     };
-    console.log(data);
     await new Promise(resolve => setTimeout(resolve, 2000));
     try {
         const result = await axios.post(`${API}/cvs/myCVsByCareer`, { data });
@@ -619,7 +618,8 @@ const HomeScreen = ({ navigation }) => {
               }} />
           </TouchableOpacity>
         </Pressable>
-      </View><View style={{ paddingHorizontal: 20, paddingBottom: 20 }}>
+      </View>
+      <View style={{ paddingHorizontal: 20, paddingBottom: 20 }}>
         <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps={'always'}
           refreshControl={<RefreshControl
             refreshing={refreshing}

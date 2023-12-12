@@ -25,11 +25,14 @@ import CVResume from '../screens/CVResumeScreen';
 import AddCVScreen from '../screens/AddCVScreen';
 import CurriculumVitae from '../screens/CurriculumVitae';
 import StageCurriculum from '../screens/StageCurriculumScreen';
+import DetailNotification from '../screens/DetailNotification';
+import EmployerHome from '../EmployerScreens/EmployerHome';
+
 //icon
 import Octicons from 'react-native-vector-icons/Octicons';
 import Feather from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import DetailNotification from '../screens/DetailNotification';
+
 
 
 
@@ -40,8 +43,8 @@ const HomeStack = (props) => {
     return (
         <Stack.Navigator>
             <Stack.Screen
-                name="HomeScreen"
-                component={HomeScreen}
+                name="HomeEmployerScreen"
+                component={EmployerHome}
                 options={({ }) => ({
                     headerShown: false,
                 })}
@@ -286,7 +289,7 @@ const TabNavigator = () => {
                     },
                 })}
             />
-            <Tab.Screen
+            {/* <Tab.Screen
                 name="Đã lưu"
                 component={SavedStack}
                 options={({ route }) => ({
@@ -302,7 +305,7 @@ const TabNavigator = () => {
                         marginBottom: 8,
                     },
                 })}
-            />
+            /> */}
             <Tab.Screen
                 name="Đăng tin"
                 component={PostStack}
