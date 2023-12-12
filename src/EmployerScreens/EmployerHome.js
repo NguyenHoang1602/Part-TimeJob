@@ -1,4 +1,8 @@
 /* eslint-disable prettier/prettier */
+/* eslint-disable comma-dangle */
+/* eslint-disable semi */
+/* eslint-disable quotes */
+/* eslint-disable no-shadow */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/self-closing-comp */
 /* eslint-disable react-native/no-inline-styles */
@@ -42,11 +46,6 @@ const EmployerHome = ({ navigation }) => {
     const [Notifications, setNotifications] = useState('');
     const [check, setChek] = useState(false);
     //const [ quantity, setQuantity ] = useState();
-    const checknews = (quantity) => {
-        if (quantity > 0) {
-            setChek(!check);
-        }
-    };
     useFocusEffect(
         React.useCallback(() => {
             setChek(false);
@@ -59,8 +58,75 @@ const EmployerHome = ({ navigation }) => {
             getListApplyStatus3();
             getListApplyStatus4();
             getListNotification();
+            getAllData();
         }, [])
     );
+    const getAllData = async () => {
+        try {
+            //All Career
+            axios({
+                url: `${API}/careers/listCareersForApp`,
+                method: "GET",
+            }).then(async (response) => {
+                if (response.status === 200) {
+                    const data = JSON.stringify(response.data)
+                    await AsyncStorage.setItem('listCareers', data);
+                }
+            })
+            //All WorkType
+            axios({
+                url: `${API}/workTypes/list`,
+                method: "GET",
+            }).then(async (response) => {
+                if (response.status === 200) {
+                    const data = JSON.stringify(response.data)
+                    await AsyncStorage.setItem('listWorkTypes', data);
+                }
+            })
+            //All PayForm
+            axios({
+                url: `${API}/payforms/list`,
+                method: "GET",
+            }).then(async (response) => {
+                if (response.status === 200) {
+                    const data = JSON.stringify(response.data)
+                    await AsyncStorage.setItem('listPayForms', data);
+                }
+            })
+            //All Academic
+            axios({
+                url: `${API}/acedemics/list`,
+                method: "GET"
+            }).then(async (response) => {
+                if (response.status === 200) {
+                    const data = JSON.stringify(response.data)
+                    await AsyncStorage.setItem('listAcademics', data);
+                }
+            })
+            //All Gender
+            axios({
+                url: `${API}/gender/list`,
+                method: "GET"
+            }).then(async (response) => {
+                if (response.status === 200) {
+                    const data = JSON.stringify(response.data)
+                    await AsyncStorage.setItem('listGenders', data);
+                }
+            })
+            //All Experience
+            axios({
+                url: `${API}/experiences/list`,
+                method: "GET"
+            }).then(async (response) => {
+                if (response.status === 200) {
+                    const data = JSON.stringify(response.data)
+                    await AsyncStorage.setItem('listExperiences', data);
+                }
+            })
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    }
     async function getListIsDisplay() {
         try {
             axios({
@@ -180,7 +246,7 @@ const EmployerHome = ({ navigation }) => {
                 const data = [...response.data];
                 console.log(data);
                 if (data.length > 0) {
-                  setChek(!check);
+                    setChek(!check);
                 }
             }
         } catch (error) {

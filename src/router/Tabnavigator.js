@@ -129,7 +129,7 @@ const PostStack = (props) => {
                     },
                     headerTitleAlign: 'center',
                     headerLeft: () => (
-                        <TouchableOpacity onPress={() => props.navigation.navigate('HomeScreen')}>
+                        <TouchableOpacity onPress={() => props.navigation.navigate('HomeEmployerScreen')}>
                             <Ionicons name="arrow-back" size={24} color="white" />
                         </TouchableOpacity>
                     ),
