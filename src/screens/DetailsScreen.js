@@ -72,7 +72,7 @@ const DetailsScreen = ({ route, navigation }) => {
     const [loading, setLoading] = React.useState(false);
     const [cv, setCv] = useState([]);
     const [salary, setSalary] = useState('');
-    
+
 
     const [selectedItem, setSelectedItem] = useState(null);
     const [sender, setSender] = useState(null);
@@ -81,24 +81,10 @@ const DetailsScreen = ({ route, navigation }) => {
     const handlePress = (itemId) => {
         setSelectedItem(itemId === selectedItem ? null : itemId);
     };
-    const handleSaveToggle = async (itemId) => {
-        try {
-            const savedata = {
-                user_id: user._id,
-                post_id: itemId,
-            };
-            const result = await axios.post(`${API}/savePost/add`, savedata);
-            if (result.status === 200) {
-              
-            }
-        } catch (error) {
-            console.log('Err: ', error);
-        }
-    };
     const getAllApplied = async () => {
         try {
             const response = await axios.post(`${API}/apply/listMyApplied`, {
-                id: user._id
+                id: user._id,
             });
             setListApplied(response.data);
         } catch (error) {
@@ -175,6 +161,17 @@ const DetailsScreen = ({ route, navigation }) => {
         const savePostIDlist = listApplied.map(item => item.post_id._id);
         return savePostIDlist.some(post_id => post_id === productId);
     };
+    const handleDelete = async (post_id) => {
+        const deleteSave = {
+            user_id : user._id,
+            post_id : post_id,
+        }
+        const result = await axios.post(`${API}/savePost/deleteWithCondition`, deleteSave);
+        if (result.status === 200) {
+          getListSave();
+          console.log("Thành công");
+        }
+    }
     const renderCV = ({ item }) => {
         const isSelected = item._id === selectedItem;
         return (
@@ -234,12 +231,14 @@ const DetailsScreen = ({ route, navigation }) => {
                 </View>
                 {
                     isSave(data.postid) ? (
-                        <TouchableOpacity>
+                        <TouchableOpacity
+                            onPress={() => handleDelete(data.postid)}
+                        >
                             <Icons style={{ marginRight: 22 }} name="bookmark-remove" size={28} color={COLORS.white} />
                         </TouchableOpacity>
                     ) : <TouchableOpacity
                         onPress={() => handleSaveToggle(data.postid)}
-                        >
+                    >
                         <Icons style={{ marginRight: 22 }} name="bookmark-add" size={28} color={COLORS.white} />
                     </TouchableOpacity>
                 }

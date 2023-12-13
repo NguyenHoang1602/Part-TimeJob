@@ -15,9 +15,9 @@ import IconWithBadgeAntDesign from '../components/IconWithBadgeAntDesign';
 import axios from 'axios';
 import { API } from '../../Sever/sever';
 
-import TopTabScreenIsDisplay from './TopTabScreenIsDisplay';
-import TopTabScreenWaiting from './TopTabScreenWaiting';
-import TopTabScreenDenied from './TopTabScreenDenied';
+import TopTabScreenIsDisplay from '../screens/TopTabScreenIsDisplay';
+import TopTabScreenWaiting from '../screens/TopTabScreenWaiting';
+import TopTabScreenDenied from '../screens/TopTabScreenDenied';
 import UserContext from '../components/UserConText';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from '@react-navigation/native';

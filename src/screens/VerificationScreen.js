@@ -49,7 +49,6 @@ const VerificationScreen = ({ navigation, route }) => {
           //   phoneNumber: number,
           // });
           // setUser(result.data);
-    
         } catch (error) {
           console.log('Invalid code: ', error);
         }

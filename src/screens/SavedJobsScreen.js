@@ -139,7 +139,7 @@ const SavedJobsScreen = ({ navigation }) => {
               source={require('../assets/images/5928293_2953962.jpg')}
               style={{ width: "100%", height: 430 }}
             />
-            <Text style={{ fontSize: 22, color: COLORS.black, fontWeight: '600' }}>Không tìm thấy</Text>
+            <Text style={{ fontSize: 22, color: COLORS.black, fontWeight: '600' }}>Bạn chưa lưu công việc nào !</Text>
           </View>
         )}
       />
@@ -154,28 +154,28 @@ const SavedJobsScreen = ({ navigation }) => {
           padding: 20,
         }}
         onPress={() => navigation.navigate('DetailsScreen', {
-          postid: item._id,
-          users_id: item.user_id,
-          avatar: item.user_id.photo,
-          address: item.post_id.address,
-          business_name: item.post_id.businessName,
-          gender: item.post_id.gender,
-          image: item.post_id.image,
-          quantity: item.post_id.quantity,
-          title: item.post_id.title,
-          career_id: item.post_id.career_id,
-          payform_id: item.post_id.payForm_id,
-          experience_id: item.post_id.experience_id,
-          acedemic_id: item.post_id.academic_id,
-          worktype_id: item.post_id.workType_id,
-          describe: item.post_id.describe,
-          age_min: item.post_id.ageMin,
-          age_max: item.post_id.ageMax,
-          wage_min: item.post_id.wageMin,
-          wage_max: item.post_id.wageMax,
-          status_id: item.post_id.status_id,
-          date: item.post_id.date,
-          time: item.post_id.time,
+          postid: item?.post_id._id,
+          users_id: item.post_id.users_id,
+          avatar: item.post_id.users_id.photo,
+          address: item?.post_id.address,
+          business_name: item?.post_id.businessName,
+          gender: item?.post_id.gender,
+          image: item?.post_id.image,
+          quantity: item?.post_id.quantity,
+          title: item?.post_id.title,
+          career_id: item?.post_id.career_id,
+          payform_id: item?.post_id.payForm_id,
+          experience_id: item?.post_id.experience_id,
+          acedemic_id: item?.post_id.academic_id,
+          worktype_id: item?.post_id.workType_id,
+          describe: item?.post_id.describe,
+          age_min: item?.post_id.ageMin,
+          age_max: item?.post_id.ageMax,
+          wage_min: item?.post_id.wageMin,
+          wage_max: item?.post_id.wageMax,
+          status_id: item?.post_id.status_id,
+          date: item?.post_id.date,
+          time: item?.post_id.time,
         })}>
         <View style={{ borderRadius: 15, borderWidth: 0.5, padding: 18, borderColor: COLORS.grey }}>
           <View style={{ flexDirection: 'row', gap: 20 }}>
@@ -201,7 +201,7 @@ const SavedJobsScreen = ({ navigation }) => {
             <TouchableOpacity onPress={() => {
               toggleModal(item)
             }}>
-              <MaterialCommunityIcons name={!isSave ? 'bookmark-minus' : 'bookmark-minus-outline'} size={26} color={COLORS.primary} />
+              <MaterialCommunityIcons name={!isSave ? 'bookmark-minus' : 'bookmark-minus-outline'} size={35} color={COLORS.primary} />
             </TouchableOpacity>
           </View>
 
@@ -346,10 +346,10 @@ const SavedJobsScreen = ({ navigation }) => {
           paddingTop: 20,
           alignItems: 'center',
         }}>
-          <Text style={{ fontSize: 18, fontWeight: '700', color: COLORS.black }}>Remove from Saved ?</Text>
+          <Text style={{ fontSize: 18, fontWeight: '700', color: COLORS.black }}>Xóa công việc đã lưu ?</Text>
           <View style={{ borderColor: COLORS.blackOpacity, marginVertical: 10, width: "100%" }} />
           <View style={{ paddingVertical: 18, width: "100%" }}>
-            <View style={{ borderRadius: 15, borderWidth: 1, paddingHorizontal: 18, borderColor: COLORS.blackOpacity }}>
+            <View style={{ borderRadius: 15, borderWidth: 1, paddingHorizontal: 18, borderColor: COLORS.grey }}>
               <View style={{ flexDirection: 'row', gap: 8, paddingVertical: 18 }}>
                 {selectedItem?.post_id.image.map((imageUrl, index) => {
                   if (index === 0) {
@@ -374,7 +374,7 @@ const SavedJobsScreen = ({ navigation }) => {
                   <MaterialCommunityIcons name={!isSave ? 'bookmark-minus' : 'bookmark-minus-outline'} size={26} color={COLORS.primary} />
                 </TouchableOpacity>
               </View>
-              <View style={{ borderTopWidth: 1, borderColor: COLORS.blackOpacity }} />
+              <View style={{ borderTopWidth: 1, borderColor: COLORS.grey }} />
               <View style={{ flexDirection: 'row', gap: 8, paddingVertical: 12 }}>
                 <View style={{ paddingStart: 60 }}>
                   <Text style={{ fontSize: 18, color: COLORS.black, fontWeight: "600" }} >
@@ -419,7 +419,7 @@ const SavedJobsScreen = ({ navigation }) => {
                 paddingVertical: 15,
                 marginEnd: 15,
               }}>
-              <Text style={{ color: COLORS.primary, fontSize: 18, fontWeight: "600" }}>Cancel</Text>
+              <Text style={{ color: COLORS.primary, fontSize: 18, fontWeight: "600" }}>Hủy</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -433,7 +433,7 @@ const SavedJobsScreen = ({ navigation }) => {
                 width: 160,
                 paddingVertical: 15,
               }}>
-              <Text style={{ color: COLORS.white, fontSize: 18, fontWeight: "600" }}>Yes, Remove</Text>
+              <Text style={{ color: COLORS.white, fontSize: 18, fontWeight: "600" }}>Xóa</Text>
             </TouchableOpacity>
           </View>
         </View>

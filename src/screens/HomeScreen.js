@@ -1,3 +1,4 @@
+/* eslint-disable react/self-closing-comp */
 /* eslint-disable comma-dangle */
 /* eslint-disable no-shadow */
 /* eslint-disable react-hooks/exhaustive-deps */
@@ -43,14 +44,16 @@ const HomeScreen = ({ navigation }) => {
   const [refreshing, setRefreshing] = useState(false);
   const [SaveJobs, setSaveJobs] = useState(false);
   const [followedProducts, setFollowedProducts] = useState([]);
+  const [categoryIndex, setCategoryIndex] = useState(0);
+  const [check, setChek] = useState(false);
   const [postIndex, setPostIndex] = useState(0);
 
   useFocusEffect(
     React.useCallback(() => {
       getAllData()
+      getListNotification();
     }, [])
   );
-  console.log(listCareers);
   const getAllData = async () => {
     try {
       //list save
@@ -240,6 +243,19 @@ const HomeScreen = ({ navigation }) => {
       console.error('Error fetching data:', error);
     }
   }
+  async function getListNotification() {
+    try {
+      const response = await axios.post(`${API}/notifications/listNoSeen`, { receiver_id: user._id });
+      if (response.status === 200) {
+        const data = [...response.data];
+        if (data.length > 0) {
+          setChek(!check);
+        }
+      }
+    } catch (error) {
+      console.log('err', error);
+    }
+  }
   const getPost = async (item) => {
     if (item.title === "Tất cả") {
       setListJobs(listData);
@@ -321,6 +337,17 @@ const HomeScreen = ({ navigation }) => {
       console.log('Err: ', error);
     }
   };
+  const handleDelete = async (post_id) => {
+    const deleteSave = {
+      user_id: user._id,
+      post_id: post_id,
+    }
+    const result = await axios.post(`${API}/savePost/deleteWithCondition`, deleteSave);
+    if (result.status === 200) {
+      getListSave();
+      console.log("Thành công");
+    }
+  }
 
   const isFollowed = (productId) => {
     const savePostIDlist = followedProducts.map(item => item.post_id);
@@ -415,12 +442,15 @@ const HomeScreen = ({ navigation }) => {
             <Text numberOfLines={2} style={{ fontSize: 18, fontWeight: '500', color: COLORS.black }}>{item.title}</Text>
             <Text numberOfLines={1} style={{ fontSize: 15, fontWeight: 'normal', color: COLORS.black, opacity: 0.5 }}>{item.address}</Text>
           </View>
-          <TouchableOpacity onPress={() => handleSaveToggle(item._id)}>
-            {isFollowed(item._id) ? (
-              <Icon name="bookmark-minus" size={30} color={COLORS.blue} />
-            ) : <Icon name="bookmark-minus-outline" size={30} color={COLORS.blue} />
-            }
-          </TouchableOpacity>
+          {
+            isFollowed(item._id) ? (
+              <TouchableOpacity onPress={() => handleDelete(item._id)}>
+                <Icon name="bookmark-minus" size={35} color={COLORS.blue} />
+              </TouchableOpacity>
+            ) : <TouchableOpacity onPress={() => handleSaveToggle(item._id)}>
+              <Icon name="bookmark-plus" size={35} color={COLORS.blue} />
+            </TouchableOpacity>
+          }
         </View>
         <View style={{ height: 1, width: '99%', backgroundColor: COLORS.grey, opacity: 0.4, marginTop: 10, marginBottom: 10 }} />
         <View style={{ width: '100%', paddingStart: '21%', gap: 10 }}>
@@ -511,12 +541,15 @@ const HomeScreen = ({ navigation }) => {
             <Text numberOfLines={2} style={{ fontSize: 18, fontWeight: '500', color: COLORS.black }}>{item.title}</Text>
             <Text numberOfLines={1} style={{ fontSize: 15, fontWeight: 'normal', color: COLORS.black, opacity: 0.5 }}>{item.address}</Text>
           </View>
-          <TouchableOpacity onPress={() => handleSaveToggle(item._id)}>
-            {isFollowed(item._id) ? (
-              <Icon name="bookmark-minus" size={30} color={COLORS.blue} />
-            ) : <Icon name="bookmark-minus-outline" size={30} color={COLORS.blue} />
-            }
-          </TouchableOpacity>
+          {
+            isFollowed(item._id) ? (
+              <TouchableOpacity onPress={() => handleDelete(item._id)}>
+                <Icon name="bookmark-minus" size={35} color={COLORS.blue} />
+              </TouchableOpacity>
+            ) : <TouchableOpacity onPress={() => handleSaveToggle(item._id)}>
+              <Icon name="bookmark-plus" size={35} color={COLORS.blue} />
+            </TouchableOpacity>
+          }
         </View>
         <View style={{ height: 1, width: '99%', backgroundColor: COLORS.grey, opacity: 0.4, marginTop: 10, marginBottom: 10 }} />
         <View style={{ width: '100%', paddingStart: '21%', gap: 10 }}>
@@ -588,7 +621,12 @@ const HomeScreen = ({ navigation }) => {
               borderColor: COLORS.grey,
             }}
             onPress={() => navigation.navigate('Notifications')}>
-            <IconWithBadge iconName="bell" badgeText="2" />
+            {/* <Feather name='bell' size={24} color={COLORS.black}/> */}
+            {
+              check ? (
+                <IconWithBadge iconName="bell" badgeText="4" />
+              ) : <IconWithBadge iconName="bell" badgeText="" />
+            }
           </TouchableOpacity>
         </View>
         {/* Search */}
