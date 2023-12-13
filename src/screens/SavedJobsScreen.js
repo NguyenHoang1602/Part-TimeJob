@@ -139,7 +139,7 @@ const SavedJobsScreen = ({ navigation }) => {
               source={require('../assets/images/5928293_2953962.jpg')}
               style={{ width: "100%", height: 430 }}
             />
-            <Text style={{ fontSize: 22, color: COLORS.black, fontWeight: '600' }}>Không tìm thấy</Text>
+            <Text style={{ fontSize: 22, color: COLORS.black, fontWeight: '600' }}>Bạn chưa lưu công việc nào !</Text>
           </View>
         )}
       />

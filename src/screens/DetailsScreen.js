@@ -177,6 +177,14 @@ const DetailsScreen = ({ route, navigation }) => {
         const savePostIDlist = listApplied.map(item => item.post_id._id);
         return savePostIDlist.some(post_id => post_id === productId);
     };
+    const handlePost = async () => {
+        const savePostIDlist = followedProducts.map(item => item.post_id);
+        const result = await axios.post(`${API}/savePost/delete`, { id: savePostIDlist });
+        if (result.status === 200) {
+          getListSave();
+          console.log("Thành công");
+        }
+      }
     const renderCV = ({ item }) => {
         const isSelected = item._id === selectedItem;
         return (
