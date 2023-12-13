@@ -4,60 +4,59 @@
 /* eslint-disable eol-last */
 /* eslint-disable semi */
 /* eslint-disable react-native/no-inline-styles */
-import { StyleSheet, Text, View, SafeAreaView, TouchableOpacity, ImageBackground, Keyboard, ScrollView} from 'react-native'
-import React, { useState, useContext } from 'react'
+import { StyleSheet, Text, View, TouchableOpacity, ImageBackground, Keyboard, ScrollView, ActivityIndicator } from 'react-native'
+import React, { useState, useContext, useEffect } from 'react'
 import COLORS from '../assets/const/colors';
 import axios from 'axios';
 import { API } from '../../Sever/sever';
 import UserContext from '../components/UserConText';
-import { useFocusEffect } from '@react-navigation/native';
+import firestore from '@react-native-firebase/firestore';
 
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome';
 
-//
 import DateTimePicker from '@react-native-community/datetimepicker';
 
-//
 import Input from '../components/InputProfile';
-import InputMutiple from '../components/InputMutiple';
 import { Dropdown } from 'react-native-element-dropdown';
-import Loader from '../components/Loader';
-import Button from '../custom/Button';
+import { useFocusEffect } from '@react-navigation/native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
+const FillProfileScreen = ({ navigation, route }) => {
 
-const data = [
-    { label: 'Nam', value: '1' },
-    { label: 'Nữ', value: '2' },
-    { label: 'Khác', value: '3' },
-];
-const FillProfileScreen = ({ navigation }) => {
+    useFocusEffect(
+        React.useCallback(() => {
+            getGender();
+        }, [])
+    );
 
     const { setUser } = useContext(UserContext);
-    const [values, setValues] = useState();
-    const [valuedate, setValuedate] = useState(null);
-    const [errgender, setErrGender] = useState(true);
+    const [gender, setGender] = useState([]);
+    const [valueDate, setValueDate] = useState(null);
+    const [errGender, setErrGender] = useState(true);
     const [isFocus, setIsFocus] = useState(false);
     const [validateSex, setValidateSex] = useState('');
     const [inputs, setInputs] = React.useState({
-        FullName: '',
-        Birthday: '',
-        Phone: '',
-        Address: '',
+        googleId: route?.params?.item?.googleId,
+        displayName: route?.params?.item?.displayName,
+        email: route?.params?.item?.email,
+        photo: route?.params?.item?.photo,
+        birthDay: route?.params?.item?.birthDay,
+        address: route?.params?.item?.address,
+        phone: route?.params?.item?.phone,
+        gender: route?.params?.item?.gender,
+        role: route?.params?.item?.role,
+        favoriteCareers: route?.params?.item?.favoriteCareers,
+        status: false,
     });
+    console.log(inputs);
+    const getGender = async () => {
+        const result = await axios.get(`${API}/gender/list`);
+        setGender(result.data);
+    }
 
-    const [checkedUser, setCheckeduser] = useState(false);
-    const [checkedEmployer, setCheckedEmployer] = useState(false);
-    const handleCheckUser = () => {
-        setCheckeduser(!checkedUser);
-        setCheckedEmployer(false);
-    };
-    const handleCheckEmployer = () => {
-        setCheckedEmployer(!checkedEmployer);
-        setCheckeduser(false);
-    };
+    const getRole = async () => {
+
+    }
 
     const validateAll = () => {
         validate();
@@ -66,36 +65,67 @@ const FillProfileScreen = ({ navigation }) => {
     const VLDSex = (value) => {
         if (!value) {
             setValidateSex('Vui lòng chọn giới tính');
-            setErrGender(!errgender);
+            setErrGender(!errGender);
         } else {
             setErrGender(false);
         }
     };
     const [errors, setErrors] = React.useState({});
     const [loading, setLoading] = React.useState(false);
+    const [isKeyboardVisible, setKeyboardVisible] = useState(false);
+
+    useEffect(() => {
+        const keyboardDidShowListener = Keyboard.addListener(
+            'keyboardDidShow',
+            () => {
+                setKeyboardVisible(true);
+            }
+        );
+
+        const keyboardDidHideListener = Keyboard.addListener(
+            'keyboardDidHide',
+            () => {
+                setKeyboardVisible(false);
+            }
+        );
+
+        // Gỡ bỏ sự kiện khi component bị unmount
+        return () => {
+            keyboardDidShowListener.remove();
+            keyboardDidHideListener.remove();
+        };
+    }, []);
 
     const validate = () => {
         Keyboard.dismiss();
-        inputs.Birthday = valuedate;
+        inputs.birthDay = valueDate;
         let isValid = true;
+        const regex = /^(0|\+84)\d{9,10}$/;
 
-        if (!inputs.FullName) {
-            handleError('Vui lòng nhập tên', 'FullName');
+        if (!inputs.displayName) {
+            handleError('Vui lòng nhập tên', 'displayName');
             isValid = false;
         }
-        if (!inputs.Birthday) {
-            handleError('Vui lòng nhập tên', 'Birthday');
+        if (!inputs.email) {
+            handleError('Vui lòng nhập tên', 'email');
             isValid = false;
         }
-        if (!inputs.Phone) {
-            handleError('Vui lòng nhập số điện thoại', 'Phone');
-            isValid = false;
-        } else if (inputs.Phone.length > 10 || inputs.Phone.length < 10 ){
-            handleError('Số điện thoại gồm 10 số', 'Phone');
+        if (!inputs.birthDay) {
+            handleError('Vui lòng chọn ngày sinh', 'birthDay');
             isValid = false;
         }
-        if (!inputs.Address) {
-            handleError('Vui lòng nhập địa chỉ', 'Address');
+        if (!inputs.phone) {
+            handleError('Vui lòng nhập số điện thoại', 'phone');
+            isValid = false;
+        } else {
+            const vld = regex.test(inputs.phone);
+            if (!vld) {
+                handleError('Số điện thoại không hợp lệ', 'phone');
+                isValid = false;
+            }
+        }
+        if (!inputs.address) {
+            handleError('Vui lòng nhập địa chỉ', 'address');
             isValid = false;
         }
         if (isValid) {
@@ -104,24 +134,53 @@ const FillProfileScreen = ({ navigation }) => {
     };
 
     const register = async () => {
+        const result = await axios.post(`${API}/users/GoogleSignIn`, { inputs });
+        if (result.status === 200) {
+            loginUser(result.data);
+            setUser(result.data);
+            if (result.data.status) {
+                setUser(result.data);
+                if (result.data.role === 0) {
+                    navigation.navigate('TabNavigatorUser');
+                } else {
+                    navigation.navigate('TabNavigator');
+                }
+            }
+            setLoading(true);
+            await new Promise(resolve => setTimeout(resolve, 2000));
+        }
+    };
 
-        const datauser = {
-            displayName: inputs.FullName,
-            birthDay: inputs.Birthday,
-            gender: inputs.Gender,
-            phone: inputs.Phone,
-            address: inputs.Address,
-        };
-        console.log(datauser);
-        // setLoading(true);
-        // setTimeout(() => { 3000 });
-        // const result = await axios.post(`${API}/users/PhoneNumberSignIn`, { data: datauser });
-        // if (result.status === 200) {
-        //     setLoading(false);
-        //     setUser(result.data);
-        //     console.log('Thành công');
-        //     navigation.navigate('TabNavigator');
-        // }
+    const loginUser = (item) => {
+        firestore()
+            .collection('users')
+            .where('email', '==', item.email)
+            .get()
+            .then(res => {
+                if (res.docs.length !== 0) {
+
+                } else {
+                    firestore()
+                        .collection('users')
+                        .doc(item._id)
+                        .set({
+                            displayName: item.displayName,
+                            email: item.email,
+                            phone: item.phone,
+                            _id: item._id,
+                            photo: item.photo
+                        })
+                        .then(res => {
+                          
+                        })
+                        .catch(error => {
+                            console.log(error);
+                        });
+                }
+            })
+            .catch(error => {
+                console.log(error);
+            });
     };
 
     const handleOnchange = (text, input) => {
@@ -137,10 +196,8 @@ const FillProfileScreen = ({ navigation }) => {
         const currentDate = selectedDate || date;
         setShowDatePicker(false);
         setDate(currentDate);
-        setValuedate(formattedDate);
-        // You can do something with the selected date here
+        setValueDate(formattedDate);
     };
-
 
     const showDatepicker = () => {
         setShowDatePicker(true);
@@ -151,102 +208,129 @@ const FillProfileScreen = ({ navigation }) => {
         year: 'numeric',
     });
     return (
-        <SafeAreaView style={styles.container}>
+        <SafeAreaView style={{ flex: 1, paddingTop: 10 }}>
             {/* header */}
-            <TouchableOpacity
-                style={{
-                    flexDirection: 'row',
-                    marginBottom: 10,
-                    alignItems: 'center',
-                    marginLeft: 20,
-                }}
-                onPress={() => navigation.navigate('SelectRole')}>
-                <AntDesign name="arrowleft" size={26} color={COLORS.black} />
-                <Text style={{ fontSize: 22, fontWeight: '600', color: COLORS.black, marginLeft: 20 }}>Fill Your Profile</Text>
-            </TouchableOpacity>
-            <ScrollView>
-            <View style={styles.body}>
-                <ImageBackground
-                    source={require('../assets/images/SignIn/LogoSignInUp.png')}
-                    style={{ width: 140, height: 133, marginBottom: 10 }}
-                />
-                <View style={{ width: '100%' }}>
-                    <Input
-                        onChangeText={text => handleOnchange(text, 'FullName')}
-                        onFocus={() => handleError(null, 'Fullname')}
-                        placeholder="Họ và tên"
-                        error={errors.FullName}
-                    />
-                    <Dropdown
-                        style={[styles.dropdown, isFocus && { borderColor: COLORS.darkBlue }, !errgender && { borderColor: 'red' }]}
-                        placeholderStyle={styles.placeholderStyle}
-                        selectedTextStyle={styles.selectedTextStyle}
-                        iconStyle={styles.iconStyle}
-                        data={data}
-                        maxHeight={300}
-                        labelField="label"
-                        valueField="value"
-                        placeholder={!isFocus ? 'Giới tính' : '...'}
-                        value={inputs.Gender}
-                        onFocus={() => setIsFocus(true)}
-                        onBlur={() => setIsFocus(false)}
-                        onChange={item => {
-                            setIsFocus(false);
-                            VLDSex(item.value);
-                            handleOnchange(item.value, 'Gender');
+            {loading ? (
+                <ActivityIndicator size="large" color={COLORS.primary} />
+            ) : (
+                <View>
+                    <TouchableOpacity
+                        style={{
+                            flexDirection: 'row',
+                            marginBottom: 10,
+                            alignItems: 'center',
+                            marginLeft: 20,
                         }}
+                        onPress={() => navigation.navigate('SelectRole')}>
+                        <AntDesign name="arrowleft" size={26} color={COLORS.black} />
+                        <Text style={{ fontSize: 22, fontWeight: '600', color: COLORS.black, marginLeft: 20 }}>Fill Your Profile</Text>
+                    </TouchableOpacity>
+                    <ScrollView>
+                        <View style={styles.body}>
+                            <ImageBackground
+                                source={require('../assets/images/SignIn/LogoSignInUp.png')}
+                                style={{ width: 140, height: 133, marginBottom: 10 }}
+                            />
+                            <View style={{ width: '100%' }}>
+                                <Input
+                                    onChangeText={text => handleOnchange(text, 'displayName')}
+                                    onFocus={() => handleError(null, 'displayName')}
+                                    placeholder="Họ và tên"
+                                    error={errors.displayName}
+                                    value={inputs.displayName}
+                                />
+                                <Input
+                                    value={valueDate}
+                                    onFocus={() => handleError(null, 'birthDay')}
+                                    placeholder="Ngày sinh"
+                                    iconName={'calendar-month-outline'}
+                                    onPress={showDatepicker}
+                                    error={errors.birthDay}
+                                />
+                                {showDatePicker && (
+                                    <DateTimePicker
+                                        testID="dateTimePicker"
+                                        value={date}
+                                        mode="date"
+                                        is24Hour={true}
+                                        display="default"
+                                        onChange={onChange}
+                                    />
+                                )}
+                                <Input
+                                    onChangeText={text => handleOnchange(text, 'email')}
+                                    onFocus={() => handleError(null, 'email')}
+                                    placeholder="Email"
+                                    error={errors.email}
+                                    value={inputs.email}
+                                />
+                                <Dropdown
+                                    style={[styles.dropdown, isFocus && { borderColor: COLORS.darkBlue }, !errGender && { borderColor: 'red' }]}
+                                    placeholderStyle={styles.placeholderStyle}
+                                    selectedTextStyle={styles.selectedTextStyle}
+                                    iconStyle={styles.iconStyle}
+                                    data={gender}
+                                    maxHeight={300}
+                                    labelField="title"
+                                    valueField="_id"
+                                    placeholder={!isFocus ? 'Giới tính' : '...'}
+                                    value={inputs?.gender}
+                                    onFocus={() => setIsFocus(true)}
+                                    onBlur={() => setIsFocus(false)}
+                                    onChange={item => {
+                                        setIsFocus(false);
+                                        VLDSex(item._id);
+                                        handleOnchange(item._id, 'gender');
+                                    }}
 
-                    />
-                    {!errgender ? <Text style={{ marginTop: 7, color: COLORS.red, fontSize: 12 }}>{validateSex}</Text> : null}
-                    <Input
-                        value={valuedate}
-                        onFocus={() => handleError(null, 'Birthday')}
-                        placeholder="Ngày sinh"
-                        iconName={'calendar-month-outline'}
-                        onpress={showDatepicker}
-                        error={errors.Birthday}
-                    />
-                    {showDatePicker && (
-                        <DateTimePicker
-                            testID="dateTimePicker"
-                            value={date}
-                            mode="date"
-                            is24Hour={true}
-                            display="default"
-                            onChange={onChange}
-                        />
-                    )}
-                    <Input
-                        onChangeText={text => handleOnchange(text, 'Phone')}
-                        onFocus={() => handleError(null, 'Phone')}
-                        keyboardType="numeric"
-                        placeholder="Số điện thoại"
-                        error={errors.Phone}
-                    />
-                    <Input
-                        onChangeText={text => handleOnchange(text, 'Address')}
-                        onFocus={() => handleError(null, 'Address')}
-                        placeholder="Địa chỉ"
-                        error={errors.Address}
-                    />
-                </View>
-            </View>
-            </ScrollView>
-            <View style={{ width: '100%', height: 100, borderWidth: 1, borderColor: '#EFEFEF', justifyContent: 'center', alignItems: 'center' }}>
-                <TouchableOpacity
-                    onPress={validateAll}
-                    style={{
-                        width: '90%',
-                        height: 50,
-                        backgroundColor: '#246BFD',
-                        borderRadius: 50,
-                        alignItems: 'center',
-                        justifyContent: 'center',
+                                />
+                                {!errGender ? <Text style={{ marginTop: 7, color: COLORS.red, fontSize: 12 }}>{validateSex}</Text> : null}
+                                <Input
+                                    onChangeText={text => handleOnchange(text, 'phone')}
+                                    onFocus={() => handleError(null, 'phone')}
+                                    keyboardType="numeric"
+                                    placeholder="Số điện thoại"
+                                    error={errors.phone}
+                                    value={inputs.phone}
+                                />
+                                <Input
+                                    onChangeText={text => handleOnchange(text, 'address')}
+                                    onFocus={() => handleError(null, 'address')}
+                                    placeholder="Địa chỉ"
+                                    error={errors.address}
+                                    value={inputs.address}
+                                />
+                            </View>
+                        </View>
+                    </ScrollView>
+                    {/* Footer */}
+                    <View style={{
+                        height: 120,
+                        position: 'absolute',
+                        bottom: isKeyboardVisible ? -120 : 0,
+                        left: 0,
+                        right: 0,
+                        display: 'flex',
+                        paddingHorizontal: 30,
                         paddingVertical: 10,
+                        backgroundColor: 'white',
+                        alignItems: 'center'
                     }}>
-                    <Text style={{ color: COLORS.white, fontSize: 18, fontWeight: '500' }}>Continue</Text>
-                </TouchableOpacity>
-            </View>
+                        <TouchableOpacity
+                            onPress={validateAll}
+                            style={{
+                                width: '100%',
+                                height: 50,
+                                backgroundColor: '#246BFD',
+                                borderRadius: 50,
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                            }}>
+                            <Text style={{ color: COLORS.white, fontSize: 18, fontWeight: '500' }}>Continue</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            )}
         </SafeAreaView>
     )
 }
@@ -267,7 +351,7 @@ const styles = StyleSheet.create({
         paddingLeft: 30,
         paddingRight: 30,
         paddingTop: 40,
-        paddingBottom: 50,
+        paddingBottom: 150,
     },
     checkUser: {
         width: '45%',

@@ -31,7 +31,7 @@ const InputMutiple = ({
             setIsFocused(true);
           }}
           onBlur={() => setIsFocused(false)}
-          style={{color: COLORS.darkBlue}}
+          style={{ color: COLORS.darkBlue, verticalAlign: 'top'}}
           {...props}
         />
       </View>
@@ -47,7 +47,6 @@ const InputMutiple = ({
 const style = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'space-between',
     marginBottom : 13,
   },
   label: {
@@ -60,6 +59,7 @@ const style = StyleSheet.create({
     paddingHorizontal: 5,
     borderWidth: 1,
     borderRadius : 6,
+    
   },
 });
 

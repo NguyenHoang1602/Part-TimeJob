@@ -1,4 +1,5 @@
 /* eslint-disable prettier/prettier */
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/no-unstable-nested-components */
 /* eslint-disable eqeqeq */
 /* eslint-disable keyword-spacing */
@@ -8,7 +9,7 @@
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable eol-last */
 /* eslint-disable semi */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, TouchableOpacity, ImageBackground, Pressable, FlatList, ActivityIndicator } from 'react-native';
 
 
@@ -31,17 +32,22 @@ import IconWithBadgeAntDesign from '../components/IconWithBadgeAntDesign';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from '@react-navigation/native';
+import UserContext from '../components/UserConText';
+import axios from 'axios';
+import Loader from '../components/Loader';
+import { API } from '../../Sever/sever';
 
 const NotificationScreen = ({ route, navigation }) => {
+    useFocusEffect(
+        React.useCallback(() => {
+            getListNotifications();
+        }, [])
+    );
 
+    const { user } = useContext(UserContext);
     const [notification, setNotification] = useState([]);
     const [loading, setLoading] = useState(false);
 
-    useFocusEffect(
-        React.useCallback(() => {
-            getListNotification();
-        }, [])
-    );
 
     const getListNotification = async () => {
         setLoading(true);
@@ -49,11 +55,27 @@ const NotificationScreen = ({ route, navigation }) => {
             await new Promise(resolve => setTimeout(resolve, 2000));
             const data = await AsyncStorage.getItem('listNotifications');
             setNotification(JSON.parse(data))
+            console.log(data)
             setLoading(false);
         } catch (error) {
             console.log("Err : ", error);
             setLoading(false);
         } finally {
+            setLoading(false);
+        }
+    }
+    const getListNotifications = async () => {
+        setLoading(true);
+        try {
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            const response = await axios.post(`${API}/notifications/list`, { receiver_id: user._id });
+            if (response.status === 200) {
+                console.log('data : ' + response.data)
+                setNotification(response.data)
+                setLoading(false);
+            }
+        } catch (error) {
+            console.log("err", error);
             setLoading(false);
         }
     }
@@ -69,14 +91,14 @@ const NotificationScreen = ({ route, navigation }) => {
             <TouchableOpacity
                 onPress={() => {
                     navigation.navigate('DetailNotification', {
-                        _id: item._id,
-                        receiver_id : item.receiver_id,
-                        sender_id : item.sender_id,
-                        post_id : item.post_id,
-                        cv_id : item.cv_id,
-                        typeNotification : item.typeNotification,
-                        date : item.date,
-                        time : item.time,
+                        _id: item?._id,
+                        receiver_id: item?.receiver_id,
+                        sender_id: item?.sender_id,
+                        post_id: item?.post_id,
+                        cv_id: item?.cv_id,
+                        typeNotification: item?.typeNotification,
+                        date: item?.date,
+                        time: item?.time,
                     });
                 }}>
                 <View
@@ -86,26 +108,79 @@ const NotificationScreen = ({ route, navigation }) => {
                         alignItems: 'center',
                     }}>
                     <View style={{ width: 60, height: 60, borderRadius: 60, alignItems: 'center', justifyContent: 'center' }}>
-                        {item.typeNotification == 'problem1' ? (
+                        {item?.typeNotification == 'problem1' ? (
                             <FontAwesome name='briefcase' size={30} color="#FD9B10" />
-                        ) : item.typeNotification == 'problem2' ? (
+                        ) : item?.typeNotification == 'problem2' ? (
                             <FontAwesome name='briefcase' size={30} color={COLORS.red} />
                         ) : <FontAwesome name='briefcase' size={30} color={COLORS.blue} />
                         }
                     </View>
                     <View style={{ flexDirection: 'column', flex: 1, justifyContent: 'center' }}>
                         <Text style={{ fontSize: 18, fontWeight: '700', color: COLORS.black }}>Đơn ứng tuyển mới</Text>
-                        <Text style={{ fontSize: 14, fontWeight: '500', color: COLORS.black, opacity: 0.5 }}>{item.time}</Text>
+                        <Text style={{ fontSize: 14, fontWeight: '500', color: COLORS.black, opacity: 0.5 }}>{item?.time}</Text>
                     </View>
-                    <View style={{ width: 40, height: 23, borderRadius: 5, backgroundColor: COLORS.blue, justifyContent: 'center', alignItems: 'center' }}>
-                        <Text style={{ fontSize: 8, color: COLORS.white }}>News</Text>
-                    </View>
+                    {
+                        item.seen == 0 ? (
+                            <View style={{ width: 40, height: 23, borderRadius: 5, backgroundColor: COLORS.blue, justifyContent: 'center', alignItems: 'center' }}>
+                                <Text style={{ fontSize: 8, color: COLORS.white }}>News</Text>
+                            </View>
+                        ) : null
+                    }
                 </View>
-                <Text style={{ fontSize: 16, fontWeight: '400', color: COLORS.black, opacity: 0.8 }}>{item.sender_id.displayName} đã ứng tuyển bài đăng {item.post_id.title} của bạn!</Text>
+                <Text style={{ fontSize: 16, fontWeight: '400', color: COLORS.black, opacity: 0.8 }}>{item?.sender_id.displayName} đã ứng tuyển bài đăng {item?.post_id.title} của bạn!</Text>
             </TouchableOpacity>
         </View>
 
     );
+    // const renderItem = ({ item }) => (
+    //     <View style={{
+    //         width: "100%",
+    //         marginBottom: 18,
+    //         // borderWidth: 0.5,
+    //         // borderColor: COLORS.grey,
+    //         // borderRadius: 10,
+    //         padding: 10,
+    //     }}>
+    //         <TouchableOpacity
+    //             onPress={() => {
+    //                 navigation.navigate('DetailNotification', {
+    //                     _id: item._id,
+    //                     receiver_id : item.receiver_id,
+    //                     sender_id : item.sender_id,
+    //                     post_id : item.post_id,
+    //                     cv_id : item.cv_id,
+    //                     typeNotification : item.typeNotification,
+    //                     date : item.date,
+    //                     time : item.time,
+    //                 });
+    //             }}>
+    //             <View
+    //                 style={{
+    //                     width: '100%',
+    //                     flexDirection: 'row',
+    //                     alignItems: 'center',
+    //                 }}>
+    //                 <View style={{ width: 60, height: 60, borderRadius: 60, alignItems: 'center', justifyContent: 'center' }}>
+    //                     {item.typeNotification == 'problem1' ? (
+    //                         <FontAwesome name='briefcase' size={30} color="#FD9B10" />
+    //                     ) : item.typeNotification == 'problem2' ? (
+    //                         <FontAwesome name='briefcase' size={30} color={COLORS.red} />
+    //                     ) : <FontAwesome name='briefcase' size={30} color={COLORS.blue} />
+    //                     }
+    //                 </View>
+    //                 <View style={{ flexDirection: 'column', flex: 1, justifyContent: 'center' }}>
+    //                     <Text style={{ fontSize: 18, fontWeight: '700', color: COLORS.black }}>Đơn ứng tuyển mới</Text>
+    //                     <Text style={{ fontSize: 14, fontWeight: '500', color: COLORS.black, opacity: 0.5 }}>{item.time}</Text>
+    //                 </View>
+    //                 <View style={{ width: 40, height: 23, borderRadius: 5, backgroundColor: COLORS.blue, justifyContent: 'center', alignItems: 'center' }}>
+    //                     <Text style={{ fontSize: 8, color: COLORS.white }}>News</Text>
+    //                 </View>
+    //             </View>
+    //             <Text style={{ fontSize: 16, fontWeight: '400', color: COLORS.black, opacity: 0.8 }}> đã ứng tuyển bài đăng  của bạn!</Text>
+    //         </TouchableOpacity>
+    //     </View>
+
+    // );
     return (
         <SafeAreaView style={{ flex: 1, paddingVertical: 18, backgroundColor: COLORS.white }}>
             {loading ? (

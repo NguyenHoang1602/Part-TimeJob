@@ -7,10 +7,9 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, StatusBar, Image, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
 import { COLORS, SIZES } from '../constants/theme';
-import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { API } from '../../Sever/sever';
-import firestore from '@react-native-firebase/firestore';
 
 import UserContext from '../components/UserConText';
 import axios from 'axios';
@@ -35,52 +34,42 @@ const AuthScreen = ({ navigation }) => {
             await GoogleSignin.signOut();
             const userInfo = await GoogleSignin.signIn();
             const token = userInfo.idToken;
-            const result = await axios.post(`${API}/user/GoogleSignIn`, {
+            const result = await axios.post(`${API}/users/GoogleCheck`, {
                 idtoken: token,
             });
-            setUser(result.data);
-            
-            loginUser(result.data);
-            setLoading(true);
-            await new Promise(resolve => setTimeout(resolve, 2000));
+            if (result.data.status) {
+                setUser(result.data);
+                if (result.data.role === 0) {
+                    navigation.navigate('TabNavigatorUser');
+                    setLoading(true);
+                    await new Promise(resolve => setTimeout(resolve, 2000));
+                } else {
+                    navigation.navigate('TabNavigator');
+                    setLoading(true);
+                    await new Promise(resolve => setTimeout(resolve, 2000));
+                }
+            } else {
+                setUser(result.data);
+                navigation.navigate('SelectRole');
+            }
+            //setUser(result.data);
+            //
+            //loginUser(result.data);
 
         } catch (error) {
-            console.error(error);
+            if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+                // Đã huỷ quá trình đăng nhập
+            } else if (error.code === statusCodes.IN_PROGRESS) {
+                // Quá trình đăng nhập đang diễn ra
+            } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+                // Google Play Services không khả dụng
+            } else {
+                // Lỗi khác
+                console.log(error);
+            }
             setLoading(false);
         }
     }
-
-    const loginUser = (item) => {
-        firestore()
-            .collection('users')
-            .where('email', '==', item.email)
-            .get()
-            .then(res => {
-                if (res.docs.length !== 0) {
-                    navigation.navigate('TabNavigatorUser');
-                } else {
-                    firestore()
-                        .collection('users')
-                        .doc(item._id)
-                        .set({
-                            displayName: item.displayName,
-                            email: item.email,
-                            phone: item.phone,
-                            _id: item._id,
-                            photo: item.photo
-                        })
-                        .then(res => {
-                            navigation.navigate('TabNavigator');
-                        })
-                        .catch(error => {
-                            console.log(error);
-                        });
-                }
-            })
-            .catch(error => {
-                console.log(error);
-            });
-    };
 
     return (
         <SafeAreaView
@@ -210,7 +199,7 @@ const AuthScreen = ({ navigation }) => {
                         </Text>
                     </TouchableOpacity>
                     <TouchableOpacity
-                    onPress={() => navigation.navigate('SelectRole')}
+                        onPress={() => navigation.navigate('SelectRole')}
                         style={{
                             padding: 5,
                             width: '85%',

@@ -11,8 +11,6 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 import HomeScreen from '../screens/HomeScreen';
 import SavedJobsScreen from '../screens/SavedJobsScreen';
-import ManagementScreen from '../screens/ManagementScreen';
-import PostScreen from '../screens/PostScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import DetailsScreen from '../screens/DetailsScreen';
 import CVScreen from '../screens/CVScreen';
