@@ -1,3 +1,7 @@
+/* eslint-disable eol-last */
+/* eslint-disable semi */
+/* eslint-disable no-unused-vars */
+/* eslint-disable quotes */
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable prettier/prettier */
 import { View, Text, Keyboard, ScrollView, StyleSheet, TouchableOpacity, ImageBackground, useWindowDimensions, FlatList, Image, StatusBar, Alert } from 'react-native';
@@ -15,7 +19,7 @@ import Loader from '../components/Loader';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-const UpdateCvScreen = ({navigation, route}) => {
+const UpdateCvScreen = ({ navigation, route }) => {
     useEffect(() => {
         getListAcademic()
         getListCareers()
@@ -153,7 +157,7 @@ const UpdateCvScreen = ({navigation, route}) => {
                     <Text style={{ fontSize: 22, fontWeight: "600", color: COLORS.black }}>Chỉnh sửa CV</Text>
                 </View>
             </View>
-            
+
             <ScrollView>
                 <View
                     style={{
@@ -415,6 +419,6 @@ const styles = StyleSheet.create({
     error: {
         fontSize: 12,
         color: 'red',
-        paddingBottom: 12
+        paddingBottom: 12,
     },
 });

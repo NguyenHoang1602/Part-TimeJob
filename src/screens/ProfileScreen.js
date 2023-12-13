@@ -4,7 +4,8 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable react-native/no-inline-styles */
 import React, { useState, useContext } from 'react';
-import { View, Text, StyleSheet, Image, SafeAreaView, TouchableOpacity, ImageBackground, FlatList, ScrollView, Alert } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, ImageBackground, FlatList, ScrollView, Alert } from 'react-native';
+
 //
 import Input from '../components/Input';
 import COLORS from '../assets/const/colors';
@@ -27,6 +28,7 @@ import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons'
 import EditAccount from './EditAccount';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const ProfileScreen = ({ route, navigation }) => {
   const { user } = useContext(UserContext);
@@ -60,12 +62,12 @@ const ProfileScreen = ({ route, navigation }) => {
     navigation.replace('AuthStack');
   };
   return (
-    <SafeAreaView style={{ flex: 1, paddingVertical: 18, backgroundColor: COLORS.white, paddingLeft: 30, paddingRight: 30 }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white, paddingHorizontal: 20 }}>
       <ScrollView showsVerticalScrollIndicator={false} >
         <View style={{
-          marginTop: '20%',
           flexDirection: 'row',
           alignItems: 'center',
+          paddingVertical: 18,
         }}>
           <ImageBackground
             source={{ uri: user.photo }}

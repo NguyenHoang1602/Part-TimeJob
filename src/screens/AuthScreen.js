@@ -7,7 +7,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, StatusBar, Image, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
 import { COLORS, SIZES } from '../constants/theme';
-import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { API } from '../../Sever/sever';
 
@@ -57,7 +57,16 @@ const AuthScreen = ({ navigation }) => {
             //loginUser(result.data);
 
         } catch (error) {
-            console.error(error);
+            if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+                // Đã huỷ quá trình đăng nhập
+            } else if (error.code === statusCodes.IN_PROGRESS) {
+                // Quá trình đăng nhập đang diễn ra
+            } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+                // Google Play Services không khả dụng
+            } else {
+                // Lỗi khác
+                console.log(error);
+            }
             setLoading(false);
         }
     }

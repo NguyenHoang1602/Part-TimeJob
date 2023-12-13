@@ -28,12 +28,10 @@ const ApplicationsStageScreen = ({ route, navigation }) => {
     wageMin: route.params?.wageMin,
     wageMax: route.params?.wageMax,
     workType_id: route.params?.workType_id,
-    status: route.params?.status,
     image: route.params?.image,
     bargain_Salary: route.params?.bargain_Salary,
     feedback: route.params?.feedback,
     cv_id: route.params?.cv_id,
-
   };
   const [data, setData] = useState(datalist);
   const { user } = useContext(UserContext);
@@ -152,9 +150,9 @@ const ApplicationsStageScreen = ({ route, navigation }) => {
               <View style={{ marginTop: '8%', width: '90%', height: 50, borderRadius: 10, backgroundColor: '#FFDCC3', alignItems: 'center', justifyContent: 'center', marginBottom: '20%' }}>
                 <Text style={{ fontSize: 17, fontWeight: '500', color: '#FF6B00' }}>Application Negotiation</Text>
               </View>
-              <View style={{ flexDirection: 'row' }}>
+              <View style={{ flexDirection: 'row', marginBottom: 25}}>
                 <Text style={{ fontSize: 18, fontWeight: '600' }}>Lương thương lượng: </Text>
-                <Text style={{ fontSize: 18, fontWeight: '600', color: COLORS.primary }}>{data.bargain_Salary}</Text>
+                <Text style={{ fontSize: 18, fontWeight: '600', color: COLORS.primary}}>{data.bargain_Salary}</Text>
               </View>
             </View>
           ) : <View style={{ marginTop: '8%', width: '90%', height: 50, borderRadius: 10, backgroundColor: '#E7FEEE', alignItems: 'center', justifyContent: 'center', marginBottom: '20%' }}>

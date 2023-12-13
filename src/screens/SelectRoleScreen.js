@@ -1,6 +1,4 @@
 /* eslint-disable prettier/prettier */
-/* eslint-disable react/self-closing-comp */
-/* eslint-disable no-unused-vars */
 /* eslint-disable eol-last */
 /* eslint-disable semi */
 /* eslint-disable react-native/no-inline-styles */

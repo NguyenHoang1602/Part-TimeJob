@@ -67,10 +67,12 @@ const DetailsScreen = ({ route, navigation }) => {
         time: route.params?.time,
     };
     const [data, setdataset] = useState(datalist);
+    const formattedWageMin = data.wage_min.toLocaleString('vi-VN');
+    const formattedWageMax = data.wage_max.toLocaleString('vi-VN');
     const [loading, setLoading] = React.useState(false);
     const [cv, setCv] = useState([]);
     const [salary, setSalary] = useState('');
-    //console.log('data : ' + JSON.stringify(data));
+
 
     const [selectedItem, setSelectedItem] = useState(null);
     const [sender, setSender] = useState(null);
@@ -82,7 +84,7 @@ const DetailsScreen = ({ route, navigation }) => {
     const getAllApplied = async () => {
         try {
             const response = await axios.post(`${API}/apply/listMyApplied`, {
-                id: user._id
+                id: user._id,
             });
             setListApplied(response.data);
         } catch (error) {
@@ -159,8 +161,6 @@ const DetailsScreen = ({ route, navigation }) => {
     };
 
     const getCV = async () => {
-        // const data = await AsyncStorage.getItem('listCVs');
-        // setCv(JSON.parse(data));
         axios({
             url: `${API}/cvs/myCVs`,
             method: 'POST',
@@ -169,8 +169,6 @@ const DetailsScreen = ({ route, navigation }) => {
             },
         }).then(async (response) => {
             if (response.status === 200) {
-                //   const data = JSON.stringify(response.data)
-                //   await AsyncStorage.setItem('listCVs', data);
                 setCv(response.data);
             }
         })
@@ -243,7 +241,7 @@ const DetailsScreen = ({ route, navigation }) => {
                         </TouchableOpacity>
                     ) : <TouchableOpacity
                         onPress={() => handleSaveToggle(data.postid)}
-                        >
+                    >
                         <Icons style={{ marginRight: 22 }} name="bookmark-add" size={28} color={COLORS.white} />
                     </TouchableOpacity>
                 }
@@ -277,7 +275,16 @@ const DetailsScreen = ({ route, navigation }) => {
                     <View
                         style={styles.postHeaders}>
                         <Text style={styles.title}>{data.title}</Text>
-                        <Text style={styles.wage}>${data.wage_min} - {data.wage_max} /month</Text>
+                        <View style={{ flexDirection: 'row' }}>
+                            <Text style={{ color: COLORS.red, fontSize: 16, marginVertical: 9 }}>{formattedWageMin}đ - {formattedWageMax}đ</Text>
+                            {
+                                data.payform_id === '655de22b9a5b0ffa7ffd5132' ? (
+                                    <Text style={{ color: COLORS.red, fontSize: 16, marginVertical: 9 }}> /giờ</Text>
+                                ) : (
+                                    <Text style={{ color: COLORS.red, fontSize: 16, marginVertical: 9 }}> /tháng</Text>
+                                )
+                            }
+                        </View>
                         <Text style={styles.datetime}>{data.date} {data.time}</Text>
                         <View style={styles.user}>
                             <ImageBackground

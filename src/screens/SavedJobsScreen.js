@@ -7,15 +7,14 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable react-native/no-inline-styles */
 import React, { useState, useContext, useEffect } from 'react';
-import { FlatList, Image, TextInput, ScrollView, StyleSheet, Text, TouchableHighlight, TouchableOpacity, View, Button, ImageBackground, RefreshControl } from 'react-native';
+import { FlatList, Image, TextInput, ScrollView, StyleSheet, Text, TouchableHighlight, TouchableOpacity, View, Button, ImageBackground, RefreshControl, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { COLORS } from '../constants/theme';
 
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Feather from 'react-native-vector-icons/Feather';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import IconWithBadge from '../components/IconWithBadge';
-import IconWithBadgeAntDesign from '../components/IconWithBadgeAntDesign';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import { API } from '../../Sever/sever';
 
 import Modal from "react-native-modal";
@@ -24,21 +23,17 @@ import UserContext from '../components/UserConText';
 import axios from 'axios';
 import { useFocusEffect } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import COLORS from '../assets/const/colors';
 
 
 const SavedJobsScreen = ({ navigation }) => {
 
   const { user } = useContext(UserContext);
-
-  const [listSaveJobs, setListSaveJobs] = useState();
-
+  const [listSaveJobs, setListSaveJobs] = useState([]);
+  const [list, setList] = useState([]);
   const [selectedItem, setSelectedItem] = useState(null);
-  const [password, setPassword] = useState('');
-  const [search, setsearch] = useState('');
-  const [isFocusedPass, setIsFocusedPass] = useState(false);
-
+  const [isFocusedSearch, setIsFocusedSearch] = useState(false);
   const [isSave, setSave] = useState(false);
-
   const [isModalVisible, setModalVisible] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
 
@@ -49,7 +44,6 @@ const SavedJobsScreen = ({ navigation }) => {
   const toggleModalclose = (item) => {
     setModalVisible(!isModalVisible);
   };
-
   useFocusEffect(
     React.useCallback(() => {
       getListSave()
@@ -82,7 +76,6 @@ const SavedJobsScreen = ({ navigation }) => {
       setRefreshing(false);
     }, 2000);
   };
-
   //List
   const getListSave = async () => {
     try {
@@ -99,6 +92,25 @@ const SavedJobsScreen = ({ navigation }) => {
       })
     } catch (error) {
       console.log("err", error);
+    }
+  }
+  const handleSearch = async (key) => {
+    const data = await AsyncStorage.getItem('listMySavePost');
+    if (key === "") {
+      setListSaveJobs(JSON.parse(data));
+      setList(JSON.parse(data));
+    } else {
+      try {
+        const filteredData = list.filter((post) => {
+          const titleA = post.post_id.title.toLowerCase();
+          const keyA = key.toLowerCase();
+          const find = titleA.indexOf(keyA) !== -1;
+          return find
+        });
+        setListSaveJobs(filteredData);
+      } catch (error) {
+        console.log(error);
+      }
     }
   }
   const handlePost = async () => {
@@ -133,147 +145,165 @@ const SavedJobsScreen = ({ navigation }) => {
       />
     );
   }
-
-  const renderItemJob = ({ item }) => (
-
-    <TouchableOpacity style={{ padding: 18 }}
-      onPress={() => navigation.navigate('DetailsScreen', {
-        postid: item?.post_id._id,
-        users_id: item.post_id.users_id,
-        avatar: item.post_id.users_id.photo,
-        address: item?.post_id.address,
-        business_name: item?.post_id.businessName,
-        gender: item?.post_id.gender,
-        image: item?.post_id.image,
-        quantity: item?.post_id.quantity,
-        title: item?.post_id.title,
-        career_id: item?.post_id.career_id,
-        payform_id: item?.post_id.payForm_id,
-        experience_id: item?.post_id.experience_id,
-        acedemic_id: item?.post_id.academic_id,
-        worktype_id: item?.post_id.workType_id,
-        describe: item?.post_id.describe,
-        age_min: item?.post_id.ageMin,
-        age_max: item?.post_id.ageMax,
-        wage_min: item?.post_id.wageMin,
-        wage_max: item?.post_id.wageMax,
-        status_id: item?.post_id.status_id,
-        date: item?.post_id.date,
-        time: item?.post_id.time,
-      })}
-      >
-      <View style={{ borderRadius: 15, borderWidth: 1, paddingHorizontal: 18, borderColor: COLORS.blackOpacity }}>
-        <View style={{ flexDirection: 'row', gap: 8, paddingVertical: 18 }}>
-          {item?.post_id.image.map((imageUrl, index) => {
-            if (index === 0) {
-              return (
-                <Image
-                  key={index}
-                  source={{ uri: imageUrl }}
-                  style={{ width: 52, aspectRatio: 1, borderRadius: 5 }}
-                />
-              );
-            }
-          })}
-          <View style={{ flex: 1 }}>
-            <Text style={{ fontSize: 18, color: COLORS.black, fontWeight: "600" }} numberOfLines={1}>
-              {item.post_id.title}
-            </Text>
-            <Text style={{ fontSize: 16, color: COLORS.grey, paddingTop: 4 }} numberOfLines={1}>
-              {item.post_id.address}
-            </Text>
-          </View>
-          <TouchableOpacity onPress={() => {
-            toggleModal(item)
-          }}>
-            <MaterialCommunityIcons name={!isSave ? 'bookmark-minus' : 'bookmark-minus-outline'} size={26} color={COLORS.primary} />
-          </TouchableOpacity>
-        </View>
-
-        <View style={{ borderTopWidth: 1, borderColor: COLORS.blackOpacity }} />
-
-        <View style={{ flexDirection: 'row', gap: 8, paddingVertical: 12 }}>
-          <View style={{ paddingStart: 60 }}>
-            <Text style={{ fontSize: 18, color: COLORS.grey, fontWeight: "600" }} numberOfLines={1}>
-              {item.post_id.businessName}
-            </Text>
-            <Text style={{ fontSize: 16, color: COLORS.primary, paddingVertical: 4 }} numberOfLines={1}>
-              ${item.post_id.wageMin} - ${item.post_id.wageMax} /month
-            </Text>
-            <View style={{
-              width: 60,
-              borderWidth: 0.5,
-              borderColor: COLORS.grey,
-              borderRadius: 7,
-              padding: 5,
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}>
-              {
-                item.post_id.workType_id._id == '653e66b38e88b23b41388e3c' ? (
-                  <Text style={{ fontSize: 10 }} >Partime</Text>
-                ) : (
-                  <Text style={{ fontSize: 10 }} >Fulltime</Text>
-                )
+  const renderItemJob = ({ item }) => {
+    const formattedWageMin = item.post_id.wageMin.toLocaleString('vi-VN');
+    const formattedWageMax = item.post_id.wageMax.toLocaleString('vi-VN');
+    return (
+      <TouchableOpacity
+        style={{
+          padding: 20,
+        }}
+        onPress={() => navigation.navigate('DetailsScreen', {
+          postid: item?.post_id._id,
+          users_id: item.post_id.users_id,
+          avatar: item.post_id.users_id.photo,
+          address: item?.post_id.address,
+          business_name: item?.post_id.businessName,
+          gender: item?.post_id.gender,
+          image: item?.post_id.image,
+          quantity: item?.post_id.quantity,
+          title: item?.post_id.title,
+          career_id: item?.post_id.career_id,
+          payform_id: item?.post_id.payForm_id,
+          experience_id: item?.post_id.experience_id,
+          acedemic_id: item?.post_id.academic_id,
+          worktype_id: item?.post_id.workType_id,
+          describe: item?.post_id.describe,
+          age_min: item?.post_id.ageMin,
+          age_max: item?.post_id.ageMax,
+          wage_min: item?.post_id.wageMin,
+          wage_max: item?.post_id.wageMax,
+          status_id: item?.post_id.status_id,
+          date: item?.post_id.date,
+          time: item?.post_id.time,
+        })}>
+        <View style={{ borderRadius: 15, borderWidth: 0.5, padding: 18, borderColor: COLORS.grey }}>
+          <View style={{ flexDirection: 'row', gap: 20 }}>
+            {item?.post_id.image.map((imageUrl, index) => {
+              if (index === 0) {
+                return (
+                  <Image
+                    key={index}
+                    source={{ uri: imageUrl }}
+                    style={{ width: 46, aspectRatio: 1, borderRadius: 12 }}
+                  />
+                );
               }
+            })}
+            <View style={{ flex: 1 }}>
+              <Text numberOfLines={2} style={{ fontSize: 18, fontWeight: '500', color: COLORS.black }}>
+                {item.post_id.title}
+              </Text>
+              <Text numberOfLines={1} style={{ fontSize: 15, fontWeight: 'normal', color: COLORS.black, opacity: 0.5 }}>
+                {item.post_id.address}
+              </Text>
+            </View>
+            <TouchableOpacity onPress={() => {
+              toggleModal(item)
+            }}>
+              <MaterialCommunityIcons name={!isSave ? 'bookmark-minus' : 'bookmark-minus-outline'} size={26} color={COLORS.primary} />
+            </TouchableOpacity>
+          </View>
+
+          <View style={{ borderTopWidth: 0.5, borderColor: COLORS.grey, marginVertical: 8 }} />
+
+          <View style={{ flexDirection: 'row', gap: 10, }}>
+            <View style={{ paddingStart: '21%' }}>
+              <Text numberOfLines={1} style={{ fontSize: 16, fontWeight: '400', color: COLORS.black, opacity: 0.6, }}>
+                {item.post_id.businessName}
+              </Text>
+              <View style={{ flexDirection: 'row' }}>
+                <Text style={{ color: COLORS.blue, fontSize: 16, marginVertical: 9 }}>{formattedWageMin}đ - {formattedWageMax}đ</Text>
+                {
+                  item.payForm_id === '655de22b9a5b0ffa7ffd5132' ? (
+                    <Text style={{ color: COLORS.blue, fontSize: 16, marginVertical: 9 }}> /giờ</Text>
+                  ) : (
+                    <Text style={{ color: COLORS.blue, fontSize: 16, marginVertical: 9 }}> /tháng</Text>
+                  )
+                }
+              </View>
+              <View style={{
+                width: 80,
+                height: 25,
+                borderWidth: 1,
+                borderColor: COLORS.grey,
+                borderRadius: 7,
+                padding: 5,
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}>
+                {
+                  item.workType_id == '653e66b38e88b23b41388e3c' ? (
+                    <Text style={{ fontSize: 10 }} >Bán thời gian</Text>
+                  ) : (
+                    <Text style={{ fontSize: 10 }} >Toàn thời gian</Text>
+                  )
+                }
+              </View>
             </View>
           </View>
         </View>
-      </View>
-    </TouchableOpacity>
-  );
+      </TouchableOpacity >
+    );
+  };
 
   return (
-
-    <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
       {/* Header */}
-      <View style={styles.header}>
-        <View style={styles.headera}>
-          <View style={styles.headeraLeft}>
-            <ImageBackground
-              source={require('../assets/images/SignIn/LogoSignInUp.png')}
-              style={{ width: 26, height: 26 }}
-              imageStyle={{ borderRadius: 46 }} />
-            <View style={{ flexDirection: 'column', height: '100%', marginStart: 15 }}>
-              <Text style={{ color: COLORS.black, fontSize: 24, fontWeight: '600' }} numberOfLines={1}>Save Jobs</Text>
-            </View>
+      <View style={{
+        paddingBottom: 5,
+        paddingHorizontal: 18,
+        paddingTop: 20,
+        gap: 26,
+      }}>
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, }}>
+          <ImageBackground
+            source={require('../assets/images/SignIn/LogoSignInUp.png')}
+            style={{ width: 26, height: 26 }}
+            imageStyle={{ borderRadius: 46 }} />
+          <View style={{ flex: 1 }}>
+            <Text style={{ color: COLORS.black, fontSize: 24, fontWeight: '600' }} numberOfLines={1}>Save Jobs</Text>
           </View>
           <TouchableOpacity
-            style={styles.headerRight}
+            style={{
+              width: 46,
+              aspectRatio: 1,
+              borderRadius: 52,
+              alignItems: 'center',
+              justifyContent: 'center',
+              borderWidth: 1,
+              borderColor: COLORS.grey,
+            }}
             onPress={() => navigation.navigate('Notifications')}>
             <IconWithBadge iconName="bell" badgeText="2" />
           </TouchableOpacity>
         </View>
+        {/* Search */}
         <View
           style={{
             flexDirection: 'row',
-            borderColor: '#C6C6C6',
-            borderRadius: 10,
-            paddingHorizontal: 10,
+            height: 50,
+            borderRadius: 15,
             alignItems: 'center',
-            backgroundColor: '#F5F5F5',
+            paddingHorizontal: 18,
+            backgroundColor: !isFocusedSearch ? COLORS.lightGrey : '#E9F0FF',
+            borderWidth: 1,
+            borderColor: !isFocusedSearch ? COLORS.white : COLORS.primary
           }}>
-          <Feather
-            name="search"
-            size={20}
-            color="#C6C6C6"
-            style={{ marginRight: 20 }} />
+          <Feather name='search' size={24} color={!isFocusedSearch ? COLORS.grey : COLORS.primary} />
           <TextInput
-            style={{ flex: 1 }}
-            placeholder="Tìm kiếm việc làm"
-          />
-          <TouchableOpacity
-            style={{
-              marginEnd: '2%',
+            placeholder="Tìm kiếm . . ."
+            placeholderTextColor={COLORS.grey}
+            onChangeText={value => {
+              handleSearch(value)
             }}
-            onPress={() => { }}>
-            <FontAwesome6
-              name="sliders"
-              size={20}
-              color={COLORS.blue}
-              style={{
-                opacity: 0.95,
-              }} />
+            onFocus={() => { setIsFocusedSearch(!isFocusedSearch) }}
+            onBlur={() => { setIsFocusedSearch(!isFocusedSearch) }}
+            style={{ flex: 1, fontSize: 16, color: COLORS.black, paddingHorizontal: 10, }} />
+          <TouchableOpacity onPress={() => {
+
+          }}>
+            <FontAwesome6 name='sliders' size={20} color={COLORS.primary} />
           </TouchableOpacity>
         </View>
       </View>
@@ -281,7 +311,7 @@ const SavedJobsScreen = ({ navigation }) => {
         refreshControl={<RefreshControl
           refreshing={refreshing}
           onRefresh={fetchData}
-          colors={['#0000ff']} // Adjust the colors of the loading indicator
+          colors={['#0000ff']}
         />}
       >
         <FlatListSaveJobs />
@@ -420,20 +450,18 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.white,
   },
   header: {
-    paddingBottom: 5,
-    paddingLeft: 20,
-    paddingRight: 20,
-    paddingTop: 5,
-
+    paddingHorizontal: 18,
+    paddingTop: 10,
+    gap: 5,
   },
-  headera: {
+  headerA: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 18,
     width: '100%',
     height: 60,
   },
-  headeraLeft: {
+  headerLeft: {
     flexDirection: 'row',
     alignItems: 'center',
     marginStart: '1%',

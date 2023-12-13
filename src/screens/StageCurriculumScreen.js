@@ -1,7 +1,10 @@
+/* eslint-disable eqeqeq */
+/* eslint-disable jsx-quotes */
+/* eslint-disable quotes */
+/* eslint-disable no-unused-vars */
 /* eslint-disable semi */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable eol-last */
-/* eslint-disable react/self-closing-comp */
 /* eslint-disable prettier/prettier */
 /* eslint-disable react-native/no-inline-styles */
 import React, { useState, useContext, useEffect } from 'react';
@@ -34,6 +37,7 @@ const StageCurriculumScreen = ({ route, navigation }) => {
         phone: route.params?.item.cv_id?.phone,
         year: route.params?.item.cv_id?.year,
         gender_id: route.params?.item.cv_id?.gender_id,
+        salary: route.params?.item.salary,
         email: route.params?.item.cv_id?.email,
         address: route.params?.item.cv_id?.address,
         introduce: route.params?.item.cv_id?.introduce,
@@ -79,7 +83,7 @@ const StageCurriculumScreen = ({ route, navigation }) => {
             url: `${API}/apply//CvApply`,
             method: "POST",
             data: {
-                id: user._id,
+                id: data._id,
                 cv_id: data.cv_id._id,
             },
         }).then(async (response) => {
@@ -193,7 +197,7 @@ const StageCurriculumScreen = ({ route, navigation }) => {
                     </View> */}
                     <Text style={styles.text1}>Giới thiệu bản thân: </Text>
                     <Text style={{ fontSize: 16, marginTop: 5, marginBottom: 20 }}>- {data?.introduce}</Text>
-                    <View style={{ width: '100%', height: 1, backgroundColor: '#FF5D01', opacity: 0.7, position: 'relative', }} />
+                    <View style={{ width: '100%', height: 1, backgroundColor: '#FF5D01', opacity: 0.7, position: 'relative' }} />
                 </View>
             </ScrollView>
             <Modal
