@@ -201,7 +201,7 @@ const SavedJobsScreen = ({ navigation }) => {
             <TouchableOpacity onPress={() => {
               toggleModal(item)
             }}>
-              <MaterialCommunityIcons name={!isSave ? 'bookmark-minus' : 'bookmark-minus-outline'} size={26} color={COLORS.primary} />
+              <MaterialCommunityIcons name={!isSave ? 'bookmark-minus' : 'bookmark-minus-outline'} size={35} color={COLORS.primary} />
             </TouchableOpacity>
           </View>
 
@@ -346,10 +346,10 @@ const SavedJobsScreen = ({ navigation }) => {
           paddingTop: 20,
           alignItems: 'center',
         }}>
-          <Text style={{ fontSize: 18, fontWeight: '700', color: COLORS.black }}>Remove from Saved ?</Text>
+          <Text style={{ fontSize: 18, fontWeight: '700', color: COLORS.black }}>Xóa công việc đã lưu ?</Text>
           <View style={{ borderColor: COLORS.blackOpacity, marginVertical: 10, width: "100%" }} />
           <View style={{ paddingVertical: 18, width: "100%" }}>
-            <View style={{ borderRadius: 15, borderWidth: 1, paddingHorizontal: 18, borderColor: COLORS.blackOpacity }}>
+            <View style={{ borderRadius: 15, borderWidth: 1, paddingHorizontal: 18, borderColor: COLORS.grey }}>
               <View style={{ flexDirection: 'row', gap: 8, paddingVertical: 18 }}>
                 {selectedItem?.post_id.image.map((imageUrl, index) => {
                   if (index === 0) {
@@ -374,7 +374,7 @@ const SavedJobsScreen = ({ navigation }) => {
                   <MaterialCommunityIcons name={!isSave ? 'bookmark-minus' : 'bookmark-minus-outline'} size={26} color={COLORS.primary} />
                 </TouchableOpacity>
               </View>
-              <View style={{ borderTopWidth: 1, borderColor: COLORS.blackOpacity }} />
+              <View style={{ borderTopWidth: 1, borderColor: COLORS.grey }} />
               <View style={{ flexDirection: 'row', gap: 8, paddingVertical: 12 }}>
                 <View style={{ paddingStart: 60 }}>
                   <Text style={{ fontSize: 18, color: COLORS.black, fontWeight: "600" }} >
@@ -419,7 +419,7 @@ const SavedJobsScreen = ({ navigation }) => {
                 paddingVertical: 15,
                 marginEnd: 15,
               }}>
-              <Text style={{ color: COLORS.primary, fontSize: 18, fontWeight: "600" }}>Cancel</Text>
+              <Text style={{ color: COLORS.primary, fontSize: 18, fontWeight: "600" }}>Hủy</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -433,7 +433,7 @@ const SavedJobsScreen = ({ navigation }) => {
                 width: 160,
                 paddingVertical: 15,
               }}>
-              <Text style={{ color: COLORS.white, fontSize: 18, fontWeight: "600" }}>Yes, Remove</Text>
+              <Text style={{ color: COLORS.white, fontSize: 18, fontWeight: "600" }}>Xóa</Text>
             </TouchableOpacity>
           </View>
         </View>

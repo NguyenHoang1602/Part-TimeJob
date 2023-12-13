@@ -177,14 +177,17 @@ const DetailsScreen = ({ route, navigation }) => {
         const savePostIDlist = listApplied.map(item => item.post_id._id);
         return savePostIDlist.some(post_id => post_id === productId);
     };
-    const handlePost = async () => {
-        const savePostIDlist = followedProducts.map(item => item.post_id);
-        const result = await axios.post(`${API}/savePost/delete`, { id: savePostIDlist });
+    const handleDelete = async (post_id) => {
+        const deleteSave = {
+            user_id : user._id,
+            post_id : post_id,
+        }
+        const result = await axios.post(`${API}/savePost/deleteWithCondition`, deleteSave);
         if (result.status === 200) {
           getListSave();
           console.log("Thành công");
         }
-      }
+    }
     const renderCV = ({ item }) => {
         const isSelected = item._id === selectedItem;
         return (
@@ -244,7 +247,9 @@ const DetailsScreen = ({ route, navigation }) => {
                 </View>
                 {
                     isSave(data.postid) ? (
-                        <TouchableOpacity>
+                        <TouchableOpacity
+                            onPress={() => handleDelete(data.postid)}
+                        >
                             <Icons style={{ marginRight: 22 }} name="bookmark-remove" size={28} color={COLORS.white} />
                         </TouchableOpacity>
                     ) : <TouchableOpacity
