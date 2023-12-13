@@ -28,6 +28,7 @@ import IconWithBadgeAntDesign from '../components/IconWithBadgeAntDesign';
 import UserContext from '../components/UserConText';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Vector from '../assets/images/undraw_festivities_tvvj.svg';
+import CircularProgress from 'react-native-circular-progress-indicator';
 
 import axios from 'axios';
 import Loader from '../components/Loader';
@@ -657,7 +658,24 @@ const HomeScreen = ({ navigation }) => {
             onRefresh={fetchData}
             colors={['#0000ff']} // Adjust the colors of the loading indicator
           />}>
-          <View style={{ height: 150, backgroundColor: '#6295FF', borderRadius: 30 }}>
+          <View style={{ height: 120, backgroundColor: '#6295FF', borderRadius: 15, flexDirection: 'row', alignItems: 'center'}}>
+            <View style={{ marginLeft: 30}}>
+              <CircularProgress
+                value={50}
+                inActiveStrokeColor={COLORS.white}
+                activeStrokeColor={'#FFC069'}
+                progressValueColor={'#fff'}
+                valueSuffix={'%'}
+                radius={40}
+                activeStrokeWidth={13}
+                inActiveStrokeWidth={13}
+                progressValueStyle={{fontWeight: '500', fontSize: 18}}
+              />
+            </View>
+            <View style={{flex: 1}}>
+              <Text style={{ marginLeft: 38, color: COLORS.white, fontSize: 21, fontWeight: '500'}}>Thống kê việc làm</Text>
+              <Text style={{ marginLeft: 38, color: COLORS.white, fontSize: 15, fontWeight: '300', marginTop: 2}}>Tỉ lệ tìm được việc</Text>
+            </View>
           </View>
           <View style={{ alignItems: 'center', marginBottom: 15, marginTop: 15, flexDirection: 'row' }}>
             <Text style={{ flex: 1, fontSize: 20, fontStyle: 'normal', color: COLORS.black, fontWeight: 'bold' }}>Công việc đề xuất</Text>
