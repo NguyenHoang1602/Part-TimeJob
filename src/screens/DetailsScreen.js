@@ -22,6 +22,7 @@ import Icons from 'react-native-vector-icons/MaterialIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
+import Entypo from 'react-native-vector-icons/MaterialCommunityIcons';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import IconWithBadge from '../components/IconWithBadge';
 import IconWithBadgeAntDesign from '../components/IconWithBadgeAntDesign';
@@ -76,10 +77,7 @@ const DetailsScreen = ({ route, navigation }) => {
     const [selectedItem, setSelectedItem] = useState(null);
     const [sender, setSender] = useState(null);
     const [listApplied, setListApplied] = useState([]);
-    const isCheckSave = (productId) => {
-        const savePostIDlist = followedProducts.map(item => item.post_id);
-        return savePostIDlist.some(post_id => post_id === productId);
-    };
+    const [followedProducts, setFollowedProducts] = useState([]);
     const handlePress = (itemId) => {
         setSelectedItem(itemId === selectedItem ? null : itemId);
     };
@@ -107,11 +105,32 @@ const DetailsScreen = ({ route, navigation }) => {
             console.log(error);
         }
     };
-
+    const getListSave = async () => {
+        try {
+            axios({
+                url: `${API}/savePost/list1`,
+                method: "POST",
+                data: {
+                    id: user._id,
+                }
+            }).then(async (response) => {
+                if (response.status === 200) {
+                    setFollowedProducts(response.data);
+                }
+            })
+        } catch (error) {
+            console.log("err", error);
+        }
+    }
+    const isSave = (postid) => {
+        const savePostIDlist = followedProducts.map(item => item.post_id);
+        return savePostIDlist.some(post_id => post_id === postid);
+    };
     useFocusEffect(
         React.useCallback(() => {
             getCV()
             getAllApplied()
+            getListSave()
         }, [])
     );
     const handleOnChangeSalary = (value) => {
@@ -208,32 +227,41 @@ const DetailsScreen = ({ route, navigation }) => {
         <SafeAreaView style={styles.container}>
             <View style={styles.headers}>
                 <TouchableOpacity onPress={() => navigation.goBack()}>
-                    <Ionicons name="arrow-back" size={30} color={COLORS.black} />
+                    <Feather name="arrow-left" size={28} color={COLORS.white} />
                 </TouchableOpacity>
                 <View style={{ flex: 1 }}>
                     <Text></Text>
                 </View>
-                <TouchableOpacity>
-                    <Icon style={{ marginRight: 22 }} name="bookmark-plus-outline" size={30} color={COLORS.black} />
-                </TouchableOpacity>
-                <Ionicons name="ellipsis-horizontal-circle" size={30} color={COLORS.black} />
+                {
+                    isSave(data.postid) ? (
+                        <TouchableOpacity>
+                            <Icons style={{ marginRight: 22 }} name="bookmark-remove" size={28} color={COLORS.white} />
+                        </TouchableOpacity>
+                    ) : <TouchableOpacity
+                        onPress={() => handleSaveToggle(data.postid)}
+                        >
+                        <Icons style={{ marginRight: 22 }} name="bookmark-add" size={28} color={COLORS.white} />
+                    </TouchableOpacity>
+                }
+                <Entypo name="dots-vertical" size={26} color={COLORS.white} />
             </View>
             <ScrollView showsVerticalScrollIndicator={false} style={{ backgroundColor: COLORS.white }}>
                 <AppIntroSlider
+                    style={{ width: '100%', height: 280 }}
                     showSkipButton={false}
                     showDoneButton={false}
                     showNextButton={false}
                     data={data.image}
                     renderItem={({ item }) => {
                         return (
-                            <View style={{ marginBottom: 25 }}>
+                            <View style={{ marginBottom: 5 }}>
                                 <Image
                                     source={{ uri: item }}
                                     style={{
                                         width: '100%',
-                                        height: 250,
+                                        height: '100%',
                                     }}
-                                    resizeMode="contain"
+                                    resizeMode="cover"
                                 />
                             </View>
                         )
@@ -444,40 +472,36 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         paddingBottom: 18,
-        backgroundColor: COLORS.white,
+        backgroundColor: COLORS.primary,
+        marginBottom: '-5%',
     },
     headers: {
         flexDirection: 'row',
         paddingHorizontal: 18,
-        backgroundColor: COLORS.white,
+        backgroundColor: COLORS.primary,
         paddingVertical: 10,
+        alignItems: 'center',
     },
     activeDotStyle: {
         backgroundColor: COLORS.white,
         width: 7,
         height: 7,
-        marginTop: 5,
+        marginTop: 30,
     },
     dotStyle: {
         backgroundColor: '#D9D9D9',
         opacity: 0.5,
         width: 7,
         height: 7,
-        marginTop: 5,
+        marginTop: 30,
     },
     postHeaders: {
         width: '100%',
-        marginBottom: 25,
-        borderWidth: 0.8,
-        borderColor: COLORS.grey,
-        borderRadius: 20,
-        paddingTop: 9,
-        paddingLeft: 23,
     },
     title: {
-        fontSize: 22,
+        fontSize: 19,
         color: COLORS.black,
-        fontWeight: 'bold',
+        fontWeight: '600',
     },
     wage: {
         color: '#FA1300',
@@ -503,7 +527,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     dot: {
-        height: 3,
+        height: 1.5,
         width: '100%',
         backgroundColor: COLORS.blue,
         borderRadius: 50,

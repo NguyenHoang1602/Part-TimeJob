@@ -1,4 +1,5 @@
 /* eslint-disable prettier/prettier */
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/no-unstable-nested-components */
 /* eslint-disable eqeqeq */
 /* eslint-disable keyword-spacing */
@@ -47,7 +48,6 @@ const NotificationScreen = ({ route, navigation }) => {
     const [notification, setNotification] = useState([]);
     const [loading, setLoading] = useState(false);
 
-    
 
     const getListNotification = async () => {
         setLoading(true);
@@ -70,14 +70,13 @@ const NotificationScreen = ({ route, navigation }) => {
             await new Promise(resolve => setTimeout(resolve, 2000));
             const response = await axios.post(`${API}/notifications/list`, { receiver_id: user._id });
             if (response.status === 200) {
-                console.log('data : '+ response.data)
+                console.log('data : ' + response.data)
                 setNotification(response.data)
                 setLoading(false);
             }
         } catch (error) {
             console.log("err", error);
             setLoading(false);
-            
         }
     }
     const renderItem = ({ item }) => (
@@ -120,9 +119,13 @@ const NotificationScreen = ({ route, navigation }) => {
                         <Text style={{ fontSize: 18, fontWeight: '700', color: COLORS.black }}>Đơn ứng tuyển mới</Text>
                         <Text style={{ fontSize: 14, fontWeight: '500', color: COLORS.black, opacity: 0.5 }}>{item?.time}</Text>
                     </View>
-                    <View style={{ width: 40, height: 23, borderRadius: 5, backgroundColor: COLORS.blue, justifyContent: 'center', alignItems: 'center' }}>
-                        <Text style={{ fontSize: 8, color: COLORS.white }}>News</Text>
-                    </View>
+                    {
+                        item.seen == 0 ? (
+                            <View style={{ width: 40, height: 23, borderRadius: 5, backgroundColor: COLORS.blue, justifyContent: 'center', alignItems: 'center' }}>
+                                <Text style={{ fontSize: 8, color: COLORS.white }}>News</Text>
+                            </View>
+                        ) : null
+                    }
                 </View>
                 <Text style={{ fontSize: 16, fontWeight: '400', color: COLORS.black, opacity: 0.8 }}>{item?.sender_id.displayName} đã ứng tuyển bài đăng {item?.post_id.title} của bạn!</Text>
             </TouchableOpacity>

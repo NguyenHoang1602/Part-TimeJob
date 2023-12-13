@@ -165,7 +165,7 @@ const ApplicationsStageScreen = ({ route, navigation }) => {
       </View>
       <View style={{ width: '100%', height: 100, borderWidth: 0.3, borderColor: COLORS.grey, justifyContent: 'center', alignItems: 'center' }}>
         {
-          status == 0 || status == 2 ? (
+          status == 0 || status == 1 ? (
             <TouchableOpacity
               style={{
                 width: '90%',
@@ -179,7 +179,7 @@ const ApplicationsStageScreen = ({ route, navigation }) => {
               <Text style={{ color: COLORS.white, fontSize: 18, fontWeight: '500' }}>Waiting...</Text>
             </TouchableOpacity>
 
-          ) : status == 1 ? (
+          ) : status == 2 ? (
             <TouchableOpacity
               style={{
                 width: '90%',

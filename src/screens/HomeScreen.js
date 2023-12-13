@@ -263,6 +263,7 @@ const HomeScreen = ({ navigation }) => {
         }).then((response) => {
           if (response.status === 200) {
             setListJobs(response.data)
+            setListData(response.data)
           }
         })
         //All Career
