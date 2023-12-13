@@ -26,6 +26,7 @@ import IconWithBadgeAntDesign from '../components/IconWithBadgeAntDesign';
 import UserContext from '../components/UserConText';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Vector from '../assets/images/undraw_festivities_tvvj.svg';
+import CircularProgress from 'react-native-circular-progress-indicator';
 
 import axios from 'axios';
 import Loader from '../components/Loader';
@@ -244,7 +245,6 @@ const EmployerHome = ({ navigation }) => {
             const response = await axios.post(`${API}/notifications/listNoSeen`, { receiver_id: user._id });
             if (response.status === 200) {
                 const data = [...response.data];
-                console.log(data);
                 if (data.length > 0) {
                     setChek(!check);
                 }
@@ -326,7 +326,24 @@ const EmployerHome = ({ navigation }) => {
             </View>
             <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps={'always'}
                 style={styles.scroll}>
-                <View style={{ marginTop: 15, height: 100, backgroundColor: '#3A7AFE', borderRadius: 20 }}>
+                <View style={{ marginTop: 15, height: 100, backgroundColor: '#6295FF', borderRadius: 15, flexDirection: 'row', alignItems: 'center' }}>
+                    <View style={{ marginLeft: 30 }}>
+                        <CircularProgress
+                            value={40}
+                            inActiveStrokeColor={COLORS.white}
+                            activeStrokeColor={'#FFC069'}
+                            progressValueColor={'#fff'}
+                            valueSuffix={'%'}
+                            radius={33}
+                            activeStrokeWidth={11}
+                            inActiveStrokeWidth={11}
+                            progressValueStyle={{ fontWeight: '500', fontSize: 16 }}
+                        />
+                    </View>
+                    <View style={{ flex: 1 }}>
+                        <Text style={{ marginLeft: 38, color: COLORS.white, fontSize: 19, fontWeight: '500' }}>Thống kê tuyển dụng</Text>
+                        <Text style={{ marginLeft: 38, color: COLORS.white, fontSize: 14, fontWeight: '300', marginTop: 2 }}>Tỉ lệ tuyển dụng </Text>
+                    </View>
                 </View>
                 <View style={{ width: '100%', alignItems: 'center', marginBottom: 15, marginTop: 15 }}>
                     <View style={{ width: '100%', marginBottom: 10 }}>
