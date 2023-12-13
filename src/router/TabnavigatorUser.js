@@ -23,11 +23,16 @@ import EditAccount from '../screens/EditAccount';
 import EditCV from '../screens/EditCV';
 import CVResume from '../screens/CVResumeScreen';
 import AddCVScreen from '../screens/AddCVScreen';
+import ApplicationsScreen from '../screens/ApplicationsScreen';
+import MessageScreen from '../screens/MessageScreen';
+import ApplicationsStageScreen from '../screens/ApplicationsStageScreen';
+import ChatScreen from '../screens/ChatScreen';
 //icon
 import Octicons from 'react-native-vector-icons/Octicons';
 import Feather from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import DetailNotification from '../screens/DetailNotification';
+import AntDesign from 'react-native-vector-icons/AntDesign'
 
 
 
@@ -107,67 +112,43 @@ const SavedStack = (props) => {
         </Stack.Navigator>
     );
 };
-const PostStack = (props) => {
+const ApplicationsStack = (props) => {
     return (
         <Stack.Navigator>
             <Stack.Screen
-                name="Đăng tin tuyển dụng"
-                component={PostScreen}
+                name="Applications"
+                component={ApplicationsScreen}
                 options={({ route }) => ({
                     title: route.params?.title,
-                    headerShown: true,
-                    headerStyle: {
-                        backgroundColor: '#337BFF',
-                    },
-                    headerTitleStyle: {
-                        color: '#FFFFFF',
-                    },
-                    headerTitleAlign: 'center',
-                    headerLeft: () => (
-                        <TouchableOpacity onPress={() => props.navigation.navigate('HomeScreen')}>
-                            <Ionicons name="arrow-back" size={24} color="white" />
-                        </TouchableOpacity>
-                    ),
+                    headerShown: false,
+                })}
+            />
+            <Stack.Screen
+                name="ApplicationsStage"
+                component={ApplicationsStageScreen}
+                options={({ route }) => ({
+                    title: route.params?.title,
+                    headerShown: false,
                 })}
             />
         </Stack.Navigator>
     );
-};
-const ManagementStack = (props) => {
+}
+const MessageStack = (props) => {
     return (
         <Stack.Navigator>
             <Stack.Screen
-                name="ManagementScreen"
-                component={ManagementScreen}
-                options={({ route }) => ({
-                    title: route.params?.title,
+                name="message"
+                component={MessageScreen}
+                options={() => ({
                     headerShown: false,
                 })}
             />
             <Stack.Screen
-                name="DetailsScreen"
-                component={DetailsScreen}
+                name="Chat"
+                component={ChatScreen}
                 options={({ route }) => ({
                     headerShown: false,
-                })}
-            />
-            <Stack.Screen
-                name="Chỉnh sửa bài đăng"
-                component={EditPostScreen}
-                options={({ route }) => ({
-                    headerShown: true,
-                    headerStyle: {
-                        backgroundColor: '#337BFF',
-                    },
-                    headerTitleStyle: {
-                        color: '#FFFFFF',
-                    },
-                    headerTitleAlign: 'center',
-                    headerLeft: () => (
-                        <TouchableOpacity onPress={() => props.navigation.navigate('ManagementScreen')}>
-                            <Ionicons name="arrow-back" size={24} color="white" />
-                        </TouchableOpacity>
-                    ),
                 })}
             />
         </Stack.Navigator>
@@ -241,7 +222,7 @@ const ProfileStack = (props) => {
     );
 };
 
-const TabNavigator = () => {
+const TabNavigatorUser = () => {
     return (
         <Tab.Navigator
             screenOptions={{
@@ -288,23 +269,8 @@ const TabNavigator = () => {
                 })}
             />
             <Tab.Screen
-                name="Đăng tin"
-                component={PostStack}
-                options={({ route }) => ({
-                    tabBarStyle: {
-                        display: 'none',
-                    },
-                    tabBarIcon: ({ color, size }) => (
-                        <Octicons name="plus-circle" color={color} size={size} />
-                    ),
-                    tabBarLabelStyle: {
-                        marginBottom: 8,
-                    },
-                })}
-            />
-            <Tab.Screen
-                name="Quản lí"
-                component={ManagementStack}
+                name="Application"
+                component={ApplicationsStack}
                 options={({ route }) => ({
                     tabBarStyle: {
                         display: getTabBarVisibility(route),
@@ -312,7 +278,24 @@ const TabNavigator = () => {
                         padding: 8,
                     },
                     tabBarIcon: ({ color, size }) => (
-                        <Ionicons name="folder-open-outline" color={color} size={size} />
+                        <Ionicons name="briefcase-outline" color={color} size={size} />
+                    ),
+                    tabBarLabelStyle: {
+                        marginBottom: 8,
+                    },
+                })}
+            />
+            <Tab.Screen
+                name="Message"
+                component={MessageStack}
+                options={({ route }) => ({
+                    tabBarStyle: {
+                        display: getTabBarVisibility(route),
+                        height: 60,
+                        padding: 8,
+                    },
+                    tabBarIcon: ({ color, size }) => (
+                        <AntDesign name="message1" color={color} size={size} />
                     ),
                     tabBarLabelStyle: {
                         marginBottom: 8,
@@ -346,10 +329,14 @@ const getTabBarVisibility = route => {
     const routeName = getFocusedRouteNameFromRoute(route) ?? 'Feed';
     // console.log(routeName);
 
-    if (routeName == 'DetailsScreen' || routeName == 'Thông tin tuyển dụng' || routeName == 'Notifications' || routeName == 'Chỉnh sửa bài đăng' || routeName == 'Cập nhật thông tin cá nhân' || routeName == 'Cập nhật CV cá nhân' || routeName == 'CVResumeScreen' || routeName == '"Tạo CV cá nhân' || routeName == 'DetailNotification') {
+    if (routeName == 'DetailsScreen' || routeName == 'Thông tin tuyển dụng' 
+    || routeName == 'Notifications' || routeName == 'Chỉnh sửa bài đăng' 
+    || routeName == 'Cập nhật thông tin cá nhân' || routeName == 'Cập nhật CV cá nhân' 
+    || routeName == 'CVResumeScreen' || routeName == '"Tạo CV cá nhân' || routeName == 'DetailNotification' 
+    || routeName == 'ApplicationsStage') {
         return 'none';
     }
     return 'flex';
 };
 
-export default TabNavigator;
+export default TabNavigatorUser;

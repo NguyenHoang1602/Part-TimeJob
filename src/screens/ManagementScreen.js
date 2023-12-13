@@ -1,9 +1,10 @@
+/* eslint-disable quotes */
 /* eslint-disable semi */
 /* eslint-disable eol-last */
 /* eslint-disable prettier/prettier */
 /* eslint-disable react-native/no-inline-styles */
-import React, { useState, useContext } from 'react';
-import { View, StyleSheet, Text, TouchableOpacity, ImageBackground } from 'react-native';
+import React, { useState, useContext, useEffect } from 'react';
+import { View, StyleSheet, Text, TouchableOpacity, ImageBackground, ActivityIndicator } from 'react-native';
 import { COLORS } from '../constants/theme';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
@@ -16,6 +17,7 @@ import TopTabScreenIsDisplay from './TopTabScreenIsDisplay';
 import TopTabScreenWaiting from './TopTabScreenWaiting';
 import TopTabScreenDenied from './TopTabScreenDenied';
 import UserContext from '../components/UserConText';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from '@react-navigation/native';
 
 const TopTab = createMaterialTopTabNavigator();
@@ -24,7 +26,6 @@ const ManagementScreen = ({ route, navigation }) => {
   const [listIsDisplay, setListIsDisplay] = useState([]);
   const [listWaiting, setListWaiting] = useState([]);
   const [listDenied, setListDenied] = useState([]);
-
   useFocusEffect(
     React.useCallback(() => {
       getListIsDisplay();
@@ -32,18 +33,17 @@ const ManagementScreen = ({ route, navigation }) => {
       getListDenied();
     }, [])
   );
-
+  // useEffect(() => {
+  //   // This will select the first tab when the component mounts
+  //   const unsubscribe = navigation.addListener('focus', () => {
+  //     navigation.navigate('Tab1'); // Change 'Tab1' to the name of your first tab
+  //   });
+  //   return unsubscribe;
+  // }, []);
   async function getListIsDisplay() {
     try {
-      const result = await axios.get('http://192.168.1.10:3000/posts/listJobsIsDisplayForApp');
-      if (result.status === 200) {
-        //
-        setListIsDisplay(result.data);
-        let data = result.data;
-        if (data !== null) {
-      
-        }
-      }
+      const data = await AsyncStorage.getItem('listJobsIsDisplay');
+      setListIsDisplay(JSON.parse(data));
     } catch (error) {
       console.log("Err : ", error);
     }
@@ -51,39 +51,25 @@ const ManagementScreen = ({ route, navigation }) => {
 
   async function getListWaiting() {
     try {
-      const result = await axios.get('http://192.168.1.10:3000/posts/listJobsWaitingForApp');
-      if (result.status === 200) {
-        //
-        setListWaiting(result.data);
-        let data = result.data;
-        if (data !== null) {
-        
-        }
-      }
+      const data = await AsyncStorage.getItem('listJobsWaiting');
+      setListWaiting(JSON.parse(data));
     } catch (error) {
-
+      console.log("Err : ", error);
     }
   }
 
   async function getListDenied() {
     try {
-      const result = await axios.get('http://192.168.1.10:3000/posts/listJobsDeniedForApp');
-      if (result.status === 200) {
-        //
-        setListDenied(result.data);
-        let data = result.data;
-        if (data !== null) {
-         
-        }
-      }
+      const data = await AsyncStorage.getItem('listJobsDenied');
+      setListDenied(JSON.parse(data));
     } catch (error) {
-
+      console.log("Err : ", error);
     }
   }
 
+
   return (
     <SafeAreaView style={{ backgroundColor: 'white', flex: 1 }}>
-      {/* Header */}
       <View style={{
         paddingBottom: 5,
         paddingLeft: 20,
@@ -111,8 +97,7 @@ const ManagementScreen = ({ route, navigation }) => {
             <ImageBackground
               source={{ uri: user.photo }}
               style={{ width: 46, height: 46 }}
-              imageStyle={{ borderRadius: 46 }}
-            />
+              imageStyle={{ borderRadius: 46 }} />
             <View style={{ flexDirection: 'column', height: '100%', justifyContent: 'center', marginStart: 13 }}>
               <Text style={{ color: '#7D7A7A', fontSize: 16 }}>Xin chào 👋</Text>
               <Text numberOfLines={1} style={{ color: COLORS.black, fontSize: 20, fontWeight: '600' }}>{user.displayName}</Text>
@@ -144,14 +129,12 @@ const ManagementScreen = ({ route, navigation }) => {
               alignItems: 'center',
               justifyContent: 'center',
             }}
-            onPress={() => navigation.navigate('ChatScreen')}>
+            onPress={() => navigation.navigate('MessageScreen')}>
             {/* <AntDesign name='message1' size={24} color={COLORS.black}/> */}
             <IconWithBadgeAntDesign iconName="message1" badgeText="" />
           </TouchableOpacity>
         </View>
-      </View>
-
-      <TopTab.Navigator
+      </View><TopTab.Navigator
         screenOptions={{
           tabBarLabelStyle: {
             fontSize: 14,
@@ -160,15 +143,15 @@ const ManagementScreen = ({ route, navigation }) => {
           tabBarItemStyle: {
             width: 'auto',
           },
-          lazyPreloadDistance: true,
           tabBarScrollEnabled: true,
           tabBarActiveTintColor: COLORS.primary,
         }}
       >
-        <TopTab.Screen name={"Đang hiện thị (" + listIsDisplay.length + ")"} component={TopTabScreenIsDisplay} />
+        <TopTab.Screen name={"Đang hiện thị  (" + listIsDisplay.length + ")"} component={TopTabScreenIsDisplay} />
         <TopTab.Screen name={"Đang chờ duyệt (" + listWaiting.length + ")"} component={TopTabScreenWaiting} />
         <TopTab.Screen name={"Bị từ chối (" + listDenied.length + ")"} component={TopTabScreenDenied} />
       </TopTab.Navigator>
+      {/* Header */}
     </SafeAreaView>
   );
 };

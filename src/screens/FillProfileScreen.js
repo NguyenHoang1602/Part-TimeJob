@@ -1,57 +1,71 @@
 /* eslint-disable prettier/prettier */
+/* eslint-disable react/self-closing-comp */
+/* eslint-disable no-unused-vars */
+/* eslint-disable eol-last */
+/* eslint-disable semi */
 /* eslint-disable react-native/no-inline-styles */
-import React, { useState, useContext } from 'react';
-import {
-    View,
-    Text,
-    SafeAreaView,
-    Keyboard,
-    ScrollView,
-    Alert,
-    StyleSheet,
-    TouchableOpacity,
-} from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView, TouchableOpacity, ImageBackground, Keyboard, ScrollView} from 'react-native'
+import React, { useState, useContext } from 'react'
+import COLORS from '../assets/const/colors';
+import axios from 'axios';
+import { API } from '../../Sever/sever';
+import UserContext from '../components/UserConText';
+import { useFocusEffect } from '@react-navigation/native';
+
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome';
+
+//
 import DateTimePicker from '@react-native-community/datetimepicker';
 
 //
 import Input from '../components/InputProfile';
 import InputMutiple from '../components/InputMutiple';
-import COLORS from '../assets/const/colors';
 import { Dropdown } from 'react-native-element-dropdown';
 import Loader from '../components/Loader';
 import Button from '../custom/Button';
-import { useFocusEffect } from '@react-navigation/native';
-import axios from 'axios';
-import UserContext from '../components/UserConText';
-import { API } from '../../Sever/sever';
+
 
 const data = [
     { label: 'Nam', value: '1' },
     { label: 'Nữ', value: '2' },
     { label: 'Khác', value: '3' },
 ];
-const RegistrationScreen = ({ route, navigation }) => {
+const FillProfileScreen = ({ navigation }) => {
+
     const { setUser } = useContext(UserContext);
     const [values, setValues] = useState();
     const [valuedate, setValuedate] = useState(null);
     const [errgender, setErrGender] = useState(true);
     const [isFocus, setIsFocus] = useState(false);
     const [validateSex, setValidateSex] = useState('');
-    const PhoneNumber = route.params?.phoneNumber;
     const [inputs, setInputs] = React.useState({
-        FirtName: '',
-        Name: '',
+        FullName: '',
         Birthday: '',
+        Phone: '',
         Address: '',
     });
+
+    const [checkedUser, setCheckeduser] = useState(false);
+    const [checkedEmployer, setCheckedEmployer] = useState(false);
+    const handleCheckUser = () => {
+        setCheckeduser(!checkedUser);
+        setCheckedEmployer(false);
+    };
+    const handleCheckEmployer = () => {
+        setCheckedEmployer(!checkedEmployer);
+        setCheckeduser(false);
+    };
+
     const validateAll = () => {
         validate();
         VLDSex();
     }
     const VLDSex = (value) => {
-        console.log('value: ', value);
         if (!value) {
-            setValidateSex('Vui long chon gioi tinh');
+            setValidateSex('Vui lòng chọn giới tính');
             setErrGender(!errgender);
         } else {
             setErrGender(false);
@@ -65,16 +79,19 @@ const RegistrationScreen = ({ route, navigation }) => {
         inputs.Birthday = valuedate;
         let isValid = true;
 
-        if (!inputs.FirtName) {
-            handleError('Vui lòng nhập họ', 'FirtName');
-            isValid = false;
-        }
-        if (!inputs.Name) {
-            handleError('Vui lòng nhập tên', 'Name');
+        if (!inputs.FullName) {
+            handleError('Vui lòng nhập tên', 'FullName');
             isValid = false;
         }
         if (!inputs.Birthday) {
             handleError('Vui lòng nhập tên', 'Birthday');
+            isValid = false;
+        }
+        if (!inputs.Phone) {
+            handleError('Vui lòng nhập số điện thoại', 'Phone');
+            isValid = false;
+        } else if (inputs.Phone.length > 10 || inputs.Phone.length < 10 ){
+            handleError('Số điện thoại gồm 10 số', 'Phone');
             isValid = false;
         }
         if (!inputs.Address) {
@@ -89,22 +106,22 @@ const RegistrationScreen = ({ route, navigation }) => {
     const register = async () => {
 
         const datauser = {
-            displayName: inputs.FirtName + inputs.Name,
+            displayName: inputs.FullName,
             birthDay: inputs.Birthday,
             gender: inputs.Gender,
-            phone: PhoneNumber,
+            phone: inputs.Phone,
             address: inputs.Address,
         };
         console.log(datauser);
-        setLoading(true);
-        setTimeout(() => {3000});
-        const result = await axios.post(`${API}/users/PhoneNumberSignIn`, { data : datauser});
-        if (result.status === 200) {
-            setLoading(false);
-            setUser(result.data);
-            console.log("Thành công");
-            navigation.navigate('TabNavigator');
-        }
+        // setLoading(true);
+        // setTimeout(() => { 3000 });
+        // const result = await axios.post(`${API}/users/PhoneNumberSignIn`, { data: datauser });
+        // if (result.status === 200) {
+        //     setLoading(false);
+        //     setUser(result.data);
+        //     console.log('Thành công');
+        //     navigation.navigate('TabNavigator');
+        // }
     };
 
     const handleOnchange = (text, input) => {
@@ -134,23 +151,31 @@ const RegistrationScreen = ({ route, navigation }) => {
         year: 'numeric',
     });
     return (
-        <SafeAreaView style={{ backgroundColor: COLORS.white, flex: 1 }}>
-            <Loader visible={loading} />
-            <ScrollView
-                showsVerticalScrollIndicator={false}
-                contentContainerStyle={{ paddingTop: 10, paddingHorizontal: 30 }}>
-                <View style={{ marginVertical: 20 }}>
+        <SafeAreaView style={styles.container}>
+            {/* header */}
+            <TouchableOpacity
+                style={{
+                    flexDirection: 'row',
+                    marginBottom: 10,
+                    alignItems: 'center',
+                    marginLeft: 20,
+                }}
+                onPress={() => navigation.navigate('SelectRole')}>
+                <AntDesign name="arrowleft" size={26} color={COLORS.black} />
+                <Text style={{ fontSize: 22, fontWeight: '600', color: COLORS.black, marginLeft: 20 }}>Fill Your Profile</Text>
+            </TouchableOpacity>
+            <ScrollView>
+            <View style={styles.body}>
+                <ImageBackground
+                    source={require('../assets/images/SignIn/LogoSignInUp.png')}
+                    style={{ width: 140, height: 133, marginBottom: 10 }}
+                />
+                <View style={{ width: '100%' }}>
                     <Input
-                        onChangeText={text => handleOnchange(text, 'FirtName')}
-                        onFocus={() => handleError(null, 'FirtName')}
-                        placeholder="Họ"
-                        error={errors.FirtName}
-                    />
-                    <Input
-                        onChangeText={text => handleOnchange(text, 'Name')}
-                        onFocus={() => handleError(null, 'Name')}
-                        placeholder="Tên"
-                        error={errors.Name}
+                        onChangeText={text => handleOnchange(text, 'FullName')}
+                        onFocus={() => handleError(null, 'Fullname')}
+                        placeholder="Họ và tên"
+                        error={errors.FullName}
                     />
                     <Dropdown
                         style={[styles.dropdown, isFocus && { borderColor: COLORS.darkBlue }, !errgender && { borderColor: 'red' }]}
@@ -192,10 +217,11 @@ const RegistrationScreen = ({ route, navigation }) => {
                         />
                     )}
                     <Input
+                        onChangeText={text => handleOnchange(text, 'Phone')}
+                        onFocus={() => handleError(null, 'Phone')}
                         keyboardType="numeric"
-                        placeholder={route.params?.phoneNumber}
-                        error={errors.PhoneNumber}
-                        value={route.params?.PhoneNumber}
+                        placeholder="Số điện thoại"
+                        error={errors.Phone}
                     />
                     <Input
                         onChangeText={text => handleOnchange(text, 'Address')}
@@ -203,110 +229,62 @@ const RegistrationScreen = ({ route, navigation }) => {
                         placeholder="Địa chỉ"
                         error={errors.Address}
                     />
-                    <View style={{ width: '100%', alignItems: 'center', marginVertical: 45 }}>
-                        <TouchableOpacity
-                            style={{
-                                width: '100%',
-                                height: 45,
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                backgroundColor: COLORS.primary,
-                                borderRadius: 8,
-
-                            }}
-                            onPress={validateAll}>
-                            <Text style={{ fontSize: 18, fontWeight: '500', color: COLORS.white }}>Hoàn tất</Text>
-                        </TouchableOpacity>
-                    </View>
-                    {/* <Text
-                        onPress={() => navigation.navigate('LoginScreen')}
-                        style={{
-                            color: COLORS.black,
-                            fontWeight: 'bold',
-                            textAlign: 'center',
-                            fontSize: 16,
-                        }}>
-                        Already have account ?Login
-                    </Text> */}
                 </View>
+            </View>
             </ScrollView>
+            <View style={{ width: '100%', height: 100, borderWidth: 1, borderColor: '#EFEFEF', justifyContent: 'center', alignItems: 'center' }}>
+                <TouchableOpacity
+                    onPress={validateAll}
+                    style={{
+                        width: '90%',
+                        height: 50,
+                        backgroundColor: '#246BFD',
+                        borderRadius: 50,
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        paddingVertical: 10,
+                    }}>
+                    <Text style={{ color: COLORS.white, fontSize: 18, fontWeight: '500' }}>Continue</Text>
+                </TouchableOpacity>
+            </View>
         </SafeAreaView>
-    );
-};
+    )
+}
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-    },
-    commandButton: {
-        padding: 15,
-        borderRadius: 10,
-        backgroundColor: '#FF6347',
-        alignItems: 'center',
-        marginTop: 10,
-    },
-    panel: {
-        padding: 20,
-        backgroundColor: '#FFFFFF',
-        paddingTop: 20,
+        backgroundColor: COLORS.white,
+        paddingTop: 45,
     },
     header: {
-        backgroundColor: '#FFFFFF',
-        shadowColor: '#333333',
-        shadowOffset: { width: -1, height: -3 },
-        shadowRadius: 2,
-        shadowOpacity: 0.4,
-        // elevation: 5,
-        paddingTop: 20,
-        borderTopLeftRadius: 20,
-        borderTopRightRadius: 20,
-    },
-    panelHeader: {
-        alignItems: 'center',
-    },
-    panelHandle: {
-        width: 40,
-        height: 8,
-        borderRadius: 4,
-        backgroundColor: COLORS.grey,
-        marginBottom: 10,
-    },
-    panelTitle: {
-        fontSize: 27,
-        height: 35,
-    },
-    panelSubtitle: {
-        fontSize: 14,
-        color: COLORS.darkBlue,
-        height: 30,
-        marginBottom: 10,
-    },
-    panelButton: {
-        padding: 13,
-        borderRadius: 10,
-        backgroundColor: COLORS.blue,
-        alignItems: 'center',
-        marginVertical: 7,
-    },
-    panelButtonTitle: {
-        fontSize: 17,
-        fontWeight: 'bold',
-        color: 'white',
-    },
-    action: {
         flexDirection: 'row',
-        marginTop: 10,
-        marginBottom: 10,
-        borderBottomWidth: 1,
-        borderBottomColor: '#f2f2f2',
-        paddingBottom: 5,
     },
-    actionError: {
-        flexDirection: 'row',
-        marginTop: 10,
-        borderBottomWidth: 1,
-        borderBottomColor: '#FF0000',
-        paddingBottom: 5,
+    body: {
+        width: '100%',
+        alignItems: 'center',
+        flex: 1,
+        paddingLeft: 30,
+        paddingRight: 30,
+        paddingTop: 40,
+        paddingBottom: 50,
+    },
+    checkUser: {
+        width: '45%',
+        borderWidth: 2,
+        height: 250,
+        borderRadius: 30,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    checkEmployer: {
+        width: '45%',
+        borderWidth: 2,
+        height: 250,
+        borderRadius: 30,
+        marginLeft: 25,
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     dropdown: {
         height: 50,
@@ -339,4 +317,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default RegistrationScreen;
+export default FillProfileScreen;

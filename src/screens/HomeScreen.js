@@ -1,3 +1,7 @@
+/* eslint-disable comma-dangle */
+/* eslint-disable no-shadow */
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable eqeqeq */
 /* eslint-disable quotes */
 /* eslint-disable react/no-unstable-nested-components */
 /* eslint-disable no-unused-vars */
@@ -5,9 +9,9 @@
 /* eslint-disable eol-last */
 /* eslint-disable prettier/prettier */
 /* eslint-disable react-native/no-inline-styles */
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
-import { View, Text, SafeAreaView, TouchableOpacity, ImageBackground, ScrollView, TextInput, FlatList, Pressable } from 'react-native';
+import { View, Text, SafeAreaView, TouchableOpacity, ImageBackground, ScrollView, Alert,ActivityIndicator, TextInput, FlatList, Pressable, RefreshControl } from 'react-native';
 
 //
 import Input from '../components/Input';
@@ -20,50 +24,276 @@ import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import IconWithBadge from '../components/IconWithBadge';
 import IconWithBadgeAntDesign from '../components/IconWithBadgeAntDesign';
 import UserContext from '../components/UserConText';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import axios from 'axios';
+import Loader from '../components/Loader';
+import { API } from '../../Sever/sever';
 
-const HomeScreen = ({navigation}) => {
+const HomeScreen = ({ navigation }) => {
+
+  const { user } = useContext(UserContext);
+  const [listJobs, setListJobs] = useState([]);
+  const [listCareers, setListCareers] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
+  const [SaveJobs, setSaveJobs] = useState(false);
+  const [followedProducts, setFollowedProducts] = useState([]);
 
   useFocusEffect(
     React.useCallback(() => {
-      getListJobs()
-      getListCareers()
+      getAllData()
     }, [])
   );
 
-  const { user } = useContext(UserContext);
+  const getAllData = async () => {
+    try {
+      //list save
+      axios({
+        url: `${API}/savePost/list`,
+        method: "POST",
+        data: {
+          id: user._id,
+        }
+      }).then(async (response) => {
+        if (response.status === 200) {
+          const data = JSON.stringify(response.data)
+          await AsyncStorage.setItem('listMySavePost', data);
+        }
+      })
+      //list save id
+      axios({
+        url: `${API}/savePost/list1`,
+        method: "POST",
+        data: {
+          id: user._id,
+        }
+      }).then(async (response) => {
+        if (response.status === 200) {
+          setFollowedProducts(response.data);
+        }
+      })
+      //All Post allow
+      axios({
+        url: `${API}/posts/list`,
+        method: "GET",
+      }).then((response) => {
+        if (response.status === 200) {
+          setListJobs(response.data)
+        }
+      })
+      //All Career
+      axios({
+        url: `${API}/careers/listCareersForApp`,
+        method: "GET",
+      }).then(async (response) => {
+        if (response.status === 200) {
+          const data = JSON.stringify(response.data)
+          await AsyncStorage.setItem('listCareers', data);
+          setListCareers(response.data);
+        }
+      })
+      //All WorkType
+      axios({
+        url: `${API}/workTypes/list`,
+        method: "GET",
+      }).then(async (response) => {
+        if (response.status === 200) {
+          const data = JSON.stringify(response.data)
+          await AsyncStorage.setItem('listWorkTypes', data);
+        }
+      })
+      //All PayForm
+      axios({
+        url: `${API}/payforms/list`,
+        method: "GET",
+      }).then(async (response) => {
+        if (response.status === 200) {
+          const data = JSON.stringify(response.data)
+          await AsyncStorage.setItem('listPayForms', data);
+        }
+      })
+      //All Academic
+      axios({
+        url: `${API}/acedemics/list`,
+        method: "GET"
+      }).then(async (response) => {
+        if (response.status === 200) {
+          const data = JSON.stringify(response.data)
+          await AsyncStorage.setItem('listAcademics', data);
+        }
+      })
+      //All Gender
+      axios({
+        url: `${API}/gender/list`,
+        method: "GET"
+      }).then(async (response) => {
+        if (response.status === 200) {
+          const data = JSON.stringify(response.data)
+          await AsyncStorage.setItem('listGenders', data);
+        }
+      })
+      //All Experience
+      axios({
+        url: `${API}/experiences/list`,
+        method: "GET"
+      }).then(async (response) => {
+        if (response.status === 200) {
+          const data = JSON.stringify(response.data)
+          await AsyncStorage.setItem('listExperiences', data);
+        }
+      })
+      //All my Notification
+      const response = await axios.post(`${API}/notifications/list`, { receiver_id: user._id });
+      if (response.status === 200) {
+        const data = JSON.stringify(response.data)
+        await AsyncStorage.setItem('listNotifications', data);
+      }
+      //All my Message
+      //All CV
+      //All my Post allow
+      axios({
+        url: `${API}/posts/listJobsIsDisplayForApp`,
+        method: "POST",
+        data: {
+          id: user._id,
+        },
+      }).then(async (response) => {
+        if (response.status === 200) {
+          const data = JSON.stringify(response.data)
+          await AsyncStorage.setItem('listJobsIsDisplay', data);
+        }
+      })
+      //All my Post waiting
+      axios({
+        url: `${API}/posts/listJobsWaitingForApp`,
+        method: "POST",
+        data: {
+          id: user._id,
+        },
+      }).then(async (response) => {
+        if (response.status === 200) {
+          const data = JSON.stringify(response.data)
+          await AsyncStorage.setItem('listJobsWaiting', data);
+        }
+      })
+      //All my Post denied
+      axios({
+        url: `${API}/posts/listJobsDeniedForApp`,
+        method: "POST",
+        data: {
+          id: user._id,
+        },
+      }).then(async (response) => {
+        if (response.status === 200) {
+          const data = JSON.stringify(response.data)
+          await AsyncStorage.setItem('listJobsDenied', data);
+        }
+      })
+      //All my CV
+      axios({
+        url: `${API}/cvs/myCVs`,
+        method: "POST",
+        data: {
+          id: user._id,
+        }
+      }).then(async (response) => {
+        if (response.status === 200) {
+          const data = JSON.stringify(response.data)
+          await AsyncStorage.setItem('listCVs', data);
+        }
+      })
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  }
 
-  const [listJobs, setListJobs] = useState([]);
-  const [listCareers, setListCareers] = useState([]);
-  const [listCv, setListCv] = useState([]);
-
-  const search = () =>{
+  const fetchData = async () => {
+    setRefreshing(true);
+    setTimeout(() => {
+      try {
+        axios({
+          url: `${API}/posts/list`,
+          method: "GET",
+        }).then((response) => {
+          if (response.status === 200) {
+            setListJobs(response.data)
+          }
+        })
+        //All Career
+        axios({
+          url: `${API}/careers/listCareersForApp`,
+          method: "GET",
+        }).then(async (response) => {
+          if (response.status === 200) {
+            const data = JSON.stringify(response.data)
+            await AsyncStorage.setItem('listCareers', data);
+            setListCareers(response.data);
+          }
+        })
+        axios({
+          url: `${API}/savePost/list`,
+          method: "POST",
+          data: {
+            id: user._id,
+          }
+        }).then(async (response) => {
+          if (response.status === 200) {
+            const data = JSON.stringify(response.data)
+            await AsyncStorage.setItem('listMySavePost', data);
+            setFollowedProducts(response.data);
+          }
+        })
+        setRefreshing(false);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        setRefreshing(false);
+      } finally {
+        setRefreshing(false);
+      }
+      setRefreshing(false);
+    }, 1000);
+  };
+  const search = () => {
     navigation.navigate('SearchScreen')
   }
-
-  const getListJobs = () => {
-    axios({
-      url: "http://192.168.1.46:3000/posts/list",
-      method: "GET",
-    }).then((res) => {
-      var response = res.data
-      // console.log(response);
-      setListJobs(response)
-      console.log("List Jobs : " + listJobs);
-    })
+  const getListSave = async () => {
+    try {
+      axios({
+        url: `${API}/savePost/list1`,
+        method: "POST",
+        data: {
+          id: user._id,
+        }
+      }).then(async (response) => {
+        if (response.status === 200) {
+          setFollowedProducts(response.data);
+        }
+      })
+    } catch (error) {
+      console.log("err", error);
+    }
   }
+  const handleSaveToggle = async (itemId) => {
+    try {
+      const savedata = {
+        user_id: user._id,
+        post_id: itemId,
+      };
+      const result = await axios.post(`${API}/savePost/add`, savedata);
+      if (result.status === 200) {
+        getListSave();
+        Alert.alert('Lưu tin thành công !')
+        console.log("Thành công");
+      }
+    } catch (error) {
+      console.log('Err: ', error);
+    }
+  };
 
-  const getListCareers = () => {
-    axios({
-      url: "http://192.168.1.46:3000/careers/listCareersForApp",
-      method: "GET",
-    }).then((res) => {
-      var response = res.data
-      // console.log("Careers : " + response);
-      setListCareers(response)
-    })
-  }
+  const isFollowed = (productId) => {
+    const savePostIDlist = followedProducts.map(item => item.post_id);
+    return savePostIDlist.some(post_id => post_id === productId);
+  };
 
   const FlatLista = () => {
     return (
@@ -80,7 +310,7 @@ const HomeScreen = ({navigation}) => {
   const FlatListb = () => {
     return (
       <FlatList
-        data={listJobs.reverse()}
+        data={listJobs}
         keyExtractor={(item, index) => index.toString()}
         renderItem={renderItemJob}
         nestedScrollEnabled={true}
@@ -90,15 +320,15 @@ const HomeScreen = ({navigation}) => {
   }
 
   const renderItem = ({ item }) => (
-    <View style={{alignItems:'center'}}>
-    <TouchableOpacity style={{ margin: 5, alignItems: 'center', width: 70, marginTop: 15, marginBottom:10}} onPress={()=>{}}>
-      <ImageBackground
-        source={{ uri: item.image }}
-        style={{ width: 46, height: 46, marginBottom: 5 }}
-        imageStyle={{ borderRadius: 5 }}
-      />
-      <Text style={{textAlign: 'center'}}>{item.c_title}</Text>
-    </TouchableOpacity>
+    <View style={{ alignItems: 'center' }}>
+      <TouchableOpacity style={{ margin: 5, alignItems: 'center', width: 70, marginTop: 15, marginBottom: 10 }} onPress={() => { }}>
+        <ImageBackground
+          source={{ uri: item.image }}
+          style={{ width: 46, height: 46, marginBottom: 5 }}
+          imageStyle={{ borderRadius: 5 }}
+        />
+        <Text style={{ textAlign: 'center' }}>{item.c_title}</Text>
+      </TouchableOpacity>
     </View>
   );
 
@@ -111,26 +341,30 @@ const HomeScreen = ({navigation}) => {
       marginBottom: 18,
       padding: 20,
     }}
-    onPress={() => navigation.navigate('DetailsScreen', {
-      title: item.title,
-      id: item.id,
-      uri: item.uri,
-      address: item.address,
-      wage_max: item.wage_max,
-      wage_min: item.wage_min,
-      worktype: item.worktype_id,
-      Details: item.describe,
-      age_min: item.age_min,
-      age_max: item.age_max,
-      business_name: item.business_name,
-      payform: item.payform_id,
-      experience: item.experience_id,
-      quantity: item.quantity,
-      status: item.status_id,
-      users: item.users_id,
-      careers: item.career_id,
-      acedemics: item.acedemic_id
-    })}>
+      onPress={() => navigation.navigate('DetailsScreen', {
+        postid: item._id,
+        users_id: item.users_id,
+        avatar: item.users_id.photo,
+        address: item.address,
+        business_name: item.businessName,
+        gender: item.gender,
+        image: item.image,
+        quantity: item.quantity,
+        title: item.title,
+        career_id: item.career_id,
+        payform_id: item.payForm_id,
+        experience_id: item.experience_id,
+        acedemic_id: item.academic_id,
+        worktype_id: item.workType_id,
+        describe: item.describe,
+        age_min: item.ageMin,
+        age_max: item.ageMax,
+        wage_min: item.wageMin,
+        wage_max: item.wageMax,
+        status_id: item.status_id,
+        date: item.date,
+        time: item.time,
+      })}>
       <View style={{ width: '100%', flexDirection: 'row' }}>
         {item.image.map((imageUrl, index) => {
           if (index === 0) {
@@ -144,19 +378,21 @@ const HomeScreen = ({navigation}) => {
             );
           }
         })}
-        
         <View style={{ width: '50%', height: '100%', marginStart: 20, flex: 1 }}>
-          <Text style={{ fontSize: 16, fontWeight: 'bold' }}>{item.title}</Text>
-          <Text style={{ fontSize: 16, fontWeight: 'bold', color: COLORS.grey }}>{item.describe}</Text>
+          <Text style={{ fontSize: 18, fontWeight: '400' }}>{item.title}</Text>
+          <Text numberOfLines={1} style={{ fontSize: 15, fontWeight: '400', color: COLORS.grey }}>{item.address}</Text>
         </View>
-        <TouchableOpacity onPress={() => { }}>
-          <Icon name="bookmark-plus-outline" size={30} color={COLORS.blue} />
+        <TouchableOpacity onPress={() => handleSaveToggle(item._id)}>
+          {isFollowed(item._id) ? (
+            <Icon name="bookmark-minus" size={30} color={COLORS.blue} />
+          ) : <Icon name="bookmark-plus" size={30} color={COLORS.blue} />
+          }
         </TouchableOpacity>
       </View>
       <View style={{ height: 1, width: '99%', backgroundColor: COLORS.grey, opacity: 0.4, marginTop: 15, marginBottom: 8 }} />
       <View style={{ width: '100%', paddingStart: '22%' }}>
-        <Text style={{ fontSize: 16, fontWeight: 'bold', color: COLORS.grey }}>{item.address}</Text>
-        <Text style={{ color: COLORS.blue, fontSize: 16, marginVertical: 9 }}>${item.wage_min} - ${item.wage_max} /month</Text>
+        <Text numberOfLines={1} style={{ fontSize: 16, fontWeight: 'bold', color: COLORS.grey, width: 200, marginBottom: 5 }}>{item.businessName}</Text>
+        <Text style={{ color: COLORS.blue, fontSize: 16, marginVertical: 9 }}>{item.wageMin} - {item.wageMax}đ/h</Text>
         <View style={{
           width: 100,
           height: 25,
@@ -167,7 +403,13 @@ const HomeScreen = ({navigation}) => {
           alignItems: 'center',
           justifyContent: 'center',
         }}>
-          <Text style={{ fontSize: 10 }}>{ item.worktype_id.wt_title}</Text>
+          {
+            item.workType_id._id == '653e66b38e88b23b41388e3c' ? (
+              <Text style={{ fontSize: 10 }} >Parttime</Text>
+            ) : (
+              <Text style={{ fontSize: 10 }} >Fulltime</Text>
+            )
+          }
         </View>
       </View>
 
@@ -200,13 +442,12 @@ const HomeScreen = ({navigation}) => {
               width: '68%',
             }}>
             <ImageBackground
-              source={{ uri : user.photo }}
+              // source={{ uri: user.photo }}
               style={{ width: 46, height: 46 }}
-              imageStyle={{ borderRadius: 46 }}
-            />
+              imageStyle={{ borderRadius: 46 }} />
             <View style={{ flexDirection: 'column', height: '100%', justifyContent: 'center', marginStart: 13 }}>
               <Text style={{ color: '#7D7A7A', fontSize: 16 }}>Xin chào 👋</Text>
-              <Text style={{ color: COLORS.black, fontSize: 20, fontWeight: "600" }} numberOfLines={1}>{user.displayName}</Text>
+              <Text style={{ color: COLORS.black, fontSize: 20, fontWeight: "600" }} numberOfLines={1}>{}</Text>
             </View>
           </TouchableOpacity>
           <TouchableOpacity
@@ -235,7 +476,7 @@ const HomeScreen = ({navigation}) => {
               alignItems: 'center',
               justifyContent: 'center',
             }}
-            onPress={() => navigation.navigate('ChatScreen')}>
+            onPress={() => navigation.navigate('MessageScreen')}>
             {/* <AntDesign name='message1' size={24} color={COLORS.black}/> */}
             <IconWithBadgeAntDesign iconName="message1" badgeText="" />
           </TouchableOpacity>
@@ -247,22 +488,20 @@ const HomeScreen = ({navigation}) => {
           style={{
             flexDirection: 'row',
             borderColor: '#C6C6C6',
-            borderWidth: 1,
             borderRadius: 10,
             paddingHorizontal: 10,
             alignItems: 'center',
+            backgroundColor: '#F5F5F5',
           }}>
           <Feather
             name="search"
             size={20}
             color="#C6C6C6"
-            style={{ marginRight: 20 }}
-          />
+            style={{ marginRight: 20 }} />
           <TextInput
-          style={{flex:1}}
+            style={{ flex: 1 }}
             placeholder="Tìm kiếm việc làm"
-            onFocus={search}
-          />
+            onFocus={search} />
           <TouchableOpacity
             style={{
               marginEnd: '2%',
@@ -274,33 +513,36 @@ const HomeScreen = ({navigation}) => {
               color={COLORS.blue}
               style={{
                 opacity: 0.95,
-              }}
-            />
+              }} />
           </TouchableOpacity>
         </Pressable>
-      </View>
-      <View style={{ padding: 20 }}>
-        <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps={'always'}>
-        <View style={{ width: '100%', alignItems: 'center', marginBottom: 15 }}>
-          <View style={{ width: '100%', marginBottom: 10 }}>
-            <Text style={{ fontSize: 20, fontStyle: 'normal', color: COLORS.black, fontWeight: 'bold' }}>Danh mục ngành nghề</Text>
+      </View><View style={{ padding: 20 }}>
+        <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps={'always'}
+          refreshControl={<RefreshControl
+            refreshing={refreshing}
+            onRefresh={fetchData}
+            colors={['#0000ff']} // Adjust the colors of the loading indicator
+          />}>
+          <View style={{ width: '100%', alignItems: 'center', marginBottom: 15 }}>
+            <View style={{ width: '100%', marginBottom: 10 }}>
+              <Text style={{ fontSize: 20, fontStyle: 'normal', color: COLORS.black, fontWeight: 'bold' }}>Danh mục ngành nghề</Text>
+            </View>
+            <FlatLista />
           </View>
-          <FlatLista/>
-        </View>
-        <View style={{ width: '100%', alignItems: 'center' }}>
-          <View style={{ width: '100%', marginBottom: 20, flexDirection: 'row', alignItems: 'center' }}>
-            <Text style={{ fontSize: 20, fontStyle: 'normal', color: COLORS.black, fontWeight: 'bold' }}>Công việc mới</Text>
-            <TouchableOpacity style={{ marginStart: '49%' }}
-              onPress={() => { }}>
-              <Text style={{ fontSize: 18, color: COLORS.blue, fontWeight: 'bold' }}>Tất cả</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={{ width: '100%', paddingBottom: '50%' }}>
-            <View style={{ alignItems: 'center' }}>
-              <FlatListb/>
+          <View style={{ width: '100%', alignItems: 'center' }}>
+            <View style={{ width: '100%', marginBottom: 20, flexDirection: 'row', alignItems: 'center' }}>
+              <Text style={{ fontSize: 20, fontStyle: 'normal', color: COLORS.black, fontWeight: 'bold' }}>Công việc mới</Text>
+              <TouchableOpacity style={{ marginStart: '49%' }}
+                onPress={() => { }}>
+                <Text style={{ fontSize: 18, color: COLORS.blue, fontWeight: 'bold' }}>Tất cả</Text>
+              </TouchableOpacity>
+            </View>
+            <View style={{ width: '100%', paddingBottom: '50%' }}>
+              <View style={{ alignItems: 'center' }}>
+                <FlatListb />
+              </View>
             </View>
           </View>
-        </View>
         </ScrollView>
       </View>
     </SafeAreaView>

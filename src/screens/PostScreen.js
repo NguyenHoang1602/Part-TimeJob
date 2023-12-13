@@ -6,13 +6,14 @@
 /* eslint-disable eol-last */
 /* eslint-disable prettier/prettier */
 /* eslint-disable react-native/no-inline-styles */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, SafeAreaView, Keyboard, ScrollView, StyleSheet, TouchableOpacity, ImageBackground, useWindowDimensions, FlatList, Image, Alert } from 'react-native';
 
 import Input from '../components/Input';
 import InputMutiple from '../components/InputMutiple';
 import COLORS from '../assets/const/colors';
 import axios from 'axios';
+import { API } from '../../Sever/sever';
 
 import Button from '../components/Button';
 //icon
@@ -21,72 +22,100 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 // import BottomSheetContent from '../components/BottomSheetContent';
 //picker
 import ImagePicker from 'react-native-image-crop-picker';
-
 //modal
 import Modal from 'react-native-modal';
 //slect drop-down
 import { Dropdown } from 'react-native-element-dropdown';
 import { useFocusEffect } from '@react-navigation/native';
+import UserContext from '../components/UserConText';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Loader from '../components/Loader';
 
-const data = [
-  { label: 'Item 1', value: 'Item 1' },
-  { label: 'Item 2', value: '2' },
-  { label: 'Item 3', value: '3' },
-  { label: 'Item 4', value: '4' },
-  { label: 'Item 5', value: '5' },
-  { label: 'Item 6', value: '6' },
-  { label: 'Item 7', value: '7' },
-  { label: 'Item 8', value: '8' },
-];
-
-const payForm = [
-  { value: 'Theo giờ' },
-  { value: 'Theo ngày' },
-  { value: 'Theo tháng' },
-  { value: 'Lương khoán' },
+const gender = [
+  { label: 'Nam', value: 'Nam' },
+  { label: 'Nữ', value: 'Nữ' },
+  { label: 'Không yêu cầu', value: 'Không yêu cầu' },
 ];
 
 const PostScreen = ({ navigation }) => {
-  useFocusEffect(
-    React.useCallback(() => {
-      getList()
-      getListWorkType()
-      getListPayform()
-      getListAcedemic()
-      getListExperience()
-    }, [])
-  );
 
+  useEffect(() => {
+    getListCareers()
+    getListWorkType()
+    getListPayForm()
+    getListAcademic()
+    getListExperience()
+  }, []);
+
+  const { user } = useContext(UserContext);
   //drop-down
-  const [value, setValue] = useState(null);
-  const [isFocus, setIsFocus] = useState(false);
-  const [inputs, setInputs] = React.useState({
-    id: '',
-    title: '',
-    subtitle: '',
-    price: '',
-    details: '',
-    sex: '',
-  });
-  const [errors, setErrors] = React.useState({});
-  const [validateSex, setValidateSex] = useState('');
-  const [validateCareers, setValidateCareers] = useState('');
-  const [validateWorkTypes, setValidateWorkTypes] = useState('');
-  const [validatePayForm, setValidatePayForm] = useState('');
-  const [validateAcademicLv, setValidateAcademicLv] = useState('');
-  const [validateExp, setValidateExp] = useState('');
-  
+  const [loading, setLoading] = React.useState(false);
 
-  const validateAll = () => {
-    validate();
-    VLDSex();
+  const [isFocus, setIsFocus] = useState(false);
+  const [selectedImages, setSelectedImages] = useState([]);
+  const urlImage = [];
+  const imageurl = [];
+  const [listCareers, setListCareers] = useState([]);
+  const [listWorkType, setListWorkType] = useState([]);
+  const [listPayForm, setListPayForm] = useState([]);
+  const [listAcademic, setListAcademic] = useState([]);
+  const [listExperience, setListExperience] = useState([]);
+  const [inputs, setInputs] = React.useState({
+    users_id: user._id,
+    businessName: '',
+    address: '',
+    image: [],
+    title: '',
+    quantity: '',
+    gender: '',
+    career_id: '',
+    workType_id: '',
+    payForm_id: '',
+    wageMin: '',
+    wageMax: '',
+    describe: '',
+    ageMin: '',
+    ageMax: '',
+    academic_id: '',
+    experience_id: '',
+    status_id: '65423efa3f8e779b5ec14e51',
+  });
+
+  const getListCareers = async () => {
+    const data = await AsyncStorage.getItem('listCareers')
+    setListCareers(JSON.parse(data));
   }
-  const validate = () => {
+
+  const getListWorkType = async () => {
+    const data = await AsyncStorage.getItem('listWorkTypes');
+    setListWorkType(JSON.parse(data));
+  }
+
+  const getListPayForm = async () => {
+    const data = await AsyncStorage.getItem('listPayForms');
+    setListPayForm(JSON.parse(data));
+  }
+
+  const getListAcademic = async () => {
+    const data = await AsyncStorage.getItem('listAcademics');
+    setListAcademic(JSON.parse(data));
+  }
+
+  const getListExperience = async () => {
+    const data = await AsyncStorage.getItem('listExperiences');
+    setListExperience(JSON.parse(data));
+  }
+
+  // Validate
+  const [errors, setErrors] = React.useState({});
+
+  const validate = async () => {
+
     Keyboard.dismiss();
     let isValid = true;
 
-    if (!inputs.bussiness_name) {
-      handleError('Vui lòng nhập tên doanh nghiệp', 'bussiness_name');
+    if (!inputs.businessName) {
+      handleError('Vui lòng nhập tên doanh nghiệp', 'businessName');
       isValid = false;
     }
     if (!inputs.andress) {
@@ -101,158 +130,119 @@ const PostScreen = ({ navigation }) => {
       handleError('Vui lòng nhập số lượng', 'quantity');
       isValid = false;
     }
-    if (!inputs.wagemin) {
-      handleError('Vui lòng nhập lương', 'wagemin');
+    if (!inputs.wageMin) {
+      handleError('Vui lòng nhập lương', 'wageMin');
       isValid = false;
     }
-    if (!inputs.wagemax) {
-      handleError('Vui lòng nhập lương', 'wagemax');
+    if (!inputs.wageMax) {
+      handleError('Vui lòng nhập lương', 'wageMax');
       isValid = false;
     }
-    if (!inputs.subtitle) {
-      handleError('Vui lòng nhập mô tả', 'subtitle');
+    if (!inputs.describe) {
+      handleError('Vui lòng nhập mô tả', 'describe');
       isValid = false;
     }
-    if (!inputs.agemin) {
-      handleError('Vui lòng nhập tuổi', 'agemin');
+    if (!inputs.ageMin) {
+      handleError('Vui lòng nhập tuổi', 'ageMin');
       isValid = false;
     }
-    if (!inputs.agemax) {
-      handleError('Vui lòng nhập tuổi', 'agemax');
+    if (!inputs.ageMax) {
+      handleError('Vui lòng nhập tuổi', 'ageMax');
       isValid = false;
     }
-    if (!inputs.Engraved_benefits) {
-      handleError('Vui lòng nhập quyền lợi', 'Engraved_benefits');
+    if (!inputs.image) {
+      handleError('Vui lòng chọn ảnh', 'image');
+      isValid = false;
+    }
+    if (!inputs.gender) {
+      handleError('Vui lòng chọn giới tính', 'gender');
+      isValid = false;
+    }
+    if (!inputs.career_id) {
+      handleError('Vui lòng chọn loại ngành nghề', 'career_id');
+      isValid = false;
+    }
+    if (!inputs.workType_id) {
+      handleError('Vui lòng chọn loại công việc', 'workType_id');
+      isValid = false;
+    }
+    if (!inputs.payForm_id) {
+      handleError('Vui lòng chọn hình thức trả lương', 'payForm_id');
+      isValid = false;
+    }
+    if (!inputs.academic_id) {
+      handleError('Vui lòng chọn trình độ học vấn', 'academic_id');
+      isValid = false;
+    }
+    if (!inputs.experience_id) {
+      handleError('Vui lòng chọn mức độ kinh nghiệm', 'experience_id');
       isValid = false;
     }
     if (isValid) {
-      console.log(' oce ');
-    }
-
-  };
-  const VLDSex = (value) => {
-    if (!value) {
-      setValidateSex('Vui lòng chọn giới tính');
-    } else {
-      setValidateSex('');
+      uploadImages();
+      setTimeout(handlePost, 4000);
     }
   };
+  console.log(inputs);
   const handleOnchange = (text, input) => {
     setInputs(prevState => ({ ...prevState, [input]: text }));
   };
   const handleError = (error, input) => {
     setErrors(prevState => ({ ...prevState, [input]: error }));
   };
-  const logimage = () => {
-    console.log(selectedImages);
+  const handlePost = async () => {
+    setLoading(true)
+    setTimeout(() => { 3000 })
+    const result = await axios.post(`${API}/posts/postForApp`, inputs);
+    if (result.status === 200) {
+      setLoading(false);
+      Alert.alert('thanh cong')
+      navigation.navigate('Quản lí')
+    }
   }
-console.log(inputs);
-  //const [images, setImages] = useState([]);
-  const [selectedImages, setSelectedImages] = useState([]);
-
-  //get list careers
-  const [listCareers, setListCareers] = useState([]);
-  const [listWorkType, setListWorkType] = useState([]);
-  const [listPayform, setListPayform] = useState([]);
-  const [listAcedemic, setListAcedemic] = useState([]);
-  const [listExperience, setListExperience] = useState([]);
-
-const getList = () => {
-  axios({
-    url: "http://192.168.1.46:3000/careers/list",
-    method: "GET",
-  }).then((res) => {
-    setListCareers(res.data);
-  })
-  console.log(listCareers);
+  useFocusEffect(
+    React.useCallback(() => {
+      return () => {
+        // Clean up the state when the component loses focus
+        setSelectedImages([]);
+      };
+    }, [])
+  );
+  const Checkdataimage = () => {
+    if (selectedImages == "") {
+      return false;
+    } else {
+      return true;
+    }
   }
-  
-  const getListWorkType = () => { 
-    axios({
-      url: "http://192.168.1.46:3000/worktypes/list",
-      method: "GET"
-    }).then((res) => { 
-      setListWorkType(res.data);
+  const shouldShow = Checkdataimage();
+  const openImagePicker = () => {
+    setSelectedImages([]);
+    ImagePicker.openPicker({
+      multiple: true,
+      mediaType: 'photo',
     })
-    console.log(listWorkType);
-  }
-
-  const getListPayform = () => {
-    axios({
-      url: "http://192.168.1.46:3000/payforms/list",
-      method : "GET",
-    }).then((res) => {
-      setListPayform(res.data);
-    })
-    console.log(listPayform);
-  }
-
-  const getListAcedemic = () => { 
-    axios({
-      url: "http://192.168.1.46:3000/acedemics/list",
-      method : "GET"
-    }).then((res) => {
-      setListAcedemic(res.data);
-    })
-    console.log(listAcedemic);
-  }
-
-  const getListExperience = () => { 
-    axios({
-      url: "http://192.168.1.46:3000/experiences/list",
-      method : "GET"
-    }).then((res) => {
-      setListExperience(res.data);
-    })
-    console.log(listExperience);
-  }
-
-  
-
-useFocusEffect(
-  React.useCallback(() => {
-    return () => {
-      // Clean up the state when the component loses focus
-      setSelectedImages([]);
-    };
-  }, [])
-);
-
-const Checkdataimage = () => {
-  if (selectedImages == "") {
-    return false;
-  } else {
-    return true;
-  }
-}
-const shouldShow = Checkdataimage();
-const openImagePicker = () => {
-  setSelectedImages([]);
-  ImagePicker.openPicker({
-    multiple: true,
-    mediaType: 'photo',
-  })
-    .then((images) => {
-      const newImages = images.map(image => ({
-        uri: image.path,
-        width: image.width,
-        height: image.height,
-      }));
-      setSelectedImages(newImages);
-      setBottomSheetVisible(!isBottomSheetVisible);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-};
-const uploadImages = async () => {
-  try {
-    const CLOUD_NAME = "dxrv1gdit";
-    const PRESET_NAME = "ParttimeJobs";
-    const urls = [];
-    const FOLDER_NAME = "Part-timeJobs";
-    const api = 'https://api.cloudinary.com/v1_1/dxrv1gdit/image/upload';
-    const formData = new FormData();
+      .then((images) => {
+        const newImages = images.map(image => ({
+          uri: image.path,
+          width: image.width,
+          height: image.height,
+        }));
+        setSelectedImages(newImages);
+        setBottomSheetVisible(!isBottomSheetVisible);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  // Upload image to Cloud
+  const uploadImages = async () => {  
+    try {
+      const CLOUD_NAME = "dxrv1gdit";
+      const PRESET_NAME = "ParttimeJobs";
+      const FOLDER_NAME = "Part-timeJobs";
+      const api = 'https://api.cloudinary.com/v1_1/dxrv1gdit/image/upload';
+      const formData = new FormData();
 
       formData.append("upload_preset", PRESET_NAME);
       formData.append("folder", FOLDER_NAME);
@@ -262,16 +252,22 @@ const uploadImages = async () => {
           type: 'image/jpeg',
           name: `image_${index + 1}.jpg`,
         });
-      });
-      console.log(urls);
-      Alert.alert("Upload Image Succesfuly !");
+        const response = await axios.post(api, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
+
+        if (response.status === 200) {
+          urlImage.push(response.data.secure_url);
+          handleOnchange(urlImage, 'image')
+        }
+      })
       setSelectedImages([]);
-      return urls;
     } catch (error) {
       console.log("Upload failed", error);
     }
   };
-
   // Pick Images
   const BottomSheetContent = ({ isVisible, onClose }) => {
     return (
@@ -305,13 +301,16 @@ const uploadImages = async () => {
       </Modal>
     );
   };
+
   const [isBottomSheetVisible, setBottomSheetVisible] = useState(false);
 
   const toggleBottomSheet = () => {
     setBottomSheetVisible(!isBottomSheetVisible);
   };
+
   return (
     <SafeAreaView style={{ backgroundColor: COLORS.white, flex: 1 }}>
+      <Loader visible={loading} />
       <ScrollView>
         <View>
           <BottomSheetContent
@@ -321,12 +320,12 @@ const uploadImages = async () => {
           <View style={{ backgroundColor: '#D9D9D9', height: 60, justifyContent: 'center' }}>
             <Text style={{ fontSize: 16, marginStart: 25 }}>THÔNG TIN NHÀ TUYỂN DỤNG</Text>
           </View>
-          <View style={{ marginVertical: 22, marginHorizontal: 24 }}>
+          <View style={{ paddingTop: 22, marginHorizontal: 24 }}>
             <Input
-              onChangeText={text => handleOnchange(text, 'bussiness_name')}
-              onFocus={() => handleError(null, 'bussiness_name')}
+              onChangeText={text => handleOnchange(text, 'businessName')}
+              onFocus={() => handleError(null, 'businessName')}
               placeholder="Tên doanh nghiệp"
-              error={errors.bussiness_name}
+              error={errors.businessName}
             />
             <Input
               onChangeText={text => handleOnchange(text, 'address')}
@@ -337,13 +336,14 @@ const uploadImages = async () => {
             />
             <View style={{
               height: 120,
+              marginBottom: 8,
             }}>{
                 shouldShow ? (
                   <View style={{
                     height: 120,
                   }}>
                     <View style={{
-                      width: 145,
+                      width: 146,
                       height: 22,
                       backgroundColor: '#CFE0FE',
                       borderRadius: 3,
@@ -422,25 +422,16 @@ const uploadImages = async () => {
                       />
                     </View>
                   </View>
-                ) : <View style={{
+                ) : <View style={[{
                   backgroundColor: '#D9D9D9',
                   height: 120,
                   borderRadius: 6,
                   borderWidth: 1,
                   borderStyle: 'dashed',
                   borderColor: '#7D7A7A66',
-                }}>
+                }, errors.image && { borderColor: 'red' }]}>
                   <View style={{ alignItems: 'flex-end' }}>
-                    <View style={{
-                      width: 96,
-                      height: 20,
-                      backgroundColor: '#CFE0FE',
-                      borderRadius: 3,
-                      marginRight: '2%',
-                      marginTop: '2%',
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                    }}>
+                    <View style={styles.pickImage}>
                       <Ionicons style={{ marginStart: 4 }} name="information-circle" size={16} color="#3E7CEF" />
                       <Text style={{ fontSize: 9, marginLeft: 3, marginBottom: 2 }}>Hình ảnh hợp lệ</Text>
                     </View>
@@ -470,6 +461,7 @@ const uploadImages = async () => {
                 </View>
               }
             </View>
+            {errors.image ? <Text style={styles.error}>{errors.image}</Text> : null}
           </View>
           <View style={{ backgroundColor: '#D9D9D9', height: 60, justifyContent: 'center' }}>
             <Text style={{ fontSize: 16, marginStart: 25 }}>NỘI DUNG ĐĂNG TUYỂN</Text>
@@ -490,112 +482,115 @@ const uploadImages = async () => {
               error={errors.quantity}
             />
             <Dropdown
-              style={[styles.dropdown, isFocus && { borderColor: COLORS.darkBlue }, validateSex && { borderColor: 'red' }]}
+              style={[styles.dropdown, isFocus && { borderColor: COLORS.darkBlue }, errors.gender && { borderColor: 'red' }]}
               placeholderStyle={styles.placeholderStyle}
               selectedTextStyle={styles.selectedTextStyle}
               iconStyle={styles.iconStyle}
-              data={data}
+              data={gender}
               maxHeight={300}
               labelField="label"
               valueField="value"
               placeholder={!isFocus ? 'Giới tính' : '...'}
-              value={inputs.sex}
+              value={inputs.gender}
               onFocus={() => setIsFocus(true)}
               onBlur={() => setIsFocus(false)}
               onChange={item => {
                 setIsFocus(false);
-                VLDSex(item.value)
-                handleOnchange(item.label, 'sex')
+                handleOnchange(item.label, 'gender')
+                handleError(null, 'gender')
               }}
-
             />
-            {validateSex ? <Text style={styles.error}>{validateSex}</Text> : null}
+            {errors.gender ? <Text style={styles.error}>{errors.gender}</Text> : null}
             <Dropdown
-              style={[styles.dropdown, isFocus && { borderColor: COLORS.darkBlue }]}
+              style={[styles.dropdown, isFocus && { borderColor: COLORS.darkBlue }, errors.career_id && { borderColor: 'red' }]}
               placeholderStyle={styles.placeholderStyle}
               selectedTextStyle={styles.selectedTextStyle}
               inputSearchStyle={styles.inputSearchStyle}
               iconStyle={styles.iconStyle}
               data={listCareers}
-              search
               maxHeight={300}
               labelField="c_title"
               valueField="_id"
               placeholder={!isFocus ? 'Ngành Nghề' : '...'}
               searchPlaceholder="Search..."
-              value={value}
+              value={listCareers._id}
               onFocus={() => setIsFocus(true)}
               onBlur={() => setIsFocus(false)}
               onChange={item => {
-                setValue(item.value);
                 setIsFocus(false);
+                handleOnchange(item._id, 'career_id')
+                handleError(null, 'career_id')
               }}
             />
-            
+            {errors.career_id ? <Text style={styles.error}>{errors.career_id}</Text> : null}
             <Dropdown
-              style={[styles.dropdown, isFocus && { borderColor: COLORS.darkBlue }]}
+              style={[styles.dropdown, isFocus && { borderColor: COLORS.darkBlue }, errors.workType_id && { borderColor: 'red' }]}
               placeholderStyle={styles.placeholderStyle}
               selectedTextStyle={styles.selectedTextStyle}
               inputSearchStyle={styles.inputSearchStyle}
               iconStyle={styles.iconStyle}
-              data={data}
-              search
+              data={listWorkType}
+          
               maxHeight={300}
-              labelField="label"
-              valueField="value"
+              labelField="wt_title"
+              valueField="_id"
               placeholder={!isFocus ? 'Loại công việc' : '...'}
               searchPlaceholder="Search..."
-              value={value}
+              value={inputs.workType_id}
               onFocus={() => setIsFocus(true)}
               onBlur={() => setIsFocus(false)}
               onChange={item => {
-                setValue(item.value);
                 setIsFocus(false);
+                handleOnchange(item._id, 'workType_id')
+                handleError(null, 'workType_id')
               }}
             />
+            {errors.workType_id ? <Text style={styles.error}>{errors.workType_id}</Text> : null}
             <Dropdown
-              style={[styles.dropdown, isFocus && { borderColor: COLORS.darkBlue }]}
+              style={[styles.dropdown, isFocus && { borderColor: COLORS.darkBlue }, errors.payForm_id && { borderColor: 'red' }]}
               placeholderStyle={styles.placeholderStyle}
               selectedTextStyle={styles.selectedTextStyle}
               inputSearchStyle={styles.inputSearchStyle}
               iconStyle={styles.iconStyle}
-              data={data}
-              search
+              data={listPayForm}
+              
               maxHeight={300}
-              labelField="label"
-              valueField="value"
+              labelField="pf_title"
+              valueField="_id"
               placeholder={!isFocus ? 'Hình thức trả lương' : '...'}
               searchPlaceholder="Search..."
-              value={value}
+              value={listPayForm._id}
               onFocus={() => setIsFocus(true)}
               onBlur={() => setIsFocus(false)}
               onChange={item => {
-                setValue(item.value);
                 setIsFocus(false);
+                handleOnchange(item._id, 'payForm_id')
+                handleError(null, 'payForm_id')
               }}
             />
+            {errors.payForm_id ? <Text style={styles.error}>{errors.payForm_id}</Text> : null}
             <Input
               keyboardType="numeric"
-              onChangeText={text => handleOnchange(text, 'wagemin')}
-              onFocus={() => handleError(null, 'wagemin')}
+              onChangeText={text => handleOnchange(text, 'wageMin')}
+              onFocus={() => handleError(null, 'wageMin')}
               placeholder="Lương tối thiểu"
               // value={route.params?.subtitle}
-              error={errors.wagemin}
+              error={errors.wageMin}
             />
             <Input
               keyboardType="numeric"
-              onChangeText={text => handleOnchange(text, 'wagemax')}
-              onFocus={() => handleError(null, 'wagemax')}
+              onChangeText={text => handleOnchange(text, 'wageMax')}
+              onFocus={() => handleError(null, 'wageMax')}
               placeholder="Lương tối đa"
               // value={route.params?.subtitle}
-              error={errors.wagemax}
+              error={errors.wageMax}
             />
             <InputMutiple
-              onChangeText={text => handleOnchange(text, 'subtitle')}
-              onFocus={() => handleError(null, 'subtitle')}
+              onChangeText={text => handleOnchange(text, 'describe')}
+              onFocus={() => handleError(null, 'describe')}
               placeholder={"Mô tả công việc\nMô tả chi tiết một số đặc điểm nhân diện của công ty tuyển dụng:\n- Tên công ty, địa chỉ công ty, hình thức và mặt hàng kinh doanh."}
               // value={route.params?.subtitle}
-              error={errors.subtitle}
+              error={errors.describe}
             />
           </View>
           <View style={{ backgroundColor: '#D9D9D9', height: 60, justifyContent: 'center' }}>
@@ -603,24 +598,24 @@ const uploadImages = async () => {
           </View>
           <View style={{ marginHorizontal: 24, marginTop: 22 }}>
             <View style={{ width: '100%', flexDirection: 'row' }}>
-              <View style={{ width: '45%', justifyContent: 'flex-start' }}>
+              <View style={{ width: '46%', justifyContent: 'flex-start' }}>
                 <Input
                   keyboardType="numeric"
-                  onChangeText={text => handleOnchange(text, 'agemin')}
-                  onFocus={() => handleError(null, 'agemin')}
+                  onChangeText={text => handleOnchange(text, 'ageMin')}
+                  onFocus={() => handleError(null, 'ageMin')}
                   placeholder="Độ tuổi tối thiểu"
                   // value={route.params?.subtitle}
-                  error={errors.agemin}
+                  error={errors.ageMin}
                 />
               </View>
-              <View style={{ width: '45%', marginStart: '9.5%' }}>
+              <View style={{ width: '46%', marginStart: '9.5%' }}>
                 <Input
                   keyboardType="numeric"
-                  onChangeText={text => handleOnchange(text, 'agemax')}
-                  onFocus={() => handleError(null, 'agemax')}
+                  onChangeText={text => handleOnchange(text, 'ageMax')}
+                  onFocus={() => handleError(null, 'ageMax')}
                   placeholder="Độ tuổi tối đa"
                   // value={route.params?.subtitle}
-                  error={errors.agemax}
+                  error={errors.ageMax}
                 />
               </View>
             </View>
@@ -633,55 +628,52 @@ const uploadImages = async () => {
               // value={route.params?.subtitle}
               error={errors.subtitle}
             /> */}
-          <Dropdown
-            style={[styles.dropdown, isFocus && { borderColor: COLORS.darkBlue }]}
-            placeholderStyle={styles.placeholderStyle}
-            selectedTextStyle={styles.selectedTextStyle}
-            inputSearchStyle={styles.inputSearchStyle}
-            iconStyle={styles.iconStyle}
-            data={listAcedemic}
-            search
-            maxHeight={300}
-            labelField="a_title"
-            valueField="_id"
-            placeholder={!isFocus ? 'Trình độ học vấn' : '...'}
-            searchPlaceholder="Search..."
-            value={value}
-            onFocus={() => setIsFocus(true)}
-            onBlur={() => setIsFocus(false)}
-            onChange={item => {
-              setValue(item.value);
-              setIsFocus(false);
-            }}
-          />
-          <Dropdown
-            style={[styles.dropdown, isFocus && { borderColor: COLORS.darkBlue }]}
-            placeholderStyle={styles.placeholderStyle}
-            selectedTextStyle={styles.selectedTextStyle}
-            inputSearchStyle={styles.inputSearchStyle}
-            iconStyle={styles.iconStyle}
-            data={listExperience}
-            search
-            maxHeight={300}
-            labelField="e_title"
-            valueField="_id"
-            placeholder={!isFocus ? 'Kinh nghiệm' : '...'}
-            searchPlaceholder="Search..."
-            value={value}
-            onFocus={() => setIsFocus(true)}
-            onBlur={() => setIsFocus(false)}
-            onChange={item => {
-              setValue(item.value);
-              setIsFocus(false);
-            }}
-          />
-          {/* <Input
-              onChangeText={text => handleOnchange(text, 'subtitle')}
-              onFocus={() => handleError(null, 'subtitle')}
-              placeholder="Kinh nghiệm"
-              // value={route.params?.subtitle}
-              error={errors.subtitle}
-            /> */}
+            <Dropdown
+              style={[styles.dropdown, isFocus && { borderColor: COLORS.darkBlue }, errors.academic_id && { borderColor: 'red' }]}
+              placeholderStyle={styles.placeholderStyle}
+              selectedTextStyle={styles.selectedTextStyle}
+              inputSearchStyle={styles.inputSearchStyle}
+              iconStyle={styles.iconStyle}
+              data={listAcademic}
+              
+              maxHeight={300}
+              labelField="a_title"
+              valueField="_id"
+              placeholder={!isFocus ? 'Trình độ học vấn' : '...'}
+              searchPlaceholder="Search..."
+              value={listAcademic._id}
+              onFocus={() => setIsFocus(true)}
+              onBlur={() => setIsFocus(false)}
+              onChange={item => {
+                setIsFocus(false);
+                handleOnchange(item._id, 'academic_id')
+                handleError(null, 'academic_id')
+              }}
+            />
+            {errors.academic_id ? <Text style={styles.error}>{errors.academic_id}</Text> : null}
+            <Dropdown
+              style={[styles.dropdown, isFocus && { borderColor: COLORS.darkBlue }, errors.experience_id && { borderColor: 'red' }]}
+              placeholderStyle={styles.placeholderStyle}
+              selectedTextStyle={styles.selectedTextStyle}
+              inputSearchStyle={styles.inputSearchStyle}
+              iconStyle={styles.iconStyle}
+              data={listExperience}
+              
+              maxHeight={300}
+              labelField="e_title"
+              valueField="_id"
+              placeholder={!isFocus ? 'Kinh nghiệm' : '...'}
+              searchPlaceholder="Search..."
+              value={listExperience._id}
+              onFocus={() => setIsFocus(true)}
+              onBlur={() => setIsFocus(false)}
+              onChange={item => {
+                setIsFocus(false);
+                handleOnchange(item._id, 'experience_id')
+                handleError(null, 'experience_id')
+              }}
+            />
+            {errors.experience_id ? <Text style={styles.error}>{errors.experience_id}</Text> : null}
           </View>
           <View style={{ marginHorizontal: 24 }}>
             <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'center' }}>
@@ -689,13 +681,13 @@ const uploadImages = async () => {
                 <Button title="Xem trước" onPress={uploadImages} />
               </View>
               <View style={{ width: '40%', marginStart: '10%' }}>
-                <Button title="Đăng tin" onPress={validateAll} />
+                <Button title="Đăng tin" onPress={validate} />
               </View>
             </View>
           </View>
         </View>
       </ScrollView>
-    </SafeAreaView >
+    </SafeAreaView>
   )
 }
 
@@ -806,6 +798,16 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: 'red',
     paddingBottom: 12
+  },
+  pickImage: {
+    width: 96,
+    height: 20,
+    backgroundColor: '#CFE0FE',
+    borderRadius: 3,
+    marginRight: '2%',
+    marginTop: '2%',
+    flexDirection: 'row',
+    alignItems: 'center',
   },
 });
 

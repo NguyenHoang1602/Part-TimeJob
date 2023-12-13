@@ -1,4 +1,10 @@
 {
+<<<<<<< HEAD
   "java.compile.nullAnalysis.mode": "automatic",
   "java.configuration.updateBuildConfiguration": "interactive"
 }
+=======
+    "java.compile.nullAnalysis.mode": "automatic",
+    "editor.inlineSuggest.showToolbar": "always"
+}
+>>>>>>> fb0c4e2a0162bc166373bd80da0a178107343d70
