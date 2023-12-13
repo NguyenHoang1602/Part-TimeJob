@@ -42,10 +42,12 @@ const HomeScreen = ({ navigation }) => {
   const [SaveJobs, setSaveJobs] = useState(false);
   const [followedProducts, setFollowedProducts] = useState([]);
   const [categoryIndex, setCategoryIndex] = useState(0);
+  const [check, setChek] = useState(false);
 
   useFocusEffect(
     React.useCallback(() => {
       getAllData()
+      getListNotification();
     }, [])
   );
   const getAllData = async () => {
@@ -220,6 +222,20 @@ const HomeScreen = ({ navigation }) => {
       console.error('Error fetching data:', error);
     }
   }
+  async function getListNotification() {
+    try {
+      const response = await axios.post(`${API}/notifications/listNoSeen`, { receiver_id: user._id });
+      if (response.status === 200) {
+        const data = [...response.data];
+        console.log(data);
+        if (data.length > 0) {
+          setChek(!check);
+        }
+      }
+    } catch (error) {
+      console.log('err', error);
+    }
+  }
 
   const fetchData = async () => {
     setRefreshing(true);
@@ -305,19 +321,19 @@ const HomeScreen = ({ navigation }) => {
   };
   const getCV = async (item) => {
     const data = {
-        userId: user._id,
-        career_id: item._id,
+      userId: user._id,
+      career_id: item._id,
     };
     await new Promise(resolve => setTimeout(resolve, 2000));
     try {
-        const result = await axios.post(`${API}/cvs/myCVsByCareer`, { data });
-        if (result.status === 200) {
-            // setListJobs(result.data);
-        }
+      const result = await axios.post(`${API}/cvs/myCVsByCareer`, { data });
+      if (result.status === 200) {
+        // setListJobs(result.data);
+      }
     } catch (error) {
-        console.log("Err : ", error);
+      console.log("Err : ", error);
     }
-};
+  };
 
   const isFollowed = (productId) => {
     const savePostIDlist = followedProducts.map(item => item.post_id);
@@ -565,7 +581,11 @@ const HomeScreen = ({ navigation }) => {
             }}
             onPress={() => navigation.navigate('Notifications')}>
             {/* <Feather name='bell' size={24} color={COLORS.black}/> */}
-            <IconWithBadge iconName="bell" badgeText="2" />
+            {
+              check ? (
+                <IconWithBadge iconName="bell" badgeText="4" />
+              ) : <IconWithBadge iconName="bell" badgeText="" />
+            }
           </TouchableOpacity>
           <TouchableOpacity
             style={{
@@ -683,7 +703,7 @@ const HomeScreen = ({ navigation }) => {
                 )
               }}
             />
-            <View style={{ width: '100%', paddingBottom: '50%', marginTop: 30}}>
+            <View style={{ width: '100%', paddingBottom: '50%', marginTop: 30 }}>
               <View style={{ alignItems: 'center' }}>
                 <FlatListb />
               </View>

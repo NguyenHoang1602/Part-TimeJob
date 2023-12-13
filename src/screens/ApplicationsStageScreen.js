@@ -58,7 +58,7 @@ const ApplicationsStageScreen = ({ route, navigation }) => {
       method: "POST",
       data: {
         id: user._id,
-        cv_id: data.cv_id,
+        cv_id: data.id,
       },
     }).then(async (response) => {
       if (response.status === 200) {
@@ -67,9 +67,9 @@ const ApplicationsStageScreen = ({ route, navigation }) => {
     });
   };
   const status = CvApply.map((item) => {
+    console.log(item.status);
     return item.status;
   });
-  console.log(data?.id);
   const [isModalVisible, setModalVisible] = useState(false);
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
