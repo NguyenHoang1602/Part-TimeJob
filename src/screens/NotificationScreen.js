@@ -49,28 +49,13 @@ const NotificationScreen = ({ route, navigation }) => {
     const [loading, setLoading] = useState(false);
 
 
-    const getListNotification = async () => {
-        setLoading(true);
-        try {
-            await new Promise(resolve => setTimeout(resolve, 2000));
-            const data = await AsyncStorage.getItem('listNotifications');
-            setNotification(JSON.parse(data))
-            console.log(data)
-            setLoading(false);
-        } catch (error) {
-            console.log("Err : ", error);
-            setLoading(false);
-        } finally {
-            setLoading(false);
-        }
-    }
     const getListNotifications = async () => {
         setLoading(true);
         try {
             await new Promise(resolve => setTimeout(resolve, 2000));
             const response = await axios.post(`${API}/notifications/list`, { receiver_id: user._id });
             if (response.status === 200) {
-                console.log('data : ' + response.data)
+                console.log(response.data)
                 setNotification(response.data)
                 setLoading(false);
             }
@@ -108,9 +93,11 @@ const NotificationScreen = ({ route, navigation }) => {
                         alignItems: 'center',
                     }}>
                     <View style={{ width: 60, height: 60, borderRadius: 60, alignItems: 'center', justifyContent: 'center' }}>
-                        {item?.typeNotification == 'problem1' ? (
-                            <FontAwesome name='briefcase' size={30} color="#FD9B10" />
-                        ) : item?.typeNotification == 'problem2' ? (
+                        {item?.category == 0 ? (
+                            <FontAwesome name='briefcase' size={30} color={COLORS.blue} />
+                        ) : item?.category == 1 ? (
+                            <FontAwesome name='briefcase' size={30} color={COLORS.red} />
+                        ) : item?.category == 2 ? (
                             <FontAwesome name='briefcase' size={30} color={COLORS.red} />
                         ) : <FontAwesome name='briefcase' size={30} color={COLORS.blue} />
                         }
