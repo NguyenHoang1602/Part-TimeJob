@@ -84,7 +84,7 @@ const CurriculumVitae = ({ navigation }) => {
 
   const handleUpdateStage = async (item) => {
     if (item.status === 0) {
-      const id = item._id
+      const id = item._id;
       const response = await axios.post(`${API}/apply/update`, { id: id });
       if (response.status === 200) {
         getFirst();
