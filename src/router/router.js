@@ -23,6 +23,7 @@ import SelectRoleScreen from "../screens/SelectRoleScreen";
 import FillProfileScreen from "../screens/FillProfileScreen";
 import DetailsCVScreen from "../screens/DetailsCVScreen";
 import UpdateCvScreen from "../screens/UpdateCvScreen";
+import FavoriteCareersScreen from "../screens/FavoriteCareersScreen";
 
 import { TouchableOpacity } from "react-native";
 import Octicons from 'react-native-vector-icons/Octicons';
@@ -32,45 +33,52 @@ import COLORS from "../assets/const/colors";
 
 const Stack = createNativeStackNavigator();
 
-const AuthStack = (props) =>{
-  return (
-    <Stack.Navigator>
-        <Stack.Screen
-            name="Auth"
-            component={Auth}
-            options={({ }) => ({
-                headerShown: false,
-            })}
-        />
-        <Stack.Screen
-            name="SelectRole"
-            component={SelectRoleScreen}
-            options={({}) => ({
-                headerShown: false,
-            })}
-        />
-        <Stack.Screen
-            name="FillProfile"
-            component={FillProfileScreen}
-            options={({}) => ({
-                headerShown: false,
-            })}
-        />
-        <Stack.Screen
-            name="SignInWithPhoneNumber"
-            component={RegisterPhoneScreen}
-            options={() => ({
-                headerShown: false,
-            })}
-        />
-        <Stack.Screen
-            name="Verification"
-            component={VerificationScreen}
-            options={() => ({
-                headerShown: false,
-            })}
-        />
-        <Stack.Screen
+const AuthStack = (props) => {
+    return (
+        <Stack.Navigator>
+            <Stack.Screen
+                name="Auth"
+                component={Auth}
+                options={({ }) => ({
+                    headerShown: false,
+                })}
+            />
+            <Stack.Screen
+                name="SelectRole"
+                component={SelectRoleScreen}
+                options={({ }) => ({
+                    headerShown: false,
+                })}
+            />
+            <Stack.Screen
+                name="FavoriteCareersScreen"
+                component={FavoriteCareersScreen}
+                options={({ }) => ({
+                    headerShown: false,
+                })}
+            />
+            <Stack.Screen
+                name="FillProfile"
+                component={FillProfileScreen}
+                options={({ }) => ({
+                    headerShown: false,
+                })}
+            />
+            <Stack.Screen
+                name="SignInWithPhoneNumber"
+                component={RegisterPhoneScreen}
+                options={() => ({
+                    headerShown: false,
+                })}
+            />
+            <Stack.Screen
+                name="Verification"
+                component={VerificationScreen}
+                options={() => ({
+                    headerShown: false,
+                })}
+            />
+            <Stack.Screen
                 name="AddProfile"
                 component={RegistrationScreen}
                 options={() => ({
@@ -96,19 +104,20 @@ const AuthStack = (props) =>{
 
 const Router = () => {
     return (
-      <Stack.Navigator initialRouteName="Onboarding" screenOptions={{headerShown: false}}>
-        <Stack.Screen name="Onboarding" component={OnboardingScreen} />
-        <Stack.Screen name="AuthStack" component={AuthStack} />
-        <Stack.Screen name="TabNavigator" component={TabNavigator} />
-        <Stack.Screen name="TabNavigatorUser" component={TabNavigatorUser}/>
-        <Stack.Screen name="SavedJobsScreen" component={SavedJobsScreen} />
-        <Stack.Screen name="MessageScreen" component={MessageScreen} />
-        <Stack.Screen name="CVScreen" component={CVScreen}/>
-        <Stack.Screen name="DetailsCVScreen" component={DetailsCVScreen} />
-        <Stack.Screen name="UpdateCvScreen" component={UpdateCvScreen} />
-        <Stack.Screen name="SearchScreen" component={SearchScreen} />
-        <Stack.Screen name="ChatScreen" component={ChatScreen} />
-      </Stack.Navigator>
+        <Stack.Navigator initialRouteName="Onboarding" screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="Onboarding" component={OnboardingScreen} />
+            <Stack.Screen name="AuthStack" component={AuthStack} />
+            <Stack.Screen name="TabNavigator" component={TabNavigator} />
+            <Stack.Screen name="TabNavigatorUser" component={TabNavigatorUser} />
+            <Stack.Screen name="SavedJobsScreen" component={SavedJobsScreen} />
+            <Stack.Screen name="MessageScreen" component={MessageScreen} />
+            <Stack.Screen name="CVScreen" component={CVScreen} />
+            <Stack.Screen name="SearchScreen" component={SearchScreen} />
+            <Stack.Screen name="ChatScreen" component={ChatScreen} />
+            <Stack.Screen name="DetailsCVScreen" component={DetailsCVScreen} />
+            <Stack.Screen name="UpdateCvScreen" component={UpdateCvScreen} />
+            <Stack.Screen name="FavoriteCareersScreen" component={FavoriteCareersScreen} />
+        </Stack.Navigator>
     );
 };
 

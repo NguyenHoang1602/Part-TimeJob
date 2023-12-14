@@ -7,7 +7,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 const Input = ({
   iconName,
   error,
-  onpress,
+  onPress,
   onFocus = () => { },
   ...props
 }) => {
@@ -36,7 +36,7 @@ const Input = ({
           style={{ color: COLORS.darkBlue, flex: 1, marginLeft: 10 }}
           {...props}
         />
-        <TouchableOpacity onPress={onpress}>
+        <TouchableOpacity onPress={onPress}>
           <Icon
             name={iconName}
             style={{ color: COLORS.darkBlue, fontSize: 22, marginRight: 10 }}

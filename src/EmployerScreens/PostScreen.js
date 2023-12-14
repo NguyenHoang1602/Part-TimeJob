@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable quotes */
 /* eslint-disable eqeqeq */
 /* eslint-disable react/no-unstable-nested-components */
@@ -39,25 +40,18 @@ const gender = [
 
 const PostScreen = ({ navigation }) => {
 
-  useEffect(() => {
-    getListCareers()
-    getListWorkType()
-    getListPayForm()
-    getListAcademic()
-    getListExperience()
-  }, []);
-
   const { user } = useContext(UserContext);
   //drop-down
   const [loading, setLoading] = React.useState(false);
 
   const [isFocus, setIsFocus] = useState(false);
+  const [isFocus1, setIsFocus1] = useState(false);
+  const [isFocus2, setIsFocus2] = useState(false);
+  const [isFocus3, setIsFocus3] = useState(false);
+  const [isFocus4, setIsFocus4] = useState(false);
   const [selectedImages, setSelectedImages] = useState([]);
-  const urlImage = [];
-  const imageurl = [];
   const [listCareers, setListCareers] = useState([]);
   const [listWorkType, setListWorkType] = useState([]);
-  const [listPayForm, setListPayForm] = useState([]);
   const [listAcademic, setListAcademic] = useState([]);
   const [listExperience, setListExperience] = useState([]);
   const [inputs, setInputs] = React.useState({
@@ -66,16 +60,16 @@ const PostScreen = ({ navigation }) => {
     address: '',
     image: [],
     title: '',
-    quantity: '',
+    quantity: null,
     gender: '',
     career_id: '',
     workType_id: '',
     payForm_id: '',
-    wageMin: '',
-    wageMax: '',
+    wageMin: null,
+    wageMax: null,
     describe: '',
-    ageMin: '',
-    ageMax: '',
+    ageMin: null,
+    ageMax: null,
     academic_id: '',
     experience_id: '',
     status_id: '65423efa3f8e779b5ec14e51',
@@ -85,15 +79,9 @@ const PostScreen = ({ navigation }) => {
     const data = await AsyncStorage.getItem('listCareers')
     setListCareers(JSON.parse(data));
   }
-
   const getListWorkType = async () => {
     const data = await AsyncStorage.getItem('listWorkTypes');
     setListWorkType(JSON.parse(data));
-  }
-
-  const getListPayForm = async () => {
-    const data = await AsyncStorage.getItem('listPayForms');
-    setListPayForm(JSON.parse(data));
   }
 
   const getListAcademic = async () => {
@@ -129,13 +117,22 @@ const PostScreen = ({ navigation }) => {
     if (!inputs.quantity) {
       handleError('Vui lòng nhập số lượng', 'quantity');
       isValid = false;
+    } else if (inputs.quantity <= 0) {
+      handleError('Số lượng tuyển dụng phải lớn hơn 0', 'quantity');
+      isValid = false;
     }
     if (!inputs.wageMin) {
       handleError('Vui lòng nhập lương', 'wageMin');
       isValid = false;
+    } else if (inputs.wageMin <= 0) {
+      handleError('Lương tối thiểu phải lớn hơn 0', 'wageMin');
+      isValid = false;
     }
     if (!inputs.wageMax) {
       handleError('Vui lòng nhập lương', 'wageMax');
+      isValid = false;
+    } else if (inputs.wageMax < inputs.wageMin) {
+      handleError('Lương tối đa phải >= lương tối thiểu', 'wageMax');
       isValid = false;
     }
     if (!inputs.describe) {
@@ -145,9 +142,15 @@ const PostScreen = ({ navigation }) => {
     if (!inputs.ageMin) {
       handleError('Vui lòng nhập tuổi', 'ageMin');
       isValid = false;
+    } else if (inputs.ageMin < 15) {
+      handleError('Độ tuổi lao động tối thiểu phải đủ 15 tuổi', 'ageMin');
+      isValid = false;
     }
     if (!inputs.ageMax) {
       handleError('Vui lòng nhập tuổi', 'ageMax');
+      isValid = false;
+    } else if (inputs.ageMax < inputs.ageMin || inputs.ageMax < 10) {
+      handleError('Tuổi tối đa phải >= tuổi tối thiểu', 'ageMax');
       isValid = false;
     }
     if (!inputs.image) {
@@ -180,32 +183,76 @@ const PostScreen = ({ navigation }) => {
     }
     if (isValid) {
       uploadImages();
-      setTimeout(handlePost, 4000);
     }
   };
   console.log(inputs);
   const handleOnchange = (text, input) => {
-    setInputs(prevState => ({ ...prevState, [input]: text }));
+    if (input === 'wageMin') {
+      let formattedValue = text.replace(/\D/g, '');
+      formattedValue = formattedValue.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+      setInputs(prevState => ({ ...prevState, [input]: formattedValue }));
+    } else if (input === "wageMax") {
+      let formattedValue = text.replace(/\D/g, '');
+      formattedValue = formattedValue.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+      setInputs(prevState => ({ ...prevState, [input]: formattedValue }));
+    } else {
+      setInputs(prevState => ({ ...prevState, [input]: text }));
+    }
   };
   const handleError = (error, input) => {
     setErrors(prevState => ({ ...prevState, [input]: error }));
   };
+
   const handlePost = async () => {
-    setLoading(true)
-    setTimeout(() => { 3000 })
     const result = await axios.post(`${API}/posts/postForApp`, inputs);
     if (result.status === 200) {
       setLoading(false);
-      Alert.alert('thanh cong')
-      navigation.navigate('Quản lí')
+      Alert.alert('Đăng tin thành công !', 'Đi tới trang quản lí tin?', [
+        { text: 'Không' },
+        { text: 'Có', onPress: () => navigation.navigate('Quản lí') },
+      ],
+        { cancelable: false });
     }
   }
+
+  useEffect(() => {
+    getListCareers()
+    getListWorkType()
+    getListAcademic()
+    getListExperience()
+    if (inputs.workType_id === "653e66b38e88b23b41388e3c") {
+      setInputs(prevInputs => ({ ...prevInputs, payForm_id: "655de22b9a5b0ffa7ffd5132" }));
+    } else if (inputs.workType_id === "6558634415be344ac80a3b40") {
+      setInputs(prevInputs => ({ ...prevInputs, payForm_id: "355de22b9a5b0ffa7ffd5132" }));
+    } else {
+      setInputs(prevInputs => ({ ...prevInputs, payForm_id: "" }));
+    }
+  }, [inputs.workType_id]);
+
   useFocusEffect(
     React.useCallback(() => {
-      return () => {
-        // Clean up the state when the component loses focus
-        setSelectedImages([]);
-      };
+      setSelectedImages([]);
+      setInputs({
+        users_id: user._id,
+        businessName: '',
+        address: '',
+        image: [],
+        title: '',
+        quantity: '',
+        gender: '',
+        career_id: '',
+        workType_id: '',
+        payForm_id: '',
+        wageMin: '',
+        wageMax: '',
+        describe: '',
+        ageMin: '',
+        ageMax: '',
+        academic_id: '',
+        experience_id: '',
+        status_id: '65423efa3f8e779b5ec14e51',
+      });
+      setErrors([]);
     }, [])
   );
   const Checkdataimage = () => {
@@ -236,7 +283,8 @@ const PostScreen = ({ navigation }) => {
       });
   };
   // Upload image to Cloud
-  const uploadImages = async () => {  
+  const uploadImages = () => {
+    setLoading(true)
     try {
       const CLOUD_NAME = "dxrv1gdit";
       const PRESET_NAME = "ParttimeJobs";
@@ -259,11 +307,13 @@ const PostScreen = ({ navigation }) => {
         })
 
         if (response.status === 200) {
-          urlImage.push(response.data.secure_url);
-          handleOnchange(urlImage, 'image')
+          inputs.image.push(response.data.secure_url);
+          if (inputs.image.length === selectedImages.length) {
+            handlePost();
+            setSelectedImages([]);
+          }
         }
       })
-      setSelectedImages([]);
     } catch (error) {
       console.log("Upload failed", error);
     }
@@ -307,7 +357,6 @@ const PostScreen = ({ navigation }) => {
   const toggleBottomSheet = () => {
     setBottomSheetVisible(!isBottomSheetVisible);
   };
-
   return (
     <SafeAreaView style={{ backgroundColor: COLORS.white, flex: 1 }}>
       <Loader visible={loading} />
@@ -325,13 +374,14 @@ const PostScreen = ({ navigation }) => {
               onChangeText={text => handleOnchange(text, 'businessName')}
               onFocus={() => handleError(null, 'businessName')}
               placeholder="Tên doanh nghiệp"
+              value={inputs.businessName}
               error={errors.businessName}
             />
             <Input
               onChangeText={text => handleOnchange(text, 'address')}
               onFocus={() => handleError(null, 'address')}
               placeholder="Địa chỉ"
-              // value={route.params?.subtitle}
+              value={inputs.address}
               error={errors.address}
             />
             <View style={{
@@ -463,7 +513,7 @@ const PostScreen = ({ navigation }) => {
             </View>
             {errors.image ? <Text style={styles.error}>{errors.image}</Text> : null}
           </View>
-          <View style={{ backgroundColor: '#D9D9D9', height: 60, justifyContent: 'center' }}>
+          <View style={{ backgroundColor: '#D9D9D9', height: 60, justifyContent: 'center', marginTop: 10 }}>
             <Text style={{ fontSize: 16, marginStart: 25 }}>NỘI DUNG ĐĂNG TUYỂN</Text>
           </View>
           <View style={{ marginVertical: 22, marginHorizontal: 24 }}>
@@ -471,6 +521,7 @@ const PostScreen = ({ navigation }) => {
               onChangeText={text => handleOnchange(text, 'title')}
               onFocus={() => handleError(null, 'title')}
               placeholder="Tiêu đề đăng tin"
+              value={inputs.title}
               error={errors.title}
             />
             <Input
@@ -478,7 +529,7 @@ const PostScreen = ({ navigation }) => {
               onChangeText={text => handleOnchange(text, 'quantity')}
               onFocus={() => handleError(null, 'quantity')}
               placeholder="Số lượng tuyển dụng"
-              // value={route.params?.subtitle}
+              value={inputs.quantity}
               error={errors.quantity}
             />
             <Dropdown
@@ -502,124 +553,102 @@ const PostScreen = ({ navigation }) => {
             />
             {errors.gender ? <Text style={styles.error}>{errors.gender}</Text> : null}
             <Dropdown
-              style={[styles.dropdown, isFocus && { borderColor: COLORS.darkBlue }, errors.career_id && { borderColor: 'red' }]}
+              style={[styles.dropdown, isFocus1 && { borderColor: COLORS.darkBlue }, errors.career_id && { borderColor: 'red' }]}
               placeholderStyle={styles.placeholderStyle}
               selectedTextStyle={styles.selectedTextStyle}
               inputSearchStyle={styles.inputSearchStyle}
               iconStyle={styles.iconStyle}
               data={listCareers}
               maxHeight={300}
-              labelField="c_title"
+              labelField="title"
               valueField="_id"
-              placeholder={!isFocus ? 'Ngành Nghề' : '...'}
+              placeholder={!isFocus1 ? 'Ngành Nghề' : '...'}
               searchPlaceholder="Search..."
               value={listCareers._id}
-              onFocus={() => setIsFocus(true)}
-              onBlur={() => setIsFocus(false)}
+              onFocus={() => setIsFocus1(true)}
+              onBlur={() => setIsFocus1(false)}
               onChange={item => {
-                setIsFocus(false);
+                setIsFocus1(false);
                 handleOnchange(item._id, 'career_id')
                 handleError(null, 'career_id')
               }}
             />
             {errors.career_id ? <Text style={styles.error}>{errors.career_id}</Text> : null}
             <Dropdown
-              style={[styles.dropdown, isFocus && { borderColor: COLORS.darkBlue }, errors.workType_id && { borderColor: 'red' }]}
+              style={[styles.dropdown, isFocus2 && { borderColor: COLORS.darkBlue }, errors.workType_id && { borderColor: 'red' }]}
               placeholderStyle={styles.placeholderStyle}
               selectedTextStyle={styles.selectedTextStyle}
               inputSearchStyle={styles.inputSearchStyle}
               iconStyle={styles.iconStyle}
               data={listWorkType}
-          
               maxHeight={300}
-              labelField="wt_title"
+              labelField="title"
               valueField="_id"
-              placeholder={!isFocus ? 'Loại công việc' : '...'}
+              placeholder={!isFocus2 ? 'Loại công việc' : '...'}
               searchPlaceholder="Search..."
               value={inputs.workType_id}
-              onFocus={() => setIsFocus(true)}
-              onBlur={() => setIsFocus(false)}
+              onFocus={() => setIsFocus2(true)}
+              onBlur={() => setIsFocus2(false)}
               onChange={item => {
-                setIsFocus(false);
+                setIsFocus2(false);
                 handleOnchange(item._id, 'workType_id')
                 handleError(null, 'workType_id')
               }}
             />
             {errors.workType_id ? <Text style={styles.error}>{errors.workType_id}</Text> : null}
-            <Dropdown
-              style={[styles.dropdown, isFocus && { borderColor: COLORS.darkBlue }, errors.payForm_id && { borderColor: 'red' }]}
-              placeholderStyle={styles.placeholderStyle}
-              selectedTextStyle={styles.selectedTextStyle}
-              inputSearchStyle={styles.inputSearchStyle}
-              iconStyle={styles.iconStyle}
-              data={listPayForm}
-              
-              maxHeight={300}
-              labelField="pf_title"
-              valueField="_id"
-              placeholder={!isFocus ? 'Hình thức trả lương' : '...'}
-              searchPlaceholder="Search..."
-              value={listPayForm._id}
-              onFocus={() => setIsFocus(true)}
-              onBlur={() => setIsFocus(false)}
-              onChange={item => {
-                setIsFocus(false);
-                handleOnchange(item._id, 'payForm_id')
-                handleError(null, 'payForm_id')
-              }}
-            />
-            {errors.payForm_id ? <Text style={styles.error}>{errors.payForm_id}</Text> : null}
-            <Input
-              keyboardType="numeric"
-              onChangeText={text => handleOnchange(text, 'wageMin')}
-              onFocus={() => handleError(null, 'wageMin')}
-              placeholder="Lương tối thiểu"
-              // value={route.params?.subtitle}
-              error={errors.wageMin}
-            />
-            <Input
-              keyboardType="numeric"
-              onChangeText={text => handleOnchange(text, 'wageMax')}
-              onFocus={() => handleError(null, 'wageMax')}
-              placeholder="Lương tối đa"
-              // value={route.params?.subtitle}
-              error={errors.wageMax}
-            />
+            <View style={styles.payForm}>
+              <Text>
+                {inputs.payForm_id === "" ? "Hình thức trả lương" : (inputs.payForm_id === "655de22b9a5b0ffa7ffd5132" ? "Theo giờ" : "Theo tháng")}
+              </Text>
+            </View>
+            <View style={{ flexDirection: 'row', gap: 20 }}>
+              <Input
+                keyboardType="numeric"
+                onChangeText={text => handleOnchange(text, 'wageMin')}
+                onFocus={() => handleError(null, 'wageMin')}
+                placeholder="Lương tối thiểu"
+                value={inputs.wageMin}
+                error={errors.wageMin}
+              />
+              <Input
+                keyboardType="numeric"
+                onChangeText={text => handleOnchange(text, 'wageMax')}
+                onFocus={() => handleError(null, 'wageMax')}
+                placeholder="Lương tối đa"
+                value={inputs.wageMax}
+                error={errors.wageMax}
+              />
+            </View>
             <InputMutiple
               onChangeText={text => handleOnchange(text, 'describe')}
               onFocus={() => handleError(null, 'describe')}
               placeholder={"Mô tả công việc\nMô tả chi tiết một số đặc điểm nhân diện của công ty tuyển dụng:\n- Tên công ty, địa chỉ công ty, hình thức và mặt hàng kinh doanh."}
-              // value={route.params?.subtitle}
+              value={inputs.describe}
               error={errors.describe}
             />
           </View>
           <View style={{ backgroundColor: '#D9D9D9', height: 60, justifyContent: 'center' }}>
             <Text style={{ fontSize: 16, marginStart: 25 }}>THÔNG TIN THÊM</Text>
           </View>
-          <View style={{ marginHorizontal: 24, marginTop: 22 }}>
-            <View style={{ width: '100%', flexDirection: 'row' }}>
-              <View style={{ width: '46%', justifyContent: 'flex-start' }}>
-                <Input
-                  keyboardType="numeric"
-                  onChangeText={text => handleOnchange(text, 'ageMin')}
-                  onFocus={() => handleError(null, 'ageMin')}
-                  placeholder="Độ tuổi tối thiểu"
-                  // value={route.params?.subtitle}
-                  error={errors.ageMin}
-                />
-              </View>
-              <View style={{ width: '46%', marginStart: '9.5%' }}>
-                <Input
-                  keyboardType="numeric"
-                  onChangeText={text => handleOnchange(text, 'ageMax')}
-                  onFocus={() => handleError(null, 'ageMax')}
-                  placeholder="Độ tuổi tối đa"
-                  // value={route.params?.subtitle}
-                  error={errors.ageMax}
-                />
-              </View>
-            </View>
+          <View style={{ marginHorizontal: 24, marginTop: 22, flexDirection: 'row', gap: 20 }}>
+            <Input
+              keyboardType="numeric"
+              onChangeText={text => handleOnchange(text, 'ageMin')}
+              onFocus={() => handleError(null, 'ageMin')}
+              placeholder="Độ tuổi tối thiểu"
+              value={inputs.ageMin}
+              error={errors.ageMin}
+            />
+            <Input
+              keyboardType="numeric"
+              onChangeText={text => handleOnchange(text, 'ageMax')}
+              onFocus={() => handleError(null, 'ageMax')}
+              placeholder="Độ tuổi tối đa"
+              value={inputs.ageMax}
+              error={errors.ageMax}
+            />
           </View>
+
           <View style={{ marginHorizontal: 24 }}>
             {/* <Input
               onChangeText={text => handleOnchange(text, 'subtitle')}
@@ -629,46 +658,44 @@ const PostScreen = ({ navigation }) => {
               error={errors.subtitle}
             /> */}
             <Dropdown
-              style={[styles.dropdown, isFocus && { borderColor: COLORS.darkBlue }, errors.academic_id && { borderColor: 'red' }]}
+              style={[styles.dropdown, isFocus3 && { borderColor: COLORS.darkBlue }, errors.academic_id && { borderColor: 'red' }]}
               placeholderStyle={styles.placeholderStyle}
               selectedTextStyle={styles.selectedTextStyle}
               inputSearchStyle={styles.inputSearchStyle}
               iconStyle={styles.iconStyle}
               data={listAcademic}
-              
               maxHeight={300}
-              labelField="a_title"
+              labelField="title"
               valueField="_id"
-              placeholder={!isFocus ? 'Trình độ học vấn' : '...'}
+              placeholder={!isFocus3 ? 'Trình độ học vấn' : '...'}
               searchPlaceholder="Search..."
               value={listAcademic._id}
-              onFocus={() => setIsFocus(true)}
-              onBlur={() => setIsFocus(false)}
+              onFocus={() => setIsFocus3(true)}
+              onBlur={() => setIsFocus3(false)}
               onChange={item => {
-                setIsFocus(false);
+                setIsFocus3(false);
                 handleOnchange(item._id, 'academic_id')
                 handleError(null, 'academic_id')
               }}
             />
             {errors.academic_id ? <Text style={styles.error}>{errors.academic_id}</Text> : null}
             <Dropdown
-              style={[styles.dropdown, isFocus && { borderColor: COLORS.darkBlue }, errors.experience_id && { borderColor: 'red' }]}
+              style={[styles.dropdown, isFocus4 && { borderColor: COLORS.darkBlue }, errors.experience_id && { borderColor: 'red' }]}
               placeholderStyle={styles.placeholderStyle}
               selectedTextStyle={styles.selectedTextStyle}
               inputSearchStyle={styles.inputSearchStyle}
               iconStyle={styles.iconStyle}
               data={listExperience}
-              
               maxHeight={300}
-              labelField="e_title"
+              labelField="title"
               valueField="_id"
-              placeholder={!isFocus ? 'Kinh nghiệm' : '...'}
+              placeholder={!isFocus4 ? 'Kinh nghiệm' : '...'}
               searchPlaceholder="Search..."
               value={listExperience._id}
-              onFocus={() => setIsFocus(true)}
-              onBlur={() => setIsFocus(false)}
+              onFocus={() => setIsFocus4(true)}
+              onBlur={() => setIsFocus4(false)}
               onChange={item => {
-                setIsFocus(false);
+                setIsFocus4(false);
                 handleOnchange(item._id, 'experience_id')
                 handleError(null, 'experience_id')
               }}
@@ -678,7 +705,7 @@ const PostScreen = ({ navigation }) => {
           <View style={{ marginHorizontal: 24 }}>
             <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'center' }}>
               <View style={{ width: '40%', justifyContent: 'flex-start' }}>
-                <Button title="Xem trước" onPress={uploadImages} />
+                <Button title="Hủy" onPress={() => navigation.navigate('Trang chủ')} />
               </View>
               <View style={{ width: '40%', marginStart: '10%' }}>
                 <Button title="Đăng tin" onPress={validate} />
@@ -773,6 +800,16 @@ const styles = StyleSheet.create({
     paddingHorizontal: 18,
     marginBottom: 8,
   },
+  payForm: {
+    height: 50,
+    borderColor: COLORS.lightGrey,
+    borderWidth: 1,
+    borderRadius: 6,
+    paddingHorizontal: 18,
+    marginBottom: 8,
+    justifyContent: 'center',
+    backgroundColor: COLORS.lightGrey
+  },
   icon: {
     marginRight: 5,
   },
@@ -808,6 +845,9 @@ const styles = StyleSheet.create({
     marginTop: '2%',
     flexDirection: 'row',
     alignItems: 'center',
+  },
+  inputMutiple: {
+    justifyContent: 'flex-end'
   },
 });
 
