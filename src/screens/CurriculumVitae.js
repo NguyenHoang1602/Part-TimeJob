@@ -113,7 +113,7 @@ const CurriculumVitae = ({ navigation }) => {
           marginBottom: 10,
           alignItems: 'center',
         }}
-        onPress={() => navigation.navigate('ProfileScreen')}>
+        onPress={() => navigation.goBack()}>
         <AntDesign name="arrowleft" size={24} color={COLORS.black} />
         <Text style={{ fontSize: 22, fontWeight: '400', color: COLORS.black, marginLeft: 20 }}>Hồ sơ ứng tuyển</Text>
       </TouchableOpacity>
