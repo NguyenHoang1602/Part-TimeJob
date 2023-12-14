@@ -1,1 +1,3 @@
-export const API = 'http://192.168.67.160:3000';
+/* eslint-disable prettier/prettier */
+
+export const API = 'http://10.0.62.105:3000';

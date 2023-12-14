@@ -23,6 +23,7 @@ import Button from '../custom/Button';
 import { useFocusEffect } from '@react-navigation/native';
 import axios from 'axios';
 import UserContext from '../components/UserConText';
+import { API } from '../../Sever/sever';
 
 const data = [
     { label: 'Nam', value: '1' },
@@ -97,7 +98,7 @@ const RegistrationScreen = ({ route, navigation }) => {
         console.log(datauser);
         setLoading(true);
         setTimeout(() => {3000});
-        const result = await axios.post('http://192.168.155.161:3000/users/PhoneNumberSignIn', { data : datauser});
+        const result = await axios.post(`${API}/users/PhoneNumberSignIn`, { data : datauser});
         if (result.status === 200) {
             setLoading(false);
             setUser(result.data);

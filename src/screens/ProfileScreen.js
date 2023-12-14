@@ -31,7 +31,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const ProfileScreen = ({ route, navigation }) => {
   const { user } = useContext(UserContext);
   const [darkMode, setDarkMode] = useState(true);
-  const Darkmode = () =>{
+  const Darkmode = () => {
     setDarkMode(!darkMode);
   }
   const CV = [
@@ -46,15 +46,15 @@ const ProfileScreen = ({ route, navigation }) => {
       <Text numberOfLines={1} style={{ flex: 1, fontSize: 16, fontWeight: '400', marginLeft: 25, color: COLORS.black }}>{item.name}</Text>
     </View>
   );
-  const Logout =  () => {
-    Alert.alert('Đăng xuất','Bạn muốn đăng xuất ?',[
-      {text: 'Không'},
-      {text: 'Có', onPress: ()=> out()}
+  const Logout = () => {
+    Alert.alert('Đăng xuất', 'Bạn muốn đăng xuất ?', [
+      { text: 'Không' },
+      { text: 'Có', onPress: () => out() }
     ],
-    { cancelable: false });
+      { cancelable: false });
 
   };
-  const out = async () =>{
+  const out = async () => {
     await GoogleSignin.signOut();
     AsyncStorage.clear();
     navigation.replace('AuthStack');
@@ -80,31 +80,38 @@ const ProfileScreen = ({ route, navigation }) => {
         <View style={styles.line} />
         <View style={styles.account}>
           <Text style={styles.title}>Tài khoản</Text>
-          <TouchableOpacity style={styles.item}>
+          <TouchableOpacity style={styles.item} onPress={() => navigation.navigate('Cập nhật thông tin cá nhân')}>
             <FontAwesome name="user-o" size={24} color='rgba(125, 122, 122, 1)' />
             <Text style={styles.itemText}>Thông tin cá nhân</Text>
             <Feather name="chevron-right" size={24} color='rgba(125, 122, 122, 1)' />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.item1}>
+          <TouchableOpacity style={styles.item1} onPress={() => navigation.navigate('CVResumeScreen')}>
             <Ionicons name="document-text-outline" size={24} color='rgba(125, 122, 122, 1)' />
             <Text style={styles.itemText}>Quản lí CV</Text>
             <Feather name="chevron-right" size={24} color='rgba(125, 122, 122, 1)' />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.item1}>
+          <TouchableOpacity style={styles.item1} onPress={() => navigation.navigate('MessageScreen')}>
             <AntDesign name="message1" size={24} color='rgba(125, 122, 122, 1)' />
             <Text style={styles.itemText}>Tin nhắn</Text>
             <Feather name="chevron-right" size={24} color='rgba(125, 122, 122, 1)' />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.item1}>
-            <AntDesign name="pdffile1" size={24} color='rgba(125, 122, 122, 1)' />
-            <Text style={styles.itemText}>Hồ sơ ứng tuyển</Text>
-            <Feather name="chevron-right" size={24} color='rgba(125, 122, 122, 1)' />
-          </TouchableOpacity>
+          {
+            user?.role === 1 ? (
+              <TouchableOpacity
+                onPress={() => navigation.navigate('CurriculumVitaeScreen')}
+               style={styles.item1}>
+                <AntDesign name="pdffile1" size={24} color='rgba(125, 122, 122, 1)' />
+                <Text style={styles.itemText}>Hồ sơ ứng tuyển</Text>
+                <Feather name="chevron-right" size={24} color='rgba(125, 122, 122, 1)' />
+              </TouchableOpacity>
+            ) : null
+          }
         </View>
         <View style={styles.line} />
         <View style={styles.account}>
           <Text style={styles.title}>Cài đặt chung</Text>
-          <TouchableOpacity style={styles.item}>
+          <TouchableOpacity style={styles.item}
+            onPress={() => navigation.navigate('Notifications')}>
             <Ionicons name="notifications-outline" size={24} color='rgba(125, 122, 122, 1)' />
             <Text style={styles.itemText}>Thông báo</Text>
             <Feather name="chevron-right" size={24} color='rgba(125, 122, 122, 1)' />
@@ -127,7 +134,7 @@ const ProfileScreen = ({ route, navigation }) => {
             <TouchableOpacity onPress={Darkmode}>
               {
                 darkMode ? (
-                  <Fontisto name="toggle-on" size={36} color= {COLORS.primary} />
+                  <Fontisto name="toggle-on" size={36} color={COLORS.primary} />
                 ) : <Fontisto name="toggle-off" size={36} color='rgba(125, 122, 122, 0.25)' />
               }
             </TouchableOpacity>
@@ -153,7 +160,7 @@ const ProfileScreen = ({ route, navigation }) => {
             paddingHorizontal: 10,
             paddingVertical: 12,
           }}
-          onPress={Logout}>
+            onPress={Logout}>
             <Ionicons name="log-out-outline" size={24} color={COLORS.red} />
             <Text style={{ fontSize: 18, fontWeight: '400', marginStart: 20, flex: 1, color: COLORS.red }}>Đăng xuất</Text>
           </TouchableOpacity>

@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-dupe-keys */
 /* eslint-disable prettier/prettier */
 /* eslint-disable react-native/no-inline-styles */
@@ -7,7 +6,7 @@
 /* eslint-disable semi */
 /* eslint-disable eol-last */
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, Image,SafeAreaView, TouchableOpacity, TextInput, Alert } from 'react-native';
+import { StyleSheet, View, Text, Image, Checkbox, SafeAreaView, TouchableOpacity, TextInput, Alert } from 'react-native';
 import { COLORS } from '../constants/theme';
 import auth, { firebase } from '@react-native-firebase/auth';
 
@@ -24,16 +23,15 @@ const SignInWithPhoneNumber = ({ navigation, props }) => {
   const [number, setNumber] = useState('');
   const [code, setCode] = useState('');
 
-// Handle login
+  // Handle login
   function onAuthStateChanged(user) {
     if (user) {
-      console.log(number);
     }
   }
 
   useEffect(() => {
     firebase.auth().onAuthStateChanged(onAuthStateChanged);
-  },[]);
+  }, []);
 
   // Handle the button press
   async function signInWithPhoneNumber(phoneNumber) {
@@ -45,17 +43,10 @@ const SignInWithPhoneNumber = ({ navigation, props }) => {
     try {
       if (confirm) {
         await confirm.confirm(codes);
-        navigation.navigate('AddProfile',{ number : number})
+        navigation.navigate('RegistrationScreen', number)
       } else {
         console.log('Confirmation object is null.');
       }
-      // This
-
-      // const result = await axios.post('http://192.168.8.124/users/PhoneNumberSignIn', {
-      //   phoneNumber: number,
-      // });
-       //setUser(result.data);
-
     } catch (error) {
       console.log('Invalid code: ', error);
     }
@@ -81,7 +72,7 @@ const SignInWithPhoneNumber = ({ navigation, props }) => {
         <View style={{ alignItems: 'center' }}>
           <Image source={require('../assets/images/SignIn/LogoSignInUp.png')} style={styles.logo} />
 
-          <Text style={{ fontSize: 24, fontWeight: '700', color: COLORS.black, marginVertical: 10 }}>Vui lòng nhập số điện thoại</Text>
+          <Text style={{ fontSize: 24, fontWeight: '700', color: COLORS.black, marginVertical: 10 }}>Enter your Phone Number</Text>
 
           <View
             style={{

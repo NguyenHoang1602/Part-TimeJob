@@ -22,6 +22,7 @@ const SalaryRangeSelector = ({
     endPrice,
     onStartPriceChange,
     onEndPriceChange,
+    salaryUnit,
 }) => {
     const theme = useTheme();
     const [barWidth, setBarWidth] = useState(0);
@@ -125,7 +126,7 @@ const SalaryRangeSelector = ({
                                 bottom: 24,
                             }}
                         />
-                        <SliderHandle label={`${startPrice}k/h`} />
+                        <SliderHandle label={salaryUnit === "655de22b9a5b0ffa7ffd5132" ? `${startPrice}k/h` : `${startPrice}tr`} />
                     </Animated.View>
                 </PanGestureHandler>
 
@@ -140,7 +141,7 @@ const SalaryRangeSelector = ({
                                 bottom: 24,
                             }}
                         />
-                        <SliderHandle label={`${endPrice}k/h`} />
+                        <SliderHandle label={salaryUnit === "655de22b9a5b0ffa7ffd5132" ? `${endPrice}k/h` : `${endPrice}tr`} />
                     </Animated.View>
                 </PanGestureHandler>
             </View>

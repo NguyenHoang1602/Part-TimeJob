@@ -1,10 +1,11 @@
 /* eslint-disable prettier/prettier */
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/self-closing-comp */
 /* eslint-disable no-unused-vars */
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable eol-last */
 /* eslint-disable semi */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, TouchableOpacity, ImageBackground, ScrollView, Image, FlatList, Alert, Pressable, StyleSheet } from 'react-native';
 
 //
@@ -33,23 +34,27 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Loader from '../components/Loader';
 import axios from 'axios';
 import { API } from '../../Sever/sever';
+import UserContext from '../components/UserConText';
+import { useFocusEffect } from '@react-navigation/native';
 
 const DetailsScreen = ({ route, navigation }) => {
+    const { user } = useContext(UserContext);
     const datalist = {
         postid: route.params?.postid,
         users_id: route.params?.users_id,
         address: route.params?.address,
-        avatar : route.params?.avatar,
+        avatar: route.params?.avatar,
+        displayName: route.params?.users_id.displayName,
         business_name: route.params?.business_name,
         image: route.params?.image,
         quantity: route.params?.quantity,
         title: route.params?.title,
         gender: route.params?.gender,
-        career_id: route.params?.career_id,
-        payform_id: route.params?.payform_id,
-        experience_id: route.params?.experience_id,
-        acedemic_id: route.params?.acedemic_id,
-        worktype_id: route.params?.worktype_id,
+        career_id: route.params?.career_id.title,
+        payform_id: route.params?.payform_id?.title,
+        experience_id: route.params?.experience_id.title,
+        acedemic_id: route.params?.acedemic_id.title,
+        worktype_id: route.params?.worktype_id.title,
         describe: route.params?.describe,
         age_min: route.params?.age_min,
         age_max: route.params?.age_max,
@@ -62,42 +67,78 @@ const DetailsScreen = ({ route, navigation }) => {
     const [data, setdataset] = useState(datalist);
     const [loading, setLoading] = React.useState(false);
     const [cv, setCv] = useState([]);
+    //console.log('data : ' + JSON.stringify(data));
 
     const [selectedItem, setSelectedItem] = useState(null);
     const [sender, setSender] = useState(null);
+    const [listApplied, setListApplied] = useState([]);
     const handlePress = (itemId) => {
         setSelectedItem(itemId === selectedItem ? null : itemId);
     };
+    const getAllApplied = async () => {
+        try {
+            const response = await axios.post(`${API}/apply/listMyApplied`, {
+                id: user._id
+            });
+            setListApplied(response.data);
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
-    useEffect(() => {
-        getCV();
-    }, []);
+    // useEffect(() => {
+    //     getCV()
+    // },[]);
+    useFocusEffect(
+        React.useCallback(() => {
+            getCV()
+            getAllApplied()
+        }, [])
+    );
 
     const handleApply = async () => {
         const apply = {
-            receiver_id: datalist.users_id._id,
+            receiver_id: data.users_id._id,
             sender_id: sender,
-            post_id: datalist.postid,
+            post_id: data.postid,
             cv_id: selectedItem,
         };
-        console.log("cv_ID : ", apply);
+
         if (selectedItem) {
             setModalVisible(false);
             setLoading(true);
             setTimeout(() => { 3000 });
             const result = await axios.post(`${API}/apply/add`, apply);
             if (result.status === 200) {
+                getAllApplied();
                 setLoading(false);
-                Alert.alert("Ứng tuyển thành công!")
+                Alert.alert('Ứng tuyển thành công!')
             }
+            
         }
     };
 
     const getCV = async () => {
-        const data = await AsyncStorage.getItem('listCVs');
-        setCv(JSON.parse(data));
+        // const data = await AsyncStorage.getItem('listCVs');
+        // setCv(JSON.parse(data));
+        axios({
+            url: `${API}/cvs/myCVs`,
+            method: 'POST',
+            data: {
+                id: user._id,
+            },
+        }).then(async (response) => {
+            if (response.status === 200) {
+                //   const data = JSON.stringify(response.data)
+                //   await AsyncStorage.setItem('listCVs', data);
+                setCv(response.data);
+            }
+        })
     }
-
+    const isFollowed = (productId) => {
+        const savePostIDlist = listApplied.map(item => item.post_id._id);
+        return savePostIDlist.some(post_id => post_id === productId);
+    };
     const renderCV = ({ item }) => {
         const isSelected = item._id === selectedItem;
         return (
@@ -132,13 +173,19 @@ const DetailsScreen = ({ route, navigation }) => {
     };
     const [isModalVisible, setModalVisible] = useState(false);
 
-    const toggleModal = (data) => {
+    const toggleModal = () => {
         setModalVisible(!isModalVisible);
     };
-    const toggleModalclose = (item) => {
+    const toggleModalclose = () => {
         setModalVisible(!isModalVisible);
     };
     // datacheck();
+    const cvscreen = () => {
+        navigation.navigate('Thông tin tuyển dụng', {
+            postid: data.postid,
+        })
+        setModalVisible(!isModalVisible);
+    }
 
     return (
         <SafeAreaView style={styles.container}>
@@ -185,11 +232,11 @@ const DetailsScreen = ({ route, navigation }) => {
                         <Text style={styles.datetime}>{data.date} {data.time}</Text>
                         <View style={styles.user}>
                             <ImageBackground
-                                source={{ uri: data.avatar}}
+                                source={{ uri: data.avatar }}
                                 style={{ width: 48, height: 48 }}
                                 imageStyle={{ borderRadius: 48 }}
                             />
-                            <Text style={styles.usertitle}>{data.users_id.displayName}</Text>
+                            <Text style={styles.usertitle}>{data.displayName}</Text>
                         </View>
                     </View>
                     <View style={styles.dot} />
@@ -198,23 +245,23 @@ const DetailsScreen = ({ route, navigation }) => {
                     </View>
                     <View style={styles.item1}>
                         <AntDesign name="creditcard" size={24} color={COLORS.blue} />
-                        <Text style={styles.itemText}>Hình thức trả lương: {data.payform_id.pf_title}</Text>
+                        <Text style={styles.itemText}>Hình thức trả lương: {data.payform_id}</Text>
                     </View>
                     <View style={styles.item}>
                         <Octicons name="log" size={24} color={COLORS.blue} />
-                        <Text style={styles.itemText}>Loại công việc: {data.worktype}</Text>
+                        <Text style={styles.itemText}>Loại công việc: {data.worktype_id}</Text>
                     </View>
                     <View style={styles.item}>
                         <SimpleLineIcons name="briefcase" size={24} color={COLORS.blue} />
-                        <Text style={styles.itemText}>Ngành nghề: {data.career_id.c_title}</Text>
+                        <Text style={styles.itemText}>Ngành nghề: {data.career_id}</Text>
                     </View>
                     <View style={styles.item}>
                         <AntDesign name="carryout" size={24} color={COLORS.blue} />
-                        <Text style={styles.itemText}>Kinh nghiệm: {data.experience_id.e_title}</Text>
+                        <Text style={styles.itemText}>Kinh nghiệm: {data.experience_id}</Text>
                     </View>
                     <View style={styles.item}>
                         <Octicons name="mortar-board" size={24} color={COLORS.blue} />
-                        <Text style={styles.itemText}>Trình độ học vấn: {data.acedemic_id.a_title}</Text>
+                        <Text style={styles.itemText}>Trình độ học vấn: {data.acedemic_id}</Text>
                     </View>
                     <View style={styles.item}>
                         <Fontisto name="venus-mars" size={24} color={COLORS.blue} />
@@ -241,8 +288,21 @@ const DetailsScreen = ({ route, navigation }) => {
                         <Text style={styles.itemText}>{data.address}</Text>
                     </View>
                     <View style={{ width: '100%', alignItems: 'center', paddingVertical: 50 }}>
-                        <TouchableOpacity
-                            onPress={() => toggleModal(data)}
+                        {isFollowed(data?.postid) ? (
+                            <TouchableOpacity
+                                onPress={() => navigation.navigate('Application')}
+                                style={styles.btnApply}>
+                                <Text
+                                    style={{
+                                        fontWeight: 'bold',
+                                        fontSize: 18,
+                                        color: COLORS.white,
+                                    }}>
+                                    Xem trạng thái ứng tuyển
+                                </Text>
+                            </TouchableOpacity>
+                        ) : <TouchableOpacity
+                            onPress={() => toggleModal()}
                             style={styles.btnApply}>
                             <Text
                                 style={{
@@ -253,6 +313,8 @@ const DetailsScreen = ({ route, navigation }) => {
                                 Nộp hồ sơ
                             </Text>
                         </TouchableOpacity>
+                        }
+
                     </View>
                 </View>
             </ScrollView>
@@ -280,15 +342,13 @@ const DetailsScreen = ({ route, navigation }) => {
                                     alignItems: 'center',
                                     marginBottom: 5,
                                 }}
-                                onPress={() => navigation.navigate('Thông tin tuyển dụng', {
-                                    postid: data.postid,
-                                })}
+                                onPress={cvscreen}
                             >
                                 <AntDesign name="addfile" size={30} color={COLORS.primary} />
+                                <View style={{ alignItems: 'center' }}>
+                                    <Text style={{ fontSize: 14, color: '#7D7A7A', opacity: 0.7 }}>Tạo hồ sơ mới</Text>
+                                </View>
                             </TouchableOpacity>
-                            <View style={{ alignItems: 'center' }}>
-                                <Text style={{ fontSize: 14, color: '#7D7A7A', opacity: 0.7 }}>Tạo hồ sơ mới</Text>
-                            </View>
                         </View>
                     </View>
                     <Text style={{ marginStart: '7%', fontSize: 16 }}>Hồ sơ của bạn</Text>
@@ -369,7 +429,6 @@ const styles = StyleSheet.create({
     },
     postHeaders: {
         width: '100%',
-        height: 165,
         marginBottom: 25,
         borderWidth: 0.8,
         borderColor: COLORS.grey,

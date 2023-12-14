@@ -54,6 +54,7 @@ const PostScreen = ({ navigation }) => {
   const [isFocus, setIsFocus] = useState(false);
   const [selectedImages, setSelectedImages] = useState([]);
   const urlImage = [];
+  const imageurl = [];
   const [listCareers, setListCareers] = useState([]);
   const [listWorkType, setListWorkType] = useState([]);
   const [listPayForm, setListPayForm] = useState([]);
@@ -77,7 +78,7 @@ const PostScreen = ({ navigation }) => {
     ageMax: '',
     academic_id: '',
     experience_id: '',
-    status_id: '65423efa3f8e779b5ec14e51'
+    status_id: '65423efa3f8e779b5ec14e51',
   });
 
   const getListCareers = async () => {
@@ -108,7 +109,7 @@ const PostScreen = ({ navigation }) => {
   // Validate
   const [errors, setErrors] = React.useState({});
 
-  const validate = () => {
+  const validate = async () => {
 
     Keyboard.dismiss();
     let isValid = true;
@@ -178,12 +179,11 @@ const PostScreen = ({ navigation }) => {
       isValid = false;
     }
     if (isValid) {
-      uploadImages().then(() => {
-        handlePost();
-      })
+      uploadImages();
+      setTimeout(handlePost, 4000);
     }
   };
-  // 
+  console.log(inputs);
   const handleOnchange = (text, input) => {
     setInputs(prevState => ({ ...prevState, [input]: text }));
   };
@@ -191,15 +191,15 @@ const PostScreen = ({ navigation }) => {
     setErrors(prevState => ({ ...prevState, [input]: error }));
   };
   const handlePost = async () => {
-    setLoading(true);
-    setTimeout(() => { 3000 });
+    setLoading(true)
+    setTimeout(() => { 3000 })
     const result = await axios.post(`${API}/posts/postForApp`, inputs);
     if (result.status === 200) {
       setLoading(false);
-      console.log("Thành công");
+      Alert.alert('thanh cong')
+      navigation.navigate('Quản lí')
     }
   }
-  console.log(inputs);
   useFocusEffect(
     React.useCallback(() => {
       return () => {
@@ -236,9 +236,7 @@ const PostScreen = ({ navigation }) => {
       });
   };
   // Upload image to Cloud
-  const uploadImages = async () => {
-    setLoading(true);
-    setTimeout(() => { 3000 })
+  const uploadImages = async () => {  
     try {
       const CLOUD_NAME = "dxrv1gdit";
       const PRESET_NAME = "ParttimeJobs";
@@ -262,11 +260,9 @@ const PostScreen = ({ navigation }) => {
 
         if (response.status === 200) {
           urlImage.push(response.data.secure_url);
-          setLoading(false)
-          console.log("image url :" + urlImage);
           handleOnchange(urlImage, 'image')
         }
-      });
+      })
       setSelectedImages([]);
     } catch (error) {
       console.log("Upload failed", error);
@@ -534,7 +530,7 @@ const PostScreen = ({ navigation }) => {
               inputSearchStyle={styles.inputSearchStyle}
               iconStyle={styles.iconStyle}
               data={listWorkType}
-              
+          
               maxHeight={300}
               labelField="wt_title"
               valueField="_id"

@@ -10,18 +10,17 @@ import { COLORS } from "../constants/theme";
 
 const CheckBoxCircle = ({options = [], onchange, multiple}) => {
     const [selected, setSelected] = useState([]);
-    function toggle(id){
-        let index = selected.findIndex((i) => i === id);
+    function toggle(_id) {
+        let index = selected.findIndex((i) => i === _id);
         let arrSelecteds = [...selected];
         if (index !== -1) {
-            arrSelecteds = arrSelecteds.filter((i) => i !== id);
+            arrSelecteds = arrSelecteds.filter((i) => i !== _id);
         } else {
-            multiple ? arrSelecteds.push(id) : (arrSelecteds = [id]);
+            multiple ? arrSelecteds.push(_id) : (arrSelecteds = [_id]);
         }
         setSelected(arrSelecteds);
     }
-
-    useEffect(() => onchange(selected), [selected]);
+    useEffect(() => onchange(selected.join(',')), [selected]);
     return (
         <View>
             {options.map((op, index) => (
@@ -31,15 +30,15 @@ const CheckBoxCircle = ({options = [], onchange, multiple}) => {
                     marginTop: 20,
                 }}>
                     <TouchableOpacity style={[style.touchble,{
-                        backgroundColor: selected.findIndex(i => i === op.id ) !== -1 ? COLORS.primary : COLORS.white,
-                    }]} onPress={() => toggle(op?.id)}>
+                        backgroundColor: selected.findIndex(i => i === op._id ) !== -1 ? COLORS.primary : COLORS.white,
+                    }]} onPress={() => toggle(op?._id)}>
                         {
-                            selected.findIndex(i => i === op.id ) !== -1 ? (
+                            selected.findIndex(i => i === op._id ) !== -1 ? (
                                 <Icon name='check-bold' color={COLORS.white} size={16}/>
                             ) : null
                         }
                     </TouchableOpacity>
-                    <Text style={style.optext}>{op?.text}</Text>
+                    <Text style={style.optext}>{op?.title}</Text>
                 </View>
             ))}
         </View>

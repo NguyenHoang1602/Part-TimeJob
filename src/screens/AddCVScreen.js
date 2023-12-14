@@ -4,7 +4,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import { View, Text, SafeAreaView, Keyboard, ScrollView, StyleSheet, TouchableOpacity, ImageBackground, useWindowDimensions, FlatList, Image, StatusBar, Alert } from 'react-native';
 import React, { useState, useContext, useEffect } from 'react';
-import { TextInput } from 'react-native-paper';
 import Input from '../components/Input';
 import InputMutiple from '../components/InputMutiple';
 import COLORS from '../assets/const/colors';
@@ -23,7 +22,7 @@ const CVScreen = ({ route, navigation }) => {
     getListExperience()
     getListGender()
   }, []);
-
+  
   const { user } = useContext(UserContext);
   const [listAcademic, setListAcademic] = useState([]);
   const [listCareers, setListCareers] = useState([]);
@@ -43,14 +42,14 @@ const CVScreen = ({ route, navigation }) => {
     academic_id: '',
     introduce: '',
   });
-
+  
   const [errors, setErrors] = React.useState({});
   const [loading, setLoading] = React.useState(false);
   const [isFocusGender, setIsFocusGender] = useState(false);
   const [isFocusCareer, setIsFocusCareer] = useState(false);
   const [isFocusExp, setIsFocusExp] = useState(false);
   const [isFocusAcademic, setIsFocusAcademic] = useState(false);
-
+  
   const getListCareers = async () => {
     const data = await AsyncStorage.getItem('listCareers')
     setListCareers(JSON.parse(data));
@@ -134,16 +133,12 @@ const CVScreen = ({ route, navigation }) => {
     const response = await axios.post(`${API}/cvs/new`, inputs);
     if (response.status === 200) {
       setLoading(false);
-      Alert.alert('Thành công','Tạo CV thành công !',[
-        {text: ''},
-        {text: 'ok', onPress : () =>  navigation.navigate('DetailsScreen')},
-      ],
-      { cancelable: false });
+      Alert.alert("Thành công");
+      navigation.navigate('CVResumeScreen');
     }
   }
-
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor : COLORS.white }}>
       <Loader visible={loading} />
       <ScrollView>
         <View
@@ -401,5 +396,10 @@ const styles = StyleSheet.create({
     height: 50,
     fontSize: 14,
     borderRadius: 6,
+  },
+  error: {
+    fontSize: 12,
+    color: 'red',
+    paddingBottom: 12
   },
 });
