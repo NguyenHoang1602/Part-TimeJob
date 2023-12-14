@@ -108,22 +108,6 @@ const DetailsScreen = ({ route, navigation }) => {
             console.log("err", error);
         }
     }
-    const handleSaveToggle = async (post_id) => {
-        try {
-            const savedata = {
-                user_id: user._id,
-                post_id: post_id,
-            };
-            const result = await axios.post(`${API}/savePost/add`, savedata);
-            if (result.status === 200) {
-                getListSave();
-                Alert.alert('Lưu tin thành công !')
-                console.log("Thành công");
-            }
-        } catch (error) {
-            console.log('Err: ', error);
-        }
-    };
     const isSave = (postid) => {
         const savePostIDlist = followedProducts.map(item => item.post_id);
         return savePostIDlist.some(post_id => post_id === postid);

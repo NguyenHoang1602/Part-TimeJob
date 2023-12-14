@@ -31,6 +31,7 @@ const StageCurriculumScreen = ({ route, navigation }) => {
 
     const datalist = {
         _id: route.params?.item._id,
+        user_id : route.params?.item?.user_id,
         cv_id: route.params?.item.cv_id,
         title: route.params?.item.cv_id?.title,
         name: route.params?.item.cv_id?.name,
@@ -51,15 +52,6 @@ const StageCurriculumScreen = ({ route, navigation }) => {
     }
     const handleOnChangeFeedback = (value) => {
         setFeedBack(value);
-    }
-    const handleAccept = async () => {
-
-        const response = await axios.post(`${API}/apply/updateAccept`, { id: data._id });
-        if (response.status === 200) {
-            console.log('thanh cong');
-            getCVApply();
-        }
-
     }
     const [isModalVisible, setModalVisible] = useState(false);
     const toggleModal = () => {
@@ -92,6 +84,17 @@ const StageCurriculumScreen = ({ route, navigation }) => {
             }
         });
     };
+    const handleAccept = async () => {
+        const data = {
+            id: data._id,
+            receiver_id: data.user_id,
+        };
+        const response = await axios.post(`${API}/apply/updateAccept`, data);
+        if (response.status === 200) {
+            console.log('thanh cong');
+            getCVApply();
+        }
+    }
     const handleReject = async () => {
         Alert.alert('Từ chối CV', 'Bạn có muốn thương lượng với người ứng tuyển ?', [
             { text: 'Không', onPress: () => toggleModal1() },
@@ -99,11 +102,12 @@ const StageCurriculumScreen = ({ route, navigation }) => {
         ]);
     };
     const bargain = async () => {
-        const bragaindata = {
+        const bargainData = {
             id: data._id,
             bargain_salary: bargainSalary,
+            receiver_id: data.user_id,
         };
-        const response = await axios.post(`${API}/apply/updateBargain`, bragaindata);
+        const response = await axios.post(`${API}/apply/updateBargain`, bargainData);
         if (response.status === 200) {
             console.log('thanh cong');
             getCVApply();
@@ -115,6 +119,7 @@ const StageCurriculumScreen = ({ route, navigation }) => {
         const Feedback = {
             id: data._id,
             feedback: feedbacks,
+            receiver_id: data.user_id,
         };
         const response = await axios.post(`${API}/apply/updateReject`, Feedback);
         if (response.status === 200) {
@@ -123,7 +128,6 @@ const StageCurriculumScreen = ({ route, navigation }) => {
             console.log('thanh cong');
         }
     }
-
 
     return (
         <SafeAreaView
