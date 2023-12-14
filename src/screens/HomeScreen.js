@@ -1,3 +1,4 @@
+/* eslint-disable jsx-quotes */
 /* eslint-disable react/self-closing-comp */
 /* eslint-disable comma-dangle */
 /* eslint-disable no-shadow */

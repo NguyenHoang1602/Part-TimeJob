@@ -42,6 +42,7 @@ const StageCurriculumScreen = ({ route, navigation }) => {
         email: route.params?.item.cv_id?.email,
         address: route.params?.item.cv_id?.address,
         introduce: route.params?.item.cv_id?.introduce,
+        post_id: route.params?.item.post_id,
     };
     const [data, setData] = useState(datalist);
     const [CvApply, setCvApply] = useState([]);
@@ -85,11 +86,14 @@ const StageCurriculumScreen = ({ route, navigation }) => {
         });
     };
     const handleAccept = async () => {
-        const data = {
+        const AcceptData = {
             id: data._id,
+            bargain_salary: "",
             receiver_id: data.user_id,
+            sender_id: user._id,
+            post_id: data.post_id,
         };
-        const response = await axios.post(`${API}/apply/updateAccept`, data);
+        const response = await axios.post(`${API}/apply/updateAccept`, AcceptData);
         if (response.status === 200) {
             console.log('thanh cong');
             getCVApply();
@@ -106,6 +110,8 @@ const StageCurriculumScreen = ({ route, navigation }) => {
             id: data._id,
             bargain_salary: bargainSalary,
             receiver_id: data.user_id,
+            sender_id: user._id,
+            post_id: data.post_id,
         };
         const response = await axios.post(`${API}/apply/updateBargain`, bargainData);
         if (response.status === 200) {
@@ -118,8 +124,11 @@ const StageCurriculumScreen = ({ route, navigation }) => {
     const Reject = async () => {
         const Feedback = {
             id: data._id,
-            feedback: feedbacks,
+            bargain_salary: "",
             receiver_id: data.user_id,
+            sender_id: user._id,
+            post_id: data.post_id,
+            feedback: feedbacks,
         };
         const response = await axios.post(`${API}/apply/updateReject`, Feedback);
         if (response.status === 200) {
