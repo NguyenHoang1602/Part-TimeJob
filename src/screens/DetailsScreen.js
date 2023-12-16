@@ -7,7 +7,7 @@
 /* eslint-disable eol-last */
 /* eslint-disable semi */
 import React, { useState, useEffect, useContext } from 'react';
-import { View, Text, TouchableOpacity, ImageBackground, ScrollView, Image, FlatList, Alert, Pressable, StyleSheet, TextInput } from 'react-native';
+import { View, Text, TouchableOpacity, ImageBackground, ScrollView, Image, FlatList, Alert, Pressable, StyleSheet, TextInput, Keyboard } from 'react-native';
 
 //
 import Input from '../components/Input';
@@ -131,11 +131,38 @@ const DetailsScreen = ({ route, navigation }) => {
             getCV()
             getAllApplied()
             getListSave()
+            setErrors('')
         }, [])
     );
     const handleOnChangeSalary = (value) => {
         setSalary(value);
     }
+    // validate
+    const [errors, setErrors] = useState('');
+
+    const validate = async () => {
+        Keyboard.dismiss();
+        let isValid = true;
+        if (!salary) {
+            setErrors('Vui lòng nhập lương mong muốn')
+            isValid = false;
+        }
+        if (isValid) {
+            handleApply()
+        }
+    };
+    // const validate = async () => {
+
+    //     Keyboard.dismiss();
+    //     let isValid = true;
+
+    //     if (!salary) {
+    //       handleError('Vui lòng nhập lương mong muốn', 'salary');
+    //       isValid = false;
+    //     if (isValid) {
+    //       handleApply()
+    //     }
+    // };
     const handleApply = async () => {
         const apply = {
             receiver_id: data.users_id._id,
@@ -153,6 +180,7 @@ const DetailsScreen = ({ route, navigation }) => {
             if (result.status === 200) {
                 getAllApplied();
                 setLoading(false);
+                setErrors('');
                 Alert.alert('Ứng tuyển thành công!')
             }
         }
@@ -287,7 +315,7 @@ const DetailsScreen = ({ route, navigation }) => {
                         style={styles.postHeaders}>
                         <Text style={styles.title}>{data.title}</Text>
                         <View style={{ flexDirection: 'row' }}>
-                            <Text style={{ color: COLORS.red, fontSize: 16, marginVertical: 9 }}>{ data.wage_min}đ - { data.wage_max}đ</Text>
+                            <Text style={{ color: COLORS.red, fontSize: 16, marginVertical: 9 }}>{data.wage_min}đ - {data.wage_max}đ</Text>
                             {
                                 data.payform_id === '655de22b9a5b0ffa7ffd5132' ? (
                                     <Text style={{ color: COLORS.red, fontSize: 16, marginVertical: 9 }}> /giờ</Text>
@@ -440,6 +468,13 @@ const DetailsScreen = ({ route, navigation }) => {
                             </View>
                         ) : null
                     }
+                    {
+                        errors != '' && (
+                            <Text style={{marginTop: 7, color: COLORS.red, fontSize: 12, marginLeft: 40}}>
+                            {errors}
+                          </Text>
+                        )
+                    }
                     <View style={{
                         flexDirection: 'row',
                         justifyContent: 'center',
@@ -462,7 +497,7 @@ const DetailsScreen = ({ route, navigation }) => {
 
                         <TouchableOpacity
                             onPress={() => {
-                                handleApply()
+                                validate()
                             }}
                             style={{
                                 backgroundColor: COLORS.primary,
