@@ -7,7 +7,7 @@
 /* eslint-disable eol-last */
 /* eslint-disable semi */
 import React, { useState, useEffect, useContext } from 'react';
-import { View, Text, TouchableOpacity, ImageBackground, ScrollView, Image, FlatList, Alert, Pressable, StyleSheet, TextInput } from 'react-native';
+import { View, Text, TouchableOpacity, ImageBackground, ScrollView, Image, FlatList, Alert, Pressable, StyleSheet, TextInput, StatusBar } from 'react-native';
 
 //
 import Input from '../components/Input';
@@ -236,6 +236,7 @@ const DetailsScreen = ({ route, navigation }) => {
 
     return (
         <SafeAreaView style={styles.container}>
+            <StatusBar barStyle={"light-content"} />
             <View style={styles.headers}>
                 <TouchableOpacity onPress={() => navigation.goBack()}>
                     <Feather name="arrow-left" size={28} color={COLORS.white} />

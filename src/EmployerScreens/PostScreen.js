@@ -564,7 +564,7 @@ const PostScreen = ({ navigation }) => {
               valueField="_id"
               placeholder={!isFocus1 ? 'Ngành Nghề' : '...'}
               searchPlaceholder="Search..."
-              value={listCareers._id}
+              value={inputs.career_id}
               onFocus={() => setIsFocus1(true)}
               onBlur={() => setIsFocus1(false)}
               onChange={item => {
