@@ -287,7 +287,7 @@ const TopTabScreenDenied = ({ navigation }) => {
                                         paddingVertical: 15,
                                         marginEnd: 15,
                                     }}>
-                                    <Text style={{ color: COLORS.primary, fontSize: 18, fontWeight: '600' }}>Xóa tin</Text>
+                                    <Text style={{ color: COLORS.primary, fontSize: 18, fontWeight: '600' }}>Hủy</Text>
                                 </TouchableOpacity>
 
                                 <TouchableOpacity
@@ -310,7 +310,7 @@ const TopTabScreenDenied = ({ navigation }) => {
                                         worktype: selectedItem?.worktype,
                                         Details: selectedItem?.Details,
                                     })}>
-                                    <Text style={{ color: COLORS.white, fontSize: 18, fontWeight: '600' }}>Sửa tin</Text>
+                                    <Text style={{ color: COLORS.white, fontSize: 18, fontWeight: '600' }}>Xóa tin</Text>
                                 </TouchableOpacity>
                             </View>
                         </View>

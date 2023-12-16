@@ -32,6 +32,8 @@ const ApplicationsStageScreen = ({ route, navigation }) => {
     bargain_Salary: route.params?.bargain_Salary,
     feedback: route.params?.feedback,
     cv_id: route.params?.cv_id,
+    post_id: route.params?.post_id,
+    receiver_id: route.params?.receiver_id,
   };
   const [data, setData] = useState(datalist);
   const { user } = useContext(UserContext);
@@ -40,9 +42,18 @@ const ApplicationsStageScreen = ({ route, navigation }) => {
       getCVApply();
     }, [])
   );
+
   const [CvApply, setCvApply] = useState([]);
   const handleAccept = async () => {
-    const response = await axios.post(`${API}/apply/updateAccept`, { id: data.id });
+    console.log(data.id);
+    const AcceptData = {
+      id: data.id,
+      bargain_salary: data.bargain_Salary,
+      receiver_id: data.receiver_id,
+      sender_id: user._id,
+      post_id: data.post_id,
+  };
+    const response = await axios.post(`${API}/apply/updateAcceptForUser`, AcceptData);
     if (response.status === 200) {
       console.log('thanh cong');
       getCVApply();
@@ -65,7 +76,6 @@ const ApplicationsStageScreen = ({ route, navigation }) => {
     });
   };
   const status = CvApply.map((item) => {
-    console.log(item.status);
     return item.status;
   });
   const [isModalVisible, setModalVisible] = useState(false);

@@ -1,3 +1,4 @@
+/* eslint-disable jsx-quotes */
 /* eslint-disable react/self-closing-comp */
 /* eslint-disable comma-dangle */
 /* eslint-disable no-shadow */
@@ -280,6 +281,7 @@ const HomeScreen = ({ navigation }) => {
         }).then((response) => {
           if (response.status === 200) {
             setListJobs(response.data)
+            setListData(response.data)
           }
         })
         //All Career
@@ -419,8 +421,8 @@ const HomeScreen = ({ navigation }) => {
           describe: item.describe,
           age_min: item.ageMin,
           age_max: item.ageMax,
-          wage_min: item.wageMin,
-          wage_max: item.wageMax,
+          wage_min: formattedWageMin,
+          wage_max: formattedWageMax,
           status_id: item.status_id,
           date: item.date,
           time: item.time,

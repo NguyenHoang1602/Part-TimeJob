@@ -19,9 +19,9 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const AuthScreen = ({ navigation }) => {
     const [loading, setLoading] = useState(false);
-
     const { setUser } = useContext(UserContext);
-
+    const { user } = useContext(UserContext);
+    console.log(user);
     useEffect(() => {
         GoogleSignin.configure({
             webClientId: '598708373288-vlbap93edc5r144q7cnealcu8vls110o.apps.googleusercontent.com',
