@@ -1,4 +1,5 @@
 /* eslint-disable prettier/prettier */
+/* eslint-disable react/no-unstable-nested-components */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable eol-last */
 /* eslint-disable react-native/no-inline-styles */
@@ -83,6 +84,8 @@ const ApplicationsScreen = ({ route, navigation }) => {
                 image: item?.post_id?.image,
                 bargain_Salary: item?.bargain_salary,
                 feedback: item?.feedback,
+                post_id: item?.post_id?._id,
+                receiver_id: item?.receiver_id,
             })}>
             <View style={{ flexDirection: 'row', width: '100%', alignItems: 'center' }}>
 
@@ -210,7 +213,7 @@ const ApplicationsScreen = ({ route, navigation }) => {
                         paddingHorizontal: 18,
                         backgroundColor: !isFocusedSearch ? COLORS.lightGrey : '#E9F0FF',
                         borderWidth: 1,
-                        borderColor: !isFocusedSearch ? COLORS.white : COLORS.primary
+                        borderColor: !isFocusedSearch ? COLORS.white : COLORS.primary,
                     }}>
                     <Feather name='search' size={24} color={!isFocusedSearch ? COLORS.grey : COLORS.primary} />
                     <TextInput

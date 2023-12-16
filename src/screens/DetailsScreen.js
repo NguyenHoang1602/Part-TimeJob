@@ -67,8 +67,6 @@ const DetailsScreen = ({ route, navigation }) => {
         time: route.params?.time,
     };
     const [data, setdataset] = useState(datalist);
-    const formattedWageMin = data.wage_min.toLocaleString('vi-VN');
-    const formattedWageMax = data.wage_max.toLocaleString('vi-VN');
     const [loading, setLoading] = React.useState(false);
     const [cv, setCv] = useState([]);
     const [salary, setSalary] = useState('');
@@ -108,6 +106,22 @@ const DetailsScreen = ({ route, navigation }) => {
             console.log("err", error);
         }
     }
+    const handleSaveToggle = async (post_id) => {
+        try {
+            const savedata = {
+                user_id: user._id,
+                post_id: post_id,
+            };
+            const result = await axios.post(`${API}/savePost/add`, savedata);
+            if (result.status === 200) {
+                getListSave();
+                Alert.alert('Lưu tin thành công !')
+                console.log("Thành công");
+            }
+        } catch (error) {
+            console.log('Err: ', error);
+        }
+    };
     const isSave = (postid) => {
         const savePostIDlist = followedProducts.map(item => item.post_id);
         return savePostIDlist.some(post_id => post_id === postid);
@@ -163,13 +177,13 @@ const DetailsScreen = ({ route, navigation }) => {
     };
     const handleDelete = async (post_id) => {
         const deleteSave = {
-            user_id : user._id,
-            post_id : post_id,
+            user_id: user._id,
+            post_id: post_id,
         }
         const result = await axios.post(`${API}/savePost/deleteWithCondition`, deleteSave);
         if (result.status === 200) {
-          getListSave();
-          console.log("Thành công");
+            getListSave();
+            console.log("Thành công");
         }
     }
     const renderCV = ({ item }) => {
@@ -273,7 +287,7 @@ const DetailsScreen = ({ route, navigation }) => {
                         style={styles.postHeaders}>
                         <Text style={styles.title}>{data.title}</Text>
                         <View style={{ flexDirection: 'row' }}>
-                            <Text style={{ color: COLORS.red, fontSize: 16, marginVertical: 9 }}>{formattedWageMin}đ - {formattedWageMax}đ</Text>
+                            <Text style={{ color: COLORS.red, fontSize: 16, marginVertical: 9 }}>{ data.wage_min}đ - { data.wage_max}đ</Text>
                             {
                                 data.payform_id === '655de22b9a5b0ffa7ffd5132' ? (
                                     <Text style={{ color: COLORS.red, fontSize: 16, marginVertical: 9 }}> /giờ</Text>
