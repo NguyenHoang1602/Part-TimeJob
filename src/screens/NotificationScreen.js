@@ -50,7 +50,7 @@ const NotificationScreen = ({ route, navigation }) => {
 
 
     const getListNotifications = async () => {
-        // setLoading(true);
+        setLoading(true);
         try {
             await new Promise(resolve => setTimeout(resolve, 2000));
             const response = await axios.post(`${API}/notifications/list`, { receiver_id: user._id });
@@ -115,7 +115,7 @@ const NotificationScreen = ({ route, navigation }) => {
                                 ) : null
                             }
                         </View>
-                        <Text style={{ fontSize: 16, fontWeight: '400', color: COLORS.black, opacity: 0.8 }}>{item?.sender_id.displayName} đã ứng tuyển bài đăng {item?.post_id.title} của bạn!</Text>
+                        <Text style={{ fontSize: 16, fontWeight: '400', color: COLORS.black, opacity: 0.8 }}>{item?.sender_id?.displayName} đã ứng tuyển bài đăng {item?.post_id?.title} của bạn!</Text>
                     </TouchableOpacity>
 
                 ) : item?.category == 1 && item?.receiver_id.role == 0 ? (
@@ -174,7 +174,7 @@ const NotificationScreen = ({ route, navigation }) => {
                                 ) : null
                             }
                         </View>
-                        <Text style={{ fontSize: 16, fontWeight: '400', color: COLORS.black, opacity: 0.8 }}>{item?.sender_id.displayName} đã phản hồi lại về đơn ứng tuyển cho bài đăng {item?.post_id.title} của bạn!</Text>
+                        <Text style={{ fontSize: 16, fontWeight: '400', color: COLORS.black, opacity: 0.8 }}>{item?.sender_id?.displayName} đã phản hồi lại về đơn ứng tuyển cho bài đăng {item?.post_id.title} của bạn!</Text>
                     </TouchableOpacity>
                 ) : item?.category == 2 ? (
                     <TouchableOpacity
