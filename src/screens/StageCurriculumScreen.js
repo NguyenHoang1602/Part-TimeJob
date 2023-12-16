@@ -8,7 +8,7 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable react-native/no-inline-styles */
 import React, { useState, useContext, useEffect } from 'react';
-import { View, Text, TouchableOpacity, ImageBackground, StyleSheet, ScrollView, Alert, TextInput } from 'react-native';
+import { View, Text, TouchableOpacity, ImageBackground, StyleSheet, ScrollView, Alert, TextInput, Keyboard } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import COLORS from '../assets/const/colors';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -23,6 +23,7 @@ const StageCurriculumScreen = ({ route, navigation }) => {
     useFocusEffect(
         React.useCallback(() => {
             getCVApply();
+            setErrors('')
         }, [])
     );
     // useEffect(() => {
@@ -31,7 +32,7 @@ const StageCurriculumScreen = ({ route, navigation }) => {
 
     const datalist = {
         _id: route.params?.item._id,
-        user_id : route.params?.item?.user_id,
+        user_id: route.params?.item?.user_id,
         cv_id: route.params?.item.cv_id,
         title: route.params?.item.cv_id?.title,
         name: route.params?.item.cv_id?.name,
@@ -103,6 +104,19 @@ const StageCurriculumScreen = ({ route, navigation }) => {
             { text: 'Không', onPress: () => toggleModal1() },
             { text: 'Có', onPress: () => toggleModal() },
         ]);
+    };
+    const [errors, setErrors] = useState('');
+
+    const validate = async () => {
+        Keyboard.dismiss();
+        let isValid = true;
+        if (!bargainSalary) {
+            setErrors('Vui lòng nhập lương mong muốn')
+            isValid = false;
+        }
+        if (isValid) {
+            bargain()
+        }
     };
     const bargain = async () => {
         const bargainData = {
@@ -248,6 +262,13 @@ const StageCurriculumScreen = ({ route, navigation }) => {
                             placeholder="Nhập lương sẽ trả"
                             onChangeText={handleOnChangeSalary}
                         />
+                        {
+                            errors != '' && (
+                                <Text style={{ marginTop: 7, color: COLORS.red, fontSize: 12, marginRight: '36%' }}>
+                                    {errors}
+                                </Text>
+                            )
+                        }
                     </View>
                     <View style={{
                         flexDirection: 'row',
@@ -271,7 +292,7 @@ const StageCurriculumScreen = ({ route, navigation }) => {
 
                         <TouchableOpacity
                             onPress={() => {
-                                bargain()
+                                validate()
                             }}
                             style={{
                                 backgroundColor: COLORS.primary,

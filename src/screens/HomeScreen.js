@@ -274,6 +274,7 @@ const HomeScreen = ({ navigation }) => {
     setRefreshing(true);
     setTimeout(() => {
       try {
+        getListNotification()
         axios({
           url: `${API}/posts/list`,
           method: "GET",
@@ -298,6 +299,7 @@ const HomeScreen = ({ navigation }) => {
         })
         getListSave();
         setRefreshing(false);
+        
       } catch (error) {
         console.error('Error fetching data:', error);
         setRefreshing(false);

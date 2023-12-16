@@ -96,6 +96,13 @@ const HomeStack = (props) => {
                     headerShown: false,
                 })}
             />
+            <Stack.Screen
+                name="StageCurriculumScreen"
+                component={StageCurriculum}
+                options={({ route }) => ({
+                    headerShown: false,
+                })}
+            />
         </Stack.Navigator>
     );
 };
