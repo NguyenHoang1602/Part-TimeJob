@@ -63,6 +63,13 @@ const NotificationScreen = ({ route, navigation }) => {
             setLoading(false);
         }
     }
+    const handleChangeSeen = async (id) => {
+        try {
+            await axios.post(`${API}/notifications/Seen`,{id : id});
+        } catch (error) {
+            console.log(error);
+        }
+    }
     const renderItem = ({ item }) => (
         <View style={{
             width: "100%",
@@ -75,6 +82,7 @@ const NotificationScreen = ({ route, navigation }) => {
                 item?.category == 0 ? (
                     <TouchableOpacity
                         onPress={() => {
+                            handleChangeSeen(item?._id)
                             navigation.navigate('DetailNotification', {
                                 _id: item?._id,
                                 receiver_id: item?.receiver_id,
@@ -113,6 +121,7 @@ const NotificationScreen = ({ route, navigation }) => {
                 ) : item?.category == 1 && item?.receiver_id.role == 0 ? (
                     <TouchableOpacity
                         onPress={() => {
+                            handleChangeSeen(item?._id)
                             navigation.navigate('Application');
                         }}>
                         <View
@@ -141,6 +150,7 @@ const NotificationScreen = ({ route, navigation }) => {
                 ) : item?.category == 1 && item?.receiver_id.role == 1 ? (
                     <TouchableOpacity
                         onPress={() => {
+                            handleChangeSeen(item?._id);
                             navigation.navigate('CurriculumVitaeScreen');
                         }}>
                         <View
@@ -169,6 +179,7 @@ const NotificationScreen = ({ route, navigation }) => {
                 ) : item?.category == 2 ? (
                     <TouchableOpacity
                         onPress={() => {
+                            handleChangeSeen(item?._id)
                             navigation.navigate('Application')
                         }}>
                         <View
