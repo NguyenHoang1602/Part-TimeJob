@@ -130,7 +130,7 @@ const HomeScreen = ({ navigation }) => {
           }
         });
       }
-
+      console.log(listCareers);
       //All WorkType
       axios({
         url: `${API}/workTypes/list`,
