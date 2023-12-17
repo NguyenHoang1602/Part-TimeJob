@@ -29,12 +29,31 @@ const ApplicationsScreen = ({ route, navigation }) => {
     const [listApplied, setListApplied] = useState([]);
     const [list, setList] = useState([]);
     const [isFocusedSearch, setIsFocusedSearch] = useState(false);
+    const [check, setChek] = useState(false);
 
     useFocusEffect(
         React.useCallback(() => {
             getAllApplied()
+            getListNotification()
         }, [])
     );
+    async function getListNotification() {
+        try {
+            const response = await axios.post(`${API}/notifications/listNoSeen`, { receiver_id: user._id });
+            if (response.status === 200) {
+                const data = [...response.data];
+                if (data.length > 0) {
+                    setChek(!check);
+                }
+            }
+        } catch (error) {
+            console.log('err', error);
+        }
+    }
+    const openNotification = () => {
+        navigation.navigate('Notifications');
+        setChek(false);
+    };
     const getAllApplied = async () => {
         try {
             const response = await axios.post(`${API}/apply/listMyApplied`, {
@@ -69,120 +88,125 @@ const ApplicationsScreen = ({ route, navigation }) => {
         }
     }
 
-    const renderItemApplications = ({ item }) => (
-        <TouchableOpacity style={styles.items}
-            onPress={() => navigation.navigate('ApplicationsStage', {
-                id: item._id,
-                title: item?.post_id?.title,
-                businessName: item?.post_id?.businessName,
-                address: item?.post_id?.address,
-                wageMin: item?.post_id?.wageMin,
-                wageMax: item?.post_id?.wageMax,
-                workType_id: item?.post_id?.workType_id,
-                cv_id: item?.cv_id._id,
-                status: item?.status,
-                image: item?.post_id?.image,
-                bargain_Salary: item?.bargain_salary,
-                feedback: item?.feedback,
-                post_id: item?.post_id?._id,
-                receiver_id: item?.receiver_id,
-            })}>
-            <View style={{ flexDirection: 'row', width: '100%', alignItems: 'center' }}>
+    const renderItemApplications = ({ item }) => {
+        const formattedWageMin = item?.post_id?.wageMin.toLocaleString('vi-VN');
+        const formattedWageMax = item?.post_id?.wageMax.toLocaleString('vi-VN');
+        const formattedBarSalary = item?.bargain_salary.toLocaleString('vi-VN');
+        return (
+            <TouchableOpacity style={styles.items}
+                onPress={() => navigation.navigate('ApplicationsStage', {
+                    id: item._id,
+                    title: item?.post_id?.title,
+                    businessName: item?.post_id?.businessName,
+                    address: item?.post_id?.address,
+                    wageMin: formattedWageMin,
+                    wageMax: formattedWageMax,
+                    workType_id: item?.post_id?.workType_id,
+                    cv_id: item?.cv_id._id,
+                    status: item?.status,
+                    image: item?.post_id?.image,
+                    bargain_Salary: formattedBarSalary,
+                    feedback: item?.feedback,
+                    post_id: item?.post_id?._id,
+                    receiver_id: item?.receiver_id,
+                })}>
+                <View style={{ flexDirection: 'row', width: '100%', alignItems: 'center' }}>
 
-                {item?.post_id?.image.map((imageUrl, index) => {
-                    if (index === 0) {
-                        return (
-                            <ImageBackground
-                                key={index}
-                                source={{ uri: imageUrl }}
-                                style={{ width: 54, height: 54, marginBottom: 5 }}
-                                imageStyle={{ borderRadius: 5 }}
-                            />
-                        );
-                    }
-                })}
-                <View style={{ flex: 1, marginLeft: '5%' }}>
-                    <Text numberOfLines={2} style={{ fontSize: 18, fontWeight: '600', color: '#212121', width: '99%' }}>{item?.post_id?.title}</Text>
-                    <Text style={{ fontSize: 15, fontWeight: '600', color: '#616161', marginTop: 5 }} numberOfLines={1}>{item?.post_id?.businessName}</Text>
+                    {item?.post_id?.image.map((imageUrl, index) => {
+                        if (index === 0) {
+                            return (
+                                <ImageBackground
+                                    key={index}
+                                    source={{ uri: imageUrl }}
+                                    style={{ width: 54, height: 54, marginBottom: 5 }}
+                                    imageStyle={{ borderRadius: 5 }}
+                                />
+                            );
+                        }
+                    })}
+                    <View style={{ flex: 1, marginLeft: '5%' }}>
+                        <Text numberOfLines={2} style={{ fontSize: 18, fontWeight: '600', color: '#212121', width: '99%' }}>{item?.post_id?.title}</Text>
+                        <Text style={{ fontSize: 15, fontWeight: '600', color: '#616161', marginTop: 5 }} numberOfLines={1}>{item?.post_id?.businessName}</Text>
+                    </View>
+                    <TouchableOpacity
+                        style={{
+                        }}>
+                        <AntDesign name="right" size={21} color="#212121" />
+                    </TouchableOpacity>
                 </View>
-                <TouchableOpacity
-                    style={{
-                    }}>
-                    <AntDesign name="right" size={21} color="#212121" />
-                </TouchableOpacity>
-            </View>
-            {
-                item?.status === 0 ? (
-                    <View style={{
-                        width: 90,
-                        backgroundColor: '#E7EFFF',
-                        borderRadius: 6,
-                        padding: 5,
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        marginStart: '20%',
-                        marginTop: '2%',
-                    }}>
-                        <Text style={{ fontSize: 9.5, color: '#246BFE' }} >Application Sent</Text>
-                    </View>
-                ) : item.status === 1 ? (
-                    <View style={{
-                        width: 110,
-                        backgroundColor: '#FFF4CD',
-                        borderRadius: 6,
-                        padding: 5,
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        marginStart: '20%',
-                        marginTop: '3%',
-                    }}>
-                        <Text style={{ fontSize: 9.5, color: '#FBCA17' }} >Application Pending</Text>
-                    </View>
-                ) : item.status === 2 ? (
-                    <View style={{
-                        width: 105,
-                        backgroundColor: '#FDD9DA',
-                        borderRadius: 6,
-                        padding: 5,
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        marginStart: '20%',
-                        marginTop: '2%',
-                    }}>
-                        <Text style={{ fontSize: 9.5, color: '#F75656' }} >Application Rejected</Text>
-                    </View>
-                ) : item.status === 4 ? (
-                    <View style={{
-                        width: 120,
-                        backgroundColor: '#FFCAA3',
-                        borderRadius: 6,
-                        padding: 5,
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        marginStart: '20%',
-                        marginTop: '2%',
-                    }}>
-                        <Text style={{ fontSize: 9.5, color: '#FF6B00' }} >Application Negotiation</Text>
-                    </View>
-                ) :
-                    <View style={{
-                        width: 110,
-                        backgroundColor: '#E7FEEE',
-                        borderRadius: 6,
-                        padding: 5,
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        marginStart: '20%',
-                        marginTop: '2%',
-                    }}>
-                        <Text style={{ fontSize: 9.5, color: '#08BE75' }} >Application Accepted</Text>
-                    </View>
-            }
-            <View style={{ height: 1, width: '99%', backgroundColor: COLORS.grey, opacity: 0.4, marginTop: 15, marginBottom: 8 }} />
+                {
+                    item?.status === 0 ? (
+                        <View style={{
+                            width: 80,
+                            backgroundColor: '#E7EFFF',
+                            borderRadius: 6,
+                            padding: 5,
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            marginStart: '20%',
+                            marginTop: '2%',
+                        }}>
+                            <Text style={{ fontSize: 9.5, color: '#246BFE' }} >Hồ sơ đã gửi</Text>
+                        </View>
+                    ) : item.status === 1 ? (
+                        <View style={{
+                            width: 100,
+                            backgroundColor: '#FFF4CD',
+                            borderRadius: 6,
+                            padding: 5,
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            marginStart: '20%',
+                            marginTop: '3%',
+                        }}>
+                            <Text style={{ fontSize: 9.5, color: '#FBCA17' }} >Hồ sơ đang xử lí</Text>
+                        </View>
+                    ) : item.status === 2 ? (
+                        <View style={{
+                            width: 105,
+                            backgroundColor: '#FDD9DA',
+                            borderRadius: 6,
+                            padding: 5,
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            marginStart: '20%',
+                            marginTop: '2%',
+                        }}>
+                            <Text style={{ fontSize: 9.5, color: '#F75656' }} >Hồ sơ bị từ chối</Text>
+                        </View>
+                    ) : item.status === 4 ? (
+                        <View style={{
+                            width: 100,
+                            backgroundColor: '#FFCAA3',
+                            borderRadius: 6,
+                            padding: 5,
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            marginStart: '20%',
+                            marginTop: '2%',
+                        }}>
+                            <Text style={{ fontSize: 9.5, color: '#FF6B00' }} >Đang thương lượng</Text>
+                        </View>
+                    ) :
+                        <View style={{
+                            width: 110,
+                            backgroundColor: '#E7FEEE',
+                            borderRadius: 6,
+                            padding: 5,
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            marginStart: '20%',
+                            marginTop: '2%',
+                        }}>
+                            <Text style={{ fontSize: 9.5, color: '#08BE75' }} >Ứng tuyển thành công</Text>
+                        </View>
+                }
+                <View style={{ height: 1, width: '99%', backgroundColor: COLORS.grey, opacity: 0.4, marginTop: 15, marginBottom: 8 }} />
 
 
-        </TouchableOpacity>
-    );
+            </TouchableOpacity>
+        )
+    };
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
             {/* Header */}
@@ -199,8 +223,12 @@ const ApplicationsScreen = ({ route, navigation }) => {
                     </View>
                     <TouchableOpacity
                         style={styles.headerRight}
-                        onPress={() => navigation.navigate('Notifications')}>
-                        <IconWithBadge iconName="bell" badgeText="2" />
+                        onPress={() => openNotification()}>
+                        {
+                            check ? (
+                                <IconWithBadge iconName="bell" badgeText="4" />
+                            ) : <IconWithBadge iconName="bell" badgeText="" />
+                        }
                     </TouchableOpacity>
                 </View>
                 {/* Search */}

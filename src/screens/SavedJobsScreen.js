@@ -36,6 +36,7 @@ const SavedJobsScreen = ({ navigation }) => {
   const [isSave, setSave] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
+  const [check, setChek] = useState(false);
 
   const toggleModal = (item) => {
     setModalVisible(!isModalVisible);
@@ -47,8 +48,26 @@ const SavedJobsScreen = ({ navigation }) => {
   useFocusEffect(
     React.useCallback(() => {
       getListSave()
+      getListNotification()
     }, [])
   );
+  async function getListNotification() {
+    try {
+      const response = await axios.post(`${API}/notifications/listNoSeen`, { receiver_id: user._id });
+      if (response.status === 200) {
+        const data = [...response.data];
+        if (data.length > 0) {
+          setChek(!check);
+        }
+      }
+    } catch (error) {
+      console.log('err', error);
+    }
+  }
+  const openNotification = () => {
+    navigation.navigate('Notifications');
+    setChek(false);
+  };
   const fetchData = async () => {
     setRefreshing(true);
     setTimeout(() => {
@@ -274,8 +293,12 @@ const SavedJobsScreen = ({ navigation }) => {
               borderWidth: 1,
               borderColor: COLORS.grey,
             }}
-            onPress={() => navigation.navigate('Notifications')}>
-            <IconWithBadge iconName="bell" badgeText="2" />
+            onPress={() => openNotification()}>
+            {
+              check ? (
+                <IconWithBadge iconName="bell" badgeText="4" />
+              ) : <IconWithBadge iconName="bell" badgeText="" />
+            }
           </TouchableOpacity>
         </View>
         {/* Search */}

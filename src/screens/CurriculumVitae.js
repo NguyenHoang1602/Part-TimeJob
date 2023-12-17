@@ -73,18 +73,29 @@ const CurriculumVitae = ({ navigation }) => {
         getFirst();
       }
     }
-    navigation.navigate('StageCurriculumScreen', {item})
+    navigation.navigate('StageCurriculumScreen', { item })
   };
 
   const renderCareers = ({ item }) => (
     <Pressable
       onPress={() => { handleUpdateStage(item) }}
-      style={{ flexDirection: 'row', backgroundColor: 'rgba(51, 123, 255, 0.20)', height: 60, borderRadius: 10, alignItems: 'center', padding: 15, marginBottom: 10 }}>
-      <AntDesign name="filetext1" size={26} color={COLORS.primary} />
-      <View style={{ marginLeft: 15, flex: 1 }}>
-        <Text numberOfLines={1} style={{ fontSize: 16, color: COLORS.black }}>{item?.cv_id?.title}</Text>
+      style={{ flexDirection: 'row', backgroundColor: 'rgba(90, 148, 255, 0.1)', borderRadius: 10, alignItems: 'center', paddingVertical: 10, paddingHorizontal: 10, marginBottom: 10 }}>
+      <ImageBackground
+        source={require('../assets/images/google-docs.png')}
+        style={{ width: 45, height: 45 }}
+        imageStyle={{}} />
+      <View style={{ marginLeft: 13, flex: 1 }}>
         <Text numberOfLines={1} style={{ fontSize: 16, color: COLORS.black }}>{item?.cv_id?.name}</Text>
+        <View style={{ flexDirection: 'row', marginTop: 5 }}>
+          <Text numberOfLines={1} style={{ fontSize: 13 }}>Thời gian : </Text>
+          <Text numberOfLines={1} style={{ fontSize: 13 }}>{item?.time}</Text>
+        </View>
+        {/* <View style={{ flexDirection: 'row', marginTop: 2 }}>
+          <Text numberOfLines={1} style={{ fontSize: 13 }}>Ngày : </Text>
+          <Text numberOfLines={1} style={{ fontSize: 13 }}>{item?.date}</Text>
+        </View> */}
       </View>
+
     </Pressable>
   );
 
@@ -151,7 +162,7 @@ const CurriculumVitae = ({ navigation }) => {
               <View style={{ alignItems: 'center', justifyContent: 'center', paddingHorizontal: 20 }}>
                 <ImageBackground
                   source={require('../assets/images/5928293_2953962.jpg')}
-                  style={{ width: 100, height: 100}}
+                  style={{ width: 100, height: 100 }}
                 />
                 <Text style={{ fontSize: 22, color: COLORS.black, fontWeight: '700' }}>Không có hồ sơ ứng tuyển</Text>
               </View>
