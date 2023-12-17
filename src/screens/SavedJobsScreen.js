@@ -403,11 +403,20 @@ const SavedJobsScreen = ({ navigation }) => {
                   <Text style={{ fontSize: 18, color: COLORS.black, fontWeight: "600" }} >
                     {selectedItem?.post_id.businessName}
                   </Text>
-                  <Text style={{ fontSize: 16, color: COLORS.primary, paddingVertical: 4 }} >
-                    ${selectedItem?.post_id.wageMin} - ${selectedItem?.post_id.wageMax} /moth
-                  </Text>
+                  <View style={{ flexDirection: 'row', paddingVertical: 4  }}>
+                    <Text style={{ fontSize: 16, color: COLORS.primary}} >
+                      {selectedItem?.post_id.wageMin.toLocaleString('vi-VN')}đ - {selectedItem?.post_id.wageMax.toLocaleString('vi-VN')}đ
+                    </Text>
+                    {
+                      selectedItem?.post_id?.payForm_id?._id === '655de22b9a5b0ffa7ffd5132' ? (
+                        <Text style={{ color: COLORS.blue, fontSize: 16 }}> /giờ</Text>
+                      ) : (
+                        <Text style={{ color: COLORS.blue, fontSize: 16 }}> /tháng</Text>
+                      )
+                    }
+                  </View>
                   <View style={{
-                    width: 70,
+                    width: 80,
                     borderWidth: 0.5,
                     borderColor: COLORS.grey,
                     borderRadius: 7,
@@ -417,9 +426,9 @@ const SavedJobsScreen = ({ navigation }) => {
                   }}>
                     {
                       selectedItem?.post_id.workType_id._id == '653e66b38e88b23b41388e3c' ? (
-                        <Text style={{ fontSize: 10 }} >Partime</Text>
+                        <Text style={{ fontSize: 10 }} >Bán thời gian</Text>
                       ) : (
-                        <Text style={{ fontSize: 10 }} >Fulltime</Text>
+                        <Text style={{ fontSize: 10 }} >Toàn thời gian</Text>
                       )
                     }
                   </View>

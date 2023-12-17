@@ -21,18 +21,12 @@ const CVResume = ({ navigation }) => {
     // }, []);
     const { user } = useContext(UserContext);
     const [cv, setCv] = useState([]);
-    const [listCareers, setListCareers] = useState([]);
     const [loading, setLoading] = useState(false);
-    const [categoryIndex, setCategoryIndex] = useState(0);
-    const [isSelectCareers, setIsSelectCareers] = React.useState({
-        userId: user._id,
-        career_id: '6554b9b322054e51b8327165',
-    });
     const getFirst = async () => {
         setLoading(true);
         await new Promise(resolve => setTimeout(resolve, 1000));
         try {
-            const result = await axios.post(`${API}/cvs/first`, { id : user._id});
+            const result = await axios.post(`${API}/cvs/first`, { id: user._id });
             if (result.status === 200) {
                 setCv(result.data);
                 setLoading(false);
@@ -41,33 +35,8 @@ const CVResume = ({ navigation }) => {
             console.log("Err : ", error);
         }
     };
-    const getCV = async (item) => {
-        const data = {
-            userId: user._id,
-            career_id: item._id,
-        };
-        console.log(data);
-        setLoading(true);
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        try {
-            console.log("Ra : ", data);
-            const result = await axios.post(`${API}/cvs/myCVsByCareer`, { data });
-            if (result.status === 200) {
-                setCv(result.data);
-                setLoading(false);
-            }
-        } catch (error) {
-            console.log("Err : ", error);
-        }
-    };
-    const getListCareers = async () => {
-        const data = await AsyncStorage.getItem('listCareers')
-        setListCareers(JSON.parse(data));
-    }
-
     useFocusEffect(
         React.useCallback(() => {
-            getListCareers();
             getFirst()
         }, [])
     );
@@ -75,8 +44,11 @@ const CVResume = ({ navigation }) => {
     const renderCareers = ({ item }) => (
         <Pressable
             onPress={() => { navigation.navigate('DetailsCVScreen', { item }) }}
-            style={{ flexDirection: 'row', backgroundColor: 'rgba(51, 123, 255, 0.20)', height: 60, borderRadius: 10, alignItems: 'center', padding: 15, marginBottom: 10 }}>
-            <AntDesign name="filetext1" size={26} color={COLORS.primary} />
+            style={{ flexDirection: 'row', backgroundColor: 'rgba(90, 123, 255, 0.10)', borderRadius: 10, alignItems: 'center', paddingHorizontal: 10, paddingVertical: 15, marginBottom: 10 }}>
+            <ImageBackground
+                source={require('../assets/images/docs.png')}
+                style={{ width: 45, height: 45 }}
+                imageStyle={{}} />
             <View style={{ marginLeft: 15, flex: 1 }}>
                 <Text numberOfLines={1} style={{ fontSize: 16, color: COLORS.black }}>{item.title}</Text>
             </View>
@@ -103,44 +75,6 @@ const CVResume = ({ navigation }) => {
             </View>
 
             <View style={{ marginTop: 20, gap: 14 }}>
-
-                <FlatList
-                    data={listCareers}
-                    horizontal
-                    showsHorizontalScrollIndicator={false}
-                    contentContainerStyle={{
-                        gap: 10,
-                    }}
-                    renderItem={({ item, index }) => {
-                        const isSelected = categoryIndex === index;
-                        return (
-                            <TouchableOpacity
-                                onPress={async () => {
-                                    setCategoryIndex(index);
-                                    await getCV(item);
-                                }}
-                                style={{
-                                    backgroundColor: isSelected ? COLORS.primary : COLORS.card,
-                                    borderWidth: 1,
-                                    borderColor: COLORS.grey,
-                                    borderRadius: 100,
-                                    paddingHorizontal: 24,
-                                    paddingVertical: 14,
-                                }}>
-                                <Text
-                                    style={{
-                                        color: isSelected ? COLORS.white : COLORS.text,
-                                        fontSize: 14,
-                                        fontWeight: "600",
-                                        opacity: isSelected ? 1 : 0.5,
-                                    }}>
-                                    {item.title}
-                                </Text>
-                            </TouchableOpacity>
-                        )
-                    }}
-                />
-
                 {loading ? (
                     <View style={{ justifyContent: 'center', marginTop: 200 }}>
                         <ActivityIndicator size="large" color={COLORS.primary} />
