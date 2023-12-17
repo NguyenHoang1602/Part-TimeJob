@@ -194,7 +194,7 @@ const AuthScreen = ({ navigation }) => {
                         </Text>
                     </TouchableOpacity>
                     <TouchableOpacity
-                        onPress={() => navigation.navigate('SelectRole')}
+                        onPress={() => navigation.navigate('SignInWithPhoneNumber')}
                         style={{
                             padding: 5,
                             width: '85%',

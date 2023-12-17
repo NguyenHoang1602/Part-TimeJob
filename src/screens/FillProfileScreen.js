@@ -13,7 +13,6 @@ import UserContext from '../components/UserConText';
 import firestore from '@react-native-firebase/firestore';
 
 import AntDesign from 'react-native-vector-icons/AntDesign';
-
 import DateTimePicker from '@react-native-community/datetimepicker';
 
 import Input from '../components/InputProfile';
@@ -48,16 +47,10 @@ const FillProfileScreen = ({ navigation, route }) => {
         favoriteCareers: route?.params?.item?.favoriteCareers,
         status: false,
     });
-    console.log(inputs);
     const getGender = async () => {
         const result = await axios.get(`${API}/gender/list`);
         setGender(result.data);
     }
-
-    const getRole = async () => {
-
-    }
-
     const validateAll = () => {
         validate();
         VLDSex();
@@ -171,7 +164,7 @@ const FillProfileScreen = ({ navigation, route }) => {
                             photo: item.photo
                         })
                         .then(res => {
-                          
+
                         })
                         .catch(error => {
                             console.log(error);
@@ -207,8 +200,9 @@ const FillProfileScreen = ({ navigation, route }) => {
         month: '2-digit',
         year: 'numeric',
     });
+
     return (
-        <SafeAreaView style={{ flex: 1, paddingTop: 10 }}>
+        <SafeAreaView style={{ flex: 1, paddingTop: 10, backgroundColor: 'white' }}>
             {/* header */}
             {loading ? (
                 <ActivityIndicator size="large" color={COLORS.primary} />
@@ -285,14 +279,38 @@ const FillProfileScreen = ({ navigation, route }) => {
 
                                 />
                                 {!errGender ? <Text style={{ marginTop: 7, color: COLORS.red, fontSize: 12 }}>{validateSex}</Text> : null}
-                                <Input
-                                    onChangeText={text => handleOnchange(text, 'phone')}
-                                    onFocus={() => handleError(null, 'phone')}
-                                    keyboardType="numeric"
-                                    placeholder="Số điện thoại"
-                                    error={errors.phone}
-                                    value={inputs.phone}
-                                />
+                                {inputs.phone ?
+                                    <View
+                                        style={{
+                                            height: 50,
+                                            flexDirection: 'row',
+                                            paddingHorizontal: 5,
+                                            borderWidth: 1,
+                                            borderRadius: 6,
+                                            alignItems: 'center',
+                                            borderColor: COLORS.grey,
+                                            marginTop: 30,
+                                        }}
+                                    >
+                                        <Text
+                                            style={{
+                                                marginStart: 14,
+                                                fontSize: 14,
+                                                color: COLORS.black,
+                                            }}>
+                                            {inputs.phone}
+                                        </Text>
+                                    </View>
+                                    :
+                                    <Input
+                                        onChangeText={text => handleOnchange(text, 'phone')}
+                                        onFocus={() => handleError(null, 'phone')}
+                                        keyboardType="numeric"
+                                        placeholder="Số điện thoại"
+                                        error={errors.phone}
+                                    />
+                                }
+
                                 <Input
                                     onChangeText={text => handleOnchange(text, 'address')}
                                     onFocus={() => handleError(null, 'address')}

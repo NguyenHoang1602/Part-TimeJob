@@ -15,95 +15,61 @@ import COLORS from '../assets/const/colors';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FlagItem from '../components/FlagItem';
 import Separator from '../components/Separator';
-import {Display} from '../utils';
+import { Display } from '../utils';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { StaticImageService } from '../services';
 import auth, { firebase } from '@react-native-firebase/auth';
 import axios from 'axios';
-
-const getDropdownStyle = y => ({ ...styles.countryDropdown, top: y + 60 });
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const RegisterPhoneScreen = ({ navigation }) => {
-    const [selectedCountry, setSelectedCountry] = useState(
-        CountryCode.find(country => country.name === 'Viet Nam'),
-    );
-    const [inputsContainerY, setInputsContainerY] = useState(0);
-    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-    const [dropdownLayout, setDropdownLayout] = useState({});
+    const [selectedCountry, setSelectedCountry] = useState('+84');
     const [phoneNumber, setPhoneNumber] = useState('');
 
-    const closeDropdown = (pageX, pageY) => {
-        if (isDropdownOpen) {
-            if (
-                pageX < dropdownLayout?.x ||
-                pageX > dropdownLayout?.x + dropdownLayout?.width ||
-                pageY < dropdownLayout?.y ||
-                pageY > dropdownLayout?.y + dropdownLayout?.height
-            ) {
-                setIsDropdownOpen(false);
-            }
-        }
-    };
     async function signInWithPhoneNumber(phoneNumber) {
-        const confirmation = await auth().signInWithPhoneNumber(phoneNumber);
+        const phone = selectedCountry + phoneNumber.slice(1, 11);
+        const confirmation = await auth().signInWithPhoneNumber(phone);
         navigation.navigate('Verification', {
-            phoneNumber: phoneNumber,
-            confirmation : confirmation,
+            phoneNumber: phone,
+            confirmation: confirmation,
         });
-      }
+    }
     return (
-        <View
-            style={styles.container}
-            onStartShouldSetResponder={({ nativeEvent: { pageX, pageY } }) =>
-                closeDropdown(pageX, pageY)
-            }>
-            <StatusBar
-                barStyle="dark-content"
-                backgroundColor={Colors.DEFAULT_WHITE}
-                translucent
-            />
-            <Separator height={StatusBar.currentHeight} />
+        <SafeAreaView style={styles.container}>
             <View style={styles.headerContainer}>
                 <Ionicons
                     name="chevron-back-outline"
                     size={30}
+                    color={COLORS.black}
                     onPress={() => navigation.goBack()}
                 />
                 <Text style={styles.headerTitle}>Đăng nhập bằng SĐT</Text>
             </View>
-            <Text style={styles.title}></Text>
+
+            <Image
+                style={{
+                    width: '100%',
+                    height: 230,
+                    marginTop: 20,
+                }}
+                source={require('../assets/images/EnterPhone.png')}
+            />
             <Text style={styles.content}>
                 Nhập số điện thoại của bạn để đăng nhập.
             </Text>
-            <View
-                style={styles.inputsContainer}
-                onLayout={({
-                    nativeEvent: {
-                        layout: { y },
-                    },
-                }) => setInputsContainerY(y)}>
-                <TouchableOpacity
-                    style={styles.countryListContainer}
-                    onPress={() => setIsDropdownOpen(!isDropdownOpen)}>
-                    <Image
-                        source={{ uri: StaticImageService.getFlagIcon(selectedCountry.code) }}
-                        style={styles.flatIcon}
-                    />
-                    <Text style={styles.countryCodeText}>
-                        {selectedCountry.dial_code}
-                    </Text>
-                    <MaterialIcons name="keyboard-arrow-down" size={18} />
-                </TouchableOpacity>
+
+
+            <View style={styles.inputsContainer}>
                 <View style={styles.phoneInputContainer}>
                     <TextInput
                         placeholder="Số điện thoại"
                         placeholderTextColor={Colors.DEFAULT_GREY}
                         selectionColor={Colors.DEFAULT_GREY}
                         keyboardType="number-pad"
-                        onFocus={() => setIsDropdownOpen(false)}
+
                         style={styles.inputText}
                         onChangeText={text =>
-                            setPhoneNumber(selectedCountry?.dial_code + text)
+                            setPhoneNumber(text)
                         }
                     />
                 </View>
@@ -114,135 +80,99 @@ const RegisterPhoneScreen = ({ navigation }) => {
                 onPress={() => signInWithPhoneNumber(phoneNumber)}>
                 <Text style={styles.signinButtonText}>Tiếp tục</Text>
             </TouchableOpacity>
-            {isDropdownOpen && (
-                <View
-                    style={getDropdownStyle(inputsContainerY)}
-                    onLayout={({
-                        nativeEvent: {
-                            layout: { x, y, height, width },
-                        },
-                    }) => setDropdownLayout({ x, y, height, width })}>
-                    <FlatList
-                        data={CountryCode}
-                        keyExtractor={item => item.code}
-                        renderItem={({ item }) => (
-                            <FlagItem
-                                {...item}
-                                onPress={country => {
-                                    setSelectedCountry(country);
-                                    setIsDropdownOpen(false);
-                                }}
-                            />
-                        )}
-                    />
-                </View>
-            )}
-        </View>
+        </SafeAreaView>
     );
 };
 
 const styles = StyleSheet.create({
     container: {
-      flex: 1,
-      backgroundColor: Colors.DEFAULT_WHITE,
+        backgroundColor: COLORS.white,
+        height: 1000
     },
     headerContainer: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      paddingVertical: 10,
-      paddingHorizontal: 20,
+        flexDirection: 'row',
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        gap: 10,
+        alignItems: 'center'
     },
     headerTitle: {
-      fontSize: 20,
-      fontFamily: Fonts.POPPINS_MEDIUM,
-      lineHeight: 20 * 1.4,
-      width: Display.setWidth(80),
-      textAlign: 'center',
+        fontSize: 20,
+        color: COLORS.black,
+        fontWeight: '700'
     },
     title: {
-      fontSize: 20,
-      fontFamily: Fonts.POPPINS_MEDIUM,
-      lineHeight: 20 * 1.4,
-      marginTop: 50,
-      marginBottom: 10,
-      marginHorizontal: 20,
+        fontSize: 20,
+        fontFamily: Fonts.POPPINS_MEDIUM,
+        lineHeight: 20 * 1.4,
+        marginTop: 50,
+        marginBottom: 10,
+        marginHorizontal: 20,
     },
     content: {
-      fontSize: 20,
-      fontFamily: Fonts.POPPINS_MEDIUM,
-      marginTop: 10,
-      marginBottom: 20,
-      marginHorizontal: 20,
+        fontSize: 16,
+        fontFamily: Fonts.POPPINS_MEDIUM,
+        marginTop: 10,
+        marginBottom: 10,
+        marginHorizontal: 20,
+        textAlign: 'center'
     },
     inputsContainer: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      marginHorizontal: 20,
-      marginVertical: 50,
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginHorizontal: 20,
+        marginVertical: 50,
     },
     countryListContainer: {
-      backgroundColor: Colors.LIGHT_GREY,
-      width: Display.setWidth(22),
-      marginRight: 10,
-      borderRadius: 8,
-      height: Display.setHeight(6),
-      justifyContent: 'space-evenly',
-      alignItems: 'center',
-      borderWidth: 0.5,
-      borderColor: Colors.LIGHT_GREY2,
-      flexDirection: 'row',
+        backgroundColor: Colors.LIGHT_GREY,
+        width: Display.setWidth(22),
+        marginRight: 10,
+        borderRadius: 8,
+        height: Display.setHeight(6),
+        justifyContent: 'space-evenly',
+        alignItems: 'center',
+        borderWidth: 0.5,
+        borderColor: Colors.LIGHT_GREY2,
+        flexDirection: 'row',
     },
     phoneInputContainer: {
-      backgroundColor: Colors.LIGHT_GREY,
-      paddingHorizontal: 10,
-      borderRadius: 8,
-      borderWidth: 0.5,
-      borderColor: Colors.LIGHT_GREY2,
-      justifyContent: 'center',
-      flex: 1,
-    },
-    flatIcon: {
-      height: 20,
-      width: 20,
-    },
-    countryCodeText: {
-      fontSize: 14,
-      lineHeight: 14 * 1.4,
-      color: Colors.DEFAULT_BLACK,
-      fontFamily: Fonts.POPPINS_MEDIUM,
+        backgroundColor: Colors.LIGHT_GREY,
+        paddingHorizontal: 10,
+        borderRadius: 8,
+        borderWidth: 0.5,
+        borderColor: Colors.LIGHT_GREY2,
+        justifyContent: 'center',
+        flex: 1,
     },
     inputText: {
-      fontSize: 18,
-      textAlignVertical: 'center',
-      padding: 0,
-      height: Display.setHeight(6),
-      color: Colors.DEFAULT_BLACK,
-    },
-    countryDropdown: {
-      backgroundColor: Colors.LIGHT_GREY,
-      position: 'absolute',
-      width: Display.setWidth(80),
-      height: Display.setHeight(50),
-      marginLeft: 20,
-      borderRadius: 10,
-      borderWidth: 0.5,
-      borderColor: Colors.LIGHT_GREY2,
-      zIndex: 3,
+        fontSize: 18,
+        textAlignVertical: 'center',
+        padding: 0,
+        height: Display.setHeight(6),
+        color: Colors.DEFAULT_BLACK,
     },
     signinButton: {
-      backgroundColor: COLORS.primary,
-      borderRadius: 8,
-      marginHorizontal: 20,
-      height: Display.setHeight(6),
-      justifyContent: 'center',
-      alignItems: 'center',
+        backgroundColor: COLORS.primary,
+        borderRadius: 45,
+        marginHorizontal: 20,
+        height: 50,
+        justifyContent: 'center',
+        alignItems: 'center',
+        shadowColor: COLORS.primary,
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.5,
+        shadowRadius: 3.84,
+        elevation: 5,
     },
     signinButtonText: {
-      fontSize: 18,
-      lineHeight: 18 * 1.4,
-      color: Colors.DEFAULT_WHITE,
-      fontFamily: Fonts.POPPINS_MEDIUM,
+        fontSize: 18,
+        lineHeight: 18 * 1.4,
+        color: Colors.DEFAULT_WHITE,
+        fontFamily: Fonts.POPPINS_MEDIUM,
     },
-  });
+});
 
 export default RegisterPhoneScreen;

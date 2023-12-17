@@ -30,6 +30,7 @@ import Octicons from 'react-native-vector-icons/Octicons';
 import Feather from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import COLORS from "../assets/const/colors";
+import SignInWithPhoneNumber from "../screens/SignInWithPhoneNumber";
 
 const Stack = createNativeStackNavigator();
 
@@ -66,7 +67,7 @@ const AuthStack = (props) => {
             />
             <Stack.Screen
                 name="SignInWithPhoneNumber"
-                component={RegisterPhoneScreen}
+                component={SignInWithPhoneNumber}
                 options={() => ({
                     headerShown: false,
                 })}

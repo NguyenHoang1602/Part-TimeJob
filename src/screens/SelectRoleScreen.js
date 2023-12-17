@@ -26,7 +26,6 @@ const SelectRoleScreen = ({ navigation }) => {
         favoriteCareers: [],
         status: false,
     });
-    console.log(data);
     const [checkedUser, setCheckedUser] = useState(true);
     const [checkedEmployer, setCheckedEmployer] = useState(false);
     const handleCheckUser = () => {
