@@ -13,7 +13,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, { useState, useContext, useEffect } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
-import { View, Text, TouchableOpacity, ImageBackground, ScrollView, Alert, ActivityIndicator, TextInput, FlatList, Pressable, RefreshControl } from 'react-native';
+import { View, Text, TouchableOpacity, ImageBackground, ScrollView, Alert, ActivityIndicator, TextInput, FlatList, Pressable, RefreshControl, StatusBar } from 'react-native';
 
 //
 import Input from '../components/Input';
@@ -131,7 +131,6 @@ const HomeScreen = ({ navigation }) => {
           }
         });
       }
-
       //All WorkType
       axios({
         url: `${API}/workTypes/list`,
@@ -275,6 +274,7 @@ const HomeScreen = ({ navigation }) => {
     setRefreshing(true);
     setTimeout(() => {
       try {
+        getListNotification()
         axios({
           url: `${API}/posts/list`,
           method: "GET",
@@ -299,6 +299,7 @@ const HomeScreen = ({ navigation }) => {
         })
         getListSave();
         setRefreshing(false);
+        
       } catch (error) {
         console.error('Error fetching data:', error);
         setRefreshing(false);
@@ -347,7 +348,6 @@ const HomeScreen = ({ navigation }) => {
     const result = await axios.post(`${API}/savePost/deleteWithCondition`, deleteSave);
     if (result.status === 200) {
       getListSave();
-      console.log("Thành công");
     }
   }
 
@@ -421,8 +421,8 @@ const HomeScreen = ({ navigation }) => {
           describe: item.describe,
           age_min: item.ageMin,
           age_max: item.ageMax,
-          wage_min: item.wageMin,
-          wage_max: item.wageMax,
+          wage_min: formattedWageMin,
+          wage_max: formattedWageMax,
           status_id: item.status_id,
           date: item.date,
           time: item.time,
@@ -559,10 +559,10 @@ const HomeScreen = ({ navigation }) => {
           <View style={{ flexDirection: 'row' }}>
             <Text style={{ color: COLORS.blue, fontSize: 16 }}>{formattedWageMin}đ - {formattedWageMax}đ</Text>
             {
-              item.payForm_id === '655de22b9a5b0ffa7ffd5132' ? (
+              item.payForm_id._id === '655de22b9a5b0ffa7ffd5132' ? (
                 <Text style={{ color: COLORS.blue, fontSize: 16 }}> /giờ</Text>
               ) : (
-                <Text style={{ color: COLORS.blue, fontSize: 16 }}> /tháng</Text>
+                  <Text style={{ color: COLORS.blue, fontSize: 16 }}> /tháng</Text>
               )
             }
           </View>

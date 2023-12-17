@@ -45,31 +45,14 @@ const CurriculumVitae = ({ navigation }) => {
       const result = await axios.post(`${API}/apply//listApply`, { id: user._id });
       if (result.status === 200) {
         setCv(result.data);
+        console.log(cv);
         setLoading(false);
       }
     } catch (error) {
       console.log("Err : ", error);
     }
   };
-  const getCV = async (item) => {
-    const data = {
-      userId: user._id,
-      career_id: item._id,
-    };
-    console.log(data);
-    setLoading(true);
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    try {
-      console.log("Ra : ", data);
-      const result = await axios.post(`${API}/cvs/myCVsByCareer`, { data });
-      if (result.status === 200) {
-        setCv(result.data);
-        setLoading(false);
-      }
-    } catch (error) {
-      console.log("Err : ", error);
-    }
-  };
+
   const getListCareers = async () => {
     const data = await AsyncStorage.getItem('listCareers')
     setListCareers(JSON.parse(data));
@@ -99,8 +82,8 @@ const CurriculumVitae = ({ navigation }) => {
       style={{ flexDirection: 'row', backgroundColor: 'rgba(51, 123, 255, 0.20)', height: 60, borderRadius: 10, alignItems: 'center', padding: 15, marginBottom: 10 }}>
       <AntDesign name="filetext1" size={26} color={COLORS.primary} />
       <View style={{ marginLeft: 15, flex: 1 }}>
-        <Text numberOfLines={1} style={{ fontSize: 16, color: COLORS.black }}>{item.cv_id.title}</Text>
-        <Text numberOfLines={1} style={{ fontSize: 16, color: COLORS.black }}>{item.cv_id.name}</Text>
+        <Text numberOfLines={1} style={{ fontSize: 16, color: COLORS.black }}>{item?.cv_id?.title}</Text>
+        <Text numberOfLines={1} style={{ fontSize: 16, color: COLORS.black }}>{item?.cv_id?.name}</Text>
       </View>
     </Pressable>
   );

@@ -21,10 +21,7 @@ import { StaticImageService } from '../services';
 import auth, { firebase } from '@react-native-firebase/auth';
 import axios from 'axios';
 
-
-
 const getDropdownStyle = y => ({ ...styles.countryDropdown, top: y + 60 });
-
 
 const RegisterPhoneScreen = ({ navigation }) => {
     const [selectedCountry, setSelectedCountry] = useState(

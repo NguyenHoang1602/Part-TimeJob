@@ -50,9 +50,9 @@ const NotificationScreen = ({ route, navigation }) => {
 
 
     const getListNotifications = async () => {
-        // setLoading(true);
+        setLoading(true);
         try {
-            await new Promise(resolve => setTimeout(resolve, 2000));
+            await new Promise(resolve => setTimeout(resolve, 1000));
             const response = await axios.post(`${API}/notifications/list`, { receiver_id: user._id });
             if (response.status === 200) {
                 setNotification(response.data)
@@ -61,6 +61,13 @@ const NotificationScreen = ({ route, navigation }) => {
         } catch (error) {
             console.log("err", error);
             setLoading(false);
+        }
+    }
+    const handleChangeSeen = async (id) => {
+        try {
+            await axios.post(`${API}/notifications/Seen`,{id : id});
+        } catch (error) {
+            console.log(error);
         }
     }
     const renderItem = ({ item }) => (
@@ -75,6 +82,7 @@ const NotificationScreen = ({ route, navigation }) => {
                 item?.category == 0 ? (
                     <TouchableOpacity
                         onPress={() => {
+                            handleChangeSeen(item?._id)
                             navigation.navigate('DetailNotification', {
                                 _id: item?._id,
                                 receiver_id: item?.receiver_id,
@@ -107,12 +115,13 @@ const NotificationScreen = ({ route, navigation }) => {
                                 ) : null
                             }
                         </View>
-                        <Text style={{ fontSize: 16, fontWeight: '400', color: COLORS.black, opacity: 0.8 }}>{item?.sender_id.displayName} đã ứng tuyển bài đăng {item?.post_id.title} của bạn!</Text>
+                        <Text style={{ fontSize: 16, fontWeight: '400', color: COLORS.black, opacity: 0.8 }}>{item?.sender_id?.displayName} đã ứng tuyển bài đăng {item?.post_id?.title} của bạn!</Text>
                     </TouchableOpacity>
 
                 ) : item?.category == 1 && item?.receiver_id.role == 0 ? (
                     <TouchableOpacity
                         onPress={() => {
+                            handleChangeSeen(item?._id)
                             navigation.navigate('Application');
                         }}>
                         <View
@@ -141,6 +150,7 @@ const NotificationScreen = ({ route, navigation }) => {
                 ) : item?.category == 1 && item?.receiver_id.role == 1 ? (
                     <TouchableOpacity
                         onPress={() => {
+                            handleChangeSeen(item?._id);
                             navigation.navigate('CurriculumVitaeScreen');
                         }}>
                         <View
@@ -164,11 +174,12 @@ const NotificationScreen = ({ route, navigation }) => {
                                 ) : null
                             }
                         </View>
-                        <Text style={{ fontSize: 16, fontWeight: '400', color: COLORS.black, opacity: 0.8 }}>{item?.sender_id.displayName} đã phản hồi lại về đơn ứng tuyển cho bài đăng {item?.post_id.title} của bạn!</Text>
+                        <Text style={{ fontSize: 16, fontWeight: '400', color: COLORS.black, opacity: 0.8 }}>{item?.sender_id?.displayName} đã phản hồi lại về đơn ứng tuyển cho bài đăng {item?.post_id.title} của bạn!</Text>
                     </TouchableOpacity>
                 ) : item?.category == 2 ? (
                     <TouchableOpacity
                         onPress={() => {
+                            handleChangeSeen(item?._id)
                             navigation.navigate('Application')
                         }}>
                         <View
