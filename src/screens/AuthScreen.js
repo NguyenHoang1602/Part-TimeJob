@@ -216,11 +216,7 @@ const AuthScreen = ({ navigation }) => {
                                 color: COLORS.black,
                                 opacity: 0.4
                             }}>
-<<<<<<< HEAD
-                            Welcom to
-=======
                             Chào mừng bạn đến với
->>>>>>> origin/nguyenhoang
                         </Text>
                         <Text
                             style={{
