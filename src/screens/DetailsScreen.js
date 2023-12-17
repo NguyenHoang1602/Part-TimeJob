@@ -1,4 +1,5 @@
 /* eslint-disable prettier/prettier */
+/* eslint-disable quotes */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/self-closing-comp */
 /* eslint-disable no-unused-vars */
@@ -6,7 +7,7 @@
 /* eslint-disable eol-last */
 /* eslint-disable semi */
 import React, { useState, useEffect, useContext } from 'react';
-import { View, Text, TouchableOpacity, ImageBackground, ScrollView, Image, FlatList, Alert, Pressable, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, ImageBackground, ScrollView, Image, FlatList, Alert, Pressable, StyleSheet, TextInput } from 'react-native';
 
 //
 import Input from '../components/Input';
@@ -21,6 +22,7 @@ import Icons from 'react-native-vector-icons/MaterialIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
+import Entypo from 'react-native-vector-icons/MaterialCommunityIcons';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import IconWithBadge from '../components/IconWithBadge';
 import IconWithBadgeAntDesign from '../components/IconWithBadgeAntDesign';
@@ -65,43 +67,84 @@ const DetailsScreen = ({ route, navigation }) => {
         time: route.params?.time,
     };
     const [data, setdataset] = useState(datalist);
+    const formattedWageMin = data.wage_min.toLocaleString('vi-VN');
+    const formattedWageMax = data.wage_max.toLocaleString('vi-VN');
     const [loading, setLoading] = React.useState(false);
     const [cv, setCv] = useState([]);
-    //console.log('data : ' + JSON.stringify(data));
+    const [salary, setSalary] = useState('');
+
 
     const [selectedItem, setSelectedItem] = useState(null);
     const [sender, setSender] = useState(null);
     const [listApplied, setListApplied] = useState([]);
+    const [followedProducts, setFollowedProducts] = useState([]);
     const handlePress = (itemId) => {
         setSelectedItem(itemId === selectedItem ? null : itemId);
     };
     const getAllApplied = async () => {
         try {
             const response = await axios.post(`${API}/apply/listMyApplied`, {
-                id: user._id
+                id: user._id,
             });
             setListApplied(response.data);
         } catch (error) {
             console.log(error);
         }
     };
-
-    // useEffect(() => {
-    //     getCV()
-    // },[]);
+    const getListSave = async () => {
+        try {
+            axios({
+                url: `${API}/savePost/list1`,
+                method: "POST",
+                data: {
+                    id: user._id,
+                }
+            }).then(async (response) => {
+                if (response.status === 200) {
+                    setFollowedProducts(response.data);
+                }
+            })
+        } catch (error) {
+            console.log("err", error);
+        }
+    }
+    const handleSaveToggle = async (post_id) => {
+        try {
+            const savedata = {
+                user_id: user._id,
+                post_id: post_id,
+            };
+            const result = await axios.post(`${API}/savePost/add`, savedata);
+            if (result.status === 200) {
+                getListSave();
+                Alert.alert('Lưu tin thành công !')
+                console.log("Thành công");
+            }
+        } catch (error) {
+            console.log('Err: ', error);
+        }
+    };
+    const isSave = (postid) => {
+        const savePostIDlist = followedProducts.map(item => item.post_id);
+        return savePostIDlist.some(post_id => post_id === postid);
+    };
     useFocusEffect(
         React.useCallback(() => {
             getCV()
             getAllApplied()
+            getListSave()
         }, [])
     );
-
+    const handleOnChangeSalary = (value) => {
+        setSalary(value);
+    }
     const handleApply = async () => {
         const apply = {
             receiver_id: data.users_id._id,
             sender_id: sender,
             post_id: data.postid,
             cv_id: selectedItem,
+            salary: salary,
         };
 
         if (selectedItem) {
@@ -114,13 +157,10 @@ const DetailsScreen = ({ route, navigation }) => {
                 setLoading(false);
                 Alert.alert('Ứng tuyển thành công!')
             }
-            
         }
     };
 
     const getCV = async () => {
-        // const data = await AsyncStorage.getItem('listCVs');
-        // setCv(JSON.parse(data));
         axios({
             url: `${API}/cvs/myCVs`,
             method: 'POST',
@@ -129,8 +169,6 @@ const DetailsScreen = ({ route, navigation }) => {
             },
         }).then(async (response) => {
             if (response.status === 200) {
-                //   const data = JSON.stringify(response.data)
-                //   await AsyncStorage.setItem('listCVs', data);
                 setCv(response.data);
             }
         })
@@ -139,6 +177,17 @@ const DetailsScreen = ({ route, navigation }) => {
         const savePostIDlist = listApplied.map(item => item.post_id._id);
         return savePostIDlist.some(post_id => post_id === productId);
     };
+    const handleDelete = async (post_id) => {
+        const deleteSave = {
+            user_id: user._id,
+            post_id: post_id,
+        }
+        const result = await axios.post(`${API}/savePost/deleteWithCondition`, deleteSave);
+        if (result.status === 200) {
+            getListSave();
+            console.log("Thành công");
+        }
+    }
     const renderCV = ({ item }) => {
         const isSelected = item._id === selectedItem;
         return (
@@ -191,32 +240,43 @@ const DetailsScreen = ({ route, navigation }) => {
         <SafeAreaView style={styles.container}>
             <View style={styles.headers}>
                 <TouchableOpacity onPress={() => navigation.goBack()}>
-                    <Ionicons name="arrow-back" size={30} color={COLORS.black} />
+                    <Feather name="arrow-left" size={28} color={COLORS.white} />
                 </TouchableOpacity>
                 <View style={{ flex: 1 }}>
                     <Text></Text>
                 </View>
-                <TouchableOpacity>
-                    <Icon style={{ marginRight: 22 }} name="bookmark-plus-outline" size={30} color={COLORS.black} />
-                </TouchableOpacity>
-                <Ionicons name="ellipsis-horizontal-circle" size={30} color={COLORS.black} />
+                {
+                    isSave(data.postid) ? (
+                        <TouchableOpacity
+                            onPress={() => handleDelete(data.postid)}
+                        >
+                            <Icons style={{ marginRight: 22 }} name="bookmark-remove" size={28} color={COLORS.white} />
+                        </TouchableOpacity>
+                    ) : <TouchableOpacity
+                        onPress={() => handleSaveToggle(data.postid)}
+                    >
+                        <Icons style={{ marginRight: 22 }} name="bookmark-add" size={28} color={COLORS.white} />
+                    </TouchableOpacity>
+                }
+                <Entypo name="dots-vertical" size={26} color={COLORS.white} />
             </View>
             <ScrollView showsVerticalScrollIndicator={false} style={{ backgroundColor: COLORS.white }}>
                 <AppIntroSlider
+                    style={{ width: '100%', height: 280 }}
                     showSkipButton={false}
                     showDoneButton={false}
                     showNextButton={false}
                     data={data.image}
                     renderItem={({ item }) => {
                         return (
-                            <View style={{ marginBottom: 25 }}>
+                            <View style={{ marginBottom: 5 }}>
                                 <Image
                                     source={{ uri: item }}
                                     style={{
                                         width: '100%',
-                                        height: 250,
+                                        height: '100%',
                                     }}
-                                    resizeMode="contain"
+                                    resizeMode="cover"
                                 />
                             </View>
                         )
@@ -228,7 +288,16 @@ const DetailsScreen = ({ route, navigation }) => {
                     <View
                         style={styles.postHeaders}>
                         <Text style={styles.title}>{data.title}</Text>
-                        <Text style={styles.wage}>${data.wage_min} - {data.wage_max} /month</Text>
+                        <View style={{ flexDirection: 'row' }}>
+                            <Text style={{ color: COLORS.red, fontSize: 16, marginVertical: 9 }}>{formattedWageMin}đ - {formattedWageMax}đ</Text>
+                            {
+                                data.payform_id === '655de22b9a5b0ffa7ffd5132' ? (
+                                    <Text style={{ color: COLORS.red, fontSize: 16, marginVertical: 9 }}> /giờ</Text>
+                                ) : (
+                                    <Text style={{ color: COLORS.red, fontSize: 16, marginVertical: 9 }}> /tháng</Text>
+                                )
+                            }
+                        </View>
                         <Text style={styles.datetime}>{data.date} {data.time}</Text>
                         <View style={styles.user}>
                             <ImageBackground
@@ -361,6 +430,18 @@ const DetailsScreen = ({ route, navigation }) => {
                             scrollEnabled={false}
                         />
                     </ScrollView>
+                    {
+                        selectedItem != null ? (
+                            <View style={{ alignItems: 'center' }}>
+                                <TextInput
+                                    keyboardType='numeric'
+                                    style={{ backgroundColor: "#F5F5F5", width: '80%', paddingHorizontal: 13, paddingVertical: 11, borderRadius: 5 }}
+                                    placeholder="Nhập lương mong muốn"
+                                    onChangeText={handleOnChangeSalary}
+                                />
+                            </View>
+                        ) : null
+                    }
                     <View style={{
                         flexDirection: 'row',
                         justifyContent: 'center',
@@ -406,40 +487,36 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         paddingBottom: 18,
-        backgroundColor: COLORS.white,
+        backgroundColor: COLORS.primary,
+        marginBottom: '-5%',
     },
     headers: {
         flexDirection: 'row',
         paddingHorizontal: 18,
-        backgroundColor: COLORS.white,
+        backgroundColor: COLORS.primary,
         paddingVertical: 10,
+        alignItems: 'center',
     },
     activeDotStyle: {
         backgroundColor: COLORS.white,
         width: 7,
         height: 7,
-        marginTop: 5,
+        marginTop: 30,
     },
     dotStyle: {
         backgroundColor: '#D9D9D9',
         opacity: 0.5,
         width: 7,
         height: 7,
-        marginTop: 5,
+        marginTop: 30,
     },
     postHeaders: {
         width: '100%',
-        marginBottom: 25,
-        borderWidth: 0.8,
-        borderColor: COLORS.grey,
-        borderRadius: 20,
-        paddingTop: 9,
-        paddingLeft: 23,
     },
     title: {
-        fontSize: 22,
+        fontSize: 19,
         color: COLORS.black,
-        fontWeight: 'bold',
+        fontWeight: '600',
     },
     wage: {
         color: '#FA1300',
@@ -465,7 +542,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     dot: {
-        height: 3,
+        height: 1.5,
         width: '100%',
         backgroundColor: COLORS.blue,
         borderRadius: 50,

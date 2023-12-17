@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable quotes */
 /* eslint-disable semi */
 /* eslint-disable eol-last */
@@ -12,10 +13,11 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 import IconWithBadge from '../components/IconWithBadge';
 import IconWithBadgeAntDesign from '../components/IconWithBadgeAntDesign';
 import axios from 'axios';
+import { API } from '../../Sever/sever';
 
-import TopTabScreenIsDisplay from './TopTabScreenIsDisplay';
-import TopTabScreenWaiting from './TopTabScreenWaiting';
-import TopTabScreenDenied from './TopTabScreenDenied';
+import TopTabScreenIsDisplay from '../screens/TopTabScreenIsDisplay';
+import TopTabScreenWaiting from '../screens/TopTabScreenWaiting';
+import TopTabScreenDenied from '../screens/TopTabScreenDenied';
 import UserContext from '../components/UserConText';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from '@react-navigation/native';
@@ -42,8 +44,20 @@ const ManagementScreen = ({ route, navigation }) => {
   // }, []);
   async function getListIsDisplay() {
     try {
-      const data = await AsyncStorage.getItem('listJobsIsDisplay');
-      setListIsDisplay(JSON.parse(data));
+      axios({
+        url: `${API}/posts/listJobsIsDisplayForApp`,
+        method: "POST",
+        data: {
+          id: user._id,
+        },
+      }).then(async (response) => {
+        if (response.status === 200) {
+          const data = JSON.stringify(response.data);
+          await AsyncStorage.setItem('listJobsIsDisplay', data);
+          setListIsDisplay(response.data);
+        }
+      })
+
     } catch (error) {
       console.log("Err : ", error);
     }
@@ -51,8 +65,19 @@ const ManagementScreen = ({ route, navigation }) => {
 
   async function getListWaiting() {
     try {
-      const data = await AsyncStorage.getItem('listJobsWaiting');
-      setListWaiting(JSON.parse(data));
+      axios({
+        url: `${API}/posts/listJobsWaitingForApp`,
+        method: "POST",
+        data: {
+            id: user._id,
+        },
+    }).then(async (response) => {
+        if (response.status === 200) {
+            const data = JSON.stringify(response.data);
+            await AsyncStorage.setItem('listJobsWaiting', data);
+            setListWaiting(response.data);
+        }
+    })
     } catch (error) {
       console.log("Err : ", error);
     }
@@ -60,8 +85,20 @@ const ManagementScreen = ({ route, navigation }) => {
 
   async function getListDenied() {
     try {
-      const data = await AsyncStorage.getItem('listJobsDenied');
-      setListDenied(JSON.parse(data));
+      axios({
+        url: `${API}/posts/listJobsDeniedForApp`,
+        method: "POST",
+        data: {
+          id: user._id,
+        },
+      }).then(async (response) => {
+        if (response.status === 200) {
+          const data = JSON.stringify(response.data)
+          await AsyncStorage.setItem('listJobsDenied', data);
+          setListDenied(response.data);
+        }
+      })
+
     } catch (error) {
       console.log("Err : ", error);
     }

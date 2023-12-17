@@ -1,4 +1,5 @@
 /* eslint-disable prettier/prettier */
+/* eslint-disable no-unused-vars */
 /* eslint-disable react-native/no-inline-styles */
 import {
   View,

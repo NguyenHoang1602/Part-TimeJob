@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable comma-dangle */
 /* eslint-disable no-shadow */
 /* eslint-disable jsx-quotes */
@@ -10,7 +12,7 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable react-native/no-inline-styles */
 import React, { useState, useEffect, useContext } from 'react';
-import { FlatList, Image, TextInput, ScrollView, StyleSheet, Text, TouchableOpacity, View, ImageBackground, Pressable } from 'react-native';
+import { FlatList, Image, TextInput, ScrollView, StyleSheet, Text, TouchableOpacity, View, ImageBackground, Pressable, Alert} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import COLORS from '../assets/const/colors';
 
@@ -241,7 +243,6 @@ const SearchScreen = ({ navigation }) => {
   const toggleModalclose = (item) => {
     setModalVisibleFiler(!isModalVisibleFilter);
   };
-
   async function search(value) {
     try {
       const result = await axios.post(`${API}/posts/searchByKeyForApp`, { key: value });
@@ -257,7 +258,6 @@ const SearchScreen = ({ navigation }) => {
       console.log("Err : ", error);
     }
   }
-
   async function handleFilter() {
     try {
       const result = await axios.post(`${API}/posts/filterForApp`, { filter });
@@ -273,7 +273,6 @@ const SearchScreen = ({ navigation }) => {
       console.log("Err : ", error);
     }
   }
-  console.log(filter);
   const FlatListb = () => {
     return (
       <FlatList
@@ -378,11 +377,8 @@ const SearchScreen = ({ navigation }) => {
 
     </TouchableOpacity>
   );
-
   return (
-
     <SafeAreaView style={{ flex: 1, paddingVertical: 18, gap: 16, backgroundColor: 'white' }}>
-
       {/* Search */}
       <View
         style={{
@@ -411,7 +407,7 @@ const SearchScreen = ({ navigation }) => {
             borderWidth: 1,
             borderColor: !isFocusedSearch ? COLORS.white : COLORS.primary
           }}>
-          <AntDesign name='search1' size={24} color={!isFocusedSearch ? COLORS.grey : COLORS.primary} />
+          <Feather name='search' size={24} color={!isFocusedSearch ? COLORS.grey : COLORS.primary} />
           <TextInput
             placeholder="Search . . ."
             onChangeText={value => {

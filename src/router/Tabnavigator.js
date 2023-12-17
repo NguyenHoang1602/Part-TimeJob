@@ -11,8 +11,8 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 import HomeScreen from '../screens/HomeScreen';
 import SavedJobsScreen from '../screens/SavedJobsScreen';
-import ManagementScreen from '../screens/ManagementScreen';
-import PostScreen from '../screens/PostScreen';
+import ManagementScreen from '../EmployerScreens/ManagementScreen';
+import PostScreen from '../EmployerScreens/PostScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import DetailsScreen from '../screens/DetailsScreen';
 import CVScreen from '../screens/CVScreen';
@@ -25,11 +25,14 @@ import CVResume from '../screens/CVResumeScreen';
 import AddCVScreen from '../screens/AddCVScreen';
 import CurriculumVitae from '../screens/CurriculumVitae';
 import StageCurriculum from '../screens/StageCurriculumScreen';
+import DetailNotification from '../screens/DetailNotification';
+import EmployerHome from '../EmployerScreens/EmployerHome';
+
 //icon
 import Octicons from 'react-native-vector-icons/Octicons';
 import Feather from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import DetailNotification from '../screens/DetailNotification';
+
 
 
 
@@ -40,8 +43,8 @@ const HomeStack = (props) => {
     return (
         <Stack.Navigator>
             <Stack.Screen
-                name="HomeScreen"
-                component={HomeScreen}
+                name="HomeEmployerScreen"
+                component={EmployerHome}
                 options={({ }) => ({
                     headerShown: false,
                 })}
@@ -86,6 +89,13 @@ const HomeStack = (props) => {
                     headerShown: false,
                 })}
             />
+             <Stack.Screen
+                name="CurriculumVitaeScreen"
+                component={CurriculumVitae}
+                options={({ route }) => ({
+                    headerShown: false,
+                })}
+            />
         </Stack.Navigator>
     );
 };
@@ -126,7 +136,7 @@ const PostStack = (props) => {
                     },
                     headerTitleAlign: 'center',
                     headerLeft: () => (
-                        <TouchableOpacity onPress={() => props.navigation.navigate('HomeScreen')}>
+                        <TouchableOpacity onPress={() => props.navigation.navigate('HomeEmployerScreen')}>
                             <Ionicons name="arrow-back" size={24} color="white" />
                         </TouchableOpacity>
                     ),
@@ -286,7 +296,7 @@ const TabNavigator = () => {
                     },
                 })}
             />
-            <Tab.Screen
+            {/* <Tab.Screen
                 name="Đã lưu"
                 component={SavedStack}
                 options={({ route }) => ({
@@ -302,7 +312,7 @@ const TabNavigator = () => {
                         marginBottom: 8,
                     },
                 })}
-            />
+            /> */}
             <Tab.Screen
                 name="Đăng tin"
                 component={PostStack}

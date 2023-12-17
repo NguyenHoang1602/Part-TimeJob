@@ -1,3 +1,8 @@
+/* eslint-disable eol-last */
+/* eslint-disable quotes */
+/* eslint-disable no-unused-vars */
+/* eslint-disable semi */
+/* eslint-disable react/no-unstable-nested-components */
 /* eslint-disable prettier/prettier */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-native/no-inline-styles */
@@ -79,7 +84,7 @@ const CurriculumVitae = ({ navigation }) => {
 
   const handleUpdateStage = async (item) => {
     if (item.status === 0) {
-      const id = item._id
+      const id = item._id;
       const response = await axios.post(`${API}/apply/update`, { id: id });
       if (response.status === 200) {
         getFirst();
@@ -106,9 +111,9 @@ const CurriculumVitae = ({ navigation }) => {
         style={{
           flexDirection: 'row',
           marginBottom: 10,
-          alignItems: 'center'
+          alignItems: 'center',
         }}
-        onPress={() => navigation.navigate('ProfileScreen')}>
+        onPress={() => navigation.goBack()}>
         <AntDesign name="arrowleft" size={24} color={COLORS.black} />
         <Text style={{ fontSize: 22, fontWeight: '400', color: COLORS.black, marginLeft: 20 }}>Hồ sơ ứng tuyển</Text>
       </TouchableOpacity>
@@ -150,43 +155,6 @@ const CurriculumVitae = ({ navigation }) => {
       </View>
 
       <View style={{ marginTop: 20, gap: 14 }}>
-
-        <FlatList
-          data={listCareers}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={{
-            gap: 10,
-          }}
-          renderItem={({ item, index }) => {
-            const isSelected = categoryIndex === index;
-            return (
-              <TouchableOpacity
-                onPress={async () => {
-                  setCategoryIndex(index);
-                }}
-                style={{
-                  backgroundColor: isSelected ? COLORS.primary : COLORS.card,
-                  borderWidth: 1,
-                  borderColor: COLORS.grey,
-                  borderRadius: 100,
-                  paddingHorizontal: 24,
-                  paddingVertical: 14,
-                }}>
-                <Text
-                  style={{
-                    color: isSelected ? COLORS.white : COLORS.text,
-                    fontSize: 14,
-                    fontWeight: "600",
-                    opacity: isSelected ? 1 : 0.5,
-                  }}>
-                  {item.title}
-                </Text>
-              </TouchableOpacity>
-            )
-          }}
-        />
-
         {loading ? (
           <View style={{ justifyContent: 'center', marginTop: 200 }}>
             <ActivityIndicator size="large" color={COLORS.primary} />
@@ -200,7 +168,7 @@ const CurriculumVitae = ({ navigation }) => {
               <View style={{ alignItems: 'center', justifyContent: 'center', paddingHorizontal: 20 }}>
                 <ImageBackground
                   source={require('../assets/images/5928293_2953962.jpg')}
-                  style={{ width: 100, height: 100, }}
+                  style={{ width: 100, height: 100}}
                 />
                 <Text style={{ fontSize: 22, color: COLORS.black, fontWeight: '700' }}>Không có hồ sơ ứng tuyển</Text>
               </View>
@@ -209,7 +177,6 @@ const CurriculumVitae = ({ navigation }) => {
           </>
         )}
       </View>
-
     </SafeAreaView>
   );
 };
@@ -228,6 +195,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     width: '100%',
     height: 80,
-  }
+  },
 })
-export default CurriculumVitae
+export default CurriculumVitae;

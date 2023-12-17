@@ -1,6 +1,4 @@
 /* eslint-disable prettier/prettier */
-/* eslint-disable react/self-closing-comp */
-/* eslint-disable no-unused-vars */
 /* eslint-disable eol-last */
 /* eslint-disable semi */
 /* eslint-disable react-native/no-inline-styles */
@@ -34,7 +32,7 @@ const SelectRoleScreen = ({ navigation }) => {
     const handleCheckUser = () => {
         setCheckedUser(true);
         setCheckedEmployer(false);
-        setData({...data,role: 0});
+        setData({ ...data, role: 0 });
     };
     const handleCheckEmployer = () => {
         setCheckedEmployer(true);
@@ -82,10 +80,16 @@ const SelectRoleScreen = ({ navigation }) => {
                     </TouchableOpacity>
                 </View>
             </View>
-            <View style={{width: '100%', height: 100, borderWidth: 1, borderColor: '#EFEFEF', justifyContent: 'center', alignItems: 'center' }}>
+            <View style={{ width: '100%', height: 100, borderWidth: 1, borderColor: '#EFEFEF', justifyContent: 'center', alignItems: 'center' }}>
                 <TouchableOpacity
-                    onPress={() => navigation.navigate('FillProfile', { item : data})}
-                    style={{
+                    onPress={() => {
+                        if (data.role === 0) {
+                            navigation.navigate('FavoriteCareersScreen', { item: data })
+                        } else {
+                            navigation.navigate('FillProfile', { item: data })
+                        }
+                    }}
+                style={{
                         width: '90%',
                         height: 50,
                         backgroundColor: '#246BFD',

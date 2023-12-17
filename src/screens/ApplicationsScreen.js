@@ -1,7 +1,9 @@
 /* eslint-disable prettier/prettier */
+/* eslint-disable react/no-unstable-nested-components */
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable eol-last */
 /* eslint-disable react-native/no-inline-styles */
-import { View, Text, StyleSheet, SafeAreaView, ImageBackground, TouchableOpacity, TextInput, Pressable, FlatList, Image, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ImageBackground, TouchableOpacity, TextInput, Pressable, FlatList, Image, ScrollView } from 'react-native';
 import React, { useContext, useState } from 'react'
 import COLORS from '../assets/const/colors';
 import UserContext from '../components/UserConText';
@@ -20,18 +22,13 @@ import { useFocusEffect } from '@react-navigation/native';
 import axios from 'axios';
 import { Layout } from 'react-native-reanimated';
 import { API } from '../../Sever/sever';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const ApplicationsScreen = ({ route, navigation }) => {
     const { user } = useContext(UserContext);
     const [listApplied, setListApplied] = useState([]);
-    const data = [
-        { id: '1', title: 'UI/UX Designer', bussiness_Name: 'Google LLC', address: 'Binh Tan, TP. HCM', wageMin: '10000', wageMax: '25000', workType: '1', status: '1', image: 'https://th.bing.com/th/id/OIP.S3ZsU5iH6e3Z2K7lXlES7AHaFj?w=230&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7' },
-        { id: '2', title: 'Software Engineer', bussiness_Name: 'Google LLC', address: 'Binh Tan, TP. HCM', wageMin: '10000', wageMax: '25000', workType: '2', status: '2', image: 'https://th.bing.com/th/id/OIP.YEEjAJNNzW_bB2imEBlRywHaD8?w=304&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7' },
-        { id: '3', title: 'Applications Developer', bussiness_Name: 'Google LLC', address: 'Binh Tan, TP. HCM', wageMin: '10000', wageMax: '25000', workType: '1', status: '3', image: 'https://th.bing.com/th/id/OIP.UEXTt6nVBMLf5I8rQh8U_wHaFj?w=208&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7' },
-        { id: '4', title: 'UI/UX Designer', bussiness_Name: 'Google LLC', address: 'Binh Tan, TP. HCM', wageMin: '10000', wageMax: '25000', workType: '2', status: '4', image: 'https://th.bing.com/th/id/OIP.eJPdCWFGsFPki_c_tK0xmQHaFX?w=253&h=183&c=7&r=0&o=5&dpr=1.3&pid=1.7' },
-        { id: '5', title: 'UI/UX Designer', bussiness_Name: 'Google LLC', address: 'Binh Tan, TP. HCM', wageMin: '10000', wageMax: '25000', workType: '1', status: '1', image: 'https://th.bing.com/th/id/OIP.09F15WCuEz8e1c1OwXN1GgHaHa?w=178&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7' },
-        { id: '6', title: 'UI/UX Designer', bussiness_Name: 'Google LLC', address: 'Binh Tan, TP. HCM', wageMin: '10000', wageMax: '25000', workType: '1', status: '4', image: 'https://th.bing.com/th/id/OIP.eJPdCWFGsFPki_c_tK0xmQHaFX?w=253&h=183&c=7&r=0&o=5&dpr=1.3&pid=1.7' },
-    ];
+    const [list, setList] = useState([]);
+    const [isFocusedSearch, setIsFocusedSearch] = useState(false);
 
     useFocusEffect(
         React.useCallback(() => {
@@ -43,11 +40,34 @@ const ApplicationsScreen = ({ route, navigation }) => {
             const response = await axios.post(`${API}/apply/listMyApplied`, {
                 id: user._id
             });
-            setListApplied(response.data);
+            if (response.status === 200) {
+                const data = JSON.stringify(response.data);
+                await AsyncStorage.setItem('listMyApplied', data)
+                setListApplied(response.data);
+            }
         } catch (error) {
             console.log(error);
         }
     };
+    const handleSearch = async (key) => {
+        const data = await AsyncStorage.getItem('listMyApplied');
+        if (key === "") {
+            setListApplied(JSON.parse(data));
+            setList(JSON.parse(data));
+        } else {
+            try {
+                const filteredData = list.filter((apply) => {
+                    const titleA = apply.post_id.title.toLowerCase();
+                    const keyA = key.toLowerCase();
+                    const find = titleA.indexOf(keyA) !== -1;
+                    return find
+                });
+                setListApplied(filteredData);
+            } catch (error) {
+                console.log(error);
+            }
+        }
+    }
 
     const renderItemApplications = ({ item }) => (
         <TouchableOpacity style={styles.items}
@@ -59,9 +79,13 @@ const ApplicationsScreen = ({ route, navigation }) => {
                 wageMin: item?.post_id?.wageMin,
                 wageMax: item?.post_id?.wageMax,
                 workType_id: item?.post_id?.workType_id,
+                cv_id: item?.cv_id._id,
                 status: item?.status,
                 image: item?.post_id?.image,
-
+                bargain_Salary: item?.bargain_salary,
+                feedback: item?.feedback,
+                post_id: item?.post_id?._id,
+                receiver_id: item?.receiver_id,
             })}>
             <View style={{ flexDirection: 'row', width: '100%', alignItems: 'center' }}>
 
@@ -71,14 +95,14 @@ const ApplicationsScreen = ({ route, navigation }) => {
                             <ImageBackground
                                 key={index}
                                 source={{ uri: imageUrl }}
-                                style={{ width: 46, height: 46, marginBottom: 5 }}
+                                style={{ width: 54, height: 54, marginBottom: 5 }}
                                 imageStyle={{ borderRadius: 5 }}
                             />
                         );
                     }
                 })}
                 <View style={{ flex: 1, marginLeft: '5%' }}>
-                    <Text style={{ fontSize: 18, fontWeight: '600', color: '#212121' }}>{item?.post_id?.title}</Text>
+                    <Text numberOfLines={2} style={{ fontSize: 18, fontWeight: '600', color: '#212121', width: '99%' }}>{item?.post_id?.title}</Text>
                     <Text style={{ fontSize: 15, fontWeight: '600', color: '#616161', marginTop: 5 }} numberOfLines={1}>{item?.post_id?.businessName}</Text>
                 </View>
                 <TouchableOpacity
@@ -127,6 +151,19 @@ const ApplicationsScreen = ({ route, navigation }) => {
                     }}>
                         <Text style={{ fontSize: 9.5, color: '#F75656' }} >Application Rejected</Text>
                     </View>
+                ) : item.status === 4 ? (
+                    <View style={{
+                        width: 120,
+                        backgroundColor: '#FFCAA3',
+                        borderRadius: 6,
+                        padding: 5,
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        marginStart: '20%',
+                        marginTop: '2%',
+                    }}>
+                        <Text style={{ fontSize: 9.5, color: '#FF6B00' }} >Application Negotiation</Text>
+                    </View>
                 ) :
                     <View style={{
                         width: 110,
@@ -147,10 +184,11 @@ const ApplicationsScreen = ({ route, navigation }) => {
         </TouchableOpacity>
     );
     return (
-        <SafeAreaView style={styles.container}>
+        <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
+            {/* Header */}
             <View style={styles.header}>
-                <View style={styles.headera}>
-                    <View style={styles.headeraLeft}>
+                <View style={styles.headerA}>
+                    <View style={styles.headerLeft}>
                         <ImageBackground
                             source={require('../assets/images/SignIn/LogoSignInUp.png')}
                             style={{ width: 26, height: 26 }}
@@ -165,38 +203,33 @@ const ApplicationsScreen = ({ route, navigation }) => {
                         <IconWithBadge iconName="bell" badgeText="2" />
                     </TouchableOpacity>
                 </View>
-                <Pressable
+                {/* Search */}
+                <View
                     style={{
                         flexDirection: 'row',
-                        borderColor: '#C6C6C6',
-                        borderRadius: 10,
-                        paddingHorizontal: 10,
+                        height: 50,
+                        borderRadius: 15,
                         alignItems: 'center',
-                        backgroundColor: '#F5F5F5',
+                        paddingHorizontal: 18,
+                        backgroundColor: !isFocusedSearch ? COLORS.lightGrey : '#E9F0FF',
+                        borderWidth: 1,
+                        borderColor: !isFocusedSearch ? COLORS.white : COLORS.primary,
                     }}>
-                    <Feather
-                        name="search"
-                        size={20}
-                        color="#C6C6C6"
-                        style={{ marginRight: 20 }} />
+                    <Feather name='search' size={24} color={!isFocusedSearch ? COLORS.grey : COLORS.primary} />
                     <TextInput
-                        style={{ flex: 1 }}
-                        placeholder="Tìm kiếm việc làm"
-                    />
-                    <TouchableOpacity
-                        style={{
-                            marginEnd: '2%',
+                        placeholder="Tìm kiếm . . ."
+                        onChangeText={value => {
+                            handleSearch(value)
                         }}
-                        onPress={() => { }}>
-                        <FontAwesome6
-                            name="sliders"
-                            size={20}
-                            color={COLORS.blue}
-                            style={{
-                                opacity: 0.95,
-                            }} />
+                        onFocus={() => { setIsFocusedSearch(!isFocusedSearch) }}
+                        onBlur={() => { setIsFocusedSearch(!isFocusedSearch) }}
+                        style={{ flex: 1, fontSize: 16, color: COLORS.black, paddingHorizontal: 10, }} />
+                    <TouchableOpacity onPress={() => {
+
+                    }}>
+                        <FontAwesome6 name='sliders' size={20} color={COLORS.primary} />
                     </TouchableOpacity>
-                </Pressable>
+                </View>
             </View>
             <ScrollView showsVerticalScrollIndicator={false} style={styles.body}>
                 <FlatList
@@ -227,20 +260,18 @@ const styles = StyleSheet.create({
         backgroundColor: COLORS.white,
     },
     header: {
-        paddingBottom: 5,
-        paddingLeft: 20,
-        paddingRight: 20,
-        paddingTop: 5,
+        paddingHorizontal: 18,
+        paddingTop: 10,
+        gap: 5,
     },
-    headera: {
+    headerA: {
         flexDirection: 'row',
         alignItems: 'center',
         marginBottom: 18,
-        marginTop: '10%',
         width: '100%',
         height: 60,
     },
-    headeraLeft: {
+    headerLeft: {
         flexDirection: 'row',
         alignItems: 'center',
         marginStart: '1%',
