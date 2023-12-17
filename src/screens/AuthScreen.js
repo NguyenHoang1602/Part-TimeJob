@@ -21,7 +21,6 @@ const AuthScreen = ({ navigation }) => {
     const [loading, setLoading] = useState(false);
     const { setUser } = useContext(UserContext);
     const { user } = useContext(UserContext);
-    console.log(user);
     useEffect(() => {
         GoogleSignin.configure({
             webClientId: '598708373288-vlbap93edc5r144q7cnealcu8vls110o.apps.googleusercontent.com',
@@ -52,10 +51,6 @@ const AuthScreen = ({ navigation }) => {
                 setUser(result.data);
                 navigation.navigate('SelectRole');
             }
-            //setUser(result.data);
-            //
-            //loginUser(result.data);
-
         } catch (error) {
             if (error.code === statusCodes.SIGN_IN_CANCELLED) {
                 // Đã huỷ quá trình đăng nhập
@@ -127,7 +122,7 @@ const AuthScreen = ({ navigation }) => {
                                 color: COLORS.black,
                                 marginStart: '3%',
                                 top: 3,
-                                fontFamily: 'aoboshione-regular',
+                                fontFamily: 'Roboto-Medium',
                             }}>
                             Tiếp tục với Facebook
                         </Text>
@@ -161,14 +156,14 @@ const AuthScreen = ({ navigation }) => {
                                 color: COLORS.black,
                                 marginStart: '3%',
                                 right: 9,
-                                fontFamily: 'aoboshione-regular',
+                                fontFamily: 'Roboto-Medium',
                             }}>
                             Tiếp tục với Google
                         </Text>
                     </TouchableOpacity>
                     <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', top: '6%' }}>
                         <View style={{ height: 1, width: '33%', backgroundColor: COLORS.grey }} />
-                        <Text style={{ width: 50, textAlign: 'center', color: COLORS.black, fontWeight: '700', fontSize: 18, }}>or</Text>
+                        <Text style={{ width: 50, textAlign: 'center', color: COLORS.black, fontWeight: '400', fontSize: 16, }}>hoặc</Text>
                         <View style={{ height: 1, width: '33%', backgroundColor: COLORS.grey }} />
                     </View>
                     <TouchableOpacity
@@ -193,13 +188,12 @@ const AuthScreen = ({ navigation }) => {
                             style={{
                                 fontSize: 18,
                                 color: COLORS.white,
-                                fontFamily: 'aoboshione-regular',
+                                fontFamily: 'Roboto-Medium',
                             }}>
                             Đăng nhập bằng SĐT
                         </Text>
                     </TouchableOpacity>
-                    <TouchableOpacity
-                        onPress={() => navigation.navigate('SelectRole')}
+                    <View
                         style={{
                             padding: 5,
                             width: '85%',
@@ -227,7 +221,7 @@ const AuthScreen = ({ navigation }) => {
                             }}>
                             Part-time Jobs
                         </Text>
-                    </TouchableOpacity>
+                    </View>
                 </View>
             )}
 

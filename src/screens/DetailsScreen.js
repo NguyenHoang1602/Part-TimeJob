@@ -7,7 +7,7 @@
 /* eslint-disable eol-last */
 /* eslint-disable semi */
 import React, { useState, useEffect, useContext } from 'react';
-import { View, Text, TouchableOpacity, ImageBackground, ScrollView, Image, FlatList, Alert, Pressable, StyleSheet, TextInput, Keyboard } from 'react-native';
+import { View, Text, TouchableOpacity, ImageBackground, ScrollView, Image, FlatList, Alert, Pressable, StyleSheet, TextInput, Keyboard, StatusBar } from 'react-native';
 
 //
 import Input from '../components/Input';
@@ -135,7 +135,9 @@ const DetailsScreen = ({ route, navigation }) => {
         }, [])
     );
     const handleOnChangeSalary = (value) => {
-        setSalary(value);
+        let formattedValue = value.replace(/\D/g, '');
+        formattedValue = formattedValue.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+        setSalary(formattedValue);
     }
     // validate
     const [errors, setErrors] = useState('');
@@ -264,6 +266,7 @@ const DetailsScreen = ({ route, navigation }) => {
 
     return (
         <SafeAreaView style={styles.container}>
+            <StatusBar barStyle={"light-content"} />
             <View style={styles.headers}>
                 <TouchableOpacity onPress={() => navigation.goBack()}>
                     <Feather name="arrow-left" size={28} color={COLORS.white} />
@@ -464,6 +467,7 @@ const DetailsScreen = ({ route, navigation }) => {
                                     style={{ backgroundColor: "#F5F5F5", width: '80%', paddingHorizontal: 13, paddingVertical: 11, borderRadius: 5 }}
                                     placeholder="Nhập lương mong muốn"
                                     onChangeText={handleOnChangeSalary}
+                                    value={salary}
                                 />
                             </View>
                         ) : null

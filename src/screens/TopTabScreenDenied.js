@@ -93,6 +93,13 @@ const TopTabScreenDenied = ({ navigation }) => {
         );
 
     };
+    const deletePost = async () =>{
+        try {
+            const response = axios.post('')
+        } catch (error) {
+            
+        }
+    }
     //Format tiền
     //const amount = 1000000; // Số tiền cần định dạng
     // const formattedAmount = amount.toLocaleString('vi-VN', {
@@ -300,16 +307,7 @@ const TopTabScreenDenied = ({ navigation }) => {
                                         width: 160,
                                         paddingVertical: 15,
                                     }}
-                                    onPress={() => navigation.navigate('Chỉnh sửa bài đăng', {
-                                        title: selectedItem?.title,
-                                        id: selectedItem?.id,
-                                        uri: selectedItem?.uri,
-                                        address: selectedItem?.Address,
-                                        wagemax: selectedItem?.wagemax,
-                                        wagemin: selectedItem?.wagemin,
-                                        worktype: selectedItem?.worktype,
-                                        Details: selectedItem?.Details,
-                                    })}>
+                                   >
                                     <Text style={{ color: COLORS.white, fontSize: 18, fontWeight: '600' }}>Xóa tin</Text>
                                 </TouchableOpacity>
                             </View>
