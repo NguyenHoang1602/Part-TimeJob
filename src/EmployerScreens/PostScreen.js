@@ -650,13 +650,6 @@ const PostScreen = ({ navigation }) => {
           </View>
 
           <View style={{ marginHorizontal: 24 }}>
-            {/* <Input
-              onChangeText={text => handleOnchange(text, 'subtitle')}
-              onFocus={() => handleError(null, 'subtitle')}
-              placeholder="Trình độ học vấn"
-              // value={route.params?.subtitle}
-              error={errors.subtitle}
-            /> */}
             <Dropdown
               style={[styles.dropdown, isFocus3 && { borderColor: COLORS.darkBlue }, errors.academic_id && { borderColor: 'red' }]}
               placeholderStyle={styles.placeholderStyle}
@@ -669,7 +662,7 @@ const PostScreen = ({ navigation }) => {
               valueField="_id"
               placeholder={!isFocus3 ? 'Trình độ học vấn' : '...'}
               searchPlaceholder="Search..."
-              value={listAcademic._id}
+              value={inputs.academic_id}
               onFocus={() => setIsFocus3(true)}
               onBlur={() => setIsFocus3(false)}
               onChange={item => {
@@ -691,7 +684,7 @@ const PostScreen = ({ navigation }) => {
               valueField="_id"
               placeholder={!isFocus4 ? 'Kinh nghiệm' : '...'}
               searchPlaceholder="Search..."
-              value={listExperience._id}
+              value={inputs.experience_id}
               onFocus={() => setIsFocus4(true)}
               onBlur={() => setIsFocus4(false)}
               onChange={item => {
