@@ -107,6 +107,13 @@ const SavedStack = (props) => {
                     headerShown: false,
                 })}
             />
+            <Stack.Screen
+                name="Notifications"
+                component={Notification}
+                options={({ route }) => ({
+                    headerShown: false,
+                })}
+            />
         </Stack.Navigator>
     );
 };
@@ -126,6 +133,13 @@ const ApplicationsStack = (props) => {
                 component={ApplicationsStageScreen}
                 options={({ route }) => ({
                     title: route.params?.title,
+                    headerShown: false,
+                })}
+            />
+            <Stack.Screen
+                name="Notifications"
+                component={Notification}
+                options={({ route }) => ({
                     headerShown: false,
                 })}
             />
@@ -212,6 +226,13 @@ const ProfileStack = (props) => {
             <Stack.Screen
                 name="CVResumeScreen"
                 component={CVResume}
+                options={({ route }) => ({
+                    headerShown: false,
+                })}
+            />
+            <Stack.Screen
+                name="Notifications"
+                component={Notification}
                 options={({ route }) => ({
                     headerShown: false,
                 })}
