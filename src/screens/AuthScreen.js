@@ -211,17 +211,17 @@ const AuthScreen = ({ navigation }) => {
                         }}>
                         <Text
                             style={{
-                                fontWeight: 'bold',
-                                fontSize: 16,
+                                fontWeight: '400',
+                                fontSize: 15,
                                 color: COLORS.black,
                                 opacity: 0.4
                             }}>
-                            Wellcom to
+                            Chào mừng bạn đến với
                         </Text>
                         <Text
                             style={{
-                                fontWeight: 'bold',
-                                fontSize: 16,
+                                fontWeight: '500',
+                                fontSize: 15,
                                 color: COLORS.primary,
                                 marginStart: '1.2%'
                             }}>
