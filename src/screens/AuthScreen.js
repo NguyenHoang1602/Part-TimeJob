@@ -97,7 +97,7 @@ const AuthScreen = ({ navigation }) => {
                             color: COLORS.black,
                             fontFamily: 'BeVietnamPro-Regular',
                         }}>
-                            Let’s you in
+                            Bắt đầu nào !
                         </Text>
                     </View>
                     <TouchableOpacity

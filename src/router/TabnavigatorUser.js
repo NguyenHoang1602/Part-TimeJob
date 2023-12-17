@@ -288,7 +288,7 @@ const TabNavigatorUser = () => {
                 })}
             />
             <Tab.Screen
-                name="Application"
+                name="Ứng tuyển"
                 component={ApplicationsStack}
                 options={({ route }) => ({
                     tabBarStyle: {
@@ -305,7 +305,7 @@ const TabNavigatorUser = () => {
                 })}
             />
             <Tab.Screen
-                name="Message"
+                name="Tin nhắn"
                 component={MessageStack}
                 options={({ route }) => ({
                     tabBarStyle: {
