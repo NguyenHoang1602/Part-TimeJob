@@ -21,7 +21,6 @@ const AuthScreen = ({ navigation }) => {
     const [loading, setLoading] = useState(false);
     const { setUser } = useContext(UserContext);
     const { user } = useContext(UserContext);
-    console.log(user);
     useEffect(() => {
         GoogleSignin.configure({
             webClientId: '598708373288-vlbap93edc5r144q7cnealcu8vls110o.apps.googleusercontent.com',
@@ -52,10 +51,6 @@ const AuthScreen = ({ navigation }) => {
                 setUser(result.data);
                 navigation.navigate('SelectRole');
             }
-            //setUser(result.data);
-            //
-            //loginUser(result.data);
-
         } catch (error) {
             if (error.code === statusCodes.SIGN_IN_CANCELLED) {
                 // Đã huỷ quá trình đăng nhập

@@ -96,7 +96,6 @@ const StageCurriculumScreen = ({ route, navigation }) => {
         };
         const response = await axios.post(`${API}/apply/updateAccept`, AcceptData);
         if (response.status === 200) {
-            console.log('thanh cong');
             getCVApply();
         }
     }
@@ -129,7 +128,6 @@ const StageCurriculumScreen = ({ route, navigation }) => {
         };
         const response = await axios.post(`${API}/apply/updateBargain`, bargainData);
         if (response.status === 200) {
-            console.log('thanh cong');
             getCVApply();
             toggleModalclose();
         }
@@ -148,7 +146,6 @@ const StageCurriculumScreen = ({ route, navigation }) => {
         if (response.status === 200) {
             getCVApply();
             toggleModalclose1();
-            console.log('thanh cong');
         }
     }
 

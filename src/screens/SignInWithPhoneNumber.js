@@ -38,6 +38,12 @@ const SignInWithPhoneNumber = ({ navigation, props }) => {
     const confirmation = await auth().signInWithPhoneNumber(phoneNumber);
     setConfirm(confirmation);
   }
+  const authSettings = {
+    // Other settings...
+    isAppVerificationDisabledForTesting: false,
+  };
+  
+  auth().settings = authSettings;
 
   async function confirmCode(codes) {
     try {
