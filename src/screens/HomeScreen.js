@@ -589,6 +589,10 @@ const HomeScreen = ({ navigation }) => {
       </TouchableOpacity>
     )
   };
+  const openNotification = () => {
+    navigation.navigate('Notifications');
+    setChek(false);
+};
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
@@ -622,7 +626,7 @@ const HomeScreen = ({ navigation }) => {
               borderWidth: 1,
               borderColor: COLORS.grey,
             }}
-            onPress={() => navigation.navigate('Notifications')}>
+            onPress={() => openNotification()}>
             {/* <Feather name='bell' size={24} color={COLORS.black}/> */}
             {
               check ? (

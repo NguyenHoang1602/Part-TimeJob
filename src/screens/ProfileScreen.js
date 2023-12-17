@@ -142,8 +142,8 @@ const ProfileScreen = ({ route, navigation }) => {
             <TouchableOpacity onPress={Darkmode}>
               {
                 darkMode ? (
-                  <Fontisto name="toggle-on" size={36} color={COLORS.primary} />
-                ) : <Fontisto name="toggle-off" size={36} color='rgba(125, 122, 122, 0.25)' />
+                  <Fontisto name="toggle-off" size={36} color='rgba(125, 122, 122, 0.25)' />
+                ) : <Fontisto name="toggle-on" size={36} color={COLORS.primary} />
               }
             </TouchableOpacity>
           </TouchableOpacity>

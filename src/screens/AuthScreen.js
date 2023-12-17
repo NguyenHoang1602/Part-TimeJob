@@ -113,16 +113,16 @@ const AuthScreen = ({ navigation }) => {
                             flexDirection: 'row',
                             bottom: '8%',
                             justifyContent: 'center',
-                            marginTop: 20
+                            alignItems: 'center',
+                            marginTop: 20,
+                            gap: 10
                         }}>
                         <Ionicons name="logo-facebook" size={30} color={COLORS.primary} />
                         <Text
                             style={{
                                 fontSize: 18,
                                 color: COLORS.black,
-                                marginStart: '3%',
-                                top: 3,
-                                fontFamily: 'aoboshione-regular',
+                                fontFamily: 'Roboto-Medium',
                             }}>
                             Tiếp tục với Facebook
                         </Text>
@@ -140,14 +140,14 @@ const AuthScreen = ({ navigation }) => {
                             flexDirection: 'row',
                             bottom: '2%',
                             justifyContent: 'center',
+                            alignItems: 'center',
+                            gap: 10
                         }}>
                         <Image
                             source={require('../assets/icon/google.png')}
                             style={{
                                 width: 24,
                                 height: 24,
-                                justifyContent: 'flex-start',
-                                right: 11,
                             }}
                         />
                         <Text
@@ -156,14 +156,14 @@ const AuthScreen = ({ navigation }) => {
                                 color: COLORS.black,
                                 marginStart: '3%',
                                 right: 9,
-                                fontFamily: 'aoboshione-regular',
+                                fontFamily: 'Roboto-Medium',
                             }}>
                             Tiếp tục với Google
                         </Text>
                     </TouchableOpacity>
                     <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', top: '6%' }}>
                         <View style={{ height: 1, width: '33%', backgroundColor: COLORS.grey }} />
-                        <Text style={{ width: 50, textAlign: 'center', color: COLORS.black, fontWeight: '700', fontSize: 18, }}>or</Text>
+                        <Text style={{ width: 50, textAlign: 'center', color: COLORS.black, fontWeight: '400', fontSize: 16, }}>hoặc</Text>
                         <View style={{ height: 1, width: '33%', backgroundColor: COLORS.grey }} />
                     </View>
                     <TouchableOpacity
@@ -188,13 +188,12 @@ const AuthScreen = ({ navigation }) => {
                             style={{
                                 fontSize: 18,
                                 color: COLORS.white,
-                                fontFamily: 'aoboshione-regular',
+                                fontFamily: 'Roboto-Medium',
                             }}>
                             Đăng nhập bằng SĐT
                         </Text>
                     </TouchableOpacity>
-                    <TouchableOpacity
-                        onPress={() => navigation.navigate('SignInWithPhoneNumber')}
+                    <View
                         style={{
                             padding: 5,
                             width: '85%',
@@ -206,23 +205,23 @@ const AuthScreen = ({ navigation }) => {
                         }}>
                         <Text
                             style={{
-                                fontWeight: 'bold',
-                                fontSize: 16,
+                                fontWeight: '400',
+                                fontSize: 15,
                                 color: COLORS.black,
                                 opacity: 0.4
                             }}>
-                            Wellcom to
+                            Chào mừng bạn đến với
                         </Text>
                         <Text
                             style={{
-                                fontWeight: 'bold',
-                                fontSize: 16,
+                                fontWeight: '500',
+                                fontSize: 15,
                                 color: COLORS.primary,
                                 marginStart: '1.2%'
                             }}>
                             Part-time Jobs
                         </Text>
-                    </TouchableOpacity>
+                    </View>
                 </View>
             )}
 
