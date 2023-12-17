@@ -7,7 +7,7 @@
 /* eslint-disable eol-last */
 /* eslint-disable react-native/no-inline-styles */
 import React, { useState, useContext } from 'react';
-import { View, Text, TouchableOpacity, Image, ImageBackground, FlatList, ScrollView, ActivityIndicator } from 'react-native';
+import { View, Text, TouchableOpacity, Image, ImageBackground, FlatList, ScrollView, ActivityIndicator, Alert } from 'react-native';
 import Modal from 'react-native-modal';
 import COLORS from '../assets/const/colors';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -90,6 +90,18 @@ const TopTabScreenWaiting = ({ navigation }) => {
         );
 
     };
+    const deletePost = async (id) => {
+        try {
+            const response = await axios.post(`${API}/posts/delete`, { id: id });
+            if (response.status === 200) {
+                toggleModalclose();
+                getListJobs()
+                Alert.alert('Xóa thành công !')
+            }
+        } catch (error) {
+            console.log('err', error);
+        }
+    }
 
     const renderItemJob = ({ item }) => {
         const formattedWageMin = item.wageMin.toLocaleString('vi-VN');
@@ -267,7 +279,7 @@ const TopTabScreenWaiting = ({ navigation }) => {
                                 flexDirection: 'row', marginTop: 18,
                             }}>
                                 <TouchableOpacity
-                                    onPress={toggleModalclose}
+                                    onPress={() => deletePost(selectedItem?._id)}
                                     style={{
                                         backgroundColor: 'rgba(51, 123, 255, 0.20)',
                                         alignItems: 'center',
@@ -291,16 +303,7 @@ const TopTabScreenWaiting = ({ navigation }) => {
                                         width: 160,
                                         paddingVertical: 15,
                                     }}
-                                    onPress={() => navigation.navigate('Chỉnh sửa bài đăng', {
-                                        title: selectedItem?.title,
-                                        id: selectedItem?.id,
-                                        uri: selectedItem?.uri,
-                                        address: selectedItem?.Address,
-                                        wagemax: selectedItem?.wagemax,
-                                        wagemin: selectedItem?.wagemin,
-                                        worktype: selectedItem?.worktype,
-                                        Details: selectedItem?.Details,
-                                    })}>
+                                    onPress={() => console.log(selectedItem?._id)}>
                                     <Text style={{ color: COLORS.white, fontSize: 18, fontWeight: '600' }}>Sửa tin</Text>
                                 </TouchableOpacity>
                             </View>
