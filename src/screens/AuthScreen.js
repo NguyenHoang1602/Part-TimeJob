@@ -18,6 +18,7 @@ import axios from 'axios';
 
 //icon
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const AuthScreen = ({ navigation }) => {
     const [loading, setLoading] = useState(false);
@@ -40,6 +41,9 @@ const AuthScreen = ({ navigation }) => {
             });
             if (result.data.status) {
                 setUser(result.data);
+                const data = JSON.stringify(result.data);
+                await AsyncStorage.setItem('user', data);
+                await AsyncStorage.setItem('isFirstAccess', "0");
                 if (result.data.role === 0) {
                     navigation.navigate('TabNavigatorUser');
                     setLoading(true);
@@ -93,6 +97,9 @@ const AuthScreen = ({ navigation }) => {
                 });
                 if (result.data.status) {
                     setUser(result.data);
+                    const data = JSON.stringify(result.data);
+                    await AsyncStorage.setItem('user', data);
+                    await AsyncStorage.setItem('isFirstAccess', "0");
                     if (result.data.role === 0) {
                         navigation.navigate('TabNavigatorUser');
                         setLoading(true);

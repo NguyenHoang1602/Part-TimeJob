@@ -20,6 +20,7 @@ import Input from '../components/InputProfile';
 import { Dropdown } from 'react-native-element-dropdown';
 import { useFocusEffect } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const FillProfileScreen = ({ navigation, route }) => {
 
@@ -163,6 +164,8 @@ const FillProfileScreen = ({ navigation, route }) => {
             if (result.status === 200) {
                 loginUser(result.data);
                 setUser(result.data);
+                const data = JSON.stringify(result.data);
+                await AsyncStorage.setItem('user', data);
                 if (result.data.status) {
                     setUser(result.data);
                     if (result.data.role === 0) {
@@ -179,6 +182,10 @@ const FillProfileScreen = ({ navigation, route }) => {
             if (result.status === 200) {
                 loginUser(result.data);
                 setUser(result.data);
+                setUser(result.data);
+                const data = JSON.stringify(result.data);
+                await AsyncStorage.setItem('user', data);
+                await AsyncStorage.setItem('isFirstAccess', "0");
                 if (result.data.status) {
                     setUser(result.data);
                     if (result.data.role === 0) {

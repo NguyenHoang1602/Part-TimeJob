@@ -12,7 +12,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, TouchableOpacity, ImageBackground, Pressable, FlatList, ActivityIndicator } from 'react-native';
 
-
 //
 import Input from '../components/Input';
 import COLORS from '../assets/const/colors';

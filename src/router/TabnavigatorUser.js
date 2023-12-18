@@ -32,8 +32,6 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import DetailNotification from '../screens/DetailNotification';
 import AntDesign from 'react-native-vector-icons/AntDesign'
 
-
-
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 

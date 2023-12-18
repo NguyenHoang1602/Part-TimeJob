@@ -76,7 +76,12 @@ const SearchScreen = ({ navigation }) => {
   useEffect(() => {
     getData();
     getListSave();
-  }, []);
+    setFilter((prevFilter) => ({
+      ...prevFilter,
+      wageMin: startPrice,
+      wageMax: endPrice,
+    }));
+  }, [startPrice, endPrice]);
 
 
   const { user } = useContext(UserContext);
@@ -170,6 +175,7 @@ const SearchScreen = ({ navigation }) => {
 
   const [startPrice, setStartPrice] = useState(15);
   const [endPrice, setEndPrice] = useState(35);
+  const [a, seta] = useState(0);
 
   const [isModalVisibleSave, setModalVisibleSave] = useState(false);
   const [isModalVisibleFilter, setModalVisibleFiler] = useState(false);
@@ -192,12 +198,12 @@ const SearchScreen = ({ navigation }) => {
     career_id: '',
     workType_id: '',
     payForm_id: '655de22b9a5b0ffa7ffd5132',
-    wageMin: startPrice,
-    wageMax: endPrice,
+    wageMin: 15,
+    wageMax: 35,
     academic_id: '',
     experience_id: '',
   });
-
+  console.log(a);
   const getData = async () => {
 
     const careers = await AsyncStorage.getItem('listCareers');
@@ -285,13 +291,11 @@ const SearchScreen = ({ navigation }) => {
               source={require('../assets/images/5928293_2953962.jpg')}
               style={{ width: "100%", height: 430, }}
             />
-            <Text style={{ fontSize: 22, color: '#000000', fontWeight: '700' }}>Empty</Text>
-            <Text style={{ fontSize: 16, marginTop: 7, textAlign: 'center' }}>Sorry, the keyword you entered cannot be found, please check again or search with another keyword.</Text>
+            <Text style={{ fontSize: 20, color: COLORS.primary, fontWeight: '600', textAlign: 'center' }}>Không tìm thấy bài viết liên quan</Text>
           </View>
         )}
       />
     );
-
   }
   const renderItemJob = ({ item }) => {
     const formattedWageMin = item.wageMin.toLocaleString('vi-VN');
@@ -423,7 +427,7 @@ const SearchScreen = ({ navigation }) => {
           }}>
           <Feather name='search' size={24} color={!isFocusedSearch ? COLORS.grey : COLORS.primary} />
           <TextInput
-            placeholder="Search . . ."
+            placeholder="Tìm kiếm . . ."
             onChangeText={value => {
               search(value)
             }}
@@ -440,20 +444,14 @@ const SearchScreen = ({ navigation }) => {
 
       {/* Found Nav */}
       <View style={styles.foundNav}>
-        <View style={{ flex: 1 }}>
-          <Text style={styles.textFound}>
-            {list.length} Found
-          </Text>
-        </View>
-        <TouchableOpacity onPress={() => {
-
-        }}>
-          <Ionicons name='chevron-back-outline' size={24} color={COLORS.primary} />
-        </TouchableOpacity>
+        <View style={{ flex: 1 }} />
+        <Text style={styles.textFound}>
+          Tìm thấy ({list.length})
+        </Text>
       </View>
 
       {/* Show Search */}
-      <View style={{ paddingHorizontal: 18 }}>
+      <View style={{ paddingHorizontal: 18, marginBottom: 100 }}>
         <FlatListb />
       </View>
 
@@ -517,10 +515,10 @@ const SearchScreen = ({ navigation }) => {
                         <SalaryRangeSelector
                           minPrice={0}
                           maxPrice={MAX_PRICE}
-                          startPrice={startPrice}
-                          endPrice={endPrice}
-                          onStartPriceChange={setStartPrice}
-                          onEndPriceChange={setEndPrice}
+                          startPrice={filter.wageMin}
+                          endPrice={filter.wageMax}
+                          onStartPriceChange={(op) => setFilter({ ...filter, wageMin: op })}
+                          onEndPriceChange={(op) => setFilter({ ...filter, wageMax: op })}
                           salaryUnit={filter.payForm_id}
                         />
 

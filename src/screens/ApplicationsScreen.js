@@ -234,19 +234,30 @@ const ApplicationsScreen = ({ route, navigation }) => {
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
             {/* Header */}
-            <View style={styles.header}>
-                <View style={styles.headerA}>
-                    <View style={styles.headerLeft}>
-                        <ImageBackground
-                            source={require('../assets/images/SignIn/LogoSignInUp.png')}
-                            style={{ width: 26, height: 26 }}
-                            imageStyle={{ borderRadius: 46 }} />
-                        <View style={{ flexDirection: 'column', height: '100%', marginStart: 15 }}>
-                            <Text style={{ color: COLORS.black, fontSize: 24, fontWeight: '600' }} numberOfLines={1}>Applications</Text>
-                        </View>
+            <View style={{
+                paddingBottom: 5,
+                paddingHorizontal: 18,
+                paddingTop: 20,
+                gap: 26,
+            }}>
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, }}>
+                    <ImageBackground
+                        source={require('../assets/images/SignIn/LogoSignInUp.png')}
+                        style={{ width: 26, height: 26 }}
+                        imageStyle={{ borderRadius: 46 }} />
+                    <View style={{ flex: 1 }}>
+                        <Text style={{ color: COLORS.black, fontSize: 24, fontWeight: '600' }} numberOfLines={1}>Applications</Text>
                     </View>
                     <TouchableOpacity
-                        style={styles.headerRight}
+                        style={{
+                            width: 46,
+                            aspectRatio: 1,
+                            borderRadius: 52,
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            borderWidth: 1,
+                            borderColor: COLORS.grey,
+                        }}
                         onPress={() => openNotification()}>
                         {
                             check ? (
@@ -265,11 +276,12 @@ const ApplicationsScreen = ({ route, navigation }) => {
                         paddingHorizontal: 18,
                         backgroundColor: !isFocusedSearch ? COLORS.lightGrey : '#E9F0FF',
                         borderWidth: 1,
-                        borderColor: !isFocusedSearch ? COLORS.white : COLORS.primary,
+                        borderColor: !isFocusedSearch ? COLORS.white : COLORS.primary
                     }}>
                     <Feather name='search' size={24} color={!isFocusedSearch ? COLORS.grey : COLORS.primary} />
                     <TextInput
                         placeholder="Tìm kiếm . . ."
+                        placeholderTextColor={COLORS.grey}
                         onChangeText={value => {
                             handleSearch(value)
                         }}
@@ -297,13 +309,12 @@ const ApplicationsScreen = ({ route, navigation }) => {
                     nestedScrollEnabled={true}
                     scrollEnabled={false}
                     ListEmptyComponent={() => (
-                        <View style={{ alignItems: 'center', justifyContent: 'center', paddingHorizontal: 20 }}>
+                        <View style={{ alignItems: 'center', justifyContent: 'center' }}>
                             <ImageBackground
                                 source={require('../assets/images/5928293_2953962.jpg')}
-                                style={{ width: "100%", height: 430, }}
+                                style={{ width: "100%", height: 430 }}
                             />
-                            <Text style={{ fontSize: 22, color: COLORS.black, fontWeight: '700' }}>Empty</Text>
-                            <Text style={{ fontSize: 16, marginTop: 7, textAlign: 'center' }}>Sorry, the keyword you entered cannot be found, please check again or search with another keyword.</Text>
+                            <Text style={{ fontSize: 22, color: COLORS.black, fontWeight: '600', textAlign: 'center'}}>Không tìm thấy công việc đã ứng tuyển</Text>
                         </View>
                     )}
                 />

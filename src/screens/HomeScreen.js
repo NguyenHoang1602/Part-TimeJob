@@ -13,7 +13,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, { useState, useContext, useEffect } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
-import { View, Text, TouchableOpacity, ImageBackground, ScrollView, Alert, ActivityIndicator, TextInput, FlatList, Pressable, RefreshControl, StatusBar } from 'react-native';
+import { View, Text, TouchableOpacity, ImageBackground, ScrollView, Alert, ActivityIndicator, TextInput, FlatList, Pressable, RefreshControl, StatusBar, ToastAndroid } from 'react-native';
 
 //
 import Input from '../components/Input';
@@ -52,14 +52,21 @@ const HomeScreen = ({ navigation }) => {
   const [listApplied, setListApplied] = useState([]);
   const [listAllAccept, setListAllAccpet] = useState([]);
 
-  useFocusEffect(
-    React.useCallback(() => {
-      getAllData()
-      getListNotification();
-      getListApply();
-      getListApply3();
-    }, [])
-  );
+  // useFocusEffect(
+  //   React.useCallback(() => {
+  //     getAllData()
+  //     getListNotification();
+  //     getListApply();
+  //     getListApply3();
+  //   }, [])
+  // );
+  useEffect(() => {
+    getAllData();
+    getListNotification();
+    getListApply();
+    getListApply3();
+  }, []);
+
   const getAllData = async () => {
     try {
       //list save
@@ -369,6 +376,7 @@ const HomeScreen = ({ navigation }) => {
       const result = await axios.post(`${API}/savePost/add`, savedata);
       if (result.status === 200) {
         getListSave();
+        ToastAndroid.show('Lưu thành công', ToastAndroid.SHORT);
       }
     } catch (error) {
       console.log('Err: ', error);
@@ -382,6 +390,7 @@ const HomeScreen = ({ navigation }) => {
     const result = await axios.post(`${API}/savePost/deleteWithCondition`, deleteSave);
     if (result.status === 200) {
       getListSave();
+      ToastAndroid.show('Xóa thành công', ToastAndroid.SHORT);
     }
   }
 
@@ -564,8 +573,8 @@ const HomeScreen = ({ navigation }) => {
           describe: item.describe,
           age_min: item.ageMin,
           age_max: item.ageMax,
-          wage_min: item.wageMin,
-          wage_max: item.wageMax,
+          wage_min: formattedWageMin,
+          wage_max: formattedWageMax,
           status_id: item.status_id,
           date: soNgay,
           time: item.time,
