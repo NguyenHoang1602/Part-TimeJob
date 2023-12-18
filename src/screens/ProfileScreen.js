@@ -60,7 +60,10 @@ const ProfileScreen = ({ route, navigation }) => {
   const out = async () => {
     await GoogleSignin.signOut();
     AsyncStorage.clear();
-    firebase.auth().signOut();
+    const user = firebase.auth().currentUser;
+    if (user) {
+      firebase.auth().signOut();
+    }
     navigation.replace('AuthStack');
   };
   return (

@@ -26,6 +26,7 @@ const FavoriteCareersScreen = ({ navigation }) => {
     const [listCareers, setListCareers] = useState([]);
     const [data, setData] = React.useState({
         googleId: user?.googleId,
+        facebookId: user?.facebookId,
         displayName: user?.displayName,
         email: user?.email,
         photo: user?.photo,
