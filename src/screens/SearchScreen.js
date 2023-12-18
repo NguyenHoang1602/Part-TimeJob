@@ -76,7 +76,12 @@ const SearchScreen = ({ navigation }) => {
   useEffect(() => {
     getData();
     getListSave();
-  }, []);
+    setFilter((prevFilter) => ({
+      ...prevFilter,
+      wageMin: startPrice,
+      wageMax: endPrice,
+    }));
+  }, [startPrice, endPrice]);
 
 
   const { user } = useContext(UserContext);
@@ -170,6 +175,7 @@ const SearchScreen = ({ navigation }) => {
 
   const [startPrice, setStartPrice] = useState(15);
   const [endPrice, setEndPrice] = useState(35);
+  const [a, seta] = useState(0);
 
   const [isModalVisibleSave, setModalVisibleSave] = useState(false);
   const [isModalVisibleFilter, setModalVisibleFiler] = useState(false);
@@ -192,12 +198,12 @@ const SearchScreen = ({ navigation }) => {
     career_id: '',
     workType_id: '',
     payForm_id: '655de22b9a5b0ffa7ffd5132',
-    wageMin: startPrice,
-    wageMax: endPrice,
+    wageMin: 15,
+    wageMax: 35,
     academic_id: '',
     experience_id: '',
   });
-
+  console.log(a);
   const getData = async () => {
 
     const careers = await AsyncStorage.getItem('listCareers');
@@ -453,7 +459,7 @@ const SearchScreen = ({ navigation }) => {
       </View>
 
       {/* Show Search */}
-      <View style={{ paddingHorizontal: 18 }}>
+      <View style={{ paddingHorizontal: 18, marginBottom: 100 }}>
         <FlatListb />
       </View>
 
@@ -517,10 +523,10 @@ const SearchScreen = ({ navigation }) => {
                         <SalaryRangeSelector
                           minPrice={0}
                           maxPrice={MAX_PRICE}
-                          startPrice={startPrice}
-                          endPrice={endPrice}
-                          onStartPriceChange={setStartPrice}
-                          onEndPriceChange={setEndPrice}
+                          startPrice={filter.wageMin}
+                          endPrice={filter.wageMax}
+                          onStartPriceChange={(op) => setFilter({ ...filter, wageMin: op })}
+                          onEndPriceChange={(op) => setFilter({ ...filter, wageMax: op })}
                           salaryUnit={filter.payForm_id}
                         />
 
