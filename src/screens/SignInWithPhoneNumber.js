@@ -92,6 +92,7 @@ const SignInWithPhoneNumber = ({ navigation, props }) => {
           setUser(response.data);
           const data = JSON.stringify(response.data);
           await AsyncStorage.setItem('user', data);
+          await AsyncStorage.setItem('isFirstAccess', "0");
           if (response.data.role === 0) {
             navigation.navigate('TabNavigatorUser');
             setLoading(true);

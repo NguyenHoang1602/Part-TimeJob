@@ -43,6 +43,7 @@ const AuthScreen = ({ navigation }) => {
                 setUser(result.data);
                 const data = JSON.stringify(result.data);
                 await AsyncStorage.setItem('user', data);
+                await AsyncStorage.setItem('isFirstAccess', "0");
                 if (result.data.role === 0) {
                     navigation.navigate('TabNavigatorUser');
                     setLoading(true);
@@ -98,6 +99,7 @@ const AuthScreen = ({ navigation }) => {
                     setUser(result.data);
                     const data = JSON.stringify(result.data);
                     await AsyncStorage.setItem('user', data);
+                    await AsyncStorage.setItem('isFirstAccess', "0");
                     if (result.data.role === 0) {
                         navigation.navigate('TabNavigatorUser');
                         setLoading(true);

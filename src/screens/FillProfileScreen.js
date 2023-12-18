@@ -156,6 +156,7 @@ const FillProfileScreen = ({ navigation, route }) => {
                 setUser(result.data);
                 const data = JSON.stringify(result.data);
                 await AsyncStorage.setItem('user', data);
+                await AsyncStorage.setItem('isFirstAccess', "0");
                 if (result.data.status) {
                     setUser(result.data);
                     if (result.data.role === 0) {
