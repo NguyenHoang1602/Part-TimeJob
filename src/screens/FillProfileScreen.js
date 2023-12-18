@@ -1,4 +1,5 @@
 /* eslint-disable prettier/prettier */
+/* eslint-disable no-const-assign */
 /* eslint-disable react/self-closing-comp */
 /* eslint-disable no-unused-vars */
 /* eslint-disable eol-last */
@@ -107,6 +108,34 @@ const FillProfileScreen = ({ navigation, route }) => {
         }
         if (!inputs.birthDay) {
             handleError('Vui lòng chọn ngày sinh', 'birthDay');
+            isValid = false;
+        } else {
+            const ngayHienTai = new Date();
+            const fomat = new Date(date);
+            const year = fomat.getFullYear();
+            const month = String(fomat.getMonth() + 1).padStart(2, '0');
+            const day = String(fomat.getDate()).padStart(2, '0');
+            const formattedDate = `${year}-${month}-${day}`;
+            const ngaySinh = new Date(formattedDate);
+            let soTuoi = ngayHienTai.getFullYear() - ngaySinh.getFullYear();
+            if (
+                ngayHienTai.getMonth() < ngaySinh.getMonth() ||
+                (ngayHienTai.getMonth() === ngaySinh.getMonth() &&
+                    ngayHienTai.getDate() < ngaySinh.getDate())
+            ) {
+                soTuoi = soTuoi - 1;
+            }
+            if (soTuoi < 15) {
+                handleError('Số tuổi phải đủ 15 tính từ ngày sinh', 'birthDay');
+                isValid = false;
+            }
+        }
+        // } else if (soTuoi < 15) {
+        //     handleError('Số tuổi phải đủ 15 tính từ ngày sinh', 'birthDay');
+        //     isValid = false;
+        // }
+        if (!inputs.gender) {
+            handleError('Vui lòng chọn giới tính', 'gender');
             isValid = false;
         }
         if (!inputs.phone) {
@@ -253,7 +282,7 @@ const FillProfileScreen = ({ navigation, route }) => {
                         }}
                         onPress={() => navigation.navigate('SelectRole')}>
                         <AntDesign name="arrowleft" size={26} color={COLORS.black} />
-                        <Text style={{ fontSize: 22, fontWeight: '600', color: COLORS.black, marginLeft: 20 }}>Fill Your Profile</Text>
+                        <Text style={{ fontSize: 22, fontWeight: '600', color: COLORS.black, marginLeft: 20 }}>Cập nhật thông tin</Text>
                     </TouchableOpacity>
                     <ScrollView>
                         <View style={styles.body}>
@@ -295,7 +324,7 @@ const FillProfileScreen = ({ navigation, route }) => {
                                     value={inputs.email}
                                 />
                                 <Dropdown
-                                    style={[styles.dropdown, isFocus && { borderColor: COLORS.darkBlue }, !errGender && { borderColor: 'red' }]}
+                                    style={[styles.dropdown, isFocus && { borderColor: COLORS.darkBlue }, errors.gender && { borderColor: 'red' }]}
                                     placeholderStyle={styles.placeholderStyle}
                                     selectedTextStyle={styles.selectedTextStyle}
                                     iconStyle={styles.iconStyle}
@@ -304,17 +333,16 @@ const FillProfileScreen = ({ navigation, route }) => {
                                     labelField="title"
                                     valueField="_id"
                                     placeholder={!isFocus ? 'Giới tính' : '...'}
-                                    value={inputs?.gender}
+                                    value={inputs.gender}
                                     onFocus={() => setIsFocus(true)}
                                     onBlur={() => setIsFocus(false)}
                                     onChange={item => {
                                         setIsFocus(false);
-                                        VLDSex(item._id);
-                                        handleOnchange(item._id, 'gender');
+                                        handleOnchange(item._id, 'gender')
+                                        handleError(null, 'gender')
                                     }}
-
                                 />
-                                {!errGender ? <Text style={{ marginTop: 7, color: COLORS.red, fontSize: 12 }}>{validateSex}</Text> : null}
+                                {errors.gender ? <Text style={{ marginTop: 7, color: COLORS.red, fontSize: 12 }}>{errors.gender}</Text> : null}
                                 {phones ?
                                     <View
                                         style={{

@@ -70,7 +70,11 @@ const NotificationScreen = ({ route, navigation }) => {
             console.log(error);
         }
     }
-    const renderItem = ({ item }) => (
+    const renderItem = ({ item }) => {
+        const ngayThang  = item.date.slice(0, 10);
+        const parts = ngayThang.split('-');
+        const date = parts.reverse().join('-');
+        return (
         <View style={{
             width: "100%",
             marginBottom: 18,
@@ -105,7 +109,7 @@ const NotificationScreen = ({ route, navigation }) => {
                             </View>
                             <View style={{ flexDirection: 'column', flex: 1, justifyContent: 'center' }}>
                                 <Text style={{ fontSize: 18, fontWeight: '700', color: COLORS.black }}>Đơn ứng tuyển mới</Text>
-                                <Text style={{ fontSize: 14, fontWeight: '500', color: COLORS.black, opacity: 0.5 }}>{item?.time}</Text>
+                                <Text style={{ fontSize: 14, fontWeight: '500', color: COLORS.black, opacity: 0.5 }}>Ngày {date} lúc : {item.time}</Text>
                             </View>
                             {
                                 item.seen == 0 ? (
@@ -135,7 +139,7 @@ const NotificationScreen = ({ route, navigation }) => {
                             </View>
                             <View style={{ flexDirection: 'column', flex: 1, justifyContent: 'center' }}>
                                 <Text style={{ fontSize: 18, fontWeight: '700', color: COLORS.black }}>Phản hồi</Text>
-                                <Text style={{ fontSize: 14, fontWeight: '500', color: COLORS.black, opacity: 0.5 }}>{item?.time}</Text>
+                                <Text style={{ fontSize: 14, fontWeight: '500', color: COLORS.black, opacity: 0.5 }}>Ngày {date} lúc : {item.time}</Text>
                             </View>
                             {
                                 item.seen == 0 ? (
@@ -164,7 +168,7 @@ const NotificationScreen = ({ route, navigation }) => {
                             </View>
                             <View style={{ flexDirection: 'column', flex: 1, justifyContent: 'center' }}>
                                 <Text style={{ fontSize: 18, fontWeight: '700', color: COLORS.black }}>Phản hồi</Text>
-                                <Text style={{ fontSize: 14, fontWeight: '500', color: COLORS.black, opacity: 0.5 }}>{item?.time}</Text>
+                                <Text style={{ fontSize: 14, fontWeight: '500', color: COLORS.black, opacity: 0.5 }}>Ngày {date} lúc : {item.time}</Text>
                             </View>
                             {
                                 item.seen == 0 ? (
@@ -193,7 +197,7 @@ const NotificationScreen = ({ route, navigation }) => {
                             </View>
                             <View style={{ flexDirection: 'column', flex: 1, justifyContent: 'center' }}>
                                 <Text style={{ fontSize: 18, fontWeight: '700', color: COLORS.black }}>Thương lượng</Text>
-                                <Text style={{ fontSize: 14, fontWeight: '500', color: COLORS.black, opacity: 0.5 }}>{item?.time}</Text>
+                                <Text style={{ fontSize: 14, fontWeight: '500', color: COLORS.black, opacity: 0.5 }}>Ngày {date} lúc : {item.time}</Text>
                             </View>
                             {
                                 item.seen == 0 ? (
@@ -209,8 +213,9 @@ const NotificationScreen = ({ route, navigation }) => {
                 ) : null
             }
         </View>
+        )
 
-    );
+        };
     // const renderItem = ({ item }) => (
     //     <View style={{
     //         width: "100%",

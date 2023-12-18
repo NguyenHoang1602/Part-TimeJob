@@ -76,7 +76,11 @@ const CurriculumVitae = ({ navigation }) => {
     navigation.navigate('StageCurriculumScreen', { item })
   };
 
-  const renderCareers = ({ item }) => (
+  const renderCareers = ({ item }) => {
+    const ngayThang  = item.date.slice(0, 10);
+    const parts = ngayThang.split('-');
+    const date = parts.reverse().join('-');
+    return (
     <Pressable
       onPress={() => { handleUpdateStage(item) }}
       style={{ flexDirection: 'row', backgroundColor: 'rgba(90, 148, 255, 0.1)', borderRadius: 10, alignItems: 'center', paddingVertical: 10, paddingHorizontal: 10, marginBottom: 10 }}>
@@ -87,8 +91,8 @@ const CurriculumVitae = ({ navigation }) => {
       <View style={{ marginLeft: 13, flex: 1 }}>
         <Text numberOfLines={1} style={{ fontSize: 16, color: COLORS.black }}>{item?.cv_id?.name}</Text>
         <View style={{ flexDirection: 'row', marginTop: 5 }}>
-          <Text numberOfLines={1} style={{ fontSize: 13 }}>Thời gian : </Text>
-          <Text numberOfLines={1} style={{ fontSize: 13 }}>{item?.time}</Text>
+          {/* <Text numberOfLines={1} style={{ fontSize: 13 }}>Thời gian : </Text> */}
+          <Text numberOfLines={1} style={{ fontSize: 13 }}>Ngày {date} lúc {item?.time}</Text>
         </View>
         {/* <View style={{ flexDirection: 'row', marginTop: 2 }}>
           <Text numberOfLines={1} style={{ fontSize: 13 }}>Ngày : </Text>
@@ -97,7 +101,7 @@ const CurriculumVitae = ({ navigation }) => {
       </View>
 
     </Pressable>
-  );
+  )};
 
   return (
     <SafeAreaView style={styles.container}>

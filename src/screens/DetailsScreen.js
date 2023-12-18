@@ -70,8 +70,6 @@ const DetailsScreen = ({ route, navigation }) => {
     const [loading, setLoading] = React.useState(false);
     const [cv, setCv] = useState([]);
     const [salary, setSalary] = useState('');
-
-
     const [selectedItem, setSelectedItem] = useState(null);
     const [sender, setSender] = useState(null);
     const [listApplied, setListApplied] = useState([]);
@@ -327,7 +325,7 @@ const DetailsScreen = ({ route, navigation }) => {
                                 )
                             }
                         </View>
-                        <Text style={styles.datetime}>{data.date} {data.time}</Text>
+                        <Text style={styles.datetime}>Đã đăng {data.date} ngày trước vào lúc {data.time}</Text>
                         <View style={styles.user}>
                             <ImageBackground
                                 source={{ uri: data.avatar }}
