@@ -672,7 +672,7 @@ const SearchScreen = ({ navigation }) => {
                   paddingVertical: 15,
 
                 }}>
-                <Text style={{ color: COLORS.primary, fontSize: 18, fontFamily: 'BeVietnamPro-Medium', marginTop: -2 }}>Reset</Text>
+                <Text style={{ color: COLORS.primary, fontSize: 18, fontFamily: 'BeVietnamPro-Medium', marginTop: -2 }}>Đặt lại</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => {
@@ -695,7 +695,7 @@ const SearchScreen = ({ navigation }) => {
                   shadowRadius: 3.84,
                   elevation: 5,
                 }}>
-                <Text style={{ color: COLORS.white, fontSize: 18, fontFamily: 'BeVietnamPro-Medium', marginTop : -4}}>Apply</Text>
+                <Text style={{ color: COLORS.white, fontSize: 18, fontFamily: 'BeVietnamPro-Medium', marginTop : -4}}>Áp dụng</Text>
               </TouchableOpacity>
             </View>
           </SafeAreaView>
