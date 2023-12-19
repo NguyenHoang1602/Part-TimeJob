@@ -52,8 +52,9 @@ const WelcomeScreen = ({ navigation }) => {
   return (
     <View style={{ flex: 1 }}>
       <StatusBar barStyle={"light-content"} />
-      <Image source={{ uri: "https://img.freepik.com/free-photo/laptop-table-modern-office-3d-rendering_1142-50476.jpg?t=st=1702925679~exp=1702929279~hmac=83e5a1717031ef037c5553cbe1ecd5334fc44a62f00db76ceaccdd85cd9730d9&w=740" }}
-        style={{ flex: 1 }} />
+      <Image
+        source={require('../assets/images/backgr.jpg')}
+        style={{ flex: 1, height: "100%", width: '100%' }} />
       <SafeAreaView edges={["top"]} style={{ position: "absolute", top: 0, left: 0, right: 0, paddingHorizontal: 20, gap: 25 }}>
         <View style={{ alignItems: 'center', marginTop: '140%' }}>
           <Text style={{ color: COLORS.white, fontSize: 36, fontFamily: 'BeVietnamPro-Bold', }}>
