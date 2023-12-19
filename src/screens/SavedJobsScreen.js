@@ -167,6 +167,11 @@ const SavedJobsScreen = ({ navigation }) => {
   const renderItemJob = ({ item }) => {
     const formattedWageMin = item.post_id.wageMin.toLocaleString('vi-VN');
     const formattedWageMax = item.post_id.wageMax.toLocaleString('vi-VN');
+    const date = item.post_id.date.slice(0, 10);
+    const ngayDang = new Date(date);
+    const ngayHienTai = new Date();
+    const soMiligiay = ngayHienTai.getTime() - ngayDang.getTime();
+    const soNgay = Math.floor(soMiligiay / (1000 * 60 * 60 * 24));
     return (
       <TouchableOpacity
         style={{
@@ -193,7 +198,7 @@ const SavedJobsScreen = ({ navigation }) => {
           wage_min: formattedWageMin,
           wage_max: formattedWageMax,
           status_id: item?.post_id.status_id,
-          date: item?.post_id.date,
+          date: soNgay,
           time: item?.post_id.time,
         })}>
         <View style={{ borderRadius: 15, borderWidth: 0.5, padding: 18, borderColor: COLORS.grey }}>
