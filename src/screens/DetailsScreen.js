@@ -113,8 +113,7 @@ const DetailsScreen = ({ route, navigation }) => {
             const result = await axios.post(`${API}/savePost/add`, savedata);
             if (result.status === 200) {
                 getListSave();
-                Alert.alert('Lưu tin thành công !')
-                console.log("Thành công");
+                ToastAndroid.show('Lưu tin thành công !', ToastAndroid.SHORT);
             }
         } catch (error) {
             console.log('Err: ', error);
@@ -216,6 +215,7 @@ const DetailsScreen = ({ route, navigation }) => {
         const result = await axios.post(`${API}/savePost/deleteWithCondition`, deleteSave);
         if (result.status === 200) {
             getListSave();
+            ToastAndroid.show('Xóa tin đã lưu thành công !', ToastAndroid.SHORT);
             console.log("Thành công");
         }
     }

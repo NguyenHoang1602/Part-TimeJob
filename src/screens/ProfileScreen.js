@@ -4,7 +4,7 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable react-native/no-inline-styles */
 import React, { useState, useContext } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, ImageBackground, FlatList, ScrollView, Alert } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, ImageBackground, FlatList, ScrollView, Alert, ToastAndroid } from 'react-native';
 
 //
 import Input from '../components/Input';
@@ -36,6 +36,7 @@ const ProfileScreen = ({ route, navigation }) => {
   const [darkMode, setDarkMode] = useState(true);
   const Darkmode = () => {
     setDarkMode(!darkMode);
+    ToastAndroid.show('Tính năng đang được phát triển !', ToastAndroid.SHORT)
   }
 
   const Logout = () => {
@@ -120,19 +121,23 @@ const ProfileScreen = ({ route, navigation }) => {
             <Text style={styles.itemText}>Thông báo</Text>
             <Feather name="chevron-right" size={24} color='rgba(125, 122, 122, 1)' />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.item1}>
+          <TouchableOpacity
+            onPress={() => ToastAndroid.show('Tính năng đang được phát triển !', ToastAndroid.SHORT)}
+            style={styles.item1}>
             <MaterialCommunityIcons name="google-translate" size={24} color='rgba(125, 122, 122, 1)' />
             <Text style={styles.itemText}>Ngôn ngữ</Text>
             <Feather name="chevron-right" size={24} color='rgba(125, 122, 122, 1)' />
           </TouchableOpacity>
-          <TouchableOpacity style={{
-            width: '100%',
-            flexDirection: 'row',
-            marginTop: 8,
-            alignItems: 'center',
-            paddingHorizontal: 10,
-            paddingVertical: 8,
-          }}>
+          <TouchableOpacity
+            onPress={() => ToastAndroid.show('Tính năng đang được phát triển !', ToastAndroid.SHORT)}
+            style={{
+              width: '100%',
+              flexDirection: 'row',
+              marginTop: 8,
+              alignItems: 'center',
+              paddingHorizontal: 10,
+              paddingVertical: 8,
+            }}>
             <Feather name="moon" size={24} color='rgba(125, 122, 122, 1)' />
             <Text style={styles.itemText}>Chế độ tối</Text>
             <TouchableOpacity onPress={Darkmode}>
@@ -143,12 +148,16 @@ const ProfileScreen = ({ route, navigation }) => {
               }
             </TouchableOpacity>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.item1}>
+          <TouchableOpacity
+            onPress={() => ToastAndroid.show('Tính năng đang được phát triển !', ToastAndroid.SHORT)}
+            style={styles.item1}>
             <Feather name="help-circle" size={24} color='rgba(125, 122, 122, 1)' />
             <Text style={styles.itemText}>Trợ giúp & hỗ trợ</Text>
             <Feather name="chevron-right" size={24} color='rgba(125, 122, 122, 1)' />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.item1}>
+          <TouchableOpacity
+            onPress={() => ToastAndroid.show('Tính năng đang được phát triển !', ToastAndroid.SHORT)}
+            style={styles.item1}>
             <AntDesign name="staro" size={24} color='rgba(125, 122, 122, 1)' />
             <Text style={styles.itemText}>Đánh giá</Text>
             <Feather name="chevron-right" size={24} color='rgba(125, 122, 122, 1)' />

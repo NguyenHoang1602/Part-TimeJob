@@ -2,16 +2,21 @@
 /* eslint-disable react/self-closing-comp */
 /* eslint-disable prettier/prettier */
 /* eslint-disable react-native/no-inline-styles */
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, ImageBackground, StyleSheet, ScrollView, Alert } from 'react-native';
+import React, { useCallback, useState } from 'react';
+import { View, Text, TouchableOpacity, ImageBackground, StyleSheet, ScrollView, Alert, ToastAndroid } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import COLORS from '../assets/const/colors';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import axios from 'axios';
 import { API } from '../../Sever/sever';
+import { useFocusEffect } from '@react-navigation/native';
 
 const DetailsCVScreen = ({ navigation, route }) => {
-
+  useFocusEffect(
+    React.useCallback(() => {
+      getListApply();
+    }, [])
+  );
   const datalist = {
     _id: route.params?.item?._id,
     title: route.params?.item?.title,
@@ -27,10 +32,34 @@ const DetailsCVScreen = ({ navigation, route }) => {
     introduce: route.params?.item?.introduce,
   };
   const [data, setData] = useState(datalist);
+  const [listApplied, setListApplied] = useState([]);
 
-  const updateCv = async (item) => {
-
+  async function getListApply() {
+    try {
+      const result = await axios.get(`${API}/apply//listAll`);
+      if (result.status === 200) {
+        setListApplied(result.data);
+      }
+    } catch (error) {
+      console.log('Err : ', error);
+    }
   }
+  const checkEdit = (id) => {
+    const saveAppliedIDlist = listApplied.map(item => item.cv_id);
+    if (saveAppliedIDlist.some(cv_id => cv_id === id) == true) {
+      ToastAndroid.show('Xin lỗi, có vẻ như CV đang trong trạng thái ứng tuyển !', ToastAndroid.SHORT);
+    } else {
+      navigation.navigate('UpdateCvScreen', {item : data});
+    }
+  };
+  const checkDelete = (id) => {
+    const saveAppliedIDlist = listApplied.map(item => item.cv_id);
+    if (saveAppliedIDlist.some(cv_id => cv_id === id) == true) {
+      ToastAndroid.show('Xin lỗi, có vẻ như CV đang trong trạng thái ứng tuyển !', ToastAndroid.SHORT);
+    } else {
+      deleteCv();
+    }
+  };
 
   const deleteCv = () => {
     Alert.alert('Xóa CV', 'Bạn muốn xóa CV này ?', [
@@ -129,7 +158,7 @@ const DetailsCVScreen = ({ navigation, route }) => {
         }}>
           <TouchableOpacity
             onPress={() => {
-              deleteCv()
+              checkDelete(data._id);
             }}
             style={{
               backgroundColor: 'rgba(51, 123, 255, 0.20)',
@@ -146,7 +175,7 @@ const DetailsCVScreen = ({ navigation, route }) => {
 
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate('UpdateCvScreen', {item : data});
+              checkEdit(data._id);
             }}
             style={{
               backgroundColor: COLORS.primary,
