@@ -141,6 +141,7 @@ const DetailsScreen = ({ route, navigation }) => {
 
     const validate = async () => {
         Keyboard.dismiss();
+        console.log(salary);
         let isValid = true;
         if (selectedItem === null) {
             ToastAndroid.show("Bạn chưa chọn CV", ToastAndroid.LONG);
@@ -148,8 +149,9 @@ const DetailsScreen = ({ route, navigation }) => {
             if (!salary) {
                 setErrors('Vui lòng nhập lương mong muốn')
                 isValid = false;
-            } else if (salary < 1000){
-                setErrors('Lương mong muốn phải lớn hơn 1.000đ')
+            } else if (salary < data?.wage_min){
+                console.log(salary);
+                setErrors('Lương mong muốn phải lớn hơn hoặc bằng lương tối thiểu')
                 isValid = false;
             }
             if (isValid) {
@@ -322,74 +324,74 @@ const DetailsScreen = ({ route, navigation }) => {
                 <View style={{ width: '100%', paddingHorizontal: 15 }}>
                     <View
                         style={styles.postHeaders}>
-                        <Text style={styles.title}>{data.title}</Text>
+                        <Text style={styles.title}>{data?.title}</Text>
                         <View style={{ flexDirection: 'row' }}>
-                            <Text style={{ color: COLORS.red, fontSize: 16, marginVertical: 9, fontFamily: 'BeVietnamPro-Medium', }}>{data.wage_min}đ - {data.wage_max}đ</Text>
+                            <Text style={{ color: COLORS.red, fontSize: 16, marginVertical: 9, fontFamily: 'BeVietnamPro-Medium' }}>{data?.wage_min}đ - {data?.wage_max}đ</Text>
                             {
-                                data.payform_id._id === '655de22b9a5b0ffa7ffd5132' ? (
-                                    <Text style={{ color: COLORS.red, fontSize: 16, marginVertical: 9, fontFamily: 'BeVietnamPro-Medium', }}> /giờ</Text>
+                                data?.payform_id?._id === '655de22b9a5b0ffa7ffd5132' ? (
+                                    <Text style={{ color: COLORS.red, fontSize: 16, marginVertical: 9, fontFamily: 'BeVietnamPro-Medium'}}> /giờ</Text>
                                 ) : (
-                                        <Text style={{ color: COLORS.red, fontSize: 16, marginVertical: 9, fontFamily: 'BeVietnamPro-Medium', }}> /tháng</Text>
+                                        <Text style={{ color: COLORS.red, fontSize: 16, marginVertical: 9, fontFamily: 'BeVietnamPro-Medium'}}> /tháng</Text>
                                 )
                             }
                         </View>
-                        <Text style={styles.datetime}>Đã đăng {data.date} ngày trước vào lúc {data.time}</Text>
+                        <Text style={styles.datetime}>Đã đăng {data?.date} ngày trước vào lúc {data?.time}</Text>
                         <View style={styles.user}>
                             <ImageBackground
-                                source={{ uri: data.avatar }}
+                                source={{ uri: data?.avatar }}
                                 style={{ width: 48, height: 48 }}
                                 imageStyle={{ borderRadius: 48 }}
                             />
-                            <Text style={styles.usertitle}>{data.displayName}</Text>
+                            <Text style={styles.usertitle}>{data?.displayName}</Text>
                         </View>
                     </View>
                     <View style={styles.dot} />
                     <View style={{ width: '100%' }}>
-                        <Text style={styles.describe}>{data.describe}</Text>
+                        <Text style={styles.describe}>{data?.describe}</Text>
                     </View>
                     <View style={styles.item1}>
                         <AntDesign name="creditcard" size={24} color={COLORS.blue} />
-                        <Text style={styles.itemText}>Hình thức trả lương: {data.payform_id.title}</Text>
+                        <Text style={styles.itemText}>Hình thức trả lương: {data?.payform_id?.title}</Text>
                     </View>
                     <View style={styles.item}>
                         <Octicons name="log" size={24} color={COLORS.blue} />
-                        <Text style={styles.itemText}>Loại công việc: {data.worktype_id}</Text>
+                        <Text style={styles.itemText}>Loại công việc: {data?.worktype_id}</Text>
                     </View>
                     <View style={styles.item}>
                         <SimpleLineIcons name="briefcase" size={24} color={COLORS.blue} />
-                        <Text style={styles.itemText}>Ngành nghề: {data.career_id}</Text>
+                        <Text style={styles.itemText}>Ngành nghề: {data?.career_id}</Text>
                     </View>
                     <View style={styles.item}>
                         <AntDesign name="carryout" size={24} color={COLORS.blue} />
-                        <Text style={styles.itemText}>Kinh nghiệm: {data.experience_id}</Text>
+                        <Text style={styles.itemText}>Kinh nghiệm: {data?.experience_id}</Text>
                     </View>
                     <View style={styles.item}>
                         <Octicons name="mortar-board" size={24} color={COLORS.blue} />
-                        <Text style={styles.itemText}>Trình độ học vấn: {data.acedemic_id}</Text>
+                        <Text style={styles.itemText}>Trình độ học vấn: {data?.acedemic_id}</Text>
                     </View>
                     <View style={styles.item}>
                         <Fontisto name="venus-mars" size={24} color={COLORS.blue} />
-                        <Text style={styles.itemText}>Giới tính: {data.gender}</Text>
+                        <Text style={styles.itemText}>Giới tính: {data?.gender}</Text>
                     </View>
                     <View style={styles.item}>
                         <FontAwesome name="building-o" size={24} color={COLORS.blue} />
-                        <Text style={styles.itemText}>Tên Công ty: {data.business_name}</Text>
+                        <Text style={styles.itemText}>Tên Công ty: {data?.business_name}</Text>
                     </View>
                     <View style={styles.item}>
                         <Octicons name="people" size={24} color={COLORS.blue} />
-                        <Text style={styles.itemText}>Số lượng tuyển dụng: {data.quantity}</Text>
+                        <Text style={styles.itemText}>Số lượng tuyển dụng: {data?.quantity}</Text>
                     </View>
                     <View style={styles.item}>
                         <AntDesign name="leftsquareo" size={24} color={COLORS.blue} />
-                        <Text style={styles.itemText}>Tuổi tối thiểu: {data.age_min}</Text>
+                        <Text style={styles.itemText}>Tuổi tối thiểu: {data?.age_min}</Text>
                     </View>
                     <View style={styles.item}>
                         <AntDesign name="rightsquareo" size={24} color={COLORS.blue} />
-                        <Text style={styles.itemText}>Tuổi đa: {data.age_max}</Text>
+                        <Text style={styles.itemText}>Tuổi đa: {data?.age_max}</Text>
                     </View>
                     <View style={{ flexDirection: 'row', marginTop: 10, alignItems: 'center', width: '90%' }}>
                         <Feather name="map-pin" size={24} color={COLORS.blue} />
-                        <Text style={styles.itemText}>{data.address}</Text>
+                        <Text style={styles.itemText}>{data?.address}</Text>
                     </View>
                     <View style={{ width: '100%', alignItems: 'center', paddingVertical: 50 }}>
                         {isFollowed(data?.postid) ? (

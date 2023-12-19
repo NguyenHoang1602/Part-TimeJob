@@ -131,7 +131,7 @@ const AuthScreen = ({ navigation }) => {
             {loading ? (
                 <ActivityIndicator size="large" color={COLORS.primary} />
             ) : (
-                <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', width: "100%" }}>
+                <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', width: "100%", marginBottom: '5%' }}>
                     <View style={{
                         bottom: '10%',
                         alignItems: 'center',

@@ -78,7 +78,6 @@ const CVScreen = ({ route, navigation }) => {
       handleError('Vui lòng nhập tên CV', 'title');
       isValid = false;
     }
-
     if (!inputs.name) {
       handleError('Vui lòng nhập họ tên', 'name');
       isValid = false;

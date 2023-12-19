@@ -328,8 +328,9 @@ const CVScreen = ({ route, navigation }) => {
             }}>
             <Text
               style={{
-                fontWeight: 'bold',
-                fontSize: 18,
+                marginBottom: 8,
+                fontFamily: 'BeVietnamPro-Medium',
+                fontSize: 17,
                 color: COLORS.white,
               }}>
               Lưu
