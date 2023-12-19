@@ -1,3 +1,9 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable semi */
+/* eslint-disable quotes */
+/* eslint-disable react-native/no-inline-styles */
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable prettier/prettier */
 import { Image, StatusBar, StyleSheet, Text, View } from 'react-native'
 import React, { useContext, useEffect } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -50,14 +56,14 @@ const WelcomeScreen = ({ navigation }) => {
         style={{ flex: 1 }} />
       <SafeAreaView edges={["top"]} style={{ position: "absolute", top: 0, left: 0, right: 0, paddingHorizontal: 20, gap: 25 }}>
         <View style={{ alignItems: 'center', marginTop: '140%' }}>
-          <Text style={{ color: COLORS.white, fontSize: 40, fontFamily: 'Roboto-Bold', }}>
+          <Text style={{ color: COLORS.white, fontSize: 36, fontFamily: 'BeVietnamPro-Bold', }}>
             Welcome to
           </Text>
-          <Text style={{ color: COLORS.white, fontSize: 40, fontFamily: 'Roboto-Bold' }}>
+          <Text style={{ color: COLORS.white, fontSize: 36, fontFamily: 'BeVietnamPro-Bold', }}>
             Part-Time Jobs 👋
           </Text>
         </View>
-        <Text style={{ color: COLORS.white, fontSize: 18, textAlign: 'center', fontFamily: 'Roboto-ExtraLight' }}>
+        <Text style={{ color: COLORS.white, fontSize: 16, textAlign: 'center', fontFamily: 'BeVietnamPro-Medium' }}>
           The best job finder & job portal app where the best jobs will find you
         </Text>
       </SafeAreaView>

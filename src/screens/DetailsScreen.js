@@ -113,8 +113,7 @@ const DetailsScreen = ({ route, navigation }) => {
             const result = await axios.post(`${API}/savePost/add`, savedata);
             if (result.status === 200) {
                 getListSave();
-                Alert.alert('Lưu tin thành công !')
-                console.log("Thành công");
+                ToastAndroid.show('Lưu tin thành công !', ToastAndroid.SHORT);
             }
         } catch (error) {
             console.log('Err: ', error);
@@ -148,6 +147,9 @@ const DetailsScreen = ({ route, navigation }) => {
         } else {
             if (!salary) {
                 setErrors('Vui lòng nhập lương mong muốn')
+                isValid = false;
+            } else if (salary < 1000){
+                setErrors('Lương mong muốn phải lớn hơn 1.000đ')
                 isValid = false;
             }
             if (isValid) {
@@ -216,6 +218,7 @@ const DetailsScreen = ({ route, navigation }) => {
         const result = await axios.post(`${API}/savePost/deleteWithCondition`, deleteSave);
         if (result.status === 200) {
             getListSave();
+            ToastAndroid.show('Xóa tin đã lưu thành công !', ToastAndroid.SHORT);
             console.log("Thành công");
         }
     }
@@ -391,7 +394,7 @@ const DetailsScreen = ({ route, navigation }) => {
                     <View style={{ width: '100%', alignItems: 'center', paddingVertical: 50 }}>
                         {isFollowed(data?.postid) ? (
                             <TouchableOpacity
-                                onPress={() => navigation.navigate('Applications')}
+                                onPress={() => navigation.navigate('Ứng tuyển')}
                                 style={styles.btnApply}>
                                 <Text
                                     style={{

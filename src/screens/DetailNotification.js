@@ -85,8 +85,58 @@ const DetailNotification = ({ route, navigation }) => {
                         <Text style={{ fontSize: 16 }}>{data?.cv_id.address}</Text>
                     </View>
                     <View style={styles.view1}>
+                        <Text style={styles.text2}>Trình dộ học vấn: </Text>
+                        {
+                            data?.cv_id.academic_id == '653e661f8e88b23b41388e3b' ? (
+                                <Text style={{ fontSize: 16 }}>Trung cấp - Nghề</Text>
+                            ) : data?.cv_id.academic_id == '655de6059a5b0ffa7ffd5134' ? (
+                                <Text style={{ fontSize: 16 }}>Cấp 3</Text>
+                            ) : data?.cv_id.academic_id == '655de6289a5b0ffa7ffd5135' ? (
+                                <Text style={{ fontSize: 16 }}>Không yêu cầu</Text>
+                            ) : data?.cv_id.academic_id == '655de6fc9a5b0ffa7ffd5136' ? (
+                                <Text style={{ fontSize: 16 }}>Đại học</Text>
+                            ) : data?.cv_id.academic_id == '655de7129a5b0ffa7ffd5137' ? (
+                                <Text style={{ fontSize: 16 }}>Cao đẳng</Text>
+                            ) : null
+                        }
+                    </View>
+                    <View style={styles.view1}>
+                        <Text style={styles.text2}>Ngành nghề: </Text>
+                        {
+                            data?.cv_id.career_id == '6554b9b322054e51b8327165' ? (
+                                <Text style={{ fontSize: 16 }}>Tạp vụ</Text>
+                            ) : data?.cv_id.career_id == '6554b9ce22054e51b8327168' ? (
+                                <Text style={{ fontSize: 16 }}> Nhân viên kho vận</Text>
+                            ) : data?.cv_id.career_id == '6554b9de22054e51b832716b' ? (
+                                <Text style={{ fontSize: 16 }}> Công nhân may</Text>
+                            ) : data?.cv_id.career_id == '6554b9f522054e51b832716e' ? (
+                                <Text style={{ fontSize: 16 }}> Bảo vệ</Text>
+                            ) : data?.cv_id.career_id == '6554ba1922054e51b8327171' ? (
+                                <Text style={{ fontSize: 16 }}> Pha chế</Text>
+                            ) : data?.cv_id.career_id == '6558505e70f5b03183a9c903' ? (
+                                <Text style={{ fontSize: 16 }}> Bán hàng</Text>
+                            ) : data?.cv_id.career_id == '6558620586d0490539c8353c' ? (
+                                <Text style={{ fontSize: 16 }}> Nhân viên phục vụ</Text>
+                            ) : data?.cv_id.career_id == '65586aa480b16af7fdeef6f3' ? (
+                                <Text style={{ fontSize: 16 }}> Nhân viên</Text>
+                            ) : null
+                        }
+                    </View>
+                    <View style={styles.view1}>
                         <Text style={styles.text2}>Kinh nghiệm: </Text>
-                        <Text style={{ fontSize: 16 }}>{data?.cv_id.experience}</Text>
+                        {
+                            data?.cv_id.experience_id == '653e64098e88b23b41388e37' ? (
+                                <Text style={{ fontSize: 16 }}>Không có</Text>
+                            ) : data?.cv_id.experience_id == '653e64198e88b23b41388e38' ? (
+                                <Text style={{ fontSize: 16 }}> dưới 1 năm</Text>
+                            ) : data?.cv_id.experience_id == '655dea819a5b0ffa7ffd513c' ? (
+                                <Text style={{ fontSize: 16 }}> Từ 1 - 2 năm</Text>
+                            ) : data?.cv_id.experience_id == '655deab09a5b0ffa7ffd513e' ? (
+                                <Text style={{ fontSize: 16 }}> Từ 3 - 4 năm</Text>
+                            ) : data?.cv_id.experience_id == '655deac79a5b0ffa7ffd513f' ? (
+                                <Text style={{ fontSize: 16 }}> Trên 4 năm</Text>
+                            ) : null
+                        }
                     </View>
                     <Text style={styles.text1}>Giới thiệu bản thân: </Text>
                     <Text style={{ fontSize: 16, marginTop: 5, marginBottom: 20 }}>- {data?.cv_id.introduce}</Text>
@@ -121,7 +171,7 @@ const DetailNotification = ({ route, navigation }) => {
                                 }
                             })}
                             <View style={{ width: '50%', height: '100%', marginStart: 20, flex: 1 }}>
-                                <Text style={{ fontSize: 18, fontWeight: '400' }}>{data?.post_id.title}</Text>
+                                <Text numberOfLines={2} style={{ fontSize: 18, fontWeight: '400' }}>{data?.post_id.title}</Text>
                                 <Text numberOfLines={1} style={{ fontSize: 15, fontWeight: '400', color: COLORS.grey }}>{data?.post_id.address}</Text>
                             </View>
                         </View>

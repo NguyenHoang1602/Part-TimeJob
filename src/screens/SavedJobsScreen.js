@@ -141,7 +141,7 @@ const SavedJobsScreen = ({ navigation }) => {
       // setLoading(false);
       toggleModalclose();
       fetchData();
-      console.log("Thành công");
+      ToastAndroid.show('Xóa thành công !', ToastAndroid.SHORT);
     }
   }
   const FlatListSaveJobs = () => {

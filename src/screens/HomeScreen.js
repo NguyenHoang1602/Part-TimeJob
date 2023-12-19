@@ -303,8 +303,6 @@ const HomeScreen = ({ navigation }) => {
   }
   var number = 0;
   const list = () => {
-    console.log(listApplied.length);
-    console.log(listAllAccept.length);
     let a = listAllAccept.length / listApplied.length * 100;
     if (!isNaN(a) && isFinite(a)) {
       number = a;
@@ -489,8 +487,8 @@ const HomeScreen = ({ navigation }) => {
             }
           })}
           <View style={{ height: '100%', marginStart: 20, flex: 1 }}>
-            <Text numberOfLines={2} style={{ fontSize: 18, fontWeight: '500', color: COLORS.black }}>{item.title}</Text>
-            <Text numberOfLines={1} style={{ fontSize: 15, fontWeight: 'normal', color: COLORS.black, opacity: 0.5 }}>{item.address}</Text>
+            <Text numberOfLines={2} style={{ fontSize: 18, color: COLORS.black, fontFamily: 'BeVietnamPro-Medium', marginTop: -2 }}>{item.title}</Text>
+            <Text numberOfLines={1} style={{ fontSize: 15, color: COLORS.black, opacity: 0.5, fontFamily: 'BeVietnamPro-Medium', marginTop: -2 }}>{item.address}</Text>
           </View>
           {
             isFollowed(item._id) ? (
@@ -504,19 +502,19 @@ const HomeScreen = ({ navigation }) => {
         </View>
         <View style={{ height: 1, width: '99%', backgroundColor: COLORS.grey, opacity: 0.4, marginTop: 10, marginBottom: 10 }} />
         <View style={{ width: '100%', paddingStart: '21%', gap: 10 }}>
-          <Text numberOfLines={1} style={{ fontSize: 16, fontWeight: '400', color: COLORS.black, opacity: 0.6, }}>{item.businessName}</Text>
+          <Text numberOfLines={1} style={{ fontSize: 16, fontWeight: '400', color: COLORS.black, opacity: 0.6, fontFamily: 'BeVietnamPro-Medium', marginTop: -2 }}>{item.businessName}</Text>
           <View style={{ flexDirection: 'row' }}>
-            <Text style={{ color: COLORS.blue, fontSize: 16 }}>{formattedWageMin}đ - {formattedWageMax}đ</Text>
+            <Text style={{ color: COLORS.blue, fontSize: 14, fontFamily: 'BeVietnamPro-Medium', marginTop: -2 }}>{formattedWageMin}đ - {formattedWageMax}đ</Text>
             {
               item.payForm_id._id === '655de22b9a5b0ffa7ffd5132' ? (
-                <Text style={{ color: COLORS.blue, fontSize: 16 }}> /giờ</Text>
+                <Text style={{ color: COLORS.blue, fontSize: 14, fontFamily: 'BeVietnamPro-Medium', marginTop: -2 }}> /giờ</Text>
               ) : (
-                <Text style={{ color: COLORS.blue, fontSize: 16 }}> /tháng</Text>
+                  <Text style={{ color: COLORS.blue, fontSize: 14, fontFamily: 'BeVietnamPro-Medium', marginTop: -2 }}> /tháng</Text>
               )
             }
           </View>
           <View style={{
-            width: 80,
+            width: 85,
             height: 25,
             borderWidth: 1,
             borderColor: COLORS.grey,
@@ -527,9 +525,9 @@ const HomeScreen = ({ navigation }) => {
           }}>
             {
               item.workType_id._id == '653e66b38e88b23b41388e3c' ? (
-                <Text style={{ fontSize: 10 }} >Bán thời gian</Text>
+                <Text style={{ fontSize: 10, fontFamily: 'BeVietnamPro-Medium', marginTop: -2 }} >Bán thời gian</Text>
               ) : (
-                <Text style={{ fontSize: 10 }} >Toàn thời gian</Text>
+                  <Text style={{ fontSize: 10, fontFamily: 'BeVietnamPro-Medium', marginTop: -2 }} >Toàn thời gian</Text>
               )
             }
           </View>
@@ -592,9 +590,9 @@ const HomeScreen = ({ navigation }) => {
               );
             }
           })}
-          <View style={{ height: '100%', marginStart: 20, flex: 1 }}>
-            <Text numberOfLines={2} style={{ fontSize: 18, fontWeight: '500', color: COLORS.black }}>{item.title}</Text>
-            <Text numberOfLines={1} style={{ fontSize: 15, fontWeight: 'normal', color: COLORS.black, opacity: 0.5 }}>{item.address}</Text>
+          <View style={{ height: '100%', marginStart: 20, flex: 1, }}>
+            <Text numberOfLines={2} style={{ fontSize: 18, color: COLORS.black, fontFamily: 'BeVietnamPro-Medium', marginTop: -2 }}>{item.title}</Text>
+            <Text numberOfLines={1} style={{ fontSize: 15, fontWeight: 'normal', color: COLORS.black, opacity: 0.5, fontFamily: 'BeVietnamPro-Medium', marginTop: -2 }}>{item.address}</Text>
           </View>
           {
             isFollowed(item._id) ? (
@@ -608,19 +606,19 @@ const HomeScreen = ({ navigation }) => {
         </View>
         <View style={{ height: 1, width: '99%', backgroundColor: COLORS.grey, opacity: 0.4, marginTop: 10, marginBottom: 10 }} />
         <View style={{ width: '100%', paddingStart: '21%', gap: 10 }}>
-          <Text numberOfLines={1} style={{ fontSize: 16, fontWeight: '400', color: COLORS.black, opacity: 0.6, }}>{item.businessName}</Text>
+          <Text numberOfLines={1} style={{ fontSize: 16,color: COLORS.black, opacity: 0.6, fontFamily: 'BeVietnamPro-Medium', }}>{item.businessName}</Text>
           <View style={{ flexDirection: 'row' }}>
-            <Text style={{ color: COLORS.blue, fontSize: 16 }}>{formattedWageMin}đ - {formattedWageMax}đ</Text>
+            <Text style={{ color: COLORS.blue, fontSize: 14, fontFamily: 'BeVietnamPro-Medium', }}>{formattedWageMin}đ - {formattedWageMax}đ</Text>
             {
               item.payForm_id._id === '655de22b9a5b0ffa7ffd5132' ? (
-                <Text style={{ color: COLORS.blue, fontSize: 16 }}> /giờ</Text>
+                <Text style={{ color: COLORS.blue, fontSize: 14, fontFamily: 'BeVietnamPro-Medium', }}> /giờ</Text>
               ) : (
-                <Text style={{ color: COLORS.blue, fontSize: 16 }}> /tháng</Text>
+                  <Text style={{ color: COLORS.blue, fontSize: 14, fontFamily: 'BeVietnamPro-Medium', }}> /tháng</Text>
               )
             }
           </View>
           <View style={{
-            width: 80,
+            width: 85,
             height: 25,
             borderWidth: 1,
             borderColor: COLORS.grey,
@@ -631,9 +629,9 @@ const HomeScreen = ({ navigation }) => {
           }}>
             {
               item.workType_id._id == '653e66b38e88b23b41388e3c' ? (
-                <Text style={{ fontSize: 10 }} >Bán thời gian</Text>
+                <Text style={{ fontSize: 10, fontFamily: 'BeVietnamPro-Medium', marginTop: -2 }} >Bán thời gian</Text>
               ) : (
-                <Text style={{ fontSize: 10 }} >Toàn thời gian</Text>
+                  <Text style={{ fontSize: 10, fontFamily: 'BeVietnamPro-Medium', marginTop: -2 }} >Toàn thời gian</Text>
               )
             }
           </View>
@@ -661,11 +659,11 @@ const HomeScreen = ({ navigation }) => {
             source={{ uri: user.photo }}
             style={{ width: 46, height: 46 }}
             imageStyle={{ borderRadius: 46 }} />
-          <View style={{ flex: 1, height: 46 }}>
-            <Text style={{ color: '#7D7A7A', fontSize: 16 }} numberOfLines={1}>
+          <View style={{ flex: 1, height: 46, justifyContent: 'center' }}>
+            <Text style={{ color: '#7D7A7A', fontSize: 14, fontFamily: 'BeVietnamPro-Medium', }} numberOfLines={1}>
               Xin chào 👋
             </Text>
-            <Text style={{ color: COLORS.black, fontSize: 20, fontWeight: "600" }} numberOfLines={1}>
+            <Text style={{ color: COLORS.black, fontSize: 20, fontFamily: 'BeVietnamPro-Bold', }} numberOfLines={1}>
               {user.displayName}
             </Text>
           </View>
@@ -704,7 +702,7 @@ const HomeScreen = ({ navigation }) => {
             borderColor: COLORS.white
           }}>
           <Feather name='search' size={24} color={COLORS.grey} />
-          <Text style={{ flex: 1, fontSize: 16, color: COLORS.grey, paddingHorizontal: 10, }} >
+          <Text style={{ flex: 1, fontSize: 16, color: COLORS.grey, paddingHorizontal: 10, fontFamily: 'BeVietnamPro-Medium', }} >
             Tìm kiếm . . .
           </Text>
           <FontAwesome6 name='sliders' size={20} color={COLORS.primary} />
@@ -715,7 +713,7 @@ const HomeScreen = ({ navigation }) => {
           refreshControl={<RefreshControl
             refreshing={refreshing}
             onRefresh={fetchData}
-            colors={['#0000ff']} // Adjust the colors of the loading indicator
+            colors={[COLORS.primary]} // Adjust the colors of the loading indicator
           />}>
           <View style={{ height: 120, backgroundColor: '#6295FF', borderRadius: 15, flexDirection: 'row', alignItems: 'center' }}>
             <View style={{ marginLeft: 30 }}>
@@ -728,28 +726,28 @@ const HomeScreen = ({ navigation }) => {
                 radius={40}
                 activeStrokeWidth={13}
                 inActiveStrokeWidth={13}
-                progressValueStyle={{ fontWeight: '500', fontSize: 18 }}
+                progressValueStyle={{ fontWeight: '500', fontSize: 18, fontFamily: 'BeVietnamPro-Medium', }}
               />
             </View>
             <View style={{ flex: 1 }}>
-              <Text style={{ marginLeft: 38, color: COLORS.white, fontSize: 21, fontWeight: '500' }}>Thống kê việc làm</Text>
-              <Text style={{ marginLeft: 38, color: COLORS.white, fontSize: 15, fontWeight: '300', marginTop: 2 }}>Tỉ lệ tìm được việc</Text>
+              <Text style={{ marginLeft: 38, color: COLORS.white, fontSize: 21, fontWeight: '500', fontFamily: 'BeVietnamPro-Medium', }}>Thống kê việc làm</Text>
+              <Text style={{ marginLeft: 38, color: COLORS.white, fontSize: 15, fontWeight: '300', marginTop: 2, fontFamily: 'BeVietnamPro-Medium', }}>Tỉ lệ tìm được việc</Text>
             </View>
           </View>
           <View style={{ alignItems: 'center', marginBottom: 15, marginTop: 15, flexDirection: 'row' }}>
-            <Text style={{ flex: 1, fontSize: 20, fontStyle: 'normal', color: COLORS.black, fontWeight: 'bold' }}>Công việc đề xuất</Text>
+            <Text style={{ flex: 1, fontSize: 20, fontStyle: 'normal', color: COLORS.black, fontFamily: 'BeVietnamPro-Bold', }}>Công việc đề xuất</Text>
             <TouchableOpacity
               onPress={() => { }}>
-              <Text style={{ fontSize: 18, color: COLORS.blue, fontWeight: 'bold' }}>Tất cả</Text>
+              <Text style={{ fontSize: 17, color: COLORS.blue, fontFamily: 'BeVietnamPro-Medium', }}>Tất cả</Text>
             </TouchableOpacity>
           </View>
           <FlatLista />
           {/* All post */}
           <View style={{ width: '100%', marginBottom: 20, flexDirection: 'row', alignItems: 'center' }}>
-            <Text style={{ fontSize: 20, fontStyle: 'normal', color: COLORS.black, fontWeight: 'bold' }}>Công việc mới</Text>
-            <TouchableOpacity style={{ marginStart: '49%' }}
+            <Text style={{ flex: 1, fontSize: 20, fontStyle: 'normal', color: COLORS.black, fontFamily: 'BeVietnamPro-Bold', }}>Công việc mới</Text>
+            <TouchableOpacity
               onPress={() => { }}>
-              <Text style={{ fontSize: 18, color: COLORS.blue, fontWeight: 'bold' }}>Tất cả</Text>
+              <Text style={{ fontSize: 17, color: COLORS.blue, fontWeight: '500', fontFamily: 'BeVietnamPro-Medium', }}>Tất cả</Text>
             </TouchableOpacity>
           </View>
           <FlatList
@@ -773,13 +771,16 @@ const HomeScreen = ({ navigation }) => {
                     borderColor: isSelected ? COLORS.white : COLORS.primary,
                     borderRadius: 100,
                     paddingHorizontal: 24,
-                    paddingVertical: 12,
+                    paddingBottom: 12,
+                    paddingTop: 10,
+                    justifyContent: 'center',
+                    alignItems: 'center'
                   }}>
                   <Text
                     style={{
                       color: isSelected ? COLORS.white : COLORS.primary,
                       fontSize: 14,
-                      fontWeight: "600",
+                      fontFamily: 'BeVietnamPro-Medium',
                     }}>
                     {item.title}
                   </Text>
