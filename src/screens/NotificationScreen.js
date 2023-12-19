@@ -125,7 +125,7 @@ const NotificationScreen = ({ route, navigation }) => {
                     <TouchableOpacity
                         onPress={() => {
                             handleChangeSeen(item?._id)
-                            navigation.navigate('Application');
+                            navigation.navigate('Ứng tuyển');
                         }}>
                         <View
                             style={{
@@ -183,7 +183,7 @@ const NotificationScreen = ({ route, navigation }) => {
                     <TouchableOpacity
                         onPress={() => {
                             handleChangeSeen(item?._id)
-                            navigation.navigate('Application')
+                            navigation.navigate('Ứng tuyển')
                         }}>
                         <View
                             style={{

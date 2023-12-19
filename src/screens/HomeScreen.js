@@ -303,8 +303,6 @@ const HomeScreen = ({ navigation }) => {
   }
   var number = 0;
   const list = () => {
-    console.log(listApplied.length);
-    console.log(listAllAccept.length);
     let a = listAllAccept.length / listApplied.length * 100;
     if (!isNaN(a) && isFinite(a)) {
       number = a;

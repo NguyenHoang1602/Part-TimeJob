@@ -7,7 +7,7 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable react-native/no-inline-styles */
 import React, { useState, useContext, useEffect } from 'react';
-import { FlatList, Image, TextInput, ScrollView, StyleSheet, Text, TouchableHighlight, TouchableOpacity, View, Button, ImageBackground, RefreshControl, Pressable } from 'react-native';
+import { FlatList, Image, TextInput, ScrollView, StyleSheet, Text, TouchableHighlight, TouchableOpacity, View, Button, ImageBackground, RefreshControl, Pressable, ToastAndroid } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -141,7 +141,7 @@ const SavedJobsScreen = ({ navigation }) => {
       // setLoading(false);
       toggleModalclose();
       fetchData();
-      console.log("Thành công");
+      ToastAndroid.show('Xóa thành công !', ToastAndroid.SHORT);
     }
   }
   const FlatListSaveJobs = () => {

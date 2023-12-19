@@ -270,6 +270,7 @@ const ApplicationsStageScreen = ({ route, navigation }) => {
             flexDirection: 'row',
             justifyContent: 'center',
             marginVertical: 20,
+            gap: 10
           }}>
             <TouchableOpacity
               onPress={toggleModalclose}
@@ -279,13 +280,24 @@ const ApplicationsStageScreen = ({ route, navigation }) => {
                 justifyContent: 'center',
                 borderRadius: 64,
                 position: 'relative',
-                width: 160,
+                width: 140,
                 paddingVertical: 15,
-                marginEnd: 15,
               }}>
               <Text style={{ color: COLORS.primary, fontSize: 18, fontWeight: '600' }}>Thương lượng</Text>
             </TouchableOpacity>
-
+            <TouchableOpacity
+              onPress={toggleModalclose}
+              style={{
+                backgroundColor: 'rgba(51, 123, 255, 0.20)',
+                alignItems: 'center',
+                justifyContent: 'center',
+                borderRadius: 64,
+                position: 'relative',
+                width: 100,
+                paddingVertical: 15,
+              }}>
+              <Text style={{ color: COLORS.primary, fontSize: 18, fontWeight: '600' }}>Từ chối</Text>
+            </TouchableOpacity>
             <TouchableOpacity
               onPress={() => {
                 handleAccept();
@@ -296,7 +308,7 @@ const ApplicationsStageScreen = ({ route, navigation }) => {
                 justifyContent: 'center',
                 borderRadius: 64,
                 position: 'relative',
-                width: 160,
+                width: 120,
                 paddingVertical: 15,
               }}>
               <Text style={{ color: COLORS.white, fontSize: 18, fontWeight: '600' }}>Chấp nhận</Text>
