@@ -15,6 +15,7 @@ const SelectRoleScreen = ({ navigation }) => {
     const { user } = useContext(UserContext);
     const [data, setData] = React.useState({
         googleId: user?.googleId,
+        facebookId: user?.facebookId,
         displayName: user?.displayName,
         email: user?.email,
         photo: user?.photo,
@@ -88,7 +89,7 @@ const SelectRoleScreen = ({ navigation }) => {
                             navigation.navigate('FillProfile', { item: data })
                         }
                     }}
-                style={{
+                    style={{
                         width: '90%',
                         height: 50,
                         backgroundColor: '#246BFD',
@@ -96,6 +97,14 @@ const SelectRoleScreen = ({ navigation }) => {
                         alignItems: 'center',
                         justifyContent: 'center',
                         paddingVertical: 10,
+                        shadowColor: COLORS.primary,
+                        shadowOffset: {
+                            width: 0,
+                            height: 2,
+                        },
+                        shadowOpacity: 0.5,
+                        shadowRadius: 3.84,
+                        elevation: 5,
                     }}>
                     <Text style={{ color: COLORS.white, fontSize: 18, fontWeight: '500' }}>Tiếp tục</Text>
                 </TouchableOpacity>

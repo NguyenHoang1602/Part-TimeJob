@@ -7,7 +7,7 @@
 /* eslint-disable eol-last */
 /* eslint-disable react-native/no-inline-styles */
 import React, { useState, useContext } from 'react';
-import { View, Text, TouchableOpacity, Image, ImageBackground, FlatList, ScrollView, ActivityIndicator } from 'react-native';
+import { View, Text, TouchableOpacity, Image, ImageBackground, FlatList, ScrollView, ActivityIndicator, Alert } from 'react-native';
 import Modal from 'react-native-modal';
 import COLORS from '../assets/const/colors';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -82,14 +82,26 @@ const TopTabScreenWaiting = ({ navigation }) => {
                             source={require('../assets/images/5928293_2953962.jpg')}
                             style={{ width: "100%", height: 430, }}
                         />
-                        <Text style={{ fontSize: 22, color: COLORS.black, fontWeight: '700' }}>Empty</Text>
-                        <Text style={{ fontSize: 16, marginTop: 7, textAlign: 'center' }}>Sorry, the keyword you entered cannot be found, please check again or search with another keyword.</Text>
+                        <Text style={{ fontSize: 22, color: COLORS.black, fontWeight: '700' }}>Không tìm thấy</Text>
+                        <Text style={{ fontSize: 16, marginTop: 7, textAlign: 'center' }}>Rất tiếc, không tìm thấy bài đăng đang chờ duyệt</Text>
                     </View>
                 )}
             />
         );
 
     };
+    const deletePost = async (id) => {
+        try {
+            const response = await axios.post(`${API}/posts/delete`, { id: id });
+            if (response.status === 200) {
+                toggleModalclose();
+                getListJobs()
+                Alert.alert('Xóa thành công !')
+            }
+        } catch (error) {
+            console.log('err', error);
+        }
+    }
 
     const renderItemJob = ({ item }) => {
         const formattedWageMin = item.wageMin.toLocaleString('vi-VN');
@@ -267,7 +279,7 @@ const TopTabScreenWaiting = ({ navigation }) => {
                                 flexDirection: 'row', marginTop: 18,
                             }}>
                                 <TouchableOpacity
-                                    onPress={toggleModalclose}
+                                    onPress={() => deletePost(selectedItem?._id)}
                                     style={{
                                         backgroundColor: 'rgba(51, 123, 255, 0.20)',
                                         alignItems: 'center',
@@ -291,16 +303,7 @@ const TopTabScreenWaiting = ({ navigation }) => {
                                         width: 160,
                                         paddingVertical: 15,
                                     }}
-                                    onPress={() => navigation.navigate('Chỉnh sửa bài đăng', {
-                                        title: selectedItem?.title,
-                                        id: selectedItem?.id,
-                                        uri: selectedItem?.uri,
-                                        address: selectedItem?.Address,
-                                        wagemax: selectedItem?.wagemax,
-                                        wagemin: selectedItem?.wagemin,
-                                        worktype: selectedItem?.worktype,
-                                        Details: selectedItem?.Details,
-                                    })}>
+                                    onPress={() => console.log(selectedItem?._id)}>
                                     <Text style={{ color: COLORS.white, fontSize: 18, fontWeight: '600' }}>Sửa tin</Text>
                                 </TouchableOpacity>
                             </View>

@@ -37,18 +37,7 @@ const ProfileScreen = ({ route, navigation }) => {
   const Darkmode = () => {
     setDarkMode(!darkMode);
   }
-  const CV = [
-    { id: '1', name: 'CV01' },
-    { id: '2', name: 'CV02' },
-    { id: '3', name: 'CV03' },
-  ];
-  const renderCV = ({ item }) => (
 
-    <View style={{ marginBottom: 18, flexDirection: 'row' }}>
-      <Ionicons name='document-text-outline' size={24} color={COLORS.black} />
-      <Text numberOfLines={1} style={{ flex: 1, fontSize: 16, fontWeight: '400', marginLeft: 25, color: COLORS.black }}>{item.name}</Text>
-    </View>
-  );
   const Logout = () => {
     Alert.alert('Đăng xuất', 'Bạn muốn đăng xuất ?', [
       { text: 'Không' },
@@ -58,10 +47,17 @@ const ProfileScreen = ({ route, navigation }) => {
 
   };
   const out = async () => {
-    await GoogleSignin.signOut();
-    AsyncStorage.clear();
-    firebase.auth().signOut();
-    navigation.replace('AuthStack');
+    try {
+      await AsyncStorage.clear();
+      const user = firebase.auth().currentUser;
+      if (user) {
+        firebase.auth().signOut();
+      }
+      await AsyncStorage.setItem('isFirstAccess', "1");
+      navigation.replace('AuthStack');
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white, paddingHorizontal: 20 }}>

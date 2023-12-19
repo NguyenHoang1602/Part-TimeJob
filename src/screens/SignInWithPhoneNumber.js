@@ -30,8 +30,9 @@ const SignInWithPhoneNumber = ({ navigation, props }) => {
   const [otp, setOtp] = useState({ 1: '', 2: '', 3: '', 4: '', 5: '', 6: '' });
   const confirmOTP = otp[1] + otp[2] + otp[3] + otp[4] + otp[5] + otp[6];
   const [confirm, setConfirm] = useState(null);
+  const [number, setNumber] = useState('');
   const [inputs, setInputs] = React.useState({
-    phone : '',
+    phone: '',
   });
   const [errors, setErrors] = React.useState({});
   const [selectedCountry, setSelectedCountry] = useState('+84');
@@ -77,16 +78,21 @@ const SignInWithPhoneNumber = ({ navigation, props }) => {
         console.log('Confirmation object is null.');
       }
     } catch (error) {
-      console.log('Invalid code: ', error);
+      console.log('Invalid codeFirmCode : ', error);
     }
   }
 
   async function check() {
     try {
-      const response = await axios.post(`${API}/users/NumberPhoneCheck`, { phone: phoneNumber });
+      const phones = inputs.phone;
+      console.log(inputs.phone);
+      const response = await axios.post(`${API}/users/NumberPhoneCheck`, { phone: phones });
       if (response.status === 200) {
         if (response.data.status) {
           setUser(response.data);
+          const data = JSON.stringify(response.data);
+          await AsyncStorage.setItem('user', data);
+          await AsyncStorage.setItem('isFirstAccess', "0");
           if (response.data.role === 0) {
             navigation.navigate('TabNavigatorUser');
             setLoading(true);
@@ -115,9 +121,10 @@ const SignInWithPhoneNumber = ({ navigation, props }) => {
   useEffect(() => {
     const unsubscribe = firebase.auth().onAuthStateChanged((user) => {
       if (user) {
+        console.log(number);
+        console.log(inputs.phone);
+        setInputs(prevState => ({ ...prevState, phone : number }));
         check();
-      } else {
-
       }
     });
 
@@ -152,7 +159,10 @@ const SignInWithPhoneNumber = ({ navigation, props }) => {
         </Text>
         <View style={styles.inputsContainer}>
           <Input
-            onChangeText={text => handleOnchange(text, 'phone')}
+            onChangeText={text => {
+              handleOnchange(text, 'phone')
+              setNumber(text)
+            }}
             onFocus={() => handleError(null, 'phone')}
             keyboardType="numeric"
             placeholder="Số điện thoại"

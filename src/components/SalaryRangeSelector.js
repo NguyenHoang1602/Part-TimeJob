@@ -38,10 +38,8 @@ const SalaryRangeSelector = ({
                 rightHandlePos.value,
                 Math.max(0, context.prevPos + event.translationX)
             );
-
-            runOnJS(onStartPriceChange)(
-                Math.round((maxPrice / barWidth) * leftHandlePos.value)
-            );
+            const newStartPrice = Math.round((maxPrice / barWidth) * leftHandlePos.value);
+            runOnJS(onStartPriceChange)(newStartPrice);
         },
     });
 
@@ -54,9 +52,8 @@ const SalaryRangeSelector = ({
                 barWidth,
                 Math.max(leftHandlePos.value, context.prevPos + event.translationX)
             );
-            runOnJS(onEndPriceChange)(
-                Math.round((maxPrice / barWidth) * rightHandlePos.value)
-            );
+            const newEndPrice = Math.round((maxPrice / barWidth) * rightHandlePos.value);
+            runOnJS(onEndPriceChange)(newEndPrice);
         },
     });
 

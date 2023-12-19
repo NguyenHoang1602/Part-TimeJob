@@ -85,8 +85,8 @@ const TopTabScreenDenied = ({ navigation }) => {
                             source={require('../assets/images/5928293_2953962.jpg')}
                             style={{ width: "100%", height: 430, }}
                         />
-                        <Text style={{ fontSize: 22, color: COLORS.black, fontWeight: '700' }}>Empty</Text>
-                        <Text style={{ fontSize: 16, marginTop: 7, textAlign: 'center' }}>Sorry, the keyword you entered cannot be found, please check again or search with another keyword.</Text>
+                        <Text style={{ fontSize: 22, color: COLORS.black, fontWeight: '700' }}>Không tìm thấy</Text>
+                        <Text style={{ fontSize: 16, marginTop: 7, textAlign: 'center' }}>Rất tiếc, không tìm thấy bài đăng bị từ chối</Text>
                     </View>
                 )}
             />
