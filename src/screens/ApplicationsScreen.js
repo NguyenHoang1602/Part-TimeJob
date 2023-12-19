@@ -131,7 +131,7 @@ const ApplicationsScreen = ({ route, navigation }) => {
                     image: item?.post_id?.image,
                     bargain_Salary: formattedBarSalary,
                     feedback: item?.feedback,
-                    post_id: item?.post_id?._id,
+                    post_id: item?.post_id,
                     receiver_id: item?.receiver_id,
                 })}>
                 <View style={{ flexDirection: 'row', width: '100%', alignItems: 'center' }}>

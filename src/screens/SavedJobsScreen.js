@@ -215,10 +215,10 @@ const SavedJobsScreen = ({ navigation }) => {
               }
             })}
             <View style={{ flex: 1 }}>
-              <Text numberOfLines={2} style={{ fontSize: 18,  fontFamily: 'BeVietnamPro-Medium',marginTop:-2, color: COLORS.black }}>
+              <Text numberOfLines={2} style={{ fontSize: 18, fontFamily: 'BeVietnamPro-Medium', marginTop: -2, color: COLORS.black }}>
                 {item.post_id.title}
               </Text>
-              <Text numberOfLines={1} style={{ fontSize: 15, fontFamily: 'BeVietnamPro-Medium',marginTop:-2, color: COLORS.black, opacity: 0.5 }}>
+              <Text numberOfLines={1} style={{ fontSize: 15, fontFamily: 'BeVietnamPro-Medium', marginTop: -2, color: COLORS.black, opacity: 0.5 }}>
                 {item.post_id.address}
               </Text>
             </View>
@@ -232,17 +232,17 @@ const SavedJobsScreen = ({ navigation }) => {
           <View style={{ borderTopWidth: 0.5, borderColor: COLORS.grey, marginVertical: 8 }} />
 
           <View style={{ flexDirection: 'row', gap: 10, }}>
-            <View style={{ paddingStart: '21%' }}>
-              <Text numberOfLines={1} style={{ fontSize: 16, fontFamily: 'BeVietnamPro-Medium',marginTop:-2, color: COLORS.black, opacity: 0.6, }}>
+            <View style={{ paddingStart: '21%', }}>
+              <Text numberOfLines={1} style={{ fontSize: 14, fontFamily: 'BeVietnamPro-Medium', marginTop: -2, color: COLORS.black, opacity: 0.6, }}>
                 {item.post_id.businessName}
               </Text>
               <View style={{ flexDirection: 'row', marginVertical: 9 }}>
-                <Text style={{ color: COLORS.blue, fontSize: 16,fontFamily: 'BeVietnamPro-Medium',marginTop:-2 }}>{formattedWageMin}đ - {formattedWageMax}đ</Text>
+                <Text style={{ color: COLORS.blue, fontSize: 14, fontFamily: 'BeVietnamPro-Medium', marginTop: -2 }}>{formattedWageMin}đ - {formattedWageMax}đ</Text>
                 {
                   item.post_id.payForm_id._id === '655de22b9a5b0ffa7ffd5132' ? (
-                    <Text style={{ color: COLORS.blue, fontSize: 16,fontFamily: 'BeVietnamPro-Medium',marginTop:-2 }}> /giờ</Text>
+                    <Text style={{ color: COLORS.blue, fontSize: 14, fontFamily: 'BeVietnamPro-Medium', marginTop: -2 }}> /giờ</Text>
                   ) : (
-                    <Text style={{ color: COLORS.blue, fontSize: 16 ,fontFamily: 'BeVietnamPro-Medium',marginTop:-2}}> /tháng</Text>
+                    <Text style={{ color: COLORS.blue, fontSize: 14, fontFamily: 'BeVietnamPro-Medium', marginTop: -2 }}> /tháng</Text>
                   )
                 }
               </View>
@@ -258,9 +258,9 @@ const SavedJobsScreen = ({ navigation }) => {
               }}>
                 {
                   item.post_id.workType_id._id === '653e66b38e88b23b41388e3c' ? (
-                    <Text style={{ fontSize: 10,fontFamily: 'BeVietnamPro-Medium',marginTop:-2 }} >Bán thời gian</Text>
+                    <Text style={{ fontSize: 10, fontFamily: 'BeVietnamPro-Medium', marginTop: -2 }} >Bán thời gian</Text>
                   ) : (
-                    <Text style={{ fontSize: 10,fontFamily: 'BeVietnamPro-Medium',marginTop:-2 }} >Toàn thời gian</Text>
+                    <Text style={{ fontSize: 10, fontFamily: 'BeVietnamPro-Medium', marginTop: -2 }} >Toàn thời gian</Text>
                   )
                 }
               </View>
@@ -286,7 +286,7 @@ const SavedJobsScreen = ({ navigation }) => {
             style={{ width: 26, height: 26 }}
             imageStyle={{ borderRadius: 46 }} />
           <View style={{ flex: 1 }}>
-            <Text style={{ color: COLORS.black, fontSize: 24, fontFamily: 'BeVietnamPro-Bold',marginTop:-6 }} numberOfLines={1}>Save Jobs</Text>
+            <Text style={{ color: COLORS.black, fontSize: 24, fontFamily: 'BeVietnamPro-Bold', marginTop: -6 }} numberOfLines={1}>Save Jobs</Text>
           </View>
           <TouchableOpacity
             onPress={() => {
@@ -325,7 +325,7 @@ const SavedJobsScreen = ({ navigation }) => {
             }}
             onFocus={() => { setIsFocusedSearch(!isFocusedSearch) }}
             onBlur={() => { setIsFocusedSearch(!isFocusedSearch) }}
-            style={{ flex: 1, fontSize: 16,fontFamily: 'BeVietnamPro-Medium',marginTop:-2, color: COLORS.black, paddingHorizontal: 10, }} />
+            style={{ flex: 1, fontSize: 16, fontFamily: 'BeVietnamPro-Medium', marginTop: -2, color: COLORS.black, paddingHorizontal: 10, }} />
           <TouchableOpacity onPress={() => {
 
           }}>
@@ -372,7 +372,7 @@ const SavedJobsScreen = ({ navigation }) => {
           paddingTop: 20,
           alignItems: 'center',
         }}>
-          <Text style={{ fontSize: 18, fontWeight: '700', color: COLORS.black }}>Xóa công việc đã lưu ?</Text>
+          <Text style={{ fontSize: 18, fontWeight: '700', color: COLORS.black, fontFamily: 'BeVietnamPro-Medium', marginTop: -2 }}>Xóa công việc đã lưu ?</Text>
           <View style={{ borderColor: COLORS.blackOpacity, marginVertical: 10, width: "100%" }} />
           <View style={{ paddingVertical: 18, width: "100%" }}>
             <View style={{ borderRadius: 15, borderWidth: 1, paddingHorizontal: 18, borderColor: COLORS.grey }}>
@@ -389,10 +389,10 @@ const SavedJobsScreen = ({ navigation }) => {
                   }
                 })}
                 <View style={{ flex: 1 }}>
-                  <Text style={{ fontSize: 18, color: COLORS.black, fontWeight: "600" }} numberOfLines={1}>
+                  <Text style={{ fontSize: 18, color: COLORS.black, fontFamily: 'BeVietnamPro-Medium', marginTop: -2 }} numberOfLines={1}>
                     {selectedItem?.post_id.title}
                   </Text>
-                  <Text style={{ fontSize: 16, color: COLORS.grey, paddingTop: 4 }} numberOfLines={1}>
+                  <Text style={{ fontSize: 15, color: COLORS.grey, paddingTop: 4, fontFamily: 'BeVietnamPro-Medium', marginTop: -2 }} numberOfLines={1}>
                     {selectedItem?.post_id.address}
                   </Text>
                 </View>
@@ -402,24 +402,24 @@ const SavedJobsScreen = ({ navigation }) => {
               </View>
               <View style={{ borderTopWidth: 1, borderColor: COLORS.grey }} />
               <View style={{ flexDirection: 'row', gap: 8, paddingVertical: 12 }}>
-                <View style={{ paddingStart: 60 }}>
-                  <Text style={{ fontSize: 18, color: COLORS.black, fontWeight: "600" }} >
+                <View style={{ paddingStart: 60, gap : 8 }}>
+                  <Text style={{ fontSize: 14, color: COLORS.black, fontFamily: 'BeVietnamPro-Medium', marginTop: -2 }} numberOfLines={1} >
                     {selectedItem?.post_id.businessName}
                   </Text>
-                  <View style={{ flexDirection: 'row', paddingVertical: 4  }}>
-                    <Text style={{ fontSize: 16, color: COLORS.primary}} >
+                  <View style={{ flexDirection: 'row', paddingVertical: 4 }}>
+                    <Text style={{ fontSize: 14, color: COLORS.primary, fontFamily: 'BeVietnamPro-Medium', marginTop: -2 }} numberOfLines={1} >
                       {selectedItem?.post_id.wageMin.toLocaleString('vi-VN')}đ - {selectedItem?.post_id.wageMax.toLocaleString('vi-VN')}đ
                     </Text>
                     {
                       selectedItem?.post_id?.payForm_id?._id === '655de22b9a5b0ffa7ffd5132' ? (
-                        <Text style={{ color: COLORS.blue, fontSize: 16 }}> /giờ</Text>
+                        <Text style={{ color: COLORS.blue, fontSize: 14, fontFamily: 'BeVietnamPro-Medium', marginTop: -2 }}> /giờ</Text>
                       ) : (
-                        <Text style={{ color: COLORS.blue, fontSize: 16 }}> /tháng</Text>
+                        <Text style={{ color: COLORS.blue, fontSize: 14, fontFamily: 'BeVietnamPro-Medium', marginTop: -2 }}> /tháng</Text>
                       )
                     }
                   </View>
                   <View style={{
-                    width: 80,
+                    width: 85,
                     borderWidth: 0.5,
                     borderColor: COLORS.grey,
                     borderRadius: 7,
@@ -429,9 +429,9 @@ const SavedJobsScreen = ({ navigation }) => {
                   }}>
                     {
                       selectedItem?.post_id.workType_id._id == '653e66b38e88b23b41388e3c' ? (
-                        <Text style={{ fontSize: 10 }} >Bán thời gian</Text>
+                        <Text style={{ fontSize: 10, fontFamily: 'BeVietnamPro-Medium', marginTop: -2 }} >Bán thời gian</Text>
                       ) : (
-                        <Text style={{ fontSize: 10 }} >Toàn thời gian</Text>
+                        <Text style={{ fontSize: 10, fontFamily: 'BeVietnamPro-Medium', marginTop: -2 }} >Toàn thời gian</Text>
                       )
                     }
                   </View>
@@ -454,7 +454,7 @@ const SavedJobsScreen = ({ navigation }) => {
                 paddingVertical: 15,
                 marginEnd: 15,
               }}>
-              <Text style={{ color: COLORS.primary, fontSize: 18, fontWeight: "600" }}>Hủy</Text>
+              <Text style={{ color: COLORS.primary, fontSize: 18, fontFamily: 'BeVietnamPro-Medium', marginTop: -2 }}>Hủy</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -468,7 +468,7 @@ const SavedJobsScreen = ({ navigation }) => {
                 width: 160,
                 paddingVertical: 15,
               }}>
-              <Text style={{ color: COLORS.white, fontSize: 18, fontWeight: "600" }}>Xóa</Text>
+              <Text style={{ color: COLORS.white, fontSize: 18, fontFamily: 'BeVietnamPro-Medium', marginTop: -2 }}>Xóa</Text>
             </TouchableOpacity>
           </View>
         </View>
