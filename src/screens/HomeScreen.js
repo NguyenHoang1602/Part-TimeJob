@@ -13,7 +13,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, { useState, useContext, useEffect } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
-import { View, Text, TouchableOpacity, ImageBackground, ScrollView, Alert, ActivityIndicator, TextInput, FlatList, Pressable, RefreshControl, StatusBar } from 'react-native';
+import { View, Text, TouchableOpacity, ImageBackground, ScrollView, Alert, ActivityIndicator, TextInput, FlatList, Pressable, RefreshControl, StatusBar, ToastAndroid } from 'react-native';
 
 //
 import Input from '../components/Input';
@@ -49,13 +49,24 @@ const HomeScreen = ({ navigation }) => {
   const [categoryIndex, setCategoryIndex] = useState(0);
   const [check, setChek] = useState(false);
   const [postIndex, setPostIndex] = useState(0);
+  const [listApplied, setListApplied] = useState([]);
+  const [listAllAccept, setListAllAccpet] = useState([]);
 
-  useFocusEffect(
-    React.useCallback(() => {
-      getAllData()
-      getListNotification();
-    }, [])
-  );
+  // useFocusEffect(
+  //   React.useCallback(() => {
+  //     getAllData()
+  //     getListNotification();
+  //     getListApply();
+  //     getListApply3();
+  //   }, [])
+  // );
+  useEffect(() => {
+    getAllData();
+    getListNotification();
+    getListApply();
+    getListApply3();
+  }, []);
+
   const getAllData = async () => {
     try {
       //list save
@@ -270,6 +281,36 @@ const HomeScreen = ({ navigation }) => {
       }
     }
   }
+  async function getListApply() {
+    try {
+      const result = await axios.get(`${API}/apply//listAll`);
+      if (result.status === 200) {
+        setListApplied(result.data);
+      }
+    } catch (error) {
+      console.log('Err : ', error);
+    }
+  }
+  async function getListApply3() {
+    try {
+      const result = await axios.get(`${API}/apply//listAllAccept`);
+      if (result.status === 200) {
+        setListAllAccpet(result.data);
+      }
+    } catch (error) {
+      console.log('Err : ', error);
+    }
+  }
+  var number = 0;
+  const list = () => {
+    console.log(listApplied.length);
+    console.log(listAllAccept.length);
+    let a = listAllAccept.length / listApplied.length * 100;
+    if (!isNaN(a) && isFinite(a)) {
+      number = a;
+    }
+  }
+  list();
   const fetchData = async () => {
     setRefreshing(true);
     setTimeout(() => {
@@ -299,7 +340,7 @@ const HomeScreen = ({ navigation }) => {
         })
         getListSave();
         setRefreshing(false);
-        
+
       } catch (error) {
         console.error('Error fetching data:', error);
         setRefreshing(false);
@@ -335,6 +376,7 @@ const HomeScreen = ({ navigation }) => {
       const result = await axios.post(`${API}/savePost/add`, savedata);
       if (result.status === 200) {
         getListSave();
+        ToastAndroid.show('Lưu thành công', ToastAndroid.SHORT);
       }
     } catch (error) {
       console.log('Err: ', error);
@@ -348,6 +390,7 @@ const HomeScreen = ({ navigation }) => {
     const result = await axios.post(`${API}/savePost/deleteWithCondition`, deleteSave);
     if (result.status === 200) {
       getListSave();
+      ToastAndroid.show('Xóa thành công', ToastAndroid.SHORT);
     }
   }
 
@@ -394,6 +437,11 @@ const HomeScreen = ({ navigation }) => {
   const renderItem = ({ item }) => {
     const formattedWageMin = item.wageMin.toLocaleString('vi-VN');
     const formattedWageMax = item.wageMax.toLocaleString('vi-VN');
+    const date = item.date.slice(0, 10);
+    const ngayDang = new Date(date);
+    const ngayHienTai = new Date();
+    const soMiligiay = ngayHienTai.getTime() - ngayDang.getTime();
+    const soNgay = Math.floor(soMiligiay / (1000 * 60 * 60 * 24));
     return (
       <TouchableOpacity style={{
         borderWidth: 0.5,
@@ -424,7 +472,7 @@ const HomeScreen = ({ navigation }) => {
           wage_min: formattedWageMin,
           wage_max: formattedWageMax,
           status_id: item.status_id,
-          date: item.date,
+          date: soNgay,
           time: item.time,
         })}>
         <View style={{ flexDirection: 'row' }}>
@@ -494,6 +542,11 @@ const HomeScreen = ({ navigation }) => {
   const renderItemJob = ({ item }) => {
     const formattedWageMin = item.wageMin.toLocaleString('vi-VN');
     const formattedWageMax = item.wageMax.toLocaleString('vi-VN');
+    const date = item.date.slice(0, 10);
+    const ngayDang = new Date(date);
+    const ngayHienTai = new Date();
+    const soMiligiay = ngayHienTai.getTime() - ngayDang.getTime();
+    const soNgay = Math.floor(soMiligiay / (1000 * 60 * 60 * 24));
     return (
       <TouchableOpacity style={{
         borderWidth: 0.5,
@@ -520,10 +573,10 @@ const HomeScreen = ({ navigation }) => {
           describe: item.describe,
           age_min: item.ageMin,
           age_max: item.ageMax,
-          wage_min: item.wageMin,
-          wage_max: item.wageMax,
+          wage_min: formattedWageMin,
+          wage_max: formattedWageMax,
           status_id: item.status_id,
-          date: item.date,
+          date: soNgay,
           time: item.time,
         })}>
         <View style={{ flexDirection: 'row' }}>
@@ -562,7 +615,7 @@ const HomeScreen = ({ navigation }) => {
               item.payForm_id._id === '655de22b9a5b0ffa7ffd5132' ? (
                 <Text style={{ color: COLORS.blue, fontSize: 16 }}> /giờ</Text>
               ) : (
-                  <Text style={{ color: COLORS.blue, fontSize: 16 }}> /tháng</Text>
+                <Text style={{ color: COLORS.blue, fontSize: 16 }}> /tháng</Text>
               )
             }
           </View>
@@ -592,7 +645,7 @@ const HomeScreen = ({ navigation }) => {
   const openNotification = () => {
     navigation.navigate('Notifications');
     setChek(false);
-};
+  };
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
@@ -664,10 +717,10 @@ const HomeScreen = ({ navigation }) => {
             onRefresh={fetchData}
             colors={['#0000ff']} // Adjust the colors of the loading indicator
           />}>
-          <View style={{ height: 120, backgroundColor: '#6295FF', borderRadius: 15, flexDirection: 'row', alignItems: 'center'}}>
-            <View style={{ marginLeft: 30}}>
+          <View style={{ height: 120, backgroundColor: '#6295FF', borderRadius: 15, flexDirection: 'row', alignItems: 'center' }}>
+            <View style={{ marginLeft: 30 }}>
               <CircularProgress
-                value={50}
+                value={number}
                 inActiveStrokeColor={COLORS.white}
                 activeStrokeColor={'#FFC069'}
                 progressValueColor={'#fff'}
@@ -675,12 +728,12 @@ const HomeScreen = ({ navigation }) => {
                 radius={40}
                 activeStrokeWidth={13}
                 inActiveStrokeWidth={13}
-                progressValueStyle={{fontWeight: '500', fontSize: 18}}
+                progressValueStyle={{ fontWeight: '500', fontSize: 18 }}
               />
             </View>
-            <View style={{flex: 1}}>
-              <Text style={{ marginLeft: 38, color: COLORS.white, fontSize: 21, fontWeight: '500'}}>Thống kê việc làm</Text>
-              <Text style={{ marginLeft: 38, color: COLORS.white, fontSize: 15, fontWeight: '300', marginTop: 2}}>Tỉ lệ tìm được việc</Text>
+            <View style={{ flex: 1 }}>
+              <Text style={{ marginLeft: 38, color: COLORS.white, fontSize: 21, fontWeight: '500' }}>Thống kê việc làm</Text>
+              <Text style={{ marginLeft: 38, color: COLORS.white, fontSize: 15, fontWeight: '300', marginTop: 2 }}>Tỉ lệ tìm được việc</Text>
             </View>
           </View>
           <View style={{ alignItems: 'center', marginBottom: 15, marginTop: 15, flexDirection: 'row' }}>

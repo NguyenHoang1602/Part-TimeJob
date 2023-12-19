@@ -21,6 +21,7 @@ import DetailsCVScreen from "../screens/DetailsCVScreen";
 import UpdateCvScreen from "../screens/UpdateCvScreen";
 import FavoriteCareersScreen from "../screens/FavoriteCareersScreen";
 import SignInWithPhoneNumber from "../screens/SignInWithPhoneNumber";
+import WelcomeScreen from "../screens/WelcomeScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -68,7 +69,8 @@ const AuthStack = (props) => {
 
 const Router = () => {
     return (
-        <Stack.Navigator initialRouteName="Onboarding" screenOptions={{ headerShown: false }}>
+        <Stack.Navigator initialRouteName="WelcomeScreen" screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="WelcomeScreen" component={WelcomeScreen} />
             <Stack.Screen name="Onboarding" component={OnboardingScreen} />
             <Stack.Screen name="AuthStack" component={AuthStack} />
             <Stack.Screen name="TabNavigator" component={TabNavigator} />

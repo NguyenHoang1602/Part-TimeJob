@@ -158,7 +158,7 @@ const SavedJobsScreen = ({ navigation }) => {
               source={require('../assets/images/5928293_2953962.jpg')}
               style={{ width: "100%", height: 430 }}
             />
-            <Text style={{ fontSize: 22, color: COLORS.black, fontWeight: '600' }}>Bạn chưa lưu công việc nào !</Text>
+            <Text style={{ fontSize: 22, color: COLORS.black, fontWeight: '600' }}>Không tìm thấy công việc đã lưu</Text>
           </View>
         )}
       />
@@ -190,8 +190,8 @@ const SavedJobsScreen = ({ navigation }) => {
           describe: item?.post_id.describe,
           age_min: item?.post_id.ageMin,
           age_max: item?.post_id.ageMax,
-          wage_min: item?.post_id.wageMin,
-          wage_max: item?.post_id.wageMax,
+          wage_min: formattedWageMin,
+          wage_max: formattedWageMax,
           status_id: item?.post_id.status_id,
           date: item?.post_id.date,
           time: item?.post_id.time,

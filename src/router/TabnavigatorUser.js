@@ -32,8 +32,6 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import DetailNotification from '../screens/DetailNotification';
 import AntDesign from 'react-native-vector-icons/AntDesign'
 
-
-
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
@@ -288,7 +286,7 @@ const TabNavigatorUser = () => {
                 })}
             />
             <Tab.Screen
-                name="Application"
+                name="Ứng tuyển"
                 component={ApplicationsStack}
                 options={({ route }) => ({
                     tabBarStyle: {
@@ -305,7 +303,7 @@ const TabNavigatorUser = () => {
                 })}
             />
             <Tab.Screen
-                name="Message"
+                name="Tin nhắn"
                 component={MessageStack}
                 options={({ route }) => ({
                     tabBarStyle: {

@@ -402,4 +402,9 @@ const styles = StyleSheet.create({
     fontSize: 14,
     borderRadius: 6,
   },
+  error: {
+    fontSize: 12,
+    color: 'red',
+    paddingBottom: 12
+  },
 });

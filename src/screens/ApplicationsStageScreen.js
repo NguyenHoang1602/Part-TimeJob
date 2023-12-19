@@ -108,10 +108,10 @@ const ApplicationsStageScreen = ({ route, navigation }) => {
               );
             }
           })}
-          <Text style={{ fontSize: 22, fontWeight: '600', color: '#212121', textAlign: 'center' }}>{data.title}</Text>
-          <Text style={{ fontSize: 17, fontWeight: '500', color: '#246BFD', marginVertical: 5, textAlign: 'center' }}>{data.businessName}</Text>
+          <Text numberOfLines={2} style={{ fontSize: 22, fontWeight: '600', color: '#212121', textAlign: 'center' }}>{data.title}</Text>
+          <Text numberOfLines={2} style={{ fontSize: 17, fontWeight: '500', color: '#246BFD', marginVertical: 5, textAlign: 'center' }}>{data.businessName}</Text>
           <View style={{ height: 1, width: '99%', backgroundColor: COLORS.grey, opacity: 0.4, marginTop: 15, marginBottom: 8 }} />
-          <Text style={{ fontSize: 17, fontWeight: '500', color: '#959595', marginTop: 5, marginVertical: 5, textAlign: 'center' }}>{data.address}</Text>
+          <Text numberOfLines={2} style={{ fontSize: 17, fontWeight: '500', color: '#959595', marginTop: 5, marginVertical: 5, textAlign: 'center' }}>{data.address}</Text>
           <View style={{ flexDirection: 'row', marginTop: 5, marginVertical: 5 }}>
             <Text style={{ fontSize: 17, fontWeight: '400', color: '#246BFD', textAlign: 'center' }}>{data.wageMin}đ - {data.wageMax}đ</Text>
             {
