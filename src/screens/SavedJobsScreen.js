@@ -283,7 +283,7 @@ const SavedJobsScreen = ({ navigation }) => {
           <View style={{ flex: 1 }}>
             <Text style={{ color: COLORS.black, fontSize: 24, fontWeight: '600' }} numberOfLines={1}>Save Jobs</Text>
           </View>
-          <TouchableOpacity
+          {/* <TouchableOpacity
             style={{
               width: 46,
               aspectRatio: 1,
@@ -299,7 +299,7 @@ const SavedJobsScreen = ({ navigation }) => {
                 <IconWithBadge iconName="bell" badgeText="4" />
               ) : <IconWithBadge iconName="bell" badgeText="" />
             }
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
         {/* Search */}
         <View

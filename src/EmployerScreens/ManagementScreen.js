@@ -166,7 +166,6 @@ const ManagementScreen = ({ route, navigation }) => {
               justifyContent: 'center',
             }}
             onPress={() => navigation.navigate('Notifications')}>
-            {/* <Feather name='bell' size={24} color={COLORS.black}/> */}
             {
               check ? (
                 <IconWithBadge iconName="bell" badgeText="4" />
