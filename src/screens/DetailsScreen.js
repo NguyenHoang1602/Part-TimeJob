@@ -53,7 +53,7 @@ const DetailsScreen = ({ route, navigation }) => {
         title: route.params?.title,
         gender: route.params?.gender,
         career_id: route.params?.career_id.title,
-        payform_id: route.params?.payform_id?.title,
+        payform_id: route.params?.payform_id,
         experience_id: route.params?.experience_id.title,
         acedemic_id: route.params?.acedemic_id.title,
         worktype_id: route.params?.worktype_id.title,
@@ -323,7 +323,7 @@ const DetailsScreen = ({ route, navigation }) => {
                         <View style={{ flexDirection: 'row' }}>
                             <Text style={{ color: COLORS.red, fontSize: 16, marginVertical: 9 }}>{data.wage_min}đ - {data.wage_max}đ</Text>
                             {
-                                data.payform_id === '655de22b9a5b0ffa7ffd5132' ? (
+                                data.payform_id._id === '655de22b9a5b0ffa7ffd5132' ? (
                                     <Text style={{ color: COLORS.red, fontSize: 16, marginVertical: 9 }}> /giờ</Text>
                                 ) : (
                                     <Text style={{ color: COLORS.red, fontSize: 16, marginVertical: 9 }}> /tháng</Text>
@@ -346,7 +346,7 @@ const DetailsScreen = ({ route, navigation }) => {
                     </View>
                     <View style={styles.item1}>
                         <AntDesign name="creditcard" size={24} color={COLORS.blue} />
-                        <Text style={styles.itemText}>Hình thức trả lương: {data.payform_id}</Text>
+                        <Text style={styles.itemText}>Hình thức trả lương: {data.payform_id.title}</Text>
                     </View>
                     <View style={styles.item}>
                         <Octicons name="log" size={24} color={COLORS.blue} />

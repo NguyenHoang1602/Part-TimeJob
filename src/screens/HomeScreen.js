@@ -508,7 +508,7 @@ const HomeScreen = ({ navigation }) => {
           <View style={{ flexDirection: 'row' }}>
             <Text style={{ color: COLORS.blue, fontSize: 16 }}>{formattedWageMin}đ - {formattedWageMax}đ</Text>
             {
-              item.payForm_id === '655de22b9a5b0ffa7ffd5132' ? (
+              item.payForm_id._id === '655de22b9a5b0ffa7ffd5132' ? (
                 <Text style={{ color: COLORS.blue, fontSize: 16 }}> /giờ</Text>
               ) : (
                 <Text style={{ color: COLORS.blue, fontSize: 16 }}> /tháng</Text>

@@ -7,7 +7,9 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 const Input = ({
     iconName,
     error,
-    onFocus = () => {},
+    onFocus = () => {
+      
+    },
     ...props
 }) => {
   const [isFocused, setIsFocused] = React.useState(false);
@@ -20,7 +22,7 @@ const Input = ({
             borderColor: error
               ? COLORS.red
               : isFocused
-              ? COLORS.darkBlue
+              ? COLORS.primary
               : COLORS.grey,
             alignItems: 'center',
           },
