@@ -149,8 +149,8 @@ const ApplicationsScreen = ({ route, navigation }) => {
                         }
                     })}
                     <View style={{ flex: 1, marginLeft: '5%' }}>
-                        <Text numberOfLines={2} style={{ fontSize: 18, fontFamily: 'BeVietnamPro-Medium',marginTop:-2, color: '#212121', width: '99%' }}>{item?.post_id?.title}</Text>
-                        <Text style={{ fontSize: 15, fontFamily: 'BeVietnamPro-Medium',marginTop:-2, color: '#616161', marginTop: 5 }} numberOfLines={1}>{item?.post_id?.businessName}</Text>
+                        <Text numberOfLines={2} style={{ fontSize: 17,  fontFamily: 'BeVietnamPro-Medium', color: '#212121', width: '99%' }}>{item?.post_id?.title}</Text>
+                        <Text style={{ fontSize: 14,  fontFamily: 'BeVietnamPro-Medium', color: '#616161', marginTop: 5 }} numberOfLines={1}>{item?.post_id?.businessName}</Text>
                     </View>
                     <TouchableOpacity
                         style={{
@@ -170,11 +170,11 @@ const ApplicationsScreen = ({ route, navigation }) => {
                             marginStart: '20%',
                             marginTop: '2%',
                         }}>
-                            <Text style={{ fontSize: 9.5,fontFamily: 'BeVietnamPro-Medium',marginTop:-2, color: '#246BFE' }} >Hồ sơ đã gửi</Text>
+                            <Text style={{ fontSize: 9, color: '#246BFE', fontFamily: 'BeVietnamPro-Medium'}} >Hồ sơ đã gửi</Text>
                         </View>
                     ) : item.status === 1 ? (
                         <View style={{
-                            width: 100,
+                            width: 95,
                             backgroundColor: '#FFF4CD',
                             borderRadius: 6,
                             padding: 5,
@@ -183,7 +183,7 @@ const ApplicationsScreen = ({ route, navigation }) => {
                             marginStart: '20%',
                             marginTop: '3%',
                         }}>
-                            <Text style={{ fontSize: 9.5,fontFamily: 'BeVietnamPro-Medium',marginTop:-2, color: '#FBCA17' }} >Hồ sơ đang xử lí</Text>
+                            <Text style={{ fontSize: 9, color: '#FBCA17',  fontFamily: 'BeVietnamPro-Medium'}} >Hồ sơ đang xử lí</Text>
                         </View>
                     ) : item.status === 2 ? (
                         <View style={{
@@ -196,7 +196,7 @@ const ApplicationsScreen = ({ route, navigation }) => {
                             marginStart: '20%',
                             marginTop: '2%',
                         }}>
-                            <Text style={{ fontSize: 9.5,fontFamily: 'BeVietnamPro-Medium',marginTop:-2, color: '#F75656' }} >Hồ sơ bị từ chối</Text>
+                            <Text style={{ fontSize: 9, color: '#F75656' ,fontFamily: 'BeVietnamPro-Medium' }} >Hồ sơ bị từ chối</Text>
                         </View>
                     ) : item.status === 4 ? (
                         <View style={{
@@ -209,11 +209,11 @@ const ApplicationsScreen = ({ route, navigation }) => {
                             marginStart: '20%',
                             marginTop: '2%',
                         }}>
-                            <Text style={{ fontSize: 9.5,fontFamily: 'BeVietnamPro-Medium',marginTop:-2, color: '#FF6B00' }} >Đang thương lượng</Text>
+                            <Text style={{ fontSize: 9, color: '#FF6B00', fontFamily: 'BeVietnamPro-Medium' }} >Đang thương lượng</Text>
                         </View>
                     ) :
                         <View style={{
-                            width: 120,
+                            width: 115,
                             backgroundColor: '#E7FEEE',
                             borderRadius: 6,
                             padding: 5,
@@ -222,7 +222,7 @@ const ApplicationsScreen = ({ route, navigation }) => {
                             marginStart: '20%',
                             marginTop: '2%',
                         }}>
-                            <Text style={{ fontSize: 9.5,fontFamily: 'BeVietnamPro-Medium',marginTop:-2, color: '#08BE75' }} >Ứng tuyển thành công</Text>
+                            <Text style={{ fontSize: 9, color: '#08BE75',  fontFamily: 'BeVietnamPro-Medium' }} >Ứng tuyển thành công</Text>
                         </View>
                 }
                 <View style={{ height: 1, width: '99%', backgroundColor: COLORS.grey, opacity: 0.4, marginTop: 15, marginBottom: 8 }} />
@@ -246,7 +246,7 @@ const ApplicationsScreen = ({ route, navigation }) => {
                         style={{ width: 26, height: 26 }}
                         imageStyle={{ borderRadius: 46 }} />
                     <View style={{ flex: 1 }}>
-                        <Text style={{ color: COLORS.black, fontSize: 24, fontFamily: 'BeVietnamPro-Bold',marginTop:-6}} numberOfLines={1}>Applications</Text>
+                        <Text style={{ color: COLORS.black, fontSize: 23,  fontFamily: 'BeVietnamPro-Medium'}} numberOfLines={1}>Applications</Text>
                     </View>
                     <TouchableOpacity
                         onPress={() => {
@@ -285,7 +285,7 @@ const ApplicationsScreen = ({ route, navigation }) => {
                         }}
                         onFocus={() => { setIsFocusedSearch(!isFocusedSearch) }}
                         onBlur={() => { setIsFocusedSearch(!isFocusedSearch) }}
-                        style={{ flex: 1, fontSize: 16,fontFamily: 'BeVietnamPro-Medium',marginTop:-2, color: COLORS.black, paddingHorizontal: 10, }} />
+                        style={{ flex: 1, fontSize: 15, color: COLORS.black, paddingHorizontal: 10,  fontFamily: 'BeVietnamPro-Medium' }} />
                     <TouchableOpacity onPress={() => {
 
                     }}>

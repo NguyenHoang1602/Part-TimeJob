@@ -326,7 +326,7 @@ const DetailsScreen = ({ route, navigation }) => {
                         <View style={{ flexDirection: 'row' }}>
                             <Text style={{ color: COLORS.red, fontSize: 16, marginVertical: 9, fontFamily: 'BeVietnamPro-Medium', }}>{data.wage_min}đ - {data.wage_max}đ</Text>
                             {
-                                data.payform_id._id === '655de22b9a5b0ffa7ffd5132' ? (
+                                data?.payform_id?._id === '655de22b9a5b0ffa7ffd5132' ? (
                                     <Text style={{ color: COLORS.red, fontSize: 16, marginVertical: 9, fontFamily: 'BeVietnamPro-Medium', }}> /giờ</Text>
                                 ) : (
                                         <Text style={{ color: COLORS.red, fontSize: 16, marginVertical: 9, fontFamily: 'BeVietnamPro-Medium', }}> /tháng</Text>
@@ -482,7 +482,7 @@ const DetailsScreen = ({ route, navigation }) => {
                     }
                     {
                         errors != '' && (
-                            <Text style={{ marginTop: 7, color: COLORS.red, fontSize: 12, marginLeft: 40, fontFamily: 'BeVietnamPro-Medium', marginTop: -2 }}>
+                            <Text style={{ marginTop: 7, color: COLORS.red, fontSize: 12, marginLeft: 40, fontFamily: 'BeVietnamPro-Medium'}}>
                                 {errors}
                             </Text>
                         )
@@ -568,7 +568,7 @@ const styles = StyleSheet.create({
         fontSize: 14,
         marginTop: 5,
         marginBottom: 7,
-        fontFamily: 'BeVietnamPro-Medium', marginTop: -2
+        fontFamily: 'BeVietnamPro-Medium',
     },
     datetime: {
         fontSize: 14,

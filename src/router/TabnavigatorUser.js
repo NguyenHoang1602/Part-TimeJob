@@ -66,6 +66,8 @@ const HomeStack = (props) => {
                     },
                     headerTitleStyle: {
                         color: '#FFFFFF',
+                        marginBottom: 8,
+                        fontFamily: 'BeVietnamPro-Medium',
                     },
                     headerTitleAlign: 'center',
                     headerLeft: () => (
@@ -190,6 +192,8 @@ const ProfileStack = (props) => {
                     },
                     headerTitleStyle: {
                         color: '#FFFFFF',
+                        marginTop: -5,
+                        fontFamily: 'BeVietnamPro-Medium',
                     },
                     headerTitleAlign: 'center',
                     headerLeft: () => (
@@ -209,6 +213,8 @@ const ProfileStack = (props) => {
                     },
                     headerTitleStyle: {
                         color: '#FFFFFF',
+                        marginBottom: 8,
+                        fontFamily: 'BeVietnamPro-Medium',
                     },
                     headerTitleAlign: 'center',
                     headerLeft: () => (
@@ -269,7 +275,7 @@ const TabNavigatorUser = () => {
                     ),
                     tabBarLabelStyle: {
                         marginBottom: 8,
-                        fontFamily: 'BeVietnamPro-Medium'
+                        fontFamily: 'BeVietnamPro-Medium',
                     },
                 })}
             />
