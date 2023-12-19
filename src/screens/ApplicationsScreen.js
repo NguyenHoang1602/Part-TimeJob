@@ -4,7 +4,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable eol-last */
 /* eslint-disable react-native/no-inline-styles */
-import { View, Text, StyleSheet, ImageBackground, TouchableOpacity, TextInput, Pressable, FlatList, Image, ScrollView, RefreshControl } from 'react-native';
+import { View, Text, StyleSheet, ImageBackground, TouchableOpacity, TextInput, Pressable, FlatList, Image, ScrollView, RefreshControl, ToastAndroid } from 'react-native';
 import React, { useContext, useState } from 'react'
 import COLORS from '../assets/const/colors';
 import UserContext from '../components/UserConText';
@@ -14,7 +14,7 @@ import Button from '../components/Button';
 //icon
 import Feather from 'react-native-vector-icons/Feather';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Entypo from 'react-native-vector-icons/Entypo';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import IconWithBadge from '../components/IconWithBadge';
 import IconWithBadgeAntDesign from '../components/IconWithBadgeAntDesign';
@@ -249,21 +249,19 @@ const ApplicationsScreen = ({ route, navigation }) => {
                         <Text style={{ color: COLORS.black, fontSize: 24, fontWeight: '600' }} numberOfLines={1}>Applications</Text>
                     </View>
                     <TouchableOpacity
+                        onPress={() => {
+                            ToastAndroid.show('Đang phát triển', ToastAndroid.SHORT);
+                        }}
                         style={{
                             width: 46,
                             aspectRatio: 1,
                             borderRadius: 52,
-                            alignItems: 'center',
+                            alignItems: 'flex-end',
                             justifyContent: 'center',
-                            borderWidth: 1,
                             borderColor: COLORS.grey,
                         }}
-                        onPress={() => openNotification()}>
-                        {
-                            check ? (
-                                <IconWithBadge iconName="bell" badgeText="4" />
-                            ) : <IconWithBadge iconName="bell" badgeText="" />
-                        }
+                    >
+                        <Entypo name='dots-three-vertical' size={20} color={COLORS.black} />
                     </TouchableOpacity>
                 </View>
                 {/* Search */}

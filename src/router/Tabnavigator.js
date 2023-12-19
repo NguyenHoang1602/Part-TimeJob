@@ -300,6 +300,7 @@ const TabNavigator = () => {
                     ),
                     tabBarLabelStyle: {
                         marginBottom: 8,
+                        fontFamily: 'BeVietnamPro-Medium'
                     },
                 })}
             />
@@ -332,11 +333,12 @@ const TabNavigator = () => {
                     ),
                     tabBarLabelStyle: {
                         marginBottom: 8,
+                        fontFamily: 'BeVietnamPro-Medium'
                     },
                 })}
             />
             <Tab.Screen
-                name="Quản lí"
+                name="Quản lý"
                 component={ManagementStack}
                 options={({ route }) => ({
                     tabBarStyle: {
@@ -349,6 +351,7 @@ const TabNavigator = () => {
                     ),
                     tabBarLabelStyle: {
                         marginBottom: 8,
+                        fontFamily: 'BeVietnamPro-Medium'
                     },
                 })}
             />
@@ -367,6 +370,7 @@ const TabNavigator = () => {
                     ),
                     tabBarLabelStyle: {
                         marginBottom: 8,
+                        fontFamily: 'BeVietnamPro-Medium'
                     },
                 })}
             />

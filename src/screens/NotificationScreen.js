@@ -215,55 +215,6 @@ const NotificationScreen = ({ route, navigation }) => {
         )
 
         };
-    // const renderItem = ({ item }) => (
-    //     <View style={{
-    //         width: "100%",
-    //         marginBottom: 18,
-    //         // borderWidth: 0.5,
-    //         // borderColor: COLORS.grey,
-    //         // borderRadius: 10,
-    //         padding: 10,
-    //     }}>
-    //         <TouchableOpacity
-    //             onPress={() => {
-    //                 navigation.navigate('DetailNotification', {
-    //                     _id: item._id,
-    //                     receiver_id : item.receiver_id,
-    //                     sender_id : item.sender_id,
-    //                     post_id : item.post_id,
-    //                     cv_id : item.cv_id,
-    //                     typeNotification : item.typeNotification,
-    //                     date : item.date,
-    //                     time : item.time,
-    //                 });
-    //             }}>
-    //             <View
-    //                 style={{
-    //                     width: '100%',
-    //                     flexDirection: 'row',
-    //                     alignItems: 'center',
-    //                 }}>
-    //                 <View style={{ width: 60, height: 60, borderRadius: 60, alignItems: 'center', justifyContent: 'center' }}>
-    //                     {item.typeNotification == 'problem1' ? (
-    //                         <FontAwesome name='briefcase' size={30} color="#FD9B10" />
-    //                     ) : item.typeNotification == 'problem2' ? (
-    //                         <FontAwesome name='briefcase' size={30} color={COLORS.red} />
-    //                     ) : <FontAwesome name='briefcase' size={30} color={COLORS.blue} />
-    //                     }
-    //                 </View>
-    //                 <View style={{ flexDirection: 'column', flex: 1, justifyContent: 'center' }}>
-    //                     <Text style={{ fontSize: 18, fontWeight: '700', color: COLORS.black }}>Đơn ứng tuyển mới</Text>
-    //                     <Text style={{ fontSize: 14, fontWeight: '500', color: COLORS.black, opacity: 0.5 }}>{item.time}</Text>
-    //                 </View>
-    //                 <View style={{ width: 40, height: 23, borderRadius: 5, backgroundColor: COLORS.blue, justifyContent: 'center', alignItems: 'center' }}>
-    //                     <Text style={{ fontSize: 8, color: COLORS.white }}>News</Text>
-    //                 </View>
-    //             </View>
-    //             <Text style={{ fontSize: 16, fontWeight: '400', color: COLORS.black, opacity: 0.8 }}> đã ứng tuyển bài đăng  của bạn!</Text>
-    //         </TouchableOpacity>
-    //     </View>
-
-    // );
     return (
         <SafeAreaView style={{ flex: 1, paddingVertical: 18, backgroundColor: COLORS.white }}>
             {loading ? (
