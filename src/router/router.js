@@ -33,7 +33,6 @@ import Feather from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import CVResume from "../screens/CVResume";
 import COLORS from "../assets/const/colors";
-import SignInWithPhoneNumber from "../screens/SignInWithPhoneNumber";
 
 const Stack = createNativeStackNavigator();
 

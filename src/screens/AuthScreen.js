@@ -193,12 +193,8 @@ const AuthScreen = ({ navigation }) => {
                             Đăng nhập bằng SĐT
                         </Text>
                     </TouchableOpacity>
-<<<<<<< HEAD
                     <View
-=======
-                    <TouchableOpacity
                         onPress={() => navigation.navigate('SignInWithPhoneNumber')}
->>>>>>> origin/VanChuc
                         style={{
                             padding: 5,
                             width: '85%',
