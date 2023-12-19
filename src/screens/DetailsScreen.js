@@ -53,6 +53,7 @@ const DetailsScreen = ({ route, navigation }) => {
         title: route.params?.title,
         gender: route.params?.gender,
         career_id: route.params?.career_id.title,
+        career_ID: route.params?.career_id._id,
         payform_id: route.params?.payform_id,
         experience_id: route.params?.experience_id.title,
         acedemic_id: route.params?.acedemic_id.title,
@@ -77,6 +78,7 @@ const DetailsScreen = ({ route, navigation }) => {
     const handlePress = (itemId) => {
         setSelectedItem(itemId === selectedItem ? null : itemId);
     };
+    console.log(data);
     const getAllApplied = async () => {
         try {
             const response = await axios.post(`${API}/apply/listMyApplied`, {
@@ -141,16 +143,17 @@ const DetailsScreen = ({ route, navigation }) => {
 
     const validate = async () => {
         Keyboard.dismiss();
-        console.log(salary);
         let isValid = true;
+        const bargain_Salary = Number(salary.replace(/\./g, ''));
+        const wageMin = Number(data?.wage_min.replace(/\./g, ''));
+        console.log(bargain_Salary);
         if (selectedItem === null) {
             ToastAndroid.show("Bạn chưa chọn CV", ToastAndroid.LONG);
         } else {
-            if (!salary) {
+            if (!bargain_Salary) {
                 setErrors('Vui lòng nhập lương mong muốn')
                 isValid = false;
-            } else if (salary < data?.wage_min){
-                console.log(salary);
+            } else if (bargain_Salary < wageMin) {
                 setErrors('Lương mong muốn phải lớn hơn hoặc bằng lương tối thiểu')
                 isValid = false;
             }
@@ -196,11 +199,15 @@ const DetailsScreen = ({ route, navigation }) => {
     };
 
     const getCV = async () => {
+        const tempData = {
+            id: user._id,
+            c_id: data.career_ID,
+        }
         axios({
             url: `${API}/cvs/myCVs`,
             method: 'POST',
             data: {
-                id: user._id,
+                tempData
             },
         }).then(async (response) => {
             if (response.status === 200) {
@@ -303,7 +310,7 @@ const DetailsScreen = ({ route, navigation }) => {
                     showSkipButton={false}
                     showDoneButton={false}
                     showNextButton={false}
-                    data={data.image}
+                    data={data?.image}
                     renderItem={({ item }) => {
                         return (
                             <View style={{ marginBottom: 5 }}>
@@ -467,6 +474,15 @@ const DetailsScreen = ({ route, navigation }) => {
                             renderItem={renderCV}
                             nestedScrollEnabled={true}
                             scrollEnabled={false}
+                            ListEmptyComponent={() => (
+                                <View style={{ alignItems: 'center', justifyContent: 'center', gap: 10 }}>
+                                    <ImageBackground
+                                        source={require('../assets/images/5928293_2953962.jpg')}
+                                        style={{ width: 200, height: 160 }}
+                                    />
+                                    <Text style={{ fontSize: 16, color: COLORS.primary, fontFamily: 'BeVietnamPro-Medium', marginTop: -2 }}>Không có CV liên quan đến công việc này</Text>
+                                </View>
+                            )}
                         />
                     </ScrollView>
                     {

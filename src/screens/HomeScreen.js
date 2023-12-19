@@ -455,7 +455,7 @@ const HomeScreen = ({ navigation }) => {
           avatar: item.users_id.photo,
           address: item.address,
           business_name: item.businessName,
-          gender: item.gender,
+          gender: item?.gender,
           image: item.image,
           quantity: item.quantity,
           title: item.title,

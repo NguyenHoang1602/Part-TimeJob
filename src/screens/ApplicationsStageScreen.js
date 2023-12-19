@@ -283,19 +283,6 @@ const ApplicationsStageScreen = ({ route, navigation }) => {
                 width: 140,
                 paddingVertical: 15,
               }}>
-              <Text style={{ color: COLORS.primary, fontSize: 18, fontFamily: 'BeVietnamPro-Medium',marginTop:-2 }}>Thương lượng</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={toggleModalclose}
-              style={{
-                backgroundColor: 'rgba(51, 123, 255, 0.20)',
-                alignItems: 'center',
-                justifyContent: 'center',
-                borderRadius: 64,
-                position: 'relative',
-                width: 100,
-                paddingVertical: 15,
-              }}>
               <Text style={{ color: COLORS.primary, fontSize: 17, fontFamily: 'BeVietnamPro-Medium'  }}>Thương lượng</Text>
             </TouchableOpacity>
             <TouchableOpacity

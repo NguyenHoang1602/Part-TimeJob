@@ -192,7 +192,7 @@ const ProfileStack = (props) => {
                     },
                     headerTitleStyle: {
                         color: '#FFFFFF',
-                        marginBottom: 8,
+                        marginTop: -5,
                         fontFamily: 'BeVietnamPro-Medium',
                     },
                     headerTitleAlign: 'center',

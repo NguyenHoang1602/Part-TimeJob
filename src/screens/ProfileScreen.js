@@ -4,7 +4,7 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable react-native/no-inline-styles */
 import React, { useState, useContext } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, ImageBackground, FlatList, ScrollView, Alert, ToastAndroid } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, ImageBackground, FlatList, ScrollView, Alert, ToastAndroid, StatusBar } from 'react-native';
 
 //
 import Input from '../components/Input';
