@@ -113,7 +113,10 @@ const StageCurriculumScreen = ({ route, navigation }) => {
         Keyboard.dismiss();
         let isValid = true;
         if (!bargainSalary) {
-            setErrors('Vui lòng nhập lương mong muốn')
+            setErrors('Vui lòng nhập lương thương lượng')
+            isValid = false;
+        } else if (bargainSalary < 1000) {
+            setErrors('Lương thương lượng không được bé hơn 1.000đ')
             isValid = false;
         }
         if (isValid) {
