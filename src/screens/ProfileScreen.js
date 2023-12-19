@@ -74,59 +74,59 @@ const ProfileScreen = ({ route, navigation }) => {
             imageStyle={{ borderRadius: 46 }}
           />
           <View style={{ flex: 1, marginStart: 22 }}>
-            <Text numberOfLines={1} style={{ fontSize: 20, fontWeight: '600', color: COLORS.black, width: '95%' }}>{user.displayName}</Text>
-            <Text style={{ color: '#7D7A7A', fontSize: 16 }}>Xin chào 👋</Text>
+            <Text numberOfLines={1} style={{ fontSize: 22, color: COLORS.black, width: '95%', fontFamily: 'BeVietnamPro-Bold', }}>{user.displayName}</Text>
+            <Text style={{ color: '#7D7A7A', fontSize: 16, fontFamily: 'BeVietnamPro-Medium', }}>Xin chào 👋</Text>
           </View>
         </View>
         <View style={styles.line} />
         <View style={styles.account}>
-          <Text style={styles.title}>Tài khoản</Text>
+          <Text style={styles.title}>TÀI KHOẢN</Text>
           <TouchableOpacity style={styles.item} onPress={() => navigation.navigate('Cập nhật thông tin cá nhân')}>
-            <FontAwesome name="user-o" size={24} color='rgba(125, 122, 122, 1)' />
+            <FontAwesome name="user-o" size={24} color={COLORS.primary} />
             <Text style={styles.itemText}>Thông tin cá nhân</Text>
-            <Feather name="chevron-right" size={24} color='rgba(125, 122, 122, 1)' />
+            <Feather name="chevron-right" size={24} color={COLORS.primary} />
           </TouchableOpacity>
           {
             user?.role === 0 ? (
               <TouchableOpacity style={styles.item1} onPress={() => navigation.navigate('CVResumeScreen')}>
-                <Ionicons name="document-text-outline" size={24} color='rgba(125, 122, 122, 1)' />
+                <Ionicons name="document-text-outline" size={24} color={COLORS.primary} />
                 <Text style={styles.itemText}>Quản lí CV</Text>
-                <Feather name="chevron-right" size={24} color='rgba(125, 122, 122, 1)' />
+                <Feather name="chevron-right" size={24} color={COLORS.primary} />
               </TouchableOpacity>
             ) : null
           }
           <TouchableOpacity style={styles.item1} onPress={() => navigation.navigate('MessageScreen')}>
-            <AntDesign name="message1" size={24} color='rgba(125, 122, 122, 1)' />
+            <AntDesign name="message1" size={24} color={COLORS.primary} />
             <Text style={styles.itemText}>Tin nhắn</Text>
-            <Feather name="chevron-right" size={24} color='rgba(125, 122, 122, 1)' />
+            <Feather name="chevron-right" size={24} color={COLORS.primary} />
           </TouchableOpacity>
           {
             user?.role === 1 ? (
               <TouchableOpacity
                 onPress={() => navigation.navigate('CurriculumVitaeScreen')}
                 style={styles.item1}>
-                <AntDesign name="pdffile1" size={24} color='rgba(125, 122, 122, 1)' />
+                <AntDesign name="pdffile1" size={24} color={COLORS.primary} />
                 <Text style={styles.itemText}>Hồ sơ ứng tuyển</Text>
-                <Feather name="chevron-right" size={24} color='rgba(125, 122, 122, 1)' />
+                <Feather name="chevron-right" size={24} color={COLORS.primary} />
               </TouchableOpacity>
             ) : null
           }
         </View>
         <View style={styles.line} />
         <View style={styles.account}>
-          <Text style={styles.title}>Cài đặt chung</Text>
+          <Text style={styles.title}>CÀI ĐẶT CHUNG</Text>
           <TouchableOpacity style={styles.item}
             onPress={() => navigation.navigate('Notifications')}>
-            <Ionicons name="notifications-outline" size={24} color='rgba(125, 122, 122, 1)' />
+            <Ionicons name="notifications-outline" size={24} color={COLORS.primary} />
             <Text style={styles.itemText}>Thông báo</Text>
-            <Feather name="chevron-right" size={24} color='rgba(125, 122, 122, 1)' />
+            <Feather name="chevron-right" size={24} color={COLORS.primary} />
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => ToastAndroid.show('Tính năng đang được phát triển !', ToastAndroid.SHORT)}
             style={styles.item1}>
-            <MaterialCommunityIcons name="google-translate" size={24} color='rgba(125, 122, 122, 1)' />
+            <MaterialCommunityIcons name="google-translate" size={24} color={COLORS.primary} />
             <Text style={styles.itemText}>Ngôn ngữ</Text>
-            <Feather name="chevron-right" size={24} color='rgba(125, 122, 122, 1)' />
+            <Feather name="chevron-right" size={24} color={COLORS.primary} />
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => ToastAndroid.show('Tính năng đang được phát triển !', ToastAndroid.SHORT)}
@@ -138,7 +138,7 @@ const ProfileScreen = ({ route, navigation }) => {
               paddingHorizontal: 10,
               paddingVertical: 8,
             }}>
-            <Feather name="moon" size={24} color='rgba(125, 122, 122, 1)' />
+            <Feather name="moon" size={24} color={COLORS.primary} />
             <Text style={styles.itemText}>Chế độ tối</Text>
             <TouchableOpacity onPress={Darkmode}>
               {
@@ -151,16 +151,16 @@ const ProfileScreen = ({ route, navigation }) => {
           <TouchableOpacity
             onPress={() => ToastAndroid.show('Tính năng đang được phát triển !', ToastAndroid.SHORT)}
             style={styles.item1}>
-            <Feather name="help-circle" size={24} color='rgba(125, 122, 122, 1)' />
+            <Feather name="help-circle" size={24} color={COLORS.primary} />
             <Text style={styles.itemText}>Trợ giúp & hỗ trợ</Text>
-            <Feather name="chevron-right" size={24} color='rgba(125, 122, 122, 1)' />
+            <Feather name="chevron-right" size={24} color={COLORS.primary} />
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => ToastAndroid.show('Tính năng đang được phát triển !', ToastAndroid.SHORT)}
             style={styles.item1}>
-            <AntDesign name="staro" size={24} color='rgba(125, 122, 122, 1)' />
+            <AntDesign name="staro" size={24} color={COLORS.primary} />
             <Text style={styles.itemText}>Đánh giá</Text>
-            <Feather name="chevron-right" size={24} color='rgba(125, 122, 122, 1)' />
+            <Feather name="chevron-right" size={24} color={COLORS.primary} />
           </TouchableOpacity>
         </View>
         <View style={styles.line} />
@@ -171,7 +171,7 @@ const ProfileScreen = ({ route, navigation }) => {
             marginBottom: 5,
             alignItems: 'center',
             paddingHorizontal: 10,
-            paddingVertical: 12,
+            paddingBottom: 15,
           }}
             onPress={Logout}>
             <Ionicons name="log-out-outline" size={24} color={COLORS.red} />
@@ -188,15 +188,16 @@ const styles = StyleSheet.create({
     width: '100%',
     borderRadius: 1,
     borderWidth: 0.25,
-    marginTop: '8%',
+    marginTop: '4%',
   },
   account: {
     marginTop: '8%',
     width: '100%',
   },
   title: {
-    fontSize: 15,
-    fontFamily: 'BeVietnamPro-Medium',
+    fontSize: 18,
+    fontFamily: 'BeVietnamPro-Bold',
+    color: COLORS.black
   },
   item: {
     width: '100%',
@@ -209,16 +210,19 @@ const styles = StyleSheet.create({
   item1: {
     width: '100%',
     flexDirection: 'row',
-    marginTop: 8,
+    marginTop: 4,
     alignItems: 'center',
+    justifyContent: 'center',
     paddingHorizontal: 10,
     paddingVertical: 12,
   },
   itemText: {
-    fontSize: 18,
-    fontWeight: '400',
+    fontSize: 16,
+    fontFamily: 'BeVietnamPro-Medium',
     marginStart: 20,
     flex: 1,
+    paddingBottom: 4,
+
   },
 });
 export default ProfileScreen;

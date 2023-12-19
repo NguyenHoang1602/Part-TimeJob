@@ -14,7 +14,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import Feather from 'react-native-vector-icons/Feather';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import IconWithBadge from '../components/IconWithBadge';
-import AntDesign from 'react-native-vector-icons/AntDesign';
+import Entypo from 'react-native-vector-icons/Entypo';
 import { API } from '../../Sever/sever';
 
 import Modal from "react-native-modal";
@@ -236,13 +236,13 @@ const SavedJobsScreen = ({ navigation }) => {
               <Text numberOfLines={1} style={{ fontSize: 16, fontWeight: '400', color: COLORS.black, opacity: 0.6, }}>
                 {item.post_id.businessName}
               </Text>
-              <View style={{ flexDirection: 'row' }}>
-                <Text style={{ color: COLORS.blue, fontSize: 16, marginVertical: 9 }}>{formattedWageMin}đ - {formattedWageMax}đ</Text>
+              <View style={{ flexDirection: 'row', marginVertical: 9 }}>
+                <Text style={{ color: COLORS.blue, fontSize: 16, }}>{formattedWageMin}đ - {formattedWageMax}đ</Text>
                 {
-                  item.payForm_id === '655de22b9a5b0ffa7ffd5132' ? (
-                    <Text style={{ color: COLORS.blue, fontSize: 16, marginVertical: 9 }}> /giờ</Text>
+                  item.post_id.payForm_id._id === '655de22b9a5b0ffa7ffd5132' ? (
+                    <Text style={{ color: COLORS.blue, fontSize: 16 }}> /giờ</Text>
                   ) : (
-                    <Text style={{ color: COLORS.blue, fontSize: 16, marginVertical: 9 }}> /tháng</Text>
+                    <Text style={{ color: COLORS.blue, fontSize: 16 }}> /tháng</Text>
                   )
                 }
               </View>
@@ -257,7 +257,7 @@ const SavedJobsScreen = ({ navigation }) => {
                 justifyContent: 'center',
               }}>
                 {
-                  item.workType_id == '653e66b38e88b23b41388e3c' ? (
+                  item.post_id.workType_id._id === '653e66b38e88b23b41388e3c' ? (
                     <Text style={{ fontSize: 10 }} >Bán thời gian</Text>
                   ) : (
                     <Text style={{ fontSize: 10 }} >Toàn thời gian</Text>
@@ -288,23 +288,21 @@ const SavedJobsScreen = ({ navigation }) => {
           <View style={{ flex: 1 }}>
             <Text style={{ color: COLORS.black, fontSize: 24, fontWeight: '600' }} numberOfLines={1}>Save Jobs</Text>
           </View>
-          {/* <TouchableOpacity
+          <TouchableOpacity
+            onPress={() => {
+              ToastAndroid.show('Đang phát triển', ToastAndroid.SHORT);
+            }}
             style={{
               width: 46,
               aspectRatio: 1,
               borderRadius: 52,
-              alignItems: 'center',
+              alignItems: 'flex-end',
               justifyContent: 'center',
-              borderWidth: 1,
               borderColor: COLORS.grey,
             }}
-            onPress={() => openNotification()}>
-            {
-              check ? (
-                <IconWithBadge iconName="bell" badgeText="4" />
-              ) : <IconWithBadge iconName="bell" badgeText="" />
-            }
-          </TouchableOpacity> */}
+          >
+            <Entypo name='dots-three-vertical' size={20} color={COLORS.black} />
+          </TouchableOpacity>
         </View>
         {/* Search */}
         <View

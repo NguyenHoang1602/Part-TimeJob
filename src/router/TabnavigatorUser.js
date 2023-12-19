@@ -43,6 +43,10 @@ const HomeStack = (props) => {
                 component={HomeScreen}
                 options={({ }) => ({
                     headerShown: false,
+                    tabBarLabelStyle: {
+                        marginBottom: 8,
+                        fontFamily: 'BeVietnamPro-Medium'
+                    },
                 })}
             />
             <Stack.Screen
@@ -265,6 +269,7 @@ const TabNavigatorUser = () => {
                     ),
                     tabBarLabelStyle: {
                         marginBottom: 8,
+                        fontFamily: 'BeVietnamPro-Medium'
                     },
                 })}
             />
@@ -282,6 +287,7 @@ const TabNavigatorUser = () => {
                     ),
                     tabBarLabelStyle: {
                         marginBottom: 8,
+                        fontFamily: 'BeVietnamPro-Medium'
                     },
                 })}
             />
@@ -299,6 +305,7 @@ const TabNavigatorUser = () => {
                     ),
                     tabBarLabelStyle: {
                         marginBottom: 8,
+                        fontFamily: 'BeVietnamPro-Medium'
                     },
                 })}
             />
@@ -316,6 +323,7 @@ const TabNavigatorUser = () => {
                     ),
                     tabBarLabelStyle: {
                         marginBottom: 8,
+                        fontFamily: 'BeVietnamPro-Medium'
                     },
                 })}
             />
@@ -334,6 +342,7 @@ const TabNavigatorUser = () => {
                     ),
                     tabBarLabelStyle: {
                         marginBottom: 8,
+                        fontFamily: 'BeVietnamPro-Medium'
                     },
                 })}
             />

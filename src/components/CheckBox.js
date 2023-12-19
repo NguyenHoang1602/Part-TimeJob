@@ -59,9 +59,8 @@ const style = StyleSheet.create({
         marginLeft: 15,
         color: COLORS.black,
         fontSize: 16,
-        fontWeight: '600',
-        marginTop: 5,
-        fontFamily: 'Inter-VariableFont_slnt,wght',
+        marginTop: -4,
+        fontFamily: 'BeVietnamPro-Medium',
     },
 });
 export default CheckBox;
