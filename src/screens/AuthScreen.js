@@ -8,6 +8,8 @@ import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, StatusBar, Image, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
 import { COLORS, SIZES } from '../constants/theme';
 import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
+import auth from '@react-native-firebase/auth';
+import { LoginManager, AccessToken } from 'react-native-fbsdk-next';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { API } from '../../Sever/sever';
 
@@ -65,6 +67,50 @@ const AuthScreen = ({ navigation }) => {
             setLoading(false);
         }
     }
+    async function onFacebookButtonPress() {
+        // Attempt login with permissions
+        const result = await LoginManager.logInWithPermissions(['public_profile', 'email']);
+
+        if (result.isCancelled) {
+            console.log('User cancelled the login process');
+        }
+
+        // Once signed in, get the users AccessToken
+        const data = await AccessToken.getCurrentAccessToken();
+        if (!data) {
+            console.log('Something went wrong obtaining access token');
+        }
+
+        // Create a Firebase credential with the AccessToken
+        const facebookCredential = auth.FacebookAuthProvider.credential(data.accessToken);
+
+        // Sign-in the user with the credential
+        auth().signInWithCredential(facebookCredential)
+            .then(async (userCredential) => {
+                const user = userCredential.user;
+                const result = await axios.post(`${API}/users/FaceBookCheck`, {
+                    id: user,
+                });
+                if (result.data.status) {
+                    setUser(result.data);
+                    if (result.data.role === 0) {
+                        navigation.navigate('TabNavigatorUser');
+                        setLoading(true);
+                        await new Promise(resolve => setTimeout(resolve, 2000));
+                    } else {
+                        navigation.navigate('TabNavigator');
+                        setLoading(true);
+                        await new Promise(resolve => setTimeout(resolve, 2000));
+                    }
+                } else {
+                    setUser(result.data);
+                    navigation.navigate('SelectRole');
+                }
+            })
+            .catch((error) => {
+                console.log('Error signing in with Facebook:', error);
+            });
+    }
 
     return (
         <SafeAreaView
@@ -101,7 +147,7 @@ const AuthScreen = ({ navigation }) => {
                         </Text>
                     </View>
                     <TouchableOpacity
-                        onPress={() => { }}
+                        onPress={() => onFacebookButtonPress().then(() => console.log('Signed in with Facebook!'))}
                         style={{
                             backgroundColor: COLORS.white,
                             padding: 10,
@@ -113,15 +159,15 @@ const AuthScreen = ({ navigation }) => {
                             flexDirection: 'row',
                             bottom: '8%',
                             justifyContent: 'center',
-                            marginTop: 20
+                            alignItems: 'center',
+                            marginTop: 20,
+                            gap: 10
                         }}>
                         <Ionicons name="logo-facebook" size={30} color={COLORS.primary} />
                         <Text
                             style={{
                                 fontSize: 18,
                                 color: COLORS.black,
-                                marginStart: '3%',
-                                top: 3,
                                 fontFamily: 'Roboto-Medium',
                             }}>
                             Tiếp tục với Facebook
@@ -140,14 +186,14 @@ const AuthScreen = ({ navigation }) => {
                             flexDirection: 'row',
                             bottom: '2%',
                             justifyContent: 'center',
+                            alignItems: 'center',
+                            gap: 10
                         }}>
                         <Image
                             source={require('../assets/icon/google.png')}
                             style={{
                                 width: 24,
                                 height: 24,
-                                justifyContent: 'flex-start',
-                                right: 11,
                             }}
                         />
                         <Text

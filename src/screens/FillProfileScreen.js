@@ -13,7 +13,6 @@ import UserContext from '../components/UserConText';
 import firestore from '@react-native-firebase/firestore';
 
 import AntDesign from 'react-native-vector-icons/AntDesign';
-
 import DateTimePicker from '@react-native-community/datetimepicker';
 
 import Input from '../components/InputProfile';
@@ -37,6 +36,7 @@ const FillProfileScreen = ({ navigation, route }) => {
     const [validateSex, setValidateSex] = useState('');
     const [inputs, setInputs] = React.useState({
         googleId: route?.params?.item?.googleId,
+        facebookId: route?.params?.item?.facebookId,
         displayName: route?.params?.item?.displayName,
         email: route?.params?.item?.email,
         photo: route?.params?.item?.photo,
@@ -48,16 +48,11 @@ const FillProfileScreen = ({ navigation, route }) => {
         favoriteCareers: route?.params?.item?.favoriteCareers,
         status: false,
     });
-    console.log(inputs);
+    const phones = route?.params?.item?.phone;
     const getGender = async () => {
         const result = await axios.get(`${API}/gender/list`);
         setGender(result.data);
     }
-
-    const getRole = async () => {
-
-    }
-
     const validateAll = () => {
         validate();
         VLDSex();
@@ -134,27 +129,61 @@ const FillProfileScreen = ({ navigation, route }) => {
     };
 
     const register = async () => {
-        const result = await axios.post(`${API}/users/GoogleSignIn`, { inputs });
-        if (result.status === 200) {
-            loginUser(result.data);
-            setUser(result.data);
-            if (result.data.status) {
+        if (inputs?.googleId) {
+            const result = await axios.post(`${API}/users/GoogleSignIn`, { inputs });
+            if (result.status === 200) {
+                loginUser(result.data);
                 setUser(result.data);
-                if (result.data.role === 0) {
-                    navigation.navigate('TabNavigatorUser');
-                } else {
-                    navigation.navigate('TabNavigator');
+                if (result.data.status) {
+                    setUser(result.data);
+                    if (result.data.role === 0) {
+                        navigation.navigate('TabNavigatorUser');
+                    } else {
+                        navigation.navigate('TabNavigator');
+                    }
                 }
+                setLoading(true);
+                await new Promise(resolve => setTimeout(resolve, 2000));
             }
-            setLoading(true);
-            await new Promise(resolve => setTimeout(resolve, 2000));
+        } else if (inputs?.facebookId) {
+            const result = await axios.post(`${API}/users/FacebookSignIn`, { inputs });
+            if (result.status === 200) {
+                loginUser(result.data);
+                setUser(result.data);
+                if (result.data.status) {
+                    setUser(result.data);
+                    if (result.data.role === 0) {
+                        navigation.navigate('TabNavigatorUser');
+                    } else {
+                        navigation.navigate('TabNavigator');
+                    }
+                }
+                setLoading(true);
+                await new Promise(resolve => setTimeout(resolve, 2000));
+            }
+        } else {
+            const result = await axios.post(`${API}/users/PhoneNumberSignIn`, { inputs });
+            if (result.status === 200) {
+                loginUser(result.data);
+                setUser(result.data);
+                if (result.data.status) {
+                    setUser(result.data);
+                    if (result.data.role === 0) {
+                        navigation.navigate('TabNavigatorUser');
+                    } else {
+                        navigation.navigate('TabNavigator');
+                    }
+                }
+                setLoading(true);
+                await new Promise(resolve => setTimeout(resolve, 2000));
+            }
         }
     };
 
     const loginUser = (item) => {
         firestore()
             .collection('users')
-            .where('email', '==', item.email)
+            .where('_id', '==', item._id)
             .get()
             .then(res => {
                 if (res.docs.length !== 0) {
@@ -171,7 +200,7 @@ const FillProfileScreen = ({ navigation, route }) => {
                             photo: item.photo
                         })
                         .then(res => {
-                          
+
                         })
                         .catch(error => {
                             console.log(error);
@@ -207,8 +236,9 @@ const FillProfileScreen = ({ navigation, route }) => {
         month: '2-digit',
         year: 'numeric',
     });
+
     return (
-        <SafeAreaView style={{ flex: 1, paddingTop: 10 }}>
+        <SafeAreaView style={{ flex: 1, paddingTop: 10, backgroundColor: 'white' }}>
             {/* header */}
             {loading ? (
                 <ActivityIndicator size="large" color={COLORS.primary} />
@@ -285,14 +315,38 @@ const FillProfileScreen = ({ navigation, route }) => {
 
                                 />
                                 {!errGender ? <Text style={{ marginTop: 7, color: COLORS.red, fontSize: 12 }}>{validateSex}</Text> : null}
-                                <Input
-                                    onChangeText={text => handleOnchange(text, 'phone')}
-                                    onFocus={() => handleError(null, 'phone')}
-                                    keyboardType="numeric"
-                                    placeholder="Số điện thoại"
-                                    error={errors.phone}
-                                    value={inputs.phone}
-                                />
+                                {phones ?
+                                    <View
+                                        style={{
+                                            height: 50,
+                                            flexDirection: 'row',
+                                            paddingHorizontal: 5,
+                                            borderWidth: 1,
+                                            borderRadius: 6,
+                                            alignItems: 'center',
+                                            borderColor: COLORS.grey,
+                                            marginTop: 30,
+                                        }}
+                                    >
+                                        <Text
+                                            style={{
+                                                marginStart: 14,
+                                                fontSize: 14,
+                                                color: COLORS.black,
+                                            }}>
+                                            {inputs.phone}
+                                        </Text>
+                                    </View>
+                                    :
+                                    <Input
+                                        onChangeText={text => handleOnchange(text, 'phone')}
+                                        onFocus={() => handleError(null, 'phone')}
+                                        keyboardType="numeric"
+                                        placeholder="Số điện thoại"
+                                        error={errors.phone}
+                                    />
+                                }
+
                                 <Input
                                     onChangeText={text => handleOnchange(text, 'address')}
                                     onFocus={() => handleError(null, 'address')}

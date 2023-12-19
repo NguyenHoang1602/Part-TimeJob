@@ -135,7 +135,9 @@ const DetailsScreen = ({ route, navigation }) => {
         }, [])
     );
     const handleOnChangeSalary = (value) => {
-        setSalary(value);
+        let formattedValue = value.replace(/\D/g, '');
+        formattedValue = formattedValue.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+        setSalary(formattedValue);
     }
     // validate
     const [errors, setErrors] = useState('');
@@ -465,6 +467,7 @@ const DetailsScreen = ({ route, navigation }) => {
                                     style={{ backgroundColor: "#F5F5F5", width: '80%', paddingHorizontal: 13, paddingVertical: 11, borderRadius: 5 }}
                                     placeholder="Nhập lương mong muốn"
                                     onChangeText={handleOnChangeSalary}
+                                    value={salary}
                                 />
                             </View>
                         ) : null

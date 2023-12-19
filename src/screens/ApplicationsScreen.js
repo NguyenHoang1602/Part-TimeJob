@@ -1,9 +1,10 @@
 /* eslint-disable prettier/prettier */
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/no-unstable-nested-components */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable eol-last */
 /* eslint-disable react-native/no-inline-styles */
-import { View, Text, StyleSheet, ImageBackground, TouchableOpacity, TextInput, Pressable, FlatList, Image, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ImageBackground, TouchableOpacity, TextInput, Pressable, FlatList, Image, ScrollView, RefreshControl } from 'react-native';
 import React, { useContext, useState } from 'react'
 import COLORS from '../assets/const/colors';
 import UserContext from '../components/UserConText';
@@ -30,6 +31,7 @@ const ApplicationsScreen = ({ route, navigation }) => {
     const [list, setList] = useState([]);
     const [isFocusedSearch, setIsFocusedSearch] = useState(false);
     const [check, setChek] = useState(false);
+    const [refreshing, setRefreshing] = useState(false);
 
     useFocusEffect(
         React.useCallback(() => {
@@ -87,6 +89,28 @@ const ApplicationsScreen = ({ route, navigation }) => {
             }
         }
     }
+    const fetchData = async () => {
+        setRefreshing(true);
+        setTimeout(async () => {
+            try {
+                const response = await axios.post(`${API}/apply/listMyApplied`, {
+                    id: user._id
+                });
+                if (response.status === 200) {
+                    const data = JSON.stringify(response.data);
+                    await AsyncStorage.setItem('listMyApplied', data);
+                    setListApplied(response.data);
+                }
+                setRefreshing(false);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                setRefreshing(false);
+            } finally {
+                setRefreshing(false);
+            }
+            setRefreshing(false);
+        }, 2000);
+    };
 
     const renderItemApplications = ({ item }) => {
         const formattedWageMin = item?.post_id?.wageMin.toLocaleString('vi-VN');
@@ -259,7 +283,13 @@ const ApplicationsScreen = ({ route, navigation }) => {
                     </TouchableOpacity>
                 </View>
             </View>
-            <ScrollView showsVerticalScrollIndicator={false} style={styles.body}>
+            <ScrollView showsVerticalScrollIndicator={false} style={styles.body}
+                keyboardShouldPersistTaps={'always'}
+                refreshControl={<RefreshControl
+                    refreshing={refreshing}
+                    onRefresh={fetchData}
+                    colors={['#0000ff']}
+                />}>
                 <FlatList
                     data={listApplied}
                     keyExtractor={(item, index) => index.toString()}

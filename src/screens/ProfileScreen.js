@@ -29,6 +29,7 @@ import EditAccount from './EditAccount';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { firebase } from '@react-native-firebase/auth';
 
 const ProfileScreen = ({ route, navigation }) => {
   const { user } = useContext(UserContext);
@@ -59,6 +60,10 @@ const ProfileScreen = ({ route, navigation }) => {
   const out = async () => {
     await GoogleSignin.signOut();
     AsyncStorage.clear();
+    const user = firebase.auth().currentUser;
+    if (user) {
+      firebase.auth().signOut();
+    }
     navigation.replace('AuthStack');
   };
   return (
@@ -140,8 +145,8 @@ const ProfileScreen = ({ route, navigation }) => {
             <TouchableOpacity onPress={Darkmode}>
               {
                 darkMode ? (
-                  <Fontisto name="toggle-on" size={36} color={COLORS.primary} />
-                ) : <Fontisto name="toggle-off" size={36} color='rgba(125, 122, 122, 0.25)' />
+                  <Fontisto name="toggle-off" size={36} color='rgba(125, 122, 122, 0.25)' />
+                ) : <Fontisto name="toggle-on" size={36} color={COLORS.primary} />
               }
             </TouchableOpacity>
           </TouchableOpacity>
