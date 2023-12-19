@@ -291,7 +291,7 @@ const SearchScreen = ({ navigation }) => {
               source={require('../assets/images/5928293_2953962.jpg')}
               style={{ width: "100%", height: 430, }}
             />
-            <Text style={{ fontSize: 20, color: COLORS.primary, fontWeight: '600', textAlign: 'center' }}>Không tìm thấy bài viết liên quan</Text>
+            <Text style={{ fontSize: 18, color: COLORS.primary, textAlign: 'center', fontFamily: 'BeVietnamPro-Medium', }}>Không tìm thấy bài viết liên quan</Text>
           </View>
         )}
       />
@@ -346,8 +346,8 @@ const SearchScreen = ({ navigation }) => {
             }
           })}
           <View style={{ height: '100%', marginStart: 20, flex: 1 }}>
-            <Text numberOfLines={2} style={{ fontSize: 18, fontWeight: '500', color: COLORS.black }}>{item.title}</Text>
-            <Text numberOfLines={1} style={{ fontSize: 15, fontWeight: 'normal', color: COLORS.black, opacity: 0.5 }}>{item.address}</Text>
+            <Text numberOfLines={2} style={{ fontSize: 18, fontWeight: '500', color: COLORS.black, fontFamily: 'BeVietnamPro-Medium', marginTop: -2 }}>{item.title}</Text>
+            <Text numberOfLines={1} style={{ fontSize: 15, fontWeight: 'normal', color: COLORS.black, opacity: 0.5, fontFamily: 'BeVietnamPro-Medium', marginTop: -2 }}>{item.address}</Text>
           </View>
           {
             isFollowed(item._id) ? (
@@ -361,19 +361,19 @@ const SearchScreen = ({ navigation }) => {
         </View>
         <View style={{ height: 1, width: '99%', backgroundColor: COLORS.grey, opacity: 0.4, marginTop: 10, marginBottom: 10 }} />
         <View style={{ width: '100%', paddingStart: '21%', gap: 10 }}>
-          <Text numberOfLines={1} style={{ fontSize: 16, fontWeight: '400', color: COLORS.black, opacity: 0.6, }}>{item.businessName}</Text>
+          <Text numberOfLines={1} style={{ fontSize: 16, fontWeight: '400', color: COLORS.black, opacity: 0.6, fontFamily: 'BeVietnamPro-Medium', marginTop: -2 }}>{item.businessName}</Text>
           <View style={{ flexDirection: 'row' }}>
-            <Text style={{ color: COLORS.blue, fontSize: 16 }}>{formattedWageMin}đ - {formattedWageMax}đ</Text>
+            <Text style={{ color: COLORS.blue, fontSize: 14, fontFamily: 'BeVietnamPro-Medium', marginTop: -2 }}>{formattedWageMin}đ - {formattedWageMax}đ</Text>
             {
               item.payForm_id._id === '655de22b9a5b0ffa7ffd5132' ? (
-                <Text style={{ color: COLORS.blue, fontSize: 16 }}> /giờ</Text>
+                <Text style={{ color: COLORS.blue, fontSize: 14, fontFamily: 'BeVietnamPro-Medium', marginTop: -2 }}> /giờ</Text>
               ) : (
-                <Text style={{ color: COLORS.blue, fontSize: 16 }}> /tháng</Text>
+                  <Text style={{ color: COLORS.blue, fontSize: 14, fontFamily: 'BeVietnamPro-Medium', marginTop: -2 }}> /tháng</Text>
               )
             }
           </View>
           <View style={{
-            width: 80,
+            width: 85,
             height: 25,
             borderWidth: 1,
             borderColor: COLORS.grey,
@@ -384,9 +384,9 @@ const SearchScreen = ({ navigation }) => {
           }}>
             {
               item.workType_id._id === '653e66b38e88b23b41388e3c' ? (
-                <Text style={{ fontSize: 10 }} >Bán thời gian</Text>
+                <Text style={{ fontSize: 10, fontFamily: 'BeVietnamPro-Medium', marginTop: -2 }} >Bán thời gian</Text>
               ) : (
-                <Text style={{ fontSize: 10 }} >Toàn thời gian</Text>
+                <Text style={{ fontSize: 10, fontFamily: 'BeVietnamPro-Medium', marginTop: -2 }} >Toàn thời gian</Text>
               )
             }
           </View>
@@ -433,7 +433,7 @@ const SearchScreen = ({ navigation }) => {
             }}
             onFocus={() => { setIsFocusedSearch(!isFocusedSearch) }}
             onBlur={() => { setIsFocusedSearch(!isFocusedSearch) }}
-            style={{ flex: 1, fontSize: 16, color: COLORS.black, paddingHorizontal: 10, }} />
+            style={{ flex: 1, fontSize: 16, color: COLORS.black, paddingHorizontal: 10, fontFamily: 'BeVietnamPro-Medium', }} />
           <TouchableOpacity onPress={() => {
             toggleModalFilter()
           }}>
@@ -465,7 +465,7 @@ const SearchScreen = ({ navigation }) => {
 
             {/* Tilter */}
             <View style={{ flexDirection: 'row', height: 40 }}>
-              <Text style={{ paddingStart: 10, fontSize: 18, fontWeight: '700', color: COLORS.black, flex: 1 }}>Tùy chọn bộ lọc</Text>
+              <Text style={{ paddingStart: 10, fontSize: 18, fontFamily: 'BeVietnamPro-Bold', marginTop: -6, color: COLORS.black, flex: 1 }}>Tùy chọn bộ lọc</Text>
               <TouchableOpacity style={{ marginEnd: 10 }} onPress={toggleModalclose}>
                 <AntDesign name='close' size={24} color={COLORS.black} />
               </TouchableOpacity>
@@ -479,7 +479,7 @@ const SearchScreen = ({ navigation }) => {
                   <View style={{ borderRadius: 15, borderWidth: 1, paddingHorizontal: 18, borderColor: COLORS.grey }}>
                     <View style={{ flexDirection: 'row', gap: 8, paddingVertical: 15 }}>
                       <View style={{ flex: 1 }}>
-                        <Text style={{ fontSize: 18, color: COLORS.black, fontWeight: "700", }} numberOfLines={1}>
+                        <Text style={{ fontSize: 16, color: COLORS.black, fontFamily: 'BeVietnamPro-Bold', marginTop: -2, }} numberOfLines={1}>
                           Địa chỉ & Mức lương
                         </Text>
                       </View>
@@ -550,7 +550,7 @@ const SearchScreen = ({ navigation }) => {
                   <View style={{ borderRadius: 15, borderWidth: 1, paddingHorizontal: 18, borderColor: COLORS.grey }}>
                     <View style={{ flexDirection: 'row', gap: 8, paddingVertical: 15 }}>
                       <View style={{ flex: 1 }}>
-                        <Text style={{ fontSize: 18, color: COLORS.black, fontWeight: "700", fontFamily: 'Inter-VariableFont_slnt,wght' }} numberOfLines={1}>
+                        <Text style={{ fontSize: 16, color: COLORS.black, fontFamily: 'BeVietnamPro-Bold', marginTop: -2, }} numberOfLines={1}>
                           Ngành nghề
                         </Text>
                       </View>
@@ -570,7 +570,7 @@ const SearchScreen = ({ navigation }) => {
                   <View style={{ borderRadius: 15, borderWidth: 1, paddingHorizontal: 18, borderColor: COLORS.grey }}>
                     <View style={{ flexDirection: 'row', gap: 8, paddingVertical: 15 }}>
                       <View style={{ flex: 1 }}>
-                        <Text style={{ fontSize: 18, color: COLORS.black, fontWeight: "700", fontFamily: 'Inter-VariableFont_slnt,wght' }} numberOfLines={1}>
+                        <Text style={{ fontSize: 16, color: COLORS.black, fontFamily: 'BeVietnamPro-Bold', marginTop: -2, }} numberOfLines={1}>
                           Loại công việc
                         </Text>
                       </View>
@@ -590,7 +590,7 @@ const SearchScreen = ({ navigation }) => {
                   <View style={{ borderRadius: 15, borderWidth: 1, paddingHorizontal: 18, borderColor: COLORS.grey }}>
                     <View style={{ flexDirection: 'row', gap: 8, paddingVertical: 15 }}>
                       <View style={{ flex: 1 }}>
-                        <Text style={{ fontSize: 18, color: COLORS.black, fontWeight: "700", fontFamily: 'Inter-VariableFont_slnt,wght' }} numberOfLines={1}>
+                        <Text style={{ fontSize: 16, color: COLORS.black, fontFamily: 'BeVietnamPro-Bold', marginTop: -2, }} numberOfLines={1}>
                           Giới tính
                         </Text>
                       </View>
@@ -610,7 +610,7 @@ const SearchScreen = ({ navigation }) => {
                   <View style={{ borderRadius: 15, borderWidth: 1, paddingHorizontal: 18, borderColor: COLORS.grey }}>
                     <View style={{ flexDirection: 'row', gap: 8, paddingVertical: 15 }}>
                       <View style={{ flex: 1 }}>
-                        <Text style={{ fontSize: 18, color: COLORS.black, fontWeight: "700", fontFamily: 'Inter-VariableFont_slnt,wght' }} numberOfLines={1}>
+                        <Text style={{ fontSize: 16, color: COLORS.black, fontFamily: 'BeVietnamPro-Bold', marginTop: -2, }} numberOfLines={1}>
                           Trình độ học vấn
                         </Text>
                       </View>
@@ -630,7 +630,7 @@ const SearchScreen = ({ navigation }) => {
                   <View style={{ borderRadius: 15, borderWidth: 1, paddingHorizontal: 18, borderColor: COLORS.grey }}>
                     <View style={{ flexDirection: 'row', gap: 8, paddingVertical: 15 }}>
                       <View style={{ flex: 1 }}>
-                        <Text style={{ fontSize: 18, color: COLORS.black, fontWeight: "700", fontFamily: 'Inter-VariableFont_slnt,wght' }} numberOfLines={1}>
+                        <Text style={{ fontSize: 16, color: COLORS.black, fontFamily: 'BeVietnamPro-Bold', marginTop: -2, }} numberOfLines={1}>
                           Kinh nghiệm làm việc
                         </Text>
                       </View>
@@ -672,7 +672,7 @@ const SearchScreen = ({ navigation }) => {
                   paddingVertical: 15,
 
                 }}>
-                <Text style={{ color: COLORS.primary, fontSize: 18, fontWeight: "600" }}>Reset</Text>
+                <Text style={{ color: COLORS.primary, fontSize: 18, fontFamily: 'BeVietnamPro-Medium', marginTop: -2 }}>Reset</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => {
@@ -695,7 +695,7 @@ const SearchScreen = ({ navigation }) => {
                   shadowRadius: 3.84,
                   elevation: 5,
                 }}>
-                <Text style={{ color: COLORS.white, fontSize: 18, fontWeight: "600" }}>Apply</Text>
+                <Text style={{ color: COLORS.white, fontSize: 18, fontFamily: 'BeVietnamPro-Medium', marginTop : -4}}>Apply</Text>
               </TouchableOpacity>
             </View>
           </SafeAreaView>
@@ -716,13 +716,13 @@ const styles = StyleSheet.create({
   },
   textFound: {
     fontSize: 16,
-    fontWeight: '700',
+    fontFamily: 'BeVietnamPro-Medium',
     color: '#000000',
   },
   titleNoFound: {
     fontSize: 20,
-    fontWeight: '700',
     color: '#000000',
+    fontFamily: 'BeVietnamPro-Medium',
   },
   show: {
     paddingHorizontal: 20,
@@ -737,7 +737,8 @@ const styles = StyleSheet.create({
   textNoFound: {
     fontSize: 18,
     color: '#000000',
-    textAlign: 'center'
+    textAlign: 'center',
+    fontFamily: 'BeVietnamPro-Medium',
   },
   dropdown: {
     height: 50,
@@ -750,11 +751,13 @@ const styles = StyleSheet.create({
     marginVertical: 5,
     fontSize: 14,
     color: COLORS.grey,
+    fontFamily: 'BeVietnamPro-Medium',
   },
   selectedTextStyle: {
     fontSize: 16,
     color: '#000000',
-    fontWeight: '500'
+    fontWeight: '500',
+    fontFamily: 'BeVietnamPro-Medium',
   },
   iconStyle: {
     width: 20,
@@ -764,11 +767,13 @@ const styles = StyleSheet.create({
     height: 50,
     fontSize: 14,
     borderRadius: 6,
+    fontFamily: 'BeVietnamPro-Medium',
   },
   textWorkType: {
     color: '#000000',
     fontSize: 16,
     fontWeight: '500',
+    fontFamily: 'BeVietnamPro-Medium',
   },
   radio: {
     width: 24,

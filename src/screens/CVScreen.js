@@ -152,7 +152,7 @@ const CVScreen = ({ route, navigation }) => {
             height: 60,
             justifyContent: 'center',
           }}>
-          <Text style={{ fontSize: 16, marginStart: 20 }}>
+          <Text style={{ fontSize: 16, marginStart: 20, fontFamily: 'BeVietnamPro-Medium', marginTop: -2 }}>
             THÔNG TIN BẮT BUỘC
           </Text>
         </View>
@@ -245,7 +245,7 @@ const CVScreen = ({ route, navigation }) => {
           {errors.career_id ? <Text style={styles.error}>{errors.career_id}</Text> : null}
         </View>
         <View style={{ backgroundColor: '#D9D9D9', height: 60, justifyContent: 'center' }}>
-          <Text style={{ fontSize: 16, marginStart: 25 }}>THÔNG TIN THÊM</Text>
+          <Text style={{ fontSize: 16, marginStart: 25, fontFamily: 'BeVietnamPro-Medium', marginTop: -2 }}>THÔNG TIN THÊM</Text>
         </View>
         <View style={{ marginVertical: 22, marginHorizontal: 24 }}>
           <Input
@@ -332,7 +332,8 @@ const CVScreen = ({ route, navigation }) => {
             }}>
             <Text
               style={{
-                fontWeight: 'bold',
+                fontFamily: 'BeVietnamPro-Bold', 
+                marginTop: -2,
                 fontSize: 18,
                 color: COLORS.white,
               }}>
@@ -388,10 +389,12 @@ const styles = StyleSheet.create({
     marginVertical: 5,
     fontSize: 14,
     color: COLORS.grey1,
+    fontFamily: 'BeVietnamPro-Medium',
   },
   selectedTextStyle: {
     fontSize: 14,
     color: COLORS.darkBlue,
+    fontFamily: 'BeVietnamPro-Medium',
   },
   iconStyle: {
     width: 20,
@@ -401,10 +404,12 @@ const styles = StyleSheet.create({
     height: 50,
     fontSize: 14,
     borderRadius: 6,
+    fontFamily: 'BeVietnamPro-Medium', marginTop: -2
   },
   error: {
-    fontSize: 12,
+    fontSize: 11,
     color: 'red',
-    paddingBottom: 12
+    paddingBottom: 12,
+    fontFamily: 'BeVietnamPro-Medium',
   },
 });
