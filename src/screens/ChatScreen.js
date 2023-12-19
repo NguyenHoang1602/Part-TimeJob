@@ -16,13 +16,13 @@ import Feather from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const ChatScreen = ({ route, navigation }) => {
-    
+
     const data = {
-        _id : route.params?.item._id,
-        photo : route.params?.item.photo,
-        displayName : route.params?.item.displayName,
+        _id: route.params?._id,
+        photo: route.params?.photo,
+        displayName: route.params?.displayName,
     };
-    const [items , setItem ] = useState(data)
+    const [items, setItem] = useState(data)
 
     useEffect(() => {
         const subscriber = fireStore()
@@ -45,13 +45,15 @@ const ChatScreen = ({ route, navigation }) => {
 
     const [messageList, setMessageList] = useState([]);
     const { user } = useContext(UserContext);
-
+    console.log("mess : ", messageList);
     const onSend = useCallback(async (messages = []) => {
         const msg = messages[0];
         const myMsg = {
             ...msg,
             sendBy: user._id,
             sendTo: items?._id,
+            sendTo_name: items?.displayName,
+            sendTo_photo: items?.photo,
             createdAt: Date.parse(msg.createdAt),
         };
         setMessageList(previousMessages =>
@@ -96,7 +98,7 @@ const ChatScreen = ({ route, navigation }) => {
                 <TouchableOpacity onPress={() => navigation.goBack()}>
                     <Ionicons name='arrow-back' size={26} />
                 </TouchableOpacity>
-                <Image source={{ uri:items?.photo }} style={{ width: 32, aspectRatio: 1, borderRadius: 32 }} />
+                <Image source={{ uri: items?.photo }} style={{ width: 32, aspectRatio: 1, borderRadius: 32 }} />
                 <View style={{ flex: 1 }}>
                     <Text style={{ fontSize: 20, color: COLORS.black, fontWeight: "600", width: 180 }} numberOfLines={1}>
                         {items?.displayName}
@@ -117,7 +119,8 @@ const ChatScreen = ({ route, navigation }) => {
                     onSend={messages => onSend(messages)}
                     user={{
                         _id: user._id,
-                        avatar: user.photo,  
+                        avatar: user.photo,
+                        displayName: user.displayName,
                     }}
                 />
             </View>

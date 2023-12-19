@@ -9,39 +9,31 @@
 /* eslint-disable eol-last */
 /* eslint-disable prettier/prettier */
 /* eslint-disable react-native/no-inline-styles */
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useCallback } from 'react';
 import { FlatList, Image, Text, ImageBackground, TouchableOpacity, View, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS } from '../constants/theme';
 import firestore from '@react-native-firebase/firestore';
-import { useIsFocused, useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useIsFocused, useNavigation } from '@react-navigation/native';
 import UserContext from '../components/UserConText';
 
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Feather from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { err } from 'react-native-svg';
 
-const MessageScreen = ({ navigation }) => {
+const MessageScreen = ({ navigation, chatId }) => {
     useEffect(() => {
         getUsers();
-    }, []);
+        getLastMess();
+    }, [chatId]);
 
     const [users, setUsers] = useState([]);
     const { user } = useContext(UserContext);
+    const { lastMess, setLastMess } = useState('');
 
     const getUsers = async () => {
-        // const id = user._id;
-        // const chatRef = firestore().collection('chats');
-        // const chatSnapshot = await chatRef.where('participants', 'array-contains', id).get();
-        // console.log(chatSnapshot);
-        // const userIds = chatSnapshot.docs.map(doc => {
-        //     const participants = doc.data().participants;
-        //     return participants.filter(participantId => participantId !== user._id)[0];
-        // });
-        // const usersSnapshot = await firestore().collection('users').where('_id', 'in', userIds).get();
-        // const users = usersSnapshot.docs.map(doc => doc.data());
-        // setUsers(users);
         let tempData = [];
         firestore()
             .collection('users')
@@ -56,6 +48,32 @@ const MessageScreen = ({ navigation }) => {
                 setUsers(tempData);
             });
     };
+
+    const getLastMess = async () => {
+        const chatRef = firestore().collection('chats').doc(chatId);
+        chatRef.get().then((doc) => {
+            if (doc.exists) {
+                const chat = doc.data();
+                const messages = chat.messages;
+
+                if (messages.length > 0) {
+                    const lastMess = messages[messages.length - 1];
+                    setLastMess(lastMess.text)
+                } else {
+                    setLastMess('Không có tin nhắn')
+                }
+            } else {
+                setLastMess('Không có đối tượng chat');
+            }
+        }).catch((err) => {
+            setLastMess('Lỗi:', err)
+        })
+    }
+   
+
+
+
+
     const FlatListb = () => {
         return (
             <FlatList
@@ -78,16 +96,20 @@ const MessageScreen = ({ navigation }) => {
     const renderItemJob = ({ item }) => (
         <View style={{ padding: 18, }}>
             <TouchableOpacity onPress={() => {
-                navigation.navigate('ChatScreen', { item })
+                navigation.navigate('ChatScreen', {
+                    _id: item._id,
+                    photo: item.photo,
+                    displayName: item.displayName,
+                })
             }}>
                 <View style={{ flexDirection: 'row', gap: 18 }}>
                     <Image source={{ uri: item.photo }} style={{ width: 52, aspectRatio: 1, borderRadius: 52 }} />
                     <View style={{ flex: 1 }}>
-                        <Text style={{ fontSize: 18, color: COLORS.black, fontWeight: "600", }} numberOfLines={1}>
+                        <Text style={{ fontSize: 18, color: COLORS.black, fontWeight: "600", }} numberOfLines={2}>
                             {item.displayName}
                         </Text>
                         <Text style={{ fontSize: 16, color: COLORS.grey, paddingTop: 6 }} numberOfLines={1}>
-                            Have a good day!  Have a good day!v
+                            {lastMess}
                         </Text>
                     </View>
                     <View style={{ alignItems: "flex-end" }}>
@@ -109,7 +131,7 @@ const MessageScreen = ({ navigation }) => {
                             </Text>
                         </View>
                         <Text style={{ fontSize: 16, color: COLORS.grey }}>
-                            16/09/2023
+                            11/2/2023
                         </Text>
                     </View>
                 </View>
@@ -136,10 +158,12 @@ const MessageScreen = ({ navigation }) => {
                         <Feather name="search" size={26} color="#212121" style={{ marginRight: 15 }} />
                     </TouchableOpacity>
                     <TouchableOpacity>
-                    <MaterialCommunityIcons name='dots-horizontal-circle-outline' size={26} color= "#212121"/>
+                        <MaterialCommunityIcons name='dots-horizontal-circle-outline' size={26} color="#212121" />
                     </TouchableOpacity>
                 </View>
             </View>
+
+
 
             <FlatListb />
 

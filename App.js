@@ -33,7 +33,7 @@ const App = () => {
     <UserProvider value={{ user, setUser }}>
       <GestureHandlerRootView style={{ flex: 1 }}>
         <NavigationContainer>
-          <Router />
+          <Router/>
         </NavigationContainer>
       </GestureHandlerRootView>
     </UserProvider>

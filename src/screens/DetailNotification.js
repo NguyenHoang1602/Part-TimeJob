@@ -135,7 +135,11 @@ const DetailNotification = ({ route, navigation }) => {
                 }}>
                     <TouchableOpacity
                         onPress={() => {
-                            navigation.navigate('ChatScreen', { item: data?.sender_id });
+                            navigation.navigate('ChatScreen', {
+                                _id: data?.sender_id?._id,
+                                photo: data?.sender_id?.photo,
+                                displayName: data?.sender_id?.displayName,
+                            });
                         }}
                         style={{
                             backgroundColor: 'rgba(51, 123, 255, 0.20)',

@@ -106,7 +106,7 @@ const PostScreen = ({ navigation }) => {
       handleError('Vui lòng nhập tên doanh nghiệp', 'businessName');
       isValid = false;
     }
-    if (!inputs.andress) {
+    if (!inputs.address) {
       handleError('Vui lòng nhập địa chỉ', 'address');
       isValid = false;
     }
