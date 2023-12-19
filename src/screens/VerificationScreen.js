@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import {
     View,
     Text,
@@ -13,6 +13,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Colors, Fonts } from '../constants';
 import { Display } from '../utils';
 import COLORS from '../assets/const/colors';
+import { firebase } from '@react-native-firebase/auth';
 
 const VerificationScreen = ({ navigation, route }) => {
     const confirm = route.params?.confirmation;
@@ -25,30 +26,28 @@ const VerificationScreen = ({ navigation, route }) => {
     const [otp, setOtp] = useState({ 1: '', 2: '', 3: '', 4: '', 5: '', 6: '' });
     const confirmOTP = otp[1] + otp[2] + otp[3] + otp[4] + otp[5] + otp[6];
 
-    // Handle login
-//   function onAuthStateChanged(user) {
-//     if (user) {
-//       navigation.navigate('AddProfile',{ number : number})
-//     }
-//   }
+    useEffect(() => {
+        const unsubscribe = firebase.auth().onAuthStateChanged((user) => {
+            if (user) {
+                setUser(user.toJSON());
+            } else {
+                setUser(null);
+            }
+        });
 
-//   useEffect(() => {
-//     firebase.auth().onAuthStateChanged(onAuthStateChanged);
-//   },[]);
+        return () => {
+            if (unsubscribe) unsubscribe();
+        };
+    }, []);
 
     async function confirmCode() {
         try {
           if (confirm) {
-            await confirm.confirm(confirmOTP);
+            await confirm.confirm(confirmOTP);            
             navigation.navigate('AddProfile',{ item : route.params?.phoneNumber});
           } else {
             console.log('Confirmation object is null.');
           }
-          // This
-          // const result = await axios.post('http://192.168.8.124/users/PhoneNumberSignIn', {
-          //   phoneNumber: number,
-          // });
-          // setUser(result.data);
         } catch (error) {
           console.log('Invalid code: ', error);
         }
