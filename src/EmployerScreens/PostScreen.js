@@ -340,9 +340,6 @@ const PostScreen = ({ navigation }) => {
             <Text style={styles.panelTitle}>Tải ảnh lên</Text>
             <Text style={styles.panelSubtitle}>Chọn hình ảnh nơi làm việc</Text>
           </View>
-          <TouchableOpacity style={styles.panelButton} onPress={''}>
-            <Text style={styles.panelButtonTitle}>Camera</Text>
-          </TouchableOpacity>
           <TouchableOpacity style={styles.panelButton} onPress={openImagePicker}>
             <Text style={styles.panelButtonTitle}>Chọn từ thư viện</Text>
           </TouchableOpacity>

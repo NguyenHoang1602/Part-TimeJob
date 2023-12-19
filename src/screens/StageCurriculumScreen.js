@@ -1,3 +1,4 @@
+/* eslint-disable radix */
 /* eslint-disable eqeqeq */
 /* eslint-disable jsx-quotes */
 /* eslint-disable quotes */
@@ -113,11 +114,13 @@ const StageCurriculumScreen = ({ route, navigation }) => {
     const validate = async () => {
         Keyboard.dismiss();
         let isValid = true;
-        if (!bargainSalary) {
+        const bargain_Salary = Number(bargainSalary.replace(/\./g, ''));
+        console.log(bargain_Salary);
+        if (!bargain_Salary) {
             setErrors('Vui lòng nhập lương thương lượng')
             isValid = false;
-        } else if (bargainSalary < 1000) {
-            setErrors('Lương thương lượng không được bé hơn 1.000đ')
+        } else if (bargain_Salary < data?.post_id?.wageMin) {
+            setErrors('Lương thương lượng phải lớn hơn hoặc bằng lương tối thiểu')
             isValid = false;
         }
         if (isValid) {

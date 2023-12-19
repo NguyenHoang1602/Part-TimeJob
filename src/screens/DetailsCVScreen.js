@@ -49,7 +49,7 @@ const DetailsCVScreen = ({ navigation, route }) => {
     if (saveAppliedIDlist.some(cv_id => cv_id === id) == true) {
       ToastAndroid.show('Xin lỗi, có vẻ như CV đang trong trạng thái ứng tuyển !', ToastAndroid.SHORT);
     } else {
-      navigation.navigate('UpdateCvScreen', {item : data});
+      navigation.navigate('UpdateCvScreen', { item: data });
     }
   };
   const checkDelete = (id) => {
@@ -99,7 +99,7 @@ const DetailsCVScreen = ({ navigation, route }) => {
           <Ionicons name="arrow-back" size={30} color={COLORS.black} />
         </TouchableOpacity>
         <View style={{ marginLeft: 20, alignItems: 'center' }}>
-          <Text style={{ fontSize: 22, fontFamily: 'BeVietnamPro-Bold',marginTop:-2, color: COLORS.black }}>Thông tin CV</Text>
+          <Text style={{ fontSize: 21, fontFamily: 'BeVietnamPro-Medium', color: COLORS.black }}>Thông tin CV</Text>
         </View>
       </View>
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -110,7 +110,7 @@ const DetailsCVScreen = ({ navigation, route }) => {
               source={{ uri: data?.cv_id.user_id.photo }}
               style={{ width: 90, height: 90, marginBottom: 10 }}
               imageStyle={{ borderRadius: 100 }} /> */}
-            <Text style={{ fontSize: 20, fontFamily: 'BeVietnamPro-Bold',marginTop:-2, color: "white" }}>{data?.title}</Text>
+            <Text style={{ fontSize: 19, fontFamily: 'BeVietnamPro-Medium', color: "white" }}>{data?.title}</Text>
           </View>
           <View style={styles.view1}>
             <Text style={styles.text1}>Tên: </Text>
@@ -170,7 +170,11 @@ const DetailsCVScreen = ({ navigation, route }) => {
               paddingVertical: 15,
               marginEnd: 15,
             }}>
-            <Text style={{ color: COLORS.primary, fontSize: 18, fontFamily: 'BeVietnamPro-Medium',marginTop:-2 }}>Xóa</Text>
+            <Text style={{
+              color: COLORS.primary,
+              fontSize: 16,
+              fontFamily: 'BeVietnamPro-Medium',
+            }}>Xóa</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -186,7 +190,11 @@ const DetailsCVScreen = ({ navigation, route }) => {
               width: 160,
               paddingVertical: 15,
             }}>
-            <Text style={{ color: COLORS.white, fontSize: 18, fontFamily: 'BeVietnamPro-Medium',marginTop:-2 }}>Chỉnh sửa</Text>
+            <Text style={{
+              color: COLORS.white,
+              fontSize: 16,
+              fontFamily: 'BeVietnamPro-Medium',
+            }}>Chỉnh sửa</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
@@ -200,13 +208,13 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   text1: {
-    fontSize: 16,
-    fontWeight: '500',
+    fontSize: 15,
+    fontFamily: 'BeVietnamPro-Medium',
     marginRight: 20,
   },
   text2: {
-    fontSize: 16,
-    fontWeight: '500',
+    fontSize: 15,
+    fontFamily: 'BeVietnamPro-Medium',
     marginRight: 5,
   },
 });
