@@ -42,7 +42,7 @@ const ApplicationsStageScreen = ({ route, navigation }) => {
       getCVApply();
     }, [])
   );
-
+  console.log(data);
   const [CvApply, setCvApply] = useState([]);
   const handleAccept = async () => {
     console.log(data.id);
@@ -115,10 +115,10 @@ const ApplicationsStageScreen = ({ route, navigation }) => {
           <View style={{ flexDirection: 'row', marginTop: 5, marginVertical: 5 }}>
             <Text style={{ fontSize: 16,  fontFamily: 'BeVietnamPro-Medium', color: 'red', textAlign: 'center' }}>{data.wageMin}đ - {data.wageMax}đ</Text>
             {
-              data?.payForm_id?._id === '655de22b9a5b0ffa7ffd5132' ? (
-                <Text style={{ fontSize: 17,  fontFamily: 'BeVietnamPro-Medium',color: 'red' }}> /giờ</Text>
+              data?.post_id?.payForm_id === '655de22b9a5b0ffa7ffd5132' ? (
+                <Text style={{ fontSize: 17,  fontFamily: 'BeVietnamPro-Medium',color: 'red', marginTop: -2 }}> /giờ</Text>
               ) : (
-                <Text style={{ fontSize: 17,  fontFamily: 'BeVietnamPro-Medium', color: 'red' }}> /tháng</Text>
+                  <Text style={{ fontSize: 17, fontFamily: 'BeVietnamPro-Medium', color: 'red', marginTop: -2 }}> /tháng</Text>
               )
             }
           </View>
@@ -134,7 +134,7 @@ const ApplicationsStageScreen = ({ route, navigation }) => {
             marginTop: 10,
           }}>
             {
-              data?.workType === '653e66b38e88b23b41388e3c' ? (
+              data?.post_id?.workType_id === '653e66b38e88b23b41388e3c' ? (
                 <Text style={{ fontSize: 10, fontFamily: 'BeVietnamPro-Medium'}} >Bán thời gian</Text>
               ) : (
                 <Text style={{ fontSize: 10 ,fontFamily: 'BeVietnamPro-Medium' }} >Toàn thời gian</Text>
