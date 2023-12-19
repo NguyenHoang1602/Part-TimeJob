@@ -207,7 +207,7 @@ const StageCurriculumScreen = ({ route, navigation }) => {
                     </View>
                     <View style={styles.view1}>
                         <Text style={styles.text2}>Lương mong muốn: </Text>
-                        <Text style={{ fontSize: 16 }}>{data?.salary.toLocaleString('vi-VN')}đ</Text>
+                        <Text style={{ fontSize: 16 }}>{data?.salary?.toLocaleString('vi-VN')}đ</Text>
                     </View>
                     {/* <View style={styles.view1}>
                         <Text style={styles.text2}>Ngành nghề: </Text>
