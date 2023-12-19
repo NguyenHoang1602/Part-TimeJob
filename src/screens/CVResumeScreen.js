@@ -50,7 +50,7 @@ const CVResume = ({ navigation }) => {
                 style={{ width: 45, height: 45 }}
                 imageStyle={{}} />
             <View style={{ marginLeft: 15, flex: 1 }}>
-                <Text numberOfLines={1} style={{ fontSize: 16, color: COLORS.black }}>{item.title}</Text>
+                <Text numberOfLines={1} style={{ fontSize: 15, fontFamily: 'BeVietnamPro-Medium',  color: COLORS.black }}>{item.title}</Text>
             </View>
         </Pressable>
     );
@@ -65,12 +65,12 @@ const CVResume = ({ navigation }) => {
                 }}
                 onPress={() => navigation.navigate('ProfileScreen')}>
                 <AntDesign name="arrowleft" size={24} color={COLORS.black} />
-                <Text style={{ fontSize: 22, fontWeight: '400', color: COLORS.black, marginLeft: 20 }}>Quản lí CV</Text>
+                <Text style={{ fontSize: 21, fontFamily: 'BeVietnamPro-Medium' , color: COLORS.black, marginLeft: 20 }}>Quản lí CV</Text>
             </TouchableOpacity>
             <View style={{ flexDirection: 'column', backgroundColor: '#EEEEEE', width: '100%', height: 140, borderRadius: 10, borderWidth: 1, borderColor: '#DDDDDD', marginTop: 20 }}>
                 <TouchableOpacity onPress={() => navigation.navigate('Tạo CV cá nhân')}>
                     <AntDesign name="addfile" size={30} color={COLORS.blue} style={{ textAlign: 'center', marginTop: 40 }} />
-                    <Text style={{ fontSize: 14, fontWeight: '400', color: '#808080', textAlign: 'center', marginTop: 10 }}>Thêm mới CV</Text>
+                    <Text style={{ fontSize: 13, fontFamily: 'BeVietnamPro-Medium' , color: '#808080', textAlign: 'center', marginTop: 10 }}>Thêm mới CV</Text>
                 </TouchableOpacity>
             </View>
 
@@ -90,7 +90,7 @@ const CVResume = ({ navigation }) => {
                                     source={require('../assets/images/5928293_2953962.jpg')}
                                     style={{ width: 100, height: 100, }}
                                 />
-                                <Text style={{ fontSize: 22, color: COLORS.black, fontWeight: '700' }}>Không có CV</Text>
+                                <Text style={{ fontSize: 21, color: COLORS.black, fontFamily: 'BeVietnamPro-Medium'  }}>Không có CV</Text>
                             </View>
                         )}
                     />

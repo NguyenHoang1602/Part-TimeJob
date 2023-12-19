@@ -482,7 +482,7 @@ const DetailsScreen = ({ route, navigation }) => {
                     }
                     {
                         errors != '' && (
-                            <Text style={{ marginTop: 7, color: COLORS.red, fontSize: 12, marginLeft: 40, fontFamily: 'BeVietnamPro-Medium', marginTop: -2 }}>
+                            <Text style={{ marginTop: 7, color: COLORS.red, fontSize: 12, marginLeft: 40, fontFamily: 'BeVietnamPro-Medium'}}>
                                 {errors}
                             </Text>
                         )
@@ -568,7 +568,7 @@ const styles = StyleSheet.create({
         fontSize: 14,
         marginTop: 5,
         marginBottom: 7,
-        fontFamily: 'BeVietnamPro-Medium', marginTop: -2
+        fontFamily: 'BeVietnamPro-Medium',
     },
     datetime: {
         fontSize: 14,
