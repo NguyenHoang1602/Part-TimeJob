@@ -148,6 +148,9 @@ const DetailsScreen = ({ route, navigation }) => {
             if (!salary) {
                 setErrors('Vui lòng nhập lương mong muốn')
                 isValid = false;
+            } else if (salary < 1000){
+                setErrors('Lương mong muốn phải lớn hơn 1.000đ')
+                isValid = false;
             }
             if (isValid) {
                 handleApply()
@@ -391,7 +394,7 @@ const DetailsScreen = ({ route, navigation }) => {
                     <View style={{ width: '100%', alignItems: 'center', paddingVertical: 50 }}>
                         {isFollowed(data?.postid) ? (
                             <TouchableOpacity
-                                onPress={() => navigation.navigate('Applications')}
+                                onPress={() => navigation.navigate('Ứng tuyển')}
                                 style={styles.btnApply}>
                                 <Text
                                     style={{

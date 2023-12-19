@@ -738,7 +738,7 @@ const HomeScreen = ({ navigation }) => {
             <Text style={{ flex: 1, fontSize: 20, fontStyle: 'normal', color: COLORS.black, fontWeight: 'bold' }}>Công việc đề xuất</Text>
             <TouchableOpacity
               onPress={() => { }}>
-              <Text style={{ fontSize: 18, color: COLORS.blue, fontWeight: 'bold' }}>Tất cả</Text>
+              <Text style={{ fontSize: 17, color: COLORS.blue, fontWeight: '500' }}>Tất cả</Text>
             </TouchableOpacity>
           </View>
           <FlatLista />
@@ -747,7 +747,7 @@ const HomeScreen = ({ navigation }) => {
             <Text style={{ fontSize: 20, fontStyle: 'normal', color: COLORS.black, fontWeight: 'bold' }}>Công việc mới</Text>
             <TouchableOpacity style={{ marginStart: '49%' }}
               onPress={() => { }}>
-              <Text style={{ fontSize: 18, color: COLORS.blue, fontWeight: 'bold' }}>Tất cả</Text>
+              <Text style={{ fontSize: 17, color: COLORS.blue, fontWeight: '500' }}>Tất cả</Text>
             </TouchableOpacity>
           </View>
           <FlatList
