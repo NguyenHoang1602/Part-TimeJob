@@ -101,7 +101,8 @@ const PostScreen = ({ navigation }) => {
 
     Keyboard.dismiss();
     let isValid = true;
-
+    const wage_Min = Number(inputs.wageMin.replace(/\./g, ''));
+    const wage_Max = Number(inputs.wageMax.replace(/\./g, ''));
     if (!inputs.businessName) {
       handleError('Vui lòng nhập tên doanh nghiệp', 'businessName');
       isValid = false;
@@ -121,17 +122,17 @@ const PostScreen = ({ navigation }) => {
       handleError('Số lượng tuyển dụng phải lớn hơn 0', 'quantity');
       isValid = false;
     }
-    if (!inputs.wageMin) {
+    if (!wage_Min) {
       handleError('Vui lòng nhập lương', 'wageMin');
       isValid = false;
-    } else if (inputs.wageMin < 15.000) {
+    } else if (wage_Min < 15.000) {
       handleError('Lương tối thiểu phải lớn hơn hoặc bằng 15.000 đ', 'wageMin');
       isValid = false;
     }
-    if (!inputs.wageMax) {
+    if (!wage_Max) {
       handleError('Vui lòng nhập lương', 'wageMax');
       isValid = false;
-    } else if (inputs.wageMax < inputs.wageMin) {
+    } else if (wage_Max < wage_Min) {
       handleError('Lương tối đa phải >= lương tối thiểu', 'wageMax');
       isValid = false;
     }
@@ -441,7 +442,7 @@ const PostScreen = ({ navigation }) => {
                             />
                           </TouchableOpacity>
                         </View>
-                        <Text style={{ marginTop: '8%', fontSize: 11, color: '#7D7A7A', opacity: 0.8, fontFamily: 'BeVietnamPro-Medium', marginTop: -4, }}>Thêm ảnh</Text>
+                        <Text style={{ marginTop: '8%', fontSize: 11, color: '#7D7A7A', opacity: 0.8, fontFamily: 'BeVietnamPro-Medium'}}>Thêm ảnh</Text>
                       </View>
                       <FlatList
                         data={selectedImages}

@@ -317,7 +317,7 @@ const EmployerHome = ({ navigation }) => {
                         imageStyle={{ borderRadius: 46 }} />
                     <View style={{ flexDirection: 'column', height: 46, justifyContent: 'center', marginStart: 13, }}>
                         <Text style={{ color: '#7D7A7A', fontSize: 16, fontFamily: 'BeVietnamPro-Medium', marginTop: -4, }}>Xin chào 👋</Text>
-                        <Text style={{ color: COLORS.black, fontSize: 20, fontFamily: 'BeVietnamPro-Bold', marginTop: -4, width: 165 }} numberOfLines={1}>{user.displayName}</Text>
+                        <Text style={{width:'55%', color: COLORS.black, fontSize: 20, fontFamily: 'BeVietnamPro-Bold', marginTop: -4, }} numberOfLines={1}>{user.displayName}</Text>
                     </View>
                 </View>
                 <TouchableOpacity
