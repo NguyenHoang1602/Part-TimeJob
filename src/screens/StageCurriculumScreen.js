@@ -113,7 +113,10 @@ const StageCurriculumScreen = ({ route, navigation }) => {
         Keyboard.dismiss();
         let isValid = true;
         if (!bargainSalary) {
-            setErrors('Vui lòng nhập lương mong muốn')
+            setErrors('Vui lòng nhập lương thương lượng')
+            isValid = false;
+        } else if (bargainSalary < 1000) {
+            setErrors('Lương thương lượng không được bé hơn 1.000đ')
             isValid = false;
         }
         if (isValid) {
@@ -207,7 +210,7 @@ const StageCurriculumScreen = ({ route, navigation }) => {
                     </View>
                     <View style={styles.view1}>
                         <Text style={styles.text2}>Lương mong muốn: </Text>
-                        <Text style={{ fontSize: 16 }}>{data?.salary.toLocaleString('vi-VN')}đ</Text>
+                        <Text style={{ fontSize: 16 }}>{data?.salary?.toLocaleString('vi-VN')}đ</Text>
                     </View>
                     {/* <View style={styles.view1}>
                         <Text style={styles.text2}>Ngành nghề: </Text>

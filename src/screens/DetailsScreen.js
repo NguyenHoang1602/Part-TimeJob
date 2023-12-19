@@ -148,6 +148,9 @@ const DetailsScreen = ({ route, navigation }) => {
             if (!salary) {
                 setErrors('Vui lòng nhập lương mong muốn')
                 isValid = false;
+            } else if (salary < 1000){
+                setErrors('Lương mong muốn phải lớn hơn 1.000đ')
+                isValid = false;
             }
             if (isValid) {
                 handleApply()
