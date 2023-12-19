@@ -58,8 +58,8 @@ const style = StyleSheet.create({
         marginLeft: 15,
         color: COLORS.black,
         fontSize: 16,
-        fontWeight: '500',
-        fontFamily: 'Inter-VariableFont_slnt,wght',
+        fontFamily: 'BeVietnamPro-Medium',
+        marginTop: -3
     },
 });
 export default CheckBoxCircle;
