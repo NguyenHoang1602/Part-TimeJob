@@ -167,10 +167,10 @@ const CurriculumVitae = ({ navigation }) => {
           style={{ width: 45, height: 45 }}
           imageStyle={{}} />
         <View style={{ marginLeft: 13, flex: 1 }}>
-          <Text numberOfLines={1} style={{ fontSize: 16, color: COLORS.black }}>{item?.cv_id?.name}</Text>
+          <Text numberOfLines={1} style={{ fontSize: 16, color: COLORS.black, fontFamily: 'BeVietnamPro-Medium', marginTop: -4 }}>{item?.cv_id?.name}</Text>
           <View style={{ flexDirection: 'row', marginTop: 5 }}>
             {/* <Text numberOfLines={1} style={{ fontSize: 13 }}>Thời gian : </Text> */}
-            <Text numberOfLines={1} style={{ fontSize: 13 }}>Ngày {date} lúc {item?.time}</Text>
+            <Text numberOfLines={1} style={{ fontSize: 13, fontFamily: 'BeVietnamPro-Medium', marginTop: -4 }}>Ngày {date} lúc {item?.time}</Text>
           </View>
           {/* <View style={{ flexDirection: 'row', marginTop: 2 }}>
           <Text numberOfLines={1} style={{ fontSize: 13 }}>Ngày : </Text>
@@ -192,7 +192,7 @@ const CurriculumVitae = ({ navigation }) => {
           }}
           onPress={() => navigation.goBack()}>
           <AntDesign name="arrowleft" size={24} color={COLORS.black} />
-          <Text style={{ fontSize: 22, fontWeight: '400', color: COLORS.black, marginLeft: 20 }}>Hồ sơ ứng tuyển</Text>
+          <Text style={{ fontSize: 22, fontWeight: '400', color: COLORS.black, marginLeft: 20, fontFamily: 'BeVietnamPro-Bold', marginTop: -4 }}>Hồ sơ ứng tuyển</Text>
         </TouchableOpacity>
         {/* Search */}
         <View
@@ -216,7 +216,7 @@ const CurriculumVitae = ({ navigation }) => {
             }}
             onFocus={() => { setIsFocusedSearch(!isFocusedSearch) }}
             onBlur={() => { setIsFocusedSearch(!isFocusedSearch) }}
-            style={{ flex: 1, fontSize: 16, color: COLORS.black, paddingHorizontal: 10, }} />
+            style={{ flex: 1, fontSize: 16, color: COLORS.black, paddingHorizontal: 10, fontFamily: 'BeVietnamPro-Medium', marginTop: -4 }} />
         </View>
 
         <View style={{ marginTop: 10, gap: 14 }}>
@@ -249,7 +249,7 @@ const CurriculumVitae = ({ navigation }) => {
                       source={require('../assets/images/5928293_2953962.jpg')}
                       style={{ width: "100%", height: 260 }}
                     />
-                    <Text style={{ fontSize: 20, color: COLORS.primary, fontWeight: '500' }}>Không tìm thấy hồ sơ liên quan</Text>
+                    <Text style={{ fontSize: 20, color: COLORS.primary, fontFamily: 'BeVietnamPro-Bold', marginTop: -4 }}>Không tìm thấy hồ sơ liên quan</Text>
                   </View>
                 )}
               />
@@ -276,11 +276,11 @@ const styles = StyleSheet.create({
   foundNav: {
     flexDirection: 'row',
     paddingHorizontal: 0,
-
   },
   textFound: {
     fontSize: 16,
-    fontWeight: '700',
+    fontFamily: 'BeVietnamPro-Bold', 
+    marginTop: -4,
     color: '#000000',
   },
 })

@@ -726,12 +726,12 @@ const HomeScreen = ({ navigation }) => {
                 radius={40}
                 activeStrokeWidth={13}
                 inActiveStrokeWidth={13}
-                progressValueStyle={{ fontWeight: '500', fontSize: 18, fontFamily: 'BeVietnamPro-Medium', }}
+                progressValueStyle={{ fontSize: 18, fontFamily: 'BeVietnamPro-Medium', }}
               />
             </View>
             <View style={{ flex: 1 }}>
-              <Text style={{ marginLeft: 38, color: COLORS.white, fontSize: 21, fontWeight: '500', fontFamily: 'BeVietnamPro-Medium', }}>Thống kê việc làm</Text>
-              <Text style={{ marginLeft: 38, color: COLORS.white, fontSize: 15, fontWeight: '300', marginTop: 2, fontFamily: 'BeVietnamPro-Medium', }}>Tỉ lệ tìm được việc</Text>
+              <Text style={{ marginLeft: 38, color: COLORS.white, fontSize: 21, fontFamily: 'BeVietnamPro-Medium', }}>Thống kê việc làm</Text>
+              <Text style={{ marginLeft: 38, color: COLORS.white, fontSize: 15, marginTop: 2, fontFamily: 'BeVietnamPro-Medium', }}>Tỉ lệ tìm được việc</Text>
             </View>
           </View>
           <View style={{ alignItems: 'center', marginBottom: 15, marginTop: 15, flexDirection: 'row' }}>
