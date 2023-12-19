@@ -160,7 +160,7 @@ const ApplicationsStageScreen = ({ route, navigation }) => {
                 <Text style={{ fontSize: 16,  fontFamily: 'BeVietnamPro-Medium', color: '#F75656' }}>Hồ sơ bị từ chối</Text>
               </View>
               <Text style={{ fontSize: 18, fontFamily: 'BeVietnamPro-Medium',marginTop:-2, textAlign: 'left' }}>Lý do: </Text>
-              <Text style={{ fontSize: 16, fontFamily: 'BeVietnamPro-Medium',marginTop:-2, marginHorizontal: 20, marginTop: 5}}>{data.feedback}</Text>
+              <Text style={{ fontSize: 16, fontFamily: 'BeVietnamPro-Medium', marginHorizontal: 20, marginTop: 5}}>{data.feedback}</Text>
             </View>
           ) : status == 4 ? (
             <View style={{ width: '100%', alignItems: 'center' }}>

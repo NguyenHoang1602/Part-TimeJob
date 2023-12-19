@@ -441,7 +441,7 @@ const PostScreen = ({ navigation }) => {
                             />
                           </TouchableOpacity>
                         </View>
-                        <Text style={{ marginTop: '8%', fontSize: 11, color: '#7D7A7A', opacity: 0.8, fontFamily: 'BeVietnamPro-Medium', marginTop: -4, }}>Thêm ảnh</Text>
+                        <Text style={{ marginTop: '8%', fontSize: 11, color: '#7D7A7A', opacity: 0.8, fontFamily: 'BeVietnamPro-Medium'}}>Thêm ảnh</Text>
                       </View>
                       <FlatList
                         data={selectedImages}

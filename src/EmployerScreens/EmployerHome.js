@@ -304,7 +304,7 @@ const EmployerHome = ({ navigation }) => {
                     paddingLeft: 20,
                     paddingRight: 20,
                 }}>
-                <TouchableOpacity
+                <View
                     style={{
                         flexDirection: 'row',
                         marginStart: '2%',
@@ -317,9 +317,9 @@ const EmployerHome = ({ navigation }) => {
                         imageStyle={{ borderRadius: 46 }} />
                     <View style={{ flexDirection: 'column', height: 46, justifyContent: 'center', marginStart: 13, }}>
                         <Text style={{ color: '#7D7A7A', fontSize: 16, fontFamily: 'BeVietnamPro-Medium', marginTop: -4, }}>Xin chào 👋</Text>
-                        <Text style={{ color: COLORS.black, fontSize: 20, fontFamily: 'BeVietnamPro-Bold', marginTop: -4, }} numberOfLines={1}>{user.displayName}</Text>
+                        <Text style={{width:'55%', color: COLORS.black, fontSize: 20, fontFamily: 'BeVietnamPro-Bold', marginTop: -4, }} numberOfLines={1}>{user.displayName}</Text>
                     </View>
-                </TouchableOpacity>
+                </View>
                 <TouchableOpacity
                     style={{
                         width: 46,

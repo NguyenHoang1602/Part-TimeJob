@@ -215,10 +215,10 @@ const SavedJobsScreen = ({ navigation }) => {
               }
             })}
             <View style={{ flex: 1 }}>
-              <Text numberOfLines={2} style={{ fontSize: 18,  fontFamily: 'BeVietnamPro-Medium',marginTop:-2, color: COLORS.black }}>
+              <Text numberOfLines={2} style={{ fontSize: 17,  fontFamily: 'BeVietnamPro-Medium',marginTop:-2, color: COLORS.black }}>
                 {item.post_id.title}
               </Text>
-              <Text numberOfLines={1} style={{ fontSize: 15, fontFamily: 'BeVietnamPro-Medium',marginTop:-2, color: COLORS.black, opacity: 0.5 }}>
+              <Text numberOfLines={1} style={{ fontSize: 14, fontFamily: 'BeVietnamPro-Medium',marginTop:-2, color: COLORS.black, opacity: 0.5 }}>
                 {item.post_id.address}
               </Text>
             </View>
@@ -233,16 +233,16 @@ const SavedJobsScreen = ({ navigation }) => {
 
           <View style={{ flexDirection: 'row', gap: 10, }}>
             <View style={{ paddingStart: '21%' }}>
-              <Text numberOfLines={1} style={{ fontSize: 16, fontFamily: 'BeVietnamPro-Medium',marginTop:-2, color: COLORS.black, opacity: 0.6, }}>
+              <Text numberOfLines={1} style={{ fontSize: 15, fontFamily: 'BeVietnamPro-Medium',marginTop:-2, color: COLORS.black, opacity: 0.6, }}>
                 {item.post_id.businessName}
               </Text>
-              <View style={{ flexDirection: 'row', marginVertical: 9 }}>
-                <Text style={{ color: COLORS.blue, fontSize: 16,fontFamily: 'BeVietnamPro-Medium',marginTop:-2 }}>{formattedWageMin}đ - {formattedWageMax}đ</Text>
+              <View style={{ flexDirection: 'row', marginVertical: 9, width: '95%'}}>
+                <Text style={{ color: COLORS.blue, fontSize: 15,fontFamily: 'BeVietnamPro-Medium',marginTop:-2 }}>{formattedWageMin}đ - {formattedWageMax}đ</Text>
                 {
                   item.post_id.payForm_id._id === '655de22b9a5b0ffa7ffd5132' ? (
-                    <Text style={{ color: COLORS.blue, fontSize: 16,fontFamily: 'BeVietnamPro-Medium',marginTop:-2 }}> /giờ</Text>
+                    <Text  style={{ color: COLORS.blue, fontSize: 15,fontFamily: 'BeVietnamPro-Medium',marginTop:-2 }}> /giờ</Text>
                   ) : (
-                    <Text style={{ color: COLORS.blue, fontSize: 16 ,fontFamily: 'BeVietnamPro-Medium',marginTop:-2}}> /tháng</Text>
+                    <Text style={{ color: COLORS.blue, fontSize: 15 ,fontFamily: 'BeVietnamPro-Medium',marginTop:-2}}> /tháng</Text>
                   )
                 }
               </View>
