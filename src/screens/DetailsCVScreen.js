@@ -99,7 +99,7 @@ const DetailsCVScreen = ({ navigation, route }) => {
           <Ionicons name="arrow-back" size={30} color={COLORS.black} />
         </TouchableOpacity>
         <View style={{ marginLeft: 20, alignItems: 'center' }}>
-          <Text style={{ fontSize: 22, fontWeight: "600", color: COLORS.black }}>Thông tin CV</Text>
+          <Text style={{ fontSize: 22, fontFamily: 'BeVietnamPro-Bold',marginTop:-2, color: COLORS.black }}>Thông tin CV</Text>
         </View>
       </View>
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -110,44 +110,44 @@ const DetailsCVScreen = ({ navigation, route }) => {
               source={{ uri: data?.cv_id.user_id.photo }}
               style={{ width: 90, height: 90, marginBottom: 10 }}
               imageStyle={{ borderRadius: 100 }} /> */}
-            <Text style={{ fontSize: 20, fontWeight: '600', color: "white" }}>{data?.title}</Text>
+            <Text style={{ fontSize: 20, fontFamily: 'BeVietnamPro-Bold',marginTop:-2, color: "white" }}>{data?.title}</Text>
           </View>
           <View style={styles.view1}>
             <Text style={styles.text1}>Tên: </Text>
-            <Text style={{ fontSize: 16 }}>{data?.name}</Text>
+            <Text style={{ fontSize: 16,fontFamily: 'BeVietnamPro-Medium',marginTop:-2 }}>{data?.name}</Text>
           </View>
           <View style={styles.view1}>
             <Text style={styles.text2}>Số ĐT: </Text>
-            <Text style={{ fontSize: 16, flex: 1 }}>{data?.phone}</Text>
+            <Text style={{ fontSize: 16, flex: 1,fontFamily: 'BeVietnamPro-Medium',marginTop:-2 }}>{data?.phone}</Text>
             <Text style={styles.text2}>Năm sinh: </Text>
-            <Text style={{ fontSize: 16, marginEnd: 25 }}>{data?.year}</Text>
+            <Text style={{ fontSize: 16, marginEnd: 25,fontFamily: 'BeVietnamPro-Medium',marginTop:-2 }}>{data?.year}</Text>
           </View>
           <View style={styles.view1}>
             <Text style={styles.text2}>Giới tính: </Text>
-            <Text style={{ fontSize: 16 }}>{data?.gender_id?.title}</Text>
+            <Text style={{ fontSize: 16,fontFamily: 'BeVietnamPro-Medium',marginTop:-2 }}>{data?.gender_id?.title}</Text>
           </View>
           <View style={styles.view1}>
             <Text style={styles.text2}>Email: </Text>
-            <Text style={{ fontSize: 16 }}>{data?.email}</Text>
+            <Text style={{ fontSize: 16,fontFamily: 'BeVietnamPro-Medium',marginTop:-2 }}>{data?.email}</Text>
           </View>
           <View style={styles.view1}>
             <Text style={styles.text2}>Địa chỉ: </Text>
-            <Text style={{ fontSize: 16 }}>{data?.address}</Text>
+            <Text style={{ fontSize: 16 ,fontFamily: 'BeVietnamPro-Medium',marginTop:-2}}>{data?.address}</Text>
           </View>
           <View style={styles.view1}>
             <Text style={styles.text2}>Ngành nghề: </Text>
-            <Text style={{ fontSize: 16 }}>{data?.career_id?.title}</Text>
+            <Text style={{ fontSize: 16,fontFamily: 'BeVietnamPro-Medium',marginTop:-2 }}>{data?.career_id?.title}</Text>
           </View>
           <View style={styles.view1}>
             <Text style={styles.text2}>Kinh nghiệm: </Text>
-            <Text style={{ fontSize: 16 }}>{data?.experience_id?.title}</Text>
+            <Text style={{ fontSize: 16 ,fontFamily: 'BeVietnamPro-Medium',marginTop:-2}}>{data?.experience_id?.title}</Text>
           </View>
           <View style={styles.view1}>
             <Text style={styles.text2}>Trình độ học vấn: </Text>
-            <Text style={{ fontSize: 16 }}>{data?.academic_id?.title}</Text>
+            <Text style={{ fontSize: 16 ,fontFamily: 'BeVietnamPro-Medium',marginTop:-2}}>{data?.academic_id?.title}</Text>
           </View>
           <Text style={styles.text1}>Giới thiệu bản thân: </Text>
-          <Text style={{ fontSize: 16, marginTop: 5, marginBottom: 20 }}>- {data?.introduce}</Text>
+          <Text style={{ fontSize: 16,fontFamily: 'BeVietnamPro-Medium',marginTop:-2 , marginTop: 5, marginBottom: 20 }}>- {data?.introduce}</Text>
           <View style={{ width: '100%', height: 1, backgroundColor: '#FF5D01', opacity: 0.7, position: 'relative', }} />
         </View>
 
@@ -170,7 +170,7 @@ const DetailsCVScreen = ({ navigation, route }) => {
               paddingVertical: 15,
               marginEnd: 15,
             }}>
-            <Text style={{ color: COLORS.primary, fontSize: 18, fontWeight: "600" }}>Xóa</Text>
+            <Text style={{ color: COLORS.primary, fontSize: 18, fontFamily: 'BeVietnamPro-Medium',marginTop:-2 }}>Xóa</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -186,7 +186,7 @@ const DetailsCVScreen = ({ navigation, route }) => {
               width: 160,
               paddingVertical: 15,
             }}>
-            <Text style={{ color: COLORS.white, fontSize: 18, fontWeight: "600" }}>Chỉnh sửa</Text>
+            <Text style={{ color: COLORS.white, fontSize: 18, fontFamily: 'BeVietnamPro-Medium',marginTop:-2 }}>Chỉnh sửa</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>

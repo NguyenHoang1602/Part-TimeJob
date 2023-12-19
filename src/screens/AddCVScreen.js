@@ -148,7 +148,7 @@ const CVScreen = ({ route, navigation }) => {
             height: 60,
             justifyContent: 'center',
           }}>
-          <Text style={{ fontSize: 16, marginStart: 20 }}>
+          <Text style={{ fontSize: 16, marginStart: 20,fontFamily: 'BeVietnamPro-Bold',marginTop:-2 }}>
             THÔNG TIN BẮT BUỘC
           </Text>
         </View>
@@ -241,7 +241,7 @@ const CVScreen = ({ route, navigation }) => {
           {errors.career_id ? <Text style={styles.error}>{errors.career_id}</Text> : null}
         </View>
         <View style={{ backgroundColor: '#D9D9D9', height: 60, justifyContent: 'center' }}>
-          <Text style={{ fontSize: 16, marginStart: 25 }}>THÔNG TIN THÊM</Text>
+          <Text style={{ fontSize: 16,fontFamily: 'BeVietnamPro-Bold',marginTop:-2, marginStart: 25 }}>THÔNG TIN THÊM</Text>
         </View>
         <View style={{ marginVertical: 22, marginHorizontal: 24 }}>
           <Input
@@ -309,6 +309,7 @@ const CVScreen = ({ route, navigation }) => {
             paddingVertical: 20,
             flexDirection: 'row',
             justifyContent: 'center',
+            
           }}>
           <TouchableOpacity
             onPress={validate}
@@ -328,7 +329,7 @@ const CVScreen = ({ route, navigation }) => {
             }}>
             <Text
               style={{
-                fontWeight: 'bold',
+                fontFamily: 'BeVietnamPro-Bold',
                 fontSize: 18,
                 color: COLORS.white,
               }}>

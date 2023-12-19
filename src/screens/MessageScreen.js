@@ -68,7 +68,7 @@ const MessageScreen = ({ navigation }) => {
                             source={require('../assets/images/5928293_2953962.jpg')}
                             style={{ width: "100%", height: 300 }}
                         />
-                        <Text style={{ fontSize: 22, color: COLORS.black, fontWeight: '600' }}>Không có tin nhắn</Text>
+                        <Text style={{ fontSize: 22, color: COLORS.black, fontFamily: 'BeVietnamPro-Medium',marginTop:-2 }}>Không có tin nhắn</Text>
                     </View>
                 )}
             />
@@ -83,7 +83,7 @@ const MessageScreen = ({ navigation }) => {
                 <View style={{ flexDirection: 'row', gap: 18 }}>
                     <Image source={{ uri: item.photo }} style={{ width: 52, aspectRatio: 1, borderRadius: 52 }} />
                     <View style={{ flex: 1 }}>
-                        <Text style={{ fontSize: 18, color: COLORS.black, fontWeight: "600", }} numberOfLines={1}>
+                        <Text style={{ fontSize: 18, color: COLORS.black, fontFamily: 'BeVietnamPro-Medium',marginTop:-2, }} numberOfLines={1}>
                             {item.displayName}
                         </Text>
                         <Text style={{ fontSize: 16, color: COLORS.grey, paddingTop: 6 }} numberOfLines={1}>
@@ -128,7 +128,7 @@ const MessageScreen = ({ navigation }) => {
                         style={{ width: 26, height: 26 }}
                         imageStyle={{ borderRadius: 46 }} />
                     <View style={{ flex: 1 }}>
-                        <Text style={{ color: COLORS.black, fontSize: 24, fontWeight: '600' }} numberOfLines={1}>Messages</Text>
+                        <Text style={{ color: COLORS.black, fontSize: 24, fontFamily: 'BeVietnamPro-Bold',marginTop:-5 }} numberOfLines={1}>Messages</Text>
                     </View>
                     <TouchableOpacity
                         onPress={() => {
