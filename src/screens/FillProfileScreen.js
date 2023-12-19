@@ -229,11 +229,11 @@ const FillProfileScreen = ({ navigation, route }) => {
                         .collection('users')
                         .doc(item._id)
                         .set({
-                            displayName: item.displayName,
-                            email: item.email,
-                            phone: item.phone,
-                            _id: item._id,
-                            photo: item.photo
+                            displayName: item?.displayName,
+                            email: item?.email,
+                            phone: item?.phone,
+                            _id: item?._id,
+                            photo: item?.photo
                         })
                         .then(res => {
 
@@ -308,7 +308,7 @@ const FillProfileScreen = ({ navigation, route }) => {
                                 <Input
                                     value={valueDate}
                                     onFocus={() => handleError(null, 'birthDay')}
-                                    placeholder="Ngày sinh"
+                                    placeholder="Năm sinh"
                                     iconName={'calendar-month-outline'}
                                     onPress={showDatepicker}
                                     error={errors.birthDay}

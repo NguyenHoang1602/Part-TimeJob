@@ -12,7 +12,7 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable react-native/no-inline-styles */
 import React, { useState, useEffect, useContext } from 'react';
-import { FlatList, Image, TextInput, ScrollView, StyleSheet, Text, TouchableOpacity, View, ImageBackground, Pressable, Alert } from 'react-native';
+import { FlatList, Image, TextInput, ScrollView, StyleSheet, Text, TouchableOpacity, View, ImageBackground, Pressable, Alert, ToastAndroid } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import COLORS from '../assets/const/colors';
 
@@ -263,6 +263,17 @@ const SearchScreen = ({ navigation }) => {
       console.log("Err : ", error);
     }
   }
+  const handleDelete = async (post_id) => {
+    const deleteSave = {
+      user_id: user._id,
+      post_id: post_id,
+    }
+    const result = await axios.post(`${API}/savePost/deleteWithCondition`, deleteSave);
+    if (result.status === 200) {
+      getListSave();
+    }
+  }
+
   async function handleFilter() {
     try {
       const result = await axios.post(`${API}/posts/filterForApp`, { filter });
@@ -300,6 +311,7 @@ const SearchScreen = ({ navigation }) => {
   const renderItemJob = ({ item }) => {
     const formattedWageMin = item.wageMin.toLocaleString('vi-VN');
     const formattedWageMax = item.wageMax.toLocaleString('vi-VN');
+    console.log(item);
     return (
       <TouchableOpacity style={{
         borderWidth: 0.5,
@@ -560,46 +572,6 @@ const SearchScreen = ({ navigation }) => {
                       <View style={{ borderTopWidth: 1, borderColor: COLORS.grey }} />
                       <View style={{ gap: 8, paddingVertical: 12 }}>
                         <CheckBox options={listCareers} multiple={true} onchange={op => setFilter({ ...filter, career_id: op })} />
-                      </View>
-                    </Collapsible>
-                  </View>
-                </Pressable>
-
-                {/* Work Type */}
-                <Pressable style={{ paddingVertical: 18, width: "100%" }} onPress={toggleSelectWorkTypes}>
-                  <View style={{ borderRadius: 15, borderWidth: 1, paddingHorizontal: 18, borderColor: COLORS.grey }}>
-                    <View style={{ flexDirection: 'row', gap: 8, paddingVertical: 15 }}>
-                      <View style={{ flex: 1 }}>
-                        <Text style={{ fontSize: 16, color: COLORS.black, fontFamily: 'BeVietnamPro-Bold', marginTop: -2, }} numberOfLines={1}>
-                          Loại công việc
-                        </Text>
-                      </View>
-                      <Feather name={!isSelectWorkTypes ? 'chevron-up' : 'chevron-down'} size={24} color={COLORS.primary} />
-                    </View>
-                    <Collapsible collapsed={workTypes}>
-                      <View style={{ borderTopWidth: 1, borderColor: COLORS.grey }} />
-                      <View style={{ gap: 8, paddingVertical: 12 }}>
-                        <CheckBoxCircle options={listWorkTypes} multiple={false} onchange={op => setFilter({ ...filter, workType_id: op })} />
-                      </View>
-                    </Collapsible>
-                  </View>
-                </Pressable>
-
-                {/* Gender Type */}
-                <Pressable style={{ paddingVertical: 18, width: "100%" }} onPress={toggleSelectGenders}>
-                  <View style={{ borderRadius: 15, borderWidth: 1, paddingHorizontal: 18, borderColor: COLORS.grey }}>
-                    <View style={{ flexDirection: 'row', gap: 8, paddingVertical: 15 }}>
-                      <View style={{ flex: 1 }}>
-                        <Text style={{ fontSize: 16, color: COLORS.black, fontFamily: 'BeVietnamPro-Bold', marginTop: -2, }} numberOfLines={1}>
-                          Giới tính
-                        </Text>
-                      </View>
-                      <Feather name={!isSelectGenders ? 'chevron-up' : 'chevron-down'} size={24} color={COLORS.primary} />
-                    </View>
-                    <Collapsible collapsed={genders}>
-                      <View style={{ borderTopWidth: 1, borderColor: COLORS.grey }} />
-                      <View style={{ gap: 8, paddingVertical: 12 }}>
-                        <CheckBoxCircle options={listGenders} multiple={false} onchange={op => setFilter({ ...filter, gender_id: op })} />
                       </View>
                     </Collapsible>
                   </View>

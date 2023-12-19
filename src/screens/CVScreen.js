@@ -43,7 +43,6 @@ const CVScreen = ({ route, navigation }) => {
     academic_id: '',
     introduce: '',
   });
-
   const [errors, setErrors] = React.useState({});
   const [loading, setLoading] = React.useState(false);
   const [isFocusGender, setIsFocusGender] = useState(false);
@@ -73,9 +72,14 @@ const CVScreen = ({ route, navigation }) => {
   const validate = () => {
     Keyboard.dismiss();
     let isValid = true;
-
+    const regex = /^(0|\+84)\d{9,10}$/;
+    const regexY = /[!@#$%^&*(),.?":{}|<>]/;
+    const year = 2023 - inputs.year;
     if (!inputs.title) {
       handleError('Vui lòng nhập tên CV', 'title');
+      isValid = false;
+    } else if (regexY.test(inputs.title)) {
+      handleError('Chứa ký tự đặc biệt', 'title');
       isValid = false;
     }
 
@@ -83,14 +87,28 @@ const CVScreen = ({ route, navigation }) => {
       handleError('Vui lòng nhập họ tên', 'name');
       isValid = false;
     }
-
     if (!inputs.phone) {
       handleError('Vui lòng nhập số điện thoại', 'phone');
       isValid = false;
+    } else if (regexY.test(inputs.phone)) {
+      handleError('Chứa ký tự đặc biệt', 'phone');
+      isValid = false;
+    } else {
+      const vld = regex.test(inputs.phone);
+      console.log(vld);
+      if (!vld) {
+        handleError('Số điện thoại không hợp lệ', 'phone');
+        isValid = false;
+      }
     }
-
     if (!inputs.year) {
       handleError('Vui lòng nhập năm sinh', 'year');
+      isValid = false;
+    } else if (year < 15 || 60 < year) {
+      handleError('Độ tuổi không hợp lệ', 'year');
+      isValid = false;
+    } else if (regexY.test(inputs.year)) {
+      handleError('Chứa ký tự đặc biệt', 'year');
       isValid = false;
     }
     if (!inputs.gender_id) {
@@ -134,11 +152,11 @@ const CVScreen = ({ route, navigation }) => {
     const response = await axios.post(`${API}/cvs/new`, inputs);
     if (response.status === 200) {
       setLoading(false);
-      Alert.alert('Thành công','Tạo CV thành công !',[
-        {text: ''},
-        {text: 'ok', onPress : () =>  navigation.navigate('DetailsScreen')},
+      Alert.alert('Thành công', 'Tạo CV thành công !', [
+        { text: '' },
+        { text: 'ok', onPress: () => navigation.navigate('DetailsScreen') },
       ],
-      { cancelable: false });
+        { cancelable: false });
     }
   }
 
@@ -215,7 +233,6 @@ const CVScreen = ({ route, navigation }) => {
           />
           {errors.gender_id ? <Text style={styles.error}>{errors.gender_id}</Text> : null}
           <Input
-            onChangeText={text => handleOnchange(text, 'email')}
             onFocus={() => handleError(null, 'email')}
             placeholder="Địa chỉ email"
             value={user?.email}
@@ -332,7 +349,7 @@ const CVScreen = ({ route, navigation }) => {
             }}>
             <Text
               style={{
-                fontFamily: 'BeVietnamPro-Bold', 
+                fontFamily: 'BeVietnamPro-Bold',
                 marginTop: -2,
                 fontSize: 18,
                 color: COLORS.white,

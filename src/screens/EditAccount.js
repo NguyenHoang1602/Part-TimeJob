@@ -15,9 +15,10 @@ import {
   FlatList,
   Image,
   StatusBar,
+  ToastAndroid,
 } from 'react-native';
-import React, {useState} from 'react';
-import {TextInput} from 'react-native-paper';
+import React, { useContext, useState } from 'react';
+import { TextInput } from 'react-native-paper';
 import Input from '../components/Input';
 import InputMutiple from '../components/InputMutiple';
 import COLORS from '../assets/const/colors';
@@ -28,30 +29,39 @@ import Octicons from 'react-native-vector-icons/Octicons';
 import Feather from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {Dropdown} from 'react-native-element-dropdown';
+import { Dropdown } from 'react-native-element-dropdown';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import UserContext from '../components/UserConText';
+import axios from 'axios';
+import { useFocusEffect } from '@react-navigation/native';
+import { API } from '../../Sever/sever';
 
-const data = [
-  {label: 'Item 1', value: '1'},
-  {label: 'Item 2', value: '2'},
-  {label: 'Item 3', value: '3'},
-  {label: 'Item 4', value: '4'},
-  {label: 'Item 5', value: '5'},
-  {label: 'Item 6', value: '6'},
-  {label: 'Item 7', value: '7'},
-  {label: 'Item 8', value: '8'},
-];
-
-const EditAccount = ({navigation}) => {
+const EditAccount = ({ navigation }) => {
   const [value, setValue] = useState(null);
+  const [gender, setGender] = useState([]);
+  const [valueDate, setValueDate] = useState(null);
   const [isFocus, setIsFocus] = useState(false);
+  const { user } = useContext(UserContext);
   const [inputs, setInputs] = React.useState({
-    id: '',
-    title: '',
-    subtitle: '',
-    price: '',
-    details: '',
+    id: user?._id,
+    name: user?.displayName,
+    birthDay: user?.birthDay,
+    phone: '0' + user?.phone,
+    gender: user?.gender,
+    email: user?.email,
   });
   const [errors, setErrors] = React.useState({});
+
+  useFocusEffect(
+    React.useCallback(() => {
+      getGender();
+    }, [])
+  );
+
+  const getGender = async () => {
+    const result = await axios.get(`${API}/gender/list`);
+    setGender(result.data);
+  }
   const validate = () => {
     Keyboard.dismiss();
     let isValid = true;
@@ -62,18 +72,38 @@ const EditAccount = ({navigation}) => {
     }
 
     if (!inputs.gender) {
-        handleError('Vui lòng nhập giới tính', 'gender');
-        isValid = false;
-      }
+      handleError('Vui lòng chọn giới tính', 'gender');
+      isValid = false;
+    }
 
     if (!inputs.phone) {
       handleError('Vui lòng nhập số điện thoại', 'phone');
       isValid = false;
     }
 
-    if (!inputs.year) {
-      handleError('Vui lòng nhập năm sinh', 'year');
+    if (!inputs.birthDay) {
+      handleError('Vui lòng chọn ngày sinh', 'birthDay');
       isValid = false;
+    } else {
+      const ngayHienTai = new Date();
+      const fomat = new Date(date);
+      const year = fomat.getFullYear();
+      const month = String(fomat.getMonth() + 1).padStart(2, '0');
+      const day = String(fomat.getDate()).padStart(2, '0');
+      const formattedDate = `${year}-${month}-${day}`;
+      const ngaySinh = new Date(formattedDate);
+      let soTuoi = ngayHienTai.getFullYear() - ngaySinh.getFullYear();
+      if (
+        ngayHienTai.getMonth() < ngaySinh.getMonth() ||
+        (ngayHienTai.getMonth() === ngaySinh.getMonth() &&
+          ngayHienTai.getDate() < ngaySinh.getDate())
+      ) {
+        soTuoi = soTuoi - 1;
+      }
+      if (soTuoi < 15) {
+        handleError('Số tuổi phải đủ 15 tính từ ngày sinh', 'birthDay');
+        isValid = false;
+      }
     }
 
     if (!inputs.email) {
@@ -100,13 +130,32 @@ const EditAccount = ({navigation}) => {
     }
   };
   const handleOnchange = (text, input) => {
-    setInputs(prevState => ({...prevState, [input]: text}));
+    setInputs(prevState => ({ ...prevState, [input]: text }));
   };
   const handleError = (error, input) => {
-    setErrors(prevState => ({...prevState, [input]: error}));
+    setErrors(prevState => ({ ...prevState, [input]: error }));
   };
+  const [date, setDate] = useState(new Date());
+  const [showDatePicker, setShowDatePicker] = useState(false);
+
+  const onChange = (event, selectedDate) => {
+    const currentDate = selectedDate || date;
+    setShowDatePicker(false);
+    setDate(currentDate);
+    setValueDate(formattedDate);
+  };
+
+  const showDatepicker = () => {
+    setShowDatePicker(true);
+  };
+  const formattedDate = date.toLocaleDateString('en-GB', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+  });
   return (
-    <SafeAreaView style={{flex: 1}}>
+    <SafeAreaView style={{ flex: 1 }}>
+      <StatusBar barStyle={'light-content'} />
       <ScrollView>
         <View
           style={{
@@ -114,63 +163,70 @@ const EditAccount = ({navigation}) => {
             height: 60,
             justifyContent: 'center',
           }}>
-          <Text style={{fontSize: 16, marginStart: 20}}>THÔNG TIN CÁ NHÂN</Text>
+          <Text style={{ fontSize: 16, marginStart: 20 }}>THÔNG TIN CÁ NHÂN</Text>
         </View>
-        <View style={{marginTop: 22, marginHorizontal: 24}}>
+        <View style={{ marginTop: 22, marginHorizontal: 24 }}>
           <Input
             onChangeText={text => handleOnchange(text, 'name')}
             onFocus={() => handleError(null, 'name')}
             placeholder="Họ tên"
+            value={inputs.name}
             error={errors.name}
           />
-          <View style={{width: '100%'}}>
-              <Input
-                keyboardType="numeric"
-                onChangeText={text => handleOnchange(text, 'gender')}
-                onFocus={() => handleError(null, 'gender')}
-                placeholder="Giới tính"
-                // value={route.params?.subtitle}
-                error={errors.gender}
+          <View style={{ width: '100%' }}>
+            {/* <Dropdown
+              style={[styles.dropdown, isFocus && { borderColor: COLORS.darkBlue }, errors.gender && { borderColor: 'red' }]}
+              placeholderStyle={styles.placeholderStyle}
+              selectedTextStyle={styles.selectedTextStyle}
+              iconStyle={styles.iconStyle}
+              data={gender}
+              maxHeight={300}
+              labelField="title"
+              valueField="_id"
+              placeholder={!isFocus ? 'Giới tính' : '...'}
+              value={inputs.gender}
+              onFocus={() => setIsFocus(true)}
+              onBlur={() => setIsFocus(false)}
+              onChange={item => {
+                setIsFocus(false);
+                handleOnchange(item._id, 'gender')
+                handleError(null, 'gender')
+              }}
+            />
+            {errors.gender ? <Text style={{ marginTop: 7, color: COLORS.red, fontSize: 11, fontFamily: 'BeVietnamPro-Medium', }}>{errors.gender}</Text> : null} */}
+            <Input
+              value={inputs?.birthDay}
+              onFocus={() => handleError(null, 'birthDay')}
+              placeholder="Năm sinh"
+              onPress={showDatepicker}
+            />
+            {showDatePicker && (
+              <DateTimePicker
+                testID="dateTimePicker"
+                value={date}
+                mode="date"
+                is24Hour={true}
+                display="default"
+                onChange={onChange}
               />
-
-              <Input
-                keyboardType="numeric"
-                onChangeText={text => handleOnchange(text, 'year')}
-                onFocus={() => handleError(null, 'year')}
-                placeholder="Năm sinh"
-                // value={route.params?.subtitle}
-                error={errors.year}
-              />
+            )}
           </View>
         </View>
-        <View style={{ marginHorizontal: 24}}>
-        <Input
+        <View style={{ marginHorizontal: 24 }}>
+          <Input
             keyboardType="numeric"
             onChangeText={text => handleOnchange(text, 'phone')}
             onFocus={() => handleError(null, 'phone')}
             placeholder="Số điện thoại"
+            value={inputs?.phone.toString()}
             error={errors.phone}
-          />
-          <Input
-            onChangeText={text => handleOnchange(text, 'address')}
-            onFocus={() => handleError(null, 'address')}
-            placeholder="Địa chỉ hiện tại"
-            error={errors.address}
           />
           <Input
             onChangeText={text => handleOnchange(text, 'email')}
             onFocus={() => handleError(null, 'email')}
             placeholder="Địa chỉ email"
+            value={inputs.email}
             error={errors.email}
-          />
-          <InputMutiple
-            onChangeText={text => handleOnchange(text, 'introduce')}
-            onFocus={() => handleError(null, 'introduce')}
-            placeholder={
-              'Giới thiệu bản thân\nHãy nêu ra kinh nghiệm, sở trường và mong muốn của bạn liên quan đến công việc để ghi điểm hơn trong mắt nhà tuyển dụng'
-            }
-            // value={route.params?.subtitle}
-            error={errors.introduce}
           />
         </View>
         <View
@@ -182,7 +238,9 @@ const EditAccount = ({navigation}) => {
             justifyContent: 'center',
           }}>
           <TouchableOpacity
-            onPress={validate}
+            onPress={() => {
+              ToastAndroid.show('Đang phát triển', ToastAndroid.SHORT);
+            }}
             style={{
               backgroundColor: COLORS.blue,
               padding: 5,
@@ -193,7 +251,7 @@ const EditAccount = ({navigation}) => {
               justifyContent: 'center',
               alignItems: 'center',
               shadowColor: COLORS.black,
-              shadowOffset: {width: 10, height: 10},
+              shadowOffset: { width: 10, height: 10 },
               shadowOpacity: 1,
               shadowRadius: 3,
             }}>
@@ -203,7 +261,7 @@ const EditAccount = ({navigation}) => {
                 fontSize: 18,
                 color: COLORS.white,
               }}>
-              Lưu
+              Chỉnh sửa
             </Text>
           </TouchableOpacity>
         </View>

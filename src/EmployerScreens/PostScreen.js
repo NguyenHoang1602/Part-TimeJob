@@ -213,7 +213,7 @@ const PostScreen = ({ navigation }) => {
       setLoading(false);
       Alert.alert('Đăng tin thành công !', 'Đi tới trang quản lí tin?', [
         { text: 'Không' },
-        { text: 'Có', onPress: () => navigation.navigate('Quản lí') },
+        { text: 'Có', onPress: () => navigation.navigate('Quản lý') },
       ],
         { cancelable: false });
     }

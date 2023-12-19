@@ -71,24 +71,43 @@ const CVScreen = ({ route, navigation }) => {
   const validate = () => {
     Keyboard.dismiss();
     let isValid = true;
+    const regex = /^(0|\+84)\d{9,10}$/;
+    const regexY = /[!@#$%^&*(),.?":{}|<>]/;
+    const year = 2023 - inputs.year;
 
     if (!inputs.title) {
       handleError('Vui lòng nhập tên CV', 'title');
       isValid = false;
+    } else if (regexY.test(inputs.title)) {
+      handleError('Chứa ký tự đặc biệt', 'title');
+      isValid = false;
     }
-
     if (!inputs.name) {
       handleError('Vui lòng nhập họ tên', 'name');
       isValid = false;
     }
-
     if (!inputs.phone) {
       handleError('Vui lòng nhập số điện thoại', 'phone');
       isValid = false;
+    } else if (regexY.test(inputs.phone)) {
+      handleError('Chứa ký tự đặc biệt', 'phone');
+      isValid = false;
+    } else {
+      const vld = regex.test(inputs.phone);
+      console.log(vld);
+      if (!vld) {
+        handleError('Số điện thoại không hợp lệ', 'phone');
+        isValid = false;
+      }
     }
-
     if (!inputs.year) {
       handleError('Vui lòng nhập năm sinh', 'year');
+      isValid = false;
+    } else if (year < 15 || 60 < year) {
+      handleError('Độ tuổi không hợp lệ', 'year');
+      isValid = false;
+    } else if (regexY.test(inputs.year)) {
+      handleError('Chứa ký tự đặc biệt', 'year');
       isValid = false;
     }
     if (!inputs.gender_id) {
@@ -140,6 +159,7 @@ const CVScreen = ({ route, navigation }) => {
   const year = parseInt(parts[2], 10); //
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor : COLORS.white }}>
+      <StatusBar barStyle={'light-content'} />
       <Loader visible={loading} />
       <ScrollView>
         <View
