@@ -7,7 +7,7 @@
 /* eslint-disable eol-last */
 /* eslint-disable semi */
 import React, { useState, useEffect, useContext } from 'react';
-import { View, Text, TouchableOpacity, ImageBackground, ScrollView, Image, FlatList, Alert, Pressable, StyleSheet, TextInput, Keyboard } from 'react-native';
+import { View, Text, TouchableOpacity, ImageBackground, ScrollView, Image, FlatList, Alert, Pressable, StyleSheet, TextInput, Keyboard, StatusBar, ToastAndroid } from 'react-native';
 
 //
 import Input from '../components/Input';
@@ -70,8 +70,6 @@ const DetailsScreen = ({ route, navigation }) => {
     const [loading, setLoading] = React.useState(false);
     const [cv, setCv] = useState([]);
     const [salary, setSalary] = useState('');
-
-
     const [selectedItem, setSelectedItem] = useState(null);
     const [sender, setSender] = useState(null);
     const [listApplied, setListApplied] = useState([]);
@@ -115,8 +113,7 @@ const DetailsScreen = ({ route, navigation }) => {
             const result = await axios.post(`${API}/savePost/add`, savedata);
             if (result.status === 200) {
                 getListSave();
-                Alert.alert('Lưu tin thành công !')
-                console.log("Thành công");
+                ToastAndroid.show('Lưu tin thành công !', ToastAndroid.SHORT);
             }
         } catch (error) {
             console.log('Err: ', error);
@@ -135,7 +132,9 @@ const DetailsScreen = ({ route, navigation }) => {
         }, [])
     );
     const handleOnChangeSalary = (value) => {
-        setSalary(value);
+        let formattedValue = value.replace(/\D/g, '');
+        formattedValue = formattedValue.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+        setSalary(formattedValue);
     }
     // validate
     const [errors, setErrors] = useState('');
@@ -143,13 +142,21 @@ const DetailsScreen = ({ route, navigation }) => {
     const validate = async () => {
         Keyboard.dismiss();
         let isValid = true;
-        if (!salary) {
-            setErrors('Vui lòng nhập lương mong muốn')
-            isValid = false;
+        if (selectedItem === null) {
+            ToastAndroid.show("Bạn chưa chọn CV", ToastAndroid.LONG);
+        } else {
+            if (!salary) {
+                setErrors('Vui lòng nhập lương mong muốn')
+                isValid = false;
+            } else if (salary < 1.000){
+                setErrors('Lương mong muốn phải lớn hơn 1.000đ')
+                isValid = false;
+            }
+            if (isValid) {
+                handleApply()
+            }
         }
-        if (isValid) {
-            handleApply()
-        }
+
     };
     // const validate = async () => {
 
@@ -211,6 +218,7 @@ const DetailsScreen = ({ route, navigation }) => {
         const result = await axios.post(`${API}/savePost/deleteWithCondition`, deleteSave);
         if (result.status === 200) {
             getListSave();
+            ToastAndroid.show('Xóa tin đã lưu thành công !', ToastAndroid.SHORT);
             console.log("Thành công");
         }
     }
@@ -264,6 +272,7 @@ const DetailsScreen = ({ route, navigation }) => {
 
     return (
         <SafeAreaView style={styles.container}>
+            <StatusBar barStyle={"light-content"} />
             <View style={styles.headers}>
                 <TouchableOpacity onPress={() => navigation.goBack()}>
                     <Feather name="arrow-left" size={28} color={COLORS.white} />
@@ -324,7 +333,7 @@ const DetailsScreen = ({ route, navigation }) => {
                                 )
                             }
                         </View>
-                        <Text style={styles.datetime}>{data.date} {data.time}</Text>
+                        <Text style={styles.datetime}>Đã đăng {data.date} ngày trước vào lúc {data.time}</Text>
                         <View style={styles.user}>
                             <ImageBackground
                                 source={{ uri: data.avatar }}
@@ -385,7 +394,7 @@ const DetailsScreen = ({ route, navigation }) => {
                     <View style={{ width: '100%', alignItems: 'center', paddingVertical: 50 }}>
                         {isFollowed(data?.postid) ? (
                             <TouchableOpacity
-                                onPress={() => navigation.navigate('Application')}
+                                onPress={() => navigation.navigate('Ứng tuyển')}
                                 style={styles.btnApply}>
                                 <Text
                                     style={{
@@ -464,15 +473,16 @@ const DetailsScreen = ({ route, navigation }) => {
                                     style={{ backgroundColor: "#F5F5F5", width: '80%', paddingHorizontal: 13, paddingVertical: 11, borderRadius: 5 }}
                                     placeholder="Nhập lương mong muốn"
                                     onChangeText={handleOnChangeSalary}
+                                    value={salary}
                                 />
                             </View>
                         ) : null
                     }
                     {
                         errors != '' && (
-                            <Text style={{marginTop: 7, color: COLORS.red, fontSize: 12, marginLeft: 40}}>
-                            {errors}
-                          </Text>
+                            <Text style={{ marginTop: 7, color: COLORS.red, fontSize: 12, marginLeft: 40 }}>
+                                {errors}
+                            </Text>
                         )
                     }
                     <View style={{

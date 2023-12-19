@@ -43,6 +43,8 @@ const EmployerHome = ({ navigation }) => {
     const [listReject, setListReject] = useState([]);
     const [listAccept, setListAccept] = useState([]);
     const [listBargain, setListBargain] = useState([]);
+    const [listApplied, setListApplied] = useState([]);
+    const [listAllAccept, setListAllAccpet] = useState([]);
     const [listNotifications, setListNotifications] = useState([]);
     const [Notifications, setNotifications] = useState('');
     const [check, setChek] = useState(false);
@@ -59,7 +61,9 @@ const EmployerHome = ({ navigation }) => {
             getListApplyStatus3();
             getListApplyStatus4();
             getListNotification();
+            getListApply();
             getAllData();
+            getListApply3();
         }, [])
     );
     const getAllData = async () => {
@@ -194,7 +198,7 @@ const EmployerHome = ({ navigation }) => {
         try {
             const result = await axios.post(`${API}/apply//unRead`, { id: user._id });
             if (result.status === 200) {
-                setListUnread(result.data);
+                setListUnread(result.data)
             }
         } catch (error) {
             console.log('Err : ', error);
@@ -253,11 +257,38 @@ const EmployerHome = ({ navigation }) => {
             console.log('err', error);
         }
     }
+    async function getListApply() {
+        try {
+            const result = await axios.get(`${API}/apply//listAll`);
+            if (result.status === 200) {
+                setListApplied(result.data);
+            }
+        } catch (error) {
+            console.log('Err : ', error);
+        }
+    }
+    async function getListApply3() {
+        try {
+            const result = await axios.get(`${API}/apply//listAllAccept`);
+            if (result.status === 200) {
+                setListAllAccpet(result.data);
+            }
+        } catch (error) {
+            console.log('Err : ', error);
+        }
+    }
     const openNotification = () => {
         navigation.navigate('Notifications');
         setChek(false);
     };
-
+    var number = 0;
+    const list = () => {
+        let a = listAllAccept.length / listApplied.length * 100;
+        if (!isNaN(a) && isFinite(a)) {
+           number = a;
+        }
+    }
+    list();
     return (
         <SafeAreaView style={styles.container}>
 
@@ -329,7 +360,7 @@ const EmployerHome = ({ navigation }) => {
                 <View style={{ marginTop: 15, height: 100, backgroundColor: '#6295FF', borderRadius: 15, flexDirection: 'row', alignItems: 'center' }}>
                     <View style={{ marginLeft: 30 }}>
                         <CircularProgress
-                            value={40}
+                            value={number}
                             inActiveStrokeColor={COLORS.white}
                             activeStrokeColor={'#FFC069'}
                             progressValueColor={'#fff'}

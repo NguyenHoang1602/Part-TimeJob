@@ -50,7 +50,9 @@ const StageCurriculumScreen = ({ route, navigation }) => {
     const [bargainSalary, setBargainSalary] = useState('');
     const [feedbacks, setFeedBack] = useState('');
     const handleOnChangeSalary = (value) => {
-        setBargainSalary(value);
+        let formattedValue = value.replace(/\D/g, '');
+        formattedValue = formattedValue.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+        setBargainSalary(formattedValue);
     }
     const handleOnChangeFeedback = (value) => {
         setFeedBack(value);
@@ -96,7 +98,6 @@ const StageCurriculumScreen = ({ route, navigation }) => {
         };
         const response = await axios.post(`${API}/apply/updateAccept`, AcceptData);
         if (response.status === 200) {
-            console.log('thanh cong');
             getCVApply();
         }
     }
@@ -112,7 +113,10 @@ const StageCurriculumScreen = ({ route, navigation }) => {
         Keyboard.dismiss();
         let isValid = true;
         if (!bargainSalary) {
-            setErrors('Vui lòng nhập lương mong muốn')
+            setErrors('Vui lòng nhập lương thương lượng')
+            isValid = false;
+        } else if (bargainSalary < 1000) {
+            setErrors('Lương thương lượng không được bé hơn 1.000đ')
             isValid = false;
         }
         if (isValid) {
@@ -129,7 +133,6 @@ const StageCurriculumScreen = ({ route, navigation }) => {
         };
         const response = await axios.post(`${API}/apply/updateBargain`, bargainData);
         if (response.status === 200) {
-            console.log('thanh cong');
             getCVApply();
             toggleModalclose();
         }
@@ -148,7 +151,6 @@ const StageCurriculumScreen = ({ route, navigation }) => {
         if (response.status === 200) {
             getCVApply();
             toggleModalclose1();
-            console.log('thanh cong');
         }
     }
 
@@ -208,7 +210,7 @@ const StageCurriculumScreen = ({ route, navigation }) => {
                     </View>
                     <View style={styles.view1}>
                         <Text style={styles.text2}>Lương mong muốn: </Text>
-                        <Text style={{ fontSize: 16 }}>{data?.salary}</Text>
+                        <Text style={{ fontSize: 16 }}>{data?.salary?.toLocaleString('vi-VN')}đ</Text>
                     </View>
                     {/* <View style={styles.view1}>
                         <Text style={styles.text2}>Ngành nghề: </Text>
@@ -263,6 +265,7 @@ const StageCurriculumScreen = ({ route, navigation }) => {
                             keyboardType='numeric'
                             style={{ backgroundColor: "#F5F5F5", width: '80%', paddingHorizontal: 13, paddingVertical: 11, borderRadius: 5 }}
                             placeholder="Nhập lương sẽ trả"
+                            value={bargainSalary}
                             onChangeText={handleOnChangeSalary}
                         />
                         {

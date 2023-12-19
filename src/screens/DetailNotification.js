@@ -155,7 +155,7 @@ const DetailNotification = ({ route, navigation }) => {
                     </TouchableOpacity>
 
                     <TouchableOpacity
-                        onPress={() => { }}
+                        onPress={() => navigation.navigate('CurriculumVitaeScreen')}
                         style={{
                             backgroundColor: COLORS.primary,
                             alignItems: 'center',
@@ -165,7 +165,7 @@ const DetailNotification = ({ route, navigation }) => {
                             width: 160,
                             paddingVertical: 15,
                         }}>
-                        <Text style={{ color: COLORS.white, fontSize: 18, fontWeight: "600" }}>Gọi điện</Text>
+                        <Text style={{ color: COLORS.white, fontSize: 18, fontWeight: "600" }}>Hồ sơ</Text>
                     </TouchableOpacity>
                 </View>
             </ScrollView>

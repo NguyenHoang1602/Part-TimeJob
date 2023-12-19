@@ -26,7 +26,7 @@ import { err } from 'react-native-svg';
 const MessageScreen = ({ navigation, chatId }) => {
     useEffect(() => {
         getUsers();
-        getLastMess();
+        // getLastMess();
     }, [chatId]);
 
     const [users, setUsers] = useState([]);
@@ -49,26 +49,26 @@ const MessageScreen = ({ navigation, chatId }) => {
             });
     };
 
-    const getLastMess = async () => {
-        const chatRef = firestore().collection('chats').doc(chatId);
-        chatRef.get().then((doc) => {
-            if (doc.exists) {
-                const chat = doc.data();
-                const messages = chat.messages;
+    // const getLastMess = async () => {
+    //     const chatRef = firestore().collection('chats').doc(chatId);
+    //     chatRef.get().then((doc) => {
+    //         if (doc.exists) {
+    //             const chat = doc.data();
+    //             const messages = chat.messages;
 
-                if (messages.length > 0) {
-                    const lastMess = messages[messages.length - 1];
-                    setLastMess(lastMess.text)
-                } else {
-                    setLastMess('Không có tin nhắn')
-                }
-            } else {
-                setLastMess('Không có đối tượng chat');
-            }
-        }).catch((err) => {
-            setLastMess('Lỗi:', err)
-        })
-    }
+    //             if (messages.length > 0) {
+    //                 const lastMess = messages[messages.length - 1];
+    //                 setLastMess(lastMess.text)
+    //             } else {
+    //                 setLastMess('Không có tin nhắn')
+    //             }
+    //         } else {
+    //             setLastMess('Không có đối tượng chat');
+    //         }
+    //     }).catch((err) => {
+    //         setLastMess('Lỗi:', err)
+    //     })
+    // }
    
 
 
@@ -109,7 +109,7 @@ const MessageScreen = ({ navigation, chatId }) => {
                             {item.displayName}
                         </Text>
                         <Text style={{ fontSize: 16, color: COLORS.grey, paddingTop: 6 }} numberOfLines={1}>
-                            {lastMess}
+                            ABC
                         </Text>
                     </View>
                     <View style={{ alignItems: "flex-end" }}>

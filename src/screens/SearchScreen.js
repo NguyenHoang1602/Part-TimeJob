@@ -12,7 +12,7 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable react-native/no-inline-styles */
 import React, { useState, useEffect, useContext } from 'react';
-import { FlatList, Image, TextInput, ScrollView, StyleSheet, Text, TouchableOpacity, View, ImageBackground, Pressable, Alert} from 'react-native';
+import { FlatList, Image, TextInput, ScrollView, StyleSheet, Text, TouchableOpacity, View, ImageBackground, Pressable, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import COLORS from '../assets/const/colors';
 
@@ -42,31 +42,31 @@ import UserContext from '../components/UserConText';
 const URL_IMG = "https://s3-alpha-sig.figma.com/img/acc1/c7a7/e9c43527e435b8c79bc8126d3d053264?Expires=1700438400&Signature=YkRmo~i-p6AZ1AulSOjpW4wA3UdrSHH2zV8WQihLw5uEordi8QWRvjnTz8mWYDq4ZkRCCVDBz1xuFXGQtgMqAStOpOvBGzkzNvHMeK4xw6AsufXB2uI2IIfmL2LgzBHgwk2l6IM3Rxb-4I9wdC8aSg1r9x9KwN~e31NOH19C3w1~A9jSJHDWJk9ECpnIqIrYRwzIfBR6nDOWxXZqjwn-Y8rg94RJb1UZYGQhSe9~MYAq1LzHKO0imJe1lpNv6dYv~amXSnfuuZW2awviacARGnYIjO~rDGmP339lgP9Df71ZKGUxsgIQpK26gCH0IoaFY1B9riTOaj2ENioGaqJurg__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4";
 
 const data = [
-  { label: 'Tất cả', value: '1' },
-  { label: 'Thành phố Thủ Đức', value: '2' },
-  { label: 'Quận 1', value: '1' },
-  { label: 'Quận 2', value: '2' },
-  { label: 'Quận 3', value: '3' },
-  { label: 'Quận 4', value: '4' },
-  { label: 'Quận 5', value: '5' },
-  { label: 'Quận 6', value: '6' },
-  { label: 'Quận 7', value: '7' },
-  { label: 'Quận 8', value: '8' },
-  { label: 'Quận 9', value: '9' },
-  { label: 'Quận 10', value: '10' },
-  { label: 'Quận 11', value: '11' },
-  { label: 'Quận 12', value: '12' },
-  { label: 'Quận Bình Tân', value: '13' },
-  { label: 'Quận Bình Thạnh', value: '14' },
-  { label: 'Quận Gò Vấp', value: '15' },
-  { label: 'Quận Phú Nhuận', value: '16' },
-  { label: 'Quận Tân Bình', value: '17' },
-  { label: 'Quận Tân Phú', value: '18' },
-  { label: 'Quận Bình Chánh', value: '19' },
-  { label: 'Quận Cần Giờ', value: '20' },
-  { label: 'Quận Củ Chi', value: '21' },
-  { label: 'Quận Hóc Môn', value: '22' },
-  { label: 'Quận Nhà Bè', value: '23' },
+  { label: 'Tất cả', value: 'Tất cả' },
+  { label: 'Thành phố Thủ Đức', value: 'Thủ Đức' },
+  { label: 'Quận 1', value: 'Quận 1' },
+  { label: 'Quận 2', value: 'Quận 2' },
+  { label: 'Quận 3', value: 'Quận 3' },
+  { label: 'Quận 4', value: 'Quận 4' },
+  { label: 'Quận 5', value: 'Quận 5' },
+  { label: 'Quận 6', value: 'Quận 6' },
+  { label: 'Quận 7', value: 'Quận 7' },
+  { label: 'Quận 8', value: 'Quận 8' },
+  { label: 'Quận 9', value: 'Quận 9' },
+  { label: 'Quận 10', value: 'Quận 10' },
+  { label: 'Quận 11', value: 'Quận 11' },
+  { label: 'Quận 12', value: 'Quận 12' },
+  { label: 'Quận Bình Tân', value: 'Bình Tân' },
+  { label: 'Quận Bình Thạnh', value: 'Bình Thạnh' },
+  { label: 'Quận Gò Vấp', value: 'Gò Vấp' },
+  { label: 'Quận Phú Nhuận', value: 'Phú Nhuận' },
+  { label: 'Quận Tân Bình', value: 'Tân Bình' },
+  { label: 'Quận Tân Phú', value: 'Tân Phú' },
+  { label: 'Quận Bình Chánh', value: 'Bình Chánh' },
+  { label: 'Quận Cần Giờ', value: 'Cần Giờ' },
+  { label: 'Quận Củ Chi', value: 'Củ Chi' },
+  { label: 'Quận Hóc Môn', value: 'Hóc Môn' },
+  { label: 'Quận Nhà Bè', value: 'Nhà Bè' },
 ];
 
 const MAX_PRICE = 50;
@@ -76,7 +76,12 @@ const SearchScreen = ({ navigation }) => {
   useEffect(() => {
     getData();
     getListSave();
-  }, []);
+    setFilter((prevFilter) => ({
+      ...prevFilter,
+      wageMin: startPrice,
+      wageMax: endPrice,
+    }));
+  }, [startPrice, endPrice]);
 
 
   const { user } = useContext(UserContext);
@@ -110,8 +115,6 @@ const SearchScreen = ({ navigation }) => {
       const result = await axios.post(`${API}/savePost/add`, savedata);
       if (result.status === 200) {
         getListSave();
-        Alert.alert('Lưu tin thành công !')
-        console.log("Thành công");
       }
     } catch (error) {
       console.log('Err: ', error);
@@ -172,6 +175,7 @@ const SearchScreen = ({ navigation }) => {
 
   const [startPrice, setStartPrice] = useState(15);
   const [endPrice, setEndPrice] = useState(35);
+  const [a, seta] = useState(0);
 
   const [isModalVisibleSave, setModalVisibleSave] = useState(false);
   const [isModalVisibleFilter, setModalVisibleFiler] = useState(false);
@@ -194,12 +198,12 @@ const SearchScreen = ({ navigation }) => {
     career_id: '',
     workType_id: '',
     payForm_id: '655de22b9a5b0ffa7ffd5132',
-    wageMin: startPrice,
-    wageMax: endPrice,
+    wageMin: 15,
+    wageMax: 35,
     academic_id: '',
     experience_id: '',
   });
-
+  console.log(a);
   const getData = async () => {
 
     const careers = await AsyncStorage.getItem('listCareers');
@@ -243,6 +247,7 @@ const SearchScreen = ({ navigation }) => {
   const toggleModalclose = (item) => {
     setModalVisibleFiler(!isModalVisibleFilter);
   };
+  console.log(filter);
   async function search(value) {
     try {
       const result = await axios.post(`${API}/posts/searchByKeyForApp`, { key: value });
@@ -286,97 +291,110 @@ const SearchScreen = ({ navigation }) => {
               source={require('../assets/images/5928293_2953962.jpg')}
               style={{ width: "100%", height: 430, }}
             />
-            <Text style={{ fontSize: 22, color: '#000000', fontWeight: '700' }}>Empty</Text>
-            <Text style={{ fontSize: 16, marginTop: 7, textAlign: 'center' }}>Sorry, the keyword you entered cannot be found, please check again or search with another keyword.</Text>
+            <Text style={{ fontSize: 20, color: COLORS.primary, fontWeight: '600', textAlign: 'center' }}>Không tìm thấy bài viết liên quan</Text>
           </View>
         )}
       />
     );
-
   }
-  const renderItemJob = ({ item }) => (
-    <TouchableOpacity style={{
-      width: 340,
-      borderWidth: 0.5,
-      borderColor: COLORS.grey,
-      borderRadius: 20,
-      marginBottom: 18,
-      padding: 20,
-    }}
-      onPress={() => navigation.navigate('DetailsScreen', {
-        postid: item._id,
-        users_id: item.users_id,
-        avatar: item.users_id.photo,
-        address: item.address,
-        business_name: item.businessName,
-        gender: item.gender,
-        image: item.image,
-        quantity: item.quantity,
-        title: item.title,
-        career_id: item.career_id,
-        payform_id: item.payForm_id,
-        experience_id: item.experience_id,
-        acedemic_id: item.academic_id,
-        worktype_id: item.workType_id,
-        describe: item.describe,
-        age_min: item.ageMin,
-        age_max: item.ageMax,
-        wage_min: item.wageMin,
-        wage_max: item.wageMax,
-        status_id: item.status_id,
-        date: item.date,
-        time: item.time,
-      })}>
-      <View style={{ width: '100%', flexDirection: 'row' }}>
-        {item.image.map((imageUrl, index) => {
-          if (index === 0) {
-            return (
-              <ImageBackground
-                key={index}
-                source={{ uri: imageUrl }}
-                style={{ width: 46, height: 46, marginBottom: 5 }}
-                imageStyle={{ borderRadius: 5 }}
-              />
-            );
-          }
-        })}
-        <View style={{ width: '50%', height: '100%', marginStart: 20, flex: 1 }}>
-          <Text style={{ fontSize: 18, fontWeight: '400' }}>{item.title}</Text>
-          <Text numberOfLines={1} style={{ fontSize: 15, fontWeight: '400', color: COLORS.grey }}>{item.address}</Text>
-        </View>
-        <TouchableOpacity onPress={() => handleSaveToggle(item._id)}>
-          {isFollowed(item._id) ? (
-            <Icon name="bookmark-minus" size={30} color={COLORS.blue} />
-          ) : <Icon name="bookmark-plus" size={30} color={COLORS.blue} />
-          }
-        </TouchableOpacity>
-      </View>
-      <View style={{ height: 1, width: '99%', backgroundColor: COLORS.grey, opacity: 0.4, marginTop: 15, marginBottom: 8 }} />
-      <View style={{ width: '100%', paddingStart: '22%' }}>
-        <Text numberOfLines={1} style={{ fontSize: 16, fontWeight: 'bold', color: COLORS.grey, width: 200, marginBottom: 5 }}>{item.businessName}</Text>
-        <Text style={{ color: COLORS.blue, fontSize: 16, marginVertical: 9 }}>{item.wageMin} - {item.wageMax}đ/h</Text>
-        <View style={{
-          width: 60,
-          height: 25,
-          borderWidth: 0.5,
-          borderColor: COLORS.grey,
-          borderRadius: 7,
-          padding: 5,
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}>
+  const renderItemJob = ({ item }) => {
+    const formattedWageMin = item.wageMin.toLocaleString('vi-VN');
+    const formattedWageMax = item.wageMax.toLocaleString('vi-VN');
+    return (
+      <TouchableOpacity style={{
+        borderWidth: 0.5,
+        borderColor: COLORS.grey,
+        borderRadius: 20,
+        marginBottom: 18,
+        padding: 20,
+      }}
+        onPress={() => navigation.navigate('DetailsScreen', {
+          postid: item._id,
+          users_id: item.users_id,
+          avatar: item.users_id.photo,
+          address: item.address,
+          business_name: item.businessName,
+          gender: item.gender,
+          image: item.image,
+          quantity: item.quantity,
+          title: item.title,
+          career_id: item.career_id,
+          payform_id: item.payForm_id,
+          experience_id: item.experience_id,
+          acedemic_id: item.academic_id,
+          worktype_id: item.workType_id,
+          describe: item.describe,
+          age_min: item.ageMin,
+          age_max: item.ageMax,
+          wage_min: item.wageMin,
+          wage_max: item.wageMax,
+          status_id: item.status_id,
+          date: item.date,
+          time: item.time,
+        })}>
+        <View style={{ flexDirection: 'row' }}>
+          {item.image.map((imageUrl, index) => {
+            if (index === 0) {
+              return (
+                <ImageBackground
+                  key={index}
+                  source={{ uri: imageUrl }}
+                  style={{ width: 46, height: 46, marginBottom: 5 }}
+                  imageStyle={{ borderRadius: 12 }}
+                />
+              );
+            }
+          })}
+          <View style={{ height: '100%', marginStart: 20, flex: 1 }}>
+            <Text numberOfLines={2} style={{ fontSize: 18, fontWeight: '500', color: COLORS.black }}>{item.title}</Text>
+            <Text numberOfLines={1} style={{ fontSize: 15, fontWeight: 'normal', color: COLORS.black, opacity: 0.5 }}>{item.address}</Text>
+          </View>
           {
-            item.workType_id._id == '653e66b38e88b23b41388e3c' ? (
-              <Text style={{ fontSize: 10 }} >Parttime</Text>
-            ) : (
-              <Text style={{ fontSize: 10 }} >Fulltime</Text>
-            )
+            isFollowed(item._id) ? (
+              <TouchableOpacity onPress={() => handleDelete(item._id)}>
+                <Icon name="bookmark-minus" size={35} color={COLORS.blue} />
+              </TouchableOpacity>
+            ) : <TouchableOpacity onPress={() => handleSaveToggle(item._id)}>
+              <Icon name="bookmark-plus" size={35} color={COLORS.blue} />
+            </TouchableOpacity>
           }
         </View>
-      </View>
+        <View style={{ height: 1, width: '99%', backgroundColor: COLORS.grey, opacity: 0.4, marginTop: 10, marginBottom: 10 }} />
+        <View style={{ width: '100%', paddingStart: '21%', gap: 10 }}>
+          <Text numberOfLines={1} style={{ fontSize: 16, fontWeight: '400', color: COLORS.black, opacity: 0.6, }}>{item.businessName}</Text>
+          <View style={{ flexDirection: 'row' }}>
+            <Text style={{ color: COLORS.blue, fontSize: 16 }}>{formattedWageMin}đ - {formattedWageMax}đ</Text>
+            {
+              item.payForm_id._id === '655de22b9a5b0ffa7ffd5132' ? (
+                <Text style={{ color: COLORS.blue, fontSize: 16 }}> /giờ</Text>
+              ) : (
+                <Text style={{ color: COLORS.blue, fontSize: 16 }}> /tháng</Text>
+              )
+            }
+          </View>
+          <View style={{
+            width: 80,
+            height: 25,
+            borderWidth: 1,
+            borderColor: COLORS.grey,
+            borderRadius: 7,
+            padding: 5,
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}>
+            {
+              item.workType_id._id === '653e66b38e88b23b41388e3c' ? (
+                <Text style={{ fontSize: 10 }} >Bán thời gian</Text>
+              ) : (
+                <Text style={{ fontSize: 10 }} >Toàn thời gian</Text>
+              )
+            }
+          </View>
+        </View>
 
-    </TouchableOpacity>
-  );
+      </TouchableOpacity>
+    )
+  };
   return (
     <SafeAreaView style={{ flex: 1, paddingVertical: 18, gap: 16, backgroundColor: 'white' }}>
       {/* Search */}
@@ -409,7 +427,7 @@ const SearchScreen = ({ navigation }) => {
           }}>
           <Feather name='search' size={24} color={!isFocusedSearch ? COLORS.grey : COLORS.primary} />
           <TextInput
-            placeholder="Search . . ."
+            placeholder="Tìm kiếm . . ."
             onChangeText={value => {
               search(value)
             }}
@@ -426,105 +444,16 @@ const SearchScreen = ({ navigation }) => {
 
       {/* Found Nav */}
       <View style={styles.foundNav}>
-        <View style={{ flex: 1 }}>
-          <Text style={styles.textFound}>
-            {list.length} Found
-          </Text>
-        </View>
-        <TouchableOpacity onPress={() => {
-
-        }}>
-          <Ionicons name='chevron-back-outline' size={24} color={COLORS.primary} />
-        </TouchableOpacity>
+        <View style={{ flex: 1 }} />
+        <Text style={styles.textFound}>
+          Tìm thấy ({list.length})
+        </Text>
       </View>
 
       {/* Show Search */}
-      <View style={{ alignItems: 'center', flex: 1 }}>
+      <View style={{ paddingHorizontal: 18, marginBottom: 100 }}>
         <FlatListb />
       </View>
-
-      {/* Modal Save job */}
-      <Modal isVisible={isModalVisibleSave} style={{ justifyContent: 'flex-end', margin: 0 }}>
-        <View style={{ backgroundColor: 'white', padding: 18, justifyContent: 'center', alignItems: 'center', borderTopRightRadius: 25, borderTopLeftRadius: 25 }}>
-          <Text style={{ fontSize: 18, fontWeight: '700', color: COLORS.black }}>Remove from Saved ?</Text>
-
-          <View style={{ borderTopWidth: 1, borderColor: COLORS.blackOpacity, marginVertical: 10, width: "100%" }} />
-
-          <View style={{ paddingVertical: 18, width: "100%" }}>
-            <View style={{ borderRadius: 15, borderWidth: 1, paddingHorizontal: 18, borderColor: COLORS.blackOpacity }}>
-              <View style={{ flexDirection: 'row', gap: 8, paddingVertical: 18 }}>
-                <Image source={{ uri: URL_IMG }} style={{ width: 52, aspectRatio: 1, borderRadius: 52 }} />
-                <View style={{ flex: 1 }}>
-                  <Text style={{ fontSize: 18, color: COLORS.black, fontWeight: "600", }} numberOfLines={1}>
-                    UI/UX Designer
-                  </Text>
-                  <Text style={{ fontSize: 16, color: COLORS.grey, paddingTop: 4 }} numberOfLines={1}>
-                    John Sena
-                  </Text>
-                </View>
-                <TouchableOpacity>
-                  <MaterialCommunityIcons name={!isSave ? 'bookmark-minus' : 'bookmark-minus-outline'} size={26} color={COLORS.primary} />
-                </TouchableOpacity>
-              </View>
-
-              <View style={{ borderTopWidth: 1, borderColor: COLORS.blackOpacity, }} />
-
-              <View style={{ flexDirection: 'row', gap: 8, paddingVertical: 12 }}>
-                <View style={{ paddingStart: 60 }}>
-                  <Text style={{ fontSize: 18, color: COLORS.black, fontWeight: "600", }} >
-                    UI/UX Designer
-                  </Text>
-                  <Text style={{ fontSize: 16, color: COLORS.primary, paddingVertical: 4 }} >
-                    $1000 - 2000/month
-                  </Text>
-                  <View style={{
-                    width: 70,
-                    borderWidth: 0.5,
-                    borderColor: COLORS.grey,
-                    borderRadius: 7,
-                    padding: 5,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}>
-                    <Text style={{ fontSize: 10 }}>Partime</Text>
-                  </View>
-                </View>
-              </View>
-            </View>
-          </View>
-          <View style={{
-            flexDirection: 'row'
-          }}>
-            <TouchableOpacity
-              onPress={toggleModalSave}
-              style={{
-                backgroundColor: COLORS.blue,
-                alignItems: 'center',
-                justifyContent: 'center',
-                borderRadius: 64,
-                position: "relative",
-                width: 160,
-                paddingVertical: 15,
-                marginEnd: 15
-              }}>
-              <Text style={{ color: COLORS.primary, fontSize: 18, fontWeight: "600", }}>Cancel</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={{
-                backgroundColor: COLORS.primary,
-                alignItems: 'center',
-                justifyContent: 'center',
-                borderRadius: 64,
-                position: "relative",
-                width: 160,
-                paddingVertical: 15
-              }}>
-              <Text style={{ color: COLORS.white, fontSize: 18, fontWeight: "600", }}>Yes, Remove</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
 
       {/* Modal Filter */}
       <Modal isVisible={isModalVisibleFilter}
@@ -578,7 +507,7 @@ const SearchScreen = ({ navigation }) => {
                           onChange={item => {
                             setValue(item.value);
                             setIsFocus(false);
-                            setFilter({ ...filter, address: item.label })
+                            setFilter({ ...filter, address: item.value })
                           }}
                         />
 
@@ -586,10 +515,10 @@ const SearchScreen = ({ navigation }) => {
                         <SalaryRangeSelector
                           minPrice={0}
                           maxPrice={MAX_PRICE}
-                          startPrice={startPrice}
-                          endPrice={endPrice}
-                          onStartPriceChange={setStartPrice}
-                          onEndPriceChange={setEndPrice}
+                          startPrice={filter.wageMin}
+                          endPrice={filter.wageMax}
+                          onStartPriceChange={(op) => setFilter({ ...filter, wageMin: op })}
+                          onEndPriceChange={(op) => setFilter({ ...filter, wageMax: op })}
                           salaryUnit={filter.payForm_id}
                         />
 

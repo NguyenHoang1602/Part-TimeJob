@@ -28,11 +28,13 @@ const ManagementScreen = ({ route, navigation }) => {
   const [listIsDisplay, setListIsDisplay] = useState([]);
   const [listWaiting, setListWaiting] = useState([]);
   const [listDenied, setListDenied] = useState([]);
+  const [check, setChek] = useState(false);
   useFocusEffect(
     React.useCallback(() => {
       getListIsDisplay();
       getListWaiting();
       getListDenied();
+      getListNotification();
     }, [])
   );
   // useEffect(() => {
@@ -69,15 +71,15 @@ const ManagementScreen = ({ route, navigation }) => {
         url: `${API}/posts/listJobsWaitingForApp`,
         method: "POST",
         data: {
-            id: user._id,
+          id: user._id,
         },
-    }).then(async (response) => {
+      }).then(async (response) => {
         if (response.status === 200) {
-            const data = JSON.stringify(response.data);
-            await AsyncStorage.setItem('listJobsWaiting', data);
-            setListWaiting(response.data);
+          const data = JSON.stringify(response.data);
+          await AsyncStorage.setItem('listJobsWaiting', data);
+          setListWaiting(response.data);
         }
-    })
+      })
     } catch (error) {
       console.log("Err : ", error);
     }
@@ -103,7 +105,19 @@ const ManagementScreen = ({ route, navigation }) => {
       console.log("Err : ", error);
     }
   }
-
+  async function getListNotification() {
+    try {
+      const response = await axios.post(`${API}/notifications/listNoSeen`, { receiver_id: user._id });
+      if (response.status === 200) {
+        const data = [...response.data];
+        if (data.length > 0) {
+          setChek(!check);
+        }
+      }
+    } catch (error) {
+      console.log('err', error);
+    }
+  }
 
   return (
     <SafeAreaView style={{ backgroundColor: 'white', flex: 1 }}>
@@ -153,7 +167,11 @@ const ManagementScreen = ({ route, navigation }) => {
             }}
             onPress={() => navigation.navigate('Notifications')}>
             {/* <Feather name='bell' size={24} color={COLORS.black}/> */}
-            <IconWithBadge iconName="bell" badgeText="2" />
+            {
+              check ? (
+                <IconWithBadge iconName="bell" badgeText="4" />
+              ) : <IconWithBadge iconName="bell" badgeText="" />
+            }
           </TouchableOpacity>
           <TouchableOpacity
             style={{

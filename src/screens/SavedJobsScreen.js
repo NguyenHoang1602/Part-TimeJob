@@ -7,7 +7,7 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable react-native/no-inline-styles */
 import React, { useState, useContext, useEffect } from 'react';
-import { FlatList, Image, TextInput, ScrollView, StyleSheet, Text, TouchableHighlight, TouchableOpacity, View, Button, ImageBackground, RefreshControl, Pressable } from 'react-native';
+import { FlatList, Image, TextInput, ScrollView, StyleSheet, Text, TouchableHighlight, TouchableOpacity, View, Button, ImageBackground, RefreshControl, Pressable, ToastAndroid } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -36,6 +36,7 @@ const SavedJobsScreen = ({ navigation }) => {
   const [isSave, setSave] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
+  const [check, setChek] = useState(false);
 
   const toggleModal = (item) => {
     setModalVisible(!isModalVisible);
@@ -47,8 +48,26 @@ const SavedJobsScreen = ({ navigation }) => {
   useFocusEffect(
     React.useCallback(() => {
       getListSave()
+      getListNotification()
     }, [])
   );
+  async function getListNotification() {
+    try {
+      const response = await axios.post(`${API}/notifications/listNoSeen`, { receiver_id: user._id });
+      if (response.status === 200) {
+        const data = [...response.data];
+        if (data.length > 0) {
+          setChek(!check);
+        }
+      }
+    } catch (error) {
+      console.log('err', error);
+    }
+  }
+  const openNotification = () => {
+    navigation.navigate('Notifications');
+    setChek(false);
+  };
   const fetchData = async () => {
     setRefreshing(true);
     setTimeout(() => {
@@ -122,7 +141,7 @@ const SavedJobsScreen = ({ navigation }) => {
       // setLoading(false);
       toggleModalclose();
       fetchData();
-      console.log("Thành công");
+      ToastAndroid.show('Xóa thành công !', ToastAndroid.SHORT);
     }
   }
   const FlatListSaveJobs = () => {
@@ -139,7 +158,7 @@ const SavedJobsScreen = ({ navigation }) => {
               source={require('../assets/images/5928293_2953962.jpg')}
               style={{ width: "100%", height: 430 }}
             />
-            <Text style={{ fontSize: 22, color: COLORS.black, fontWeight: '600' }}>Bạn chưa lưu công việc nào !</Text>
+            <Text style={{ fontSize: 22, color: COLORS.black, fontWeight: '600' }}>Không tìm thấy công việc đã lưu</Text>
           </View>
         )}
       />
@@ -171,8 +190,8 @@ const SavedJobsScreen = ({ navigation }) => {
           describe: item?.post_id.describe,
           age_min: item?.post_id.ageMin,
           age_max: item?.post_id.ageMax,
-          wage_min: item?.post_id.wageMin,
-          wage_max: item?.post_id.wageMax,
+          wage_min: formattedWageMin,
+          wage_max: formattedWageMax,
           status_id: item?.post_id.status_id,
           date: item?.post_id.date,
           time: item?.post_id.time,
@@ -274,8 +293,12 @@ const SavedJobsScreen = ({ navigation }) => {
               borderWidth: 1,
               borderColor: COLORS.grey,
             }}
-            onPress={() => navigation.navigate('Notifications')}>
-            <IconWithBadge iconName="bell" badgeText="2" />
+            onPress={() => openNotification()}>
+            {
+              check ? (
+                <IconWithBadge iconName="bell" badgeText="4" />
+              ) : <IconWithBadge iconName="bell" badgeText="" />
+            }
           </TouchableOpacity>
         </View>
         {/* Search */}
@@ -380,11 +403,20 @@ const SavedJobsScreen = ({ navigation }) => {
                   <Text style={{ fontSize: 18, color: COLORS.black, fontWeight: "600" }} >
                     {selectedItem?.post_id.businessName}
                   </Text>
-                  <Text style={{ fontSize: 16, color: COLORS.primary, paddingVertical: 4 }} >
-                    ${selectedItem?.post_id.wageMin} - ${selectedItem?.post_id.wageMax} /moth
-                  </Text>
+                  <View style={{ flexDirection: 'row', paddingVertical: 4  }}>
+                    <Text style={{ fontSize: 16, color: COLORS.primary}} >
+                      {selectedItem?.post_id.wageMin.toLocaleString('vi-VN')}đ - {selectedItem?.post_id.wageMax.toLocaleString('vi-VN')}đ
+                    </Text>
+                    {
+                      selectedItem?.post_id?.payForm_id?._id === '655de22b9a5b0ffa7ffd5132' ? (
+                        <Text style={{ color: COLORS.blue, fontSize: 16 }}> /giờ</Text>
+                      ) : (
+                        <Text style={{ color: COLORS.blue, fontSize: 16 }}> /tháng</Text>
+                      )
+                    }
+                  </View>
                   <View style={{
-                    width: 70,
+                    width: 80,
                     borderWidth: 0.5,
                     borderColor: COLORS.grey,
                     borderRadius: 7,
@@ -394,9 +426,9 @@ const SavedJobsScreen = ({ navigation }) => {
                   }}>
                     {
                       selectedItem?.post_id.workType_id._id == '653e66b38e88b23b41388e3c' ? (
-                        <Text style={{ fontSize: 10 }} >Partime</Text>
+                        <Text style={{ fontSize: 10 }} >Bán thời gian</Text>
                       ) : (
-                        <Text style={{ fontSize: 10 }} >Fulltime</Text>
+                        <Text style={{ fontSize: 10 }} >Toàn thời gian</Text>
                       )
                     }
                   </View>

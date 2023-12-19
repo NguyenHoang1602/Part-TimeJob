@@ -32,8 +32,6 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import DetailNotification from '../screens/DetailNotification';
 import AntDesign from 'react-native-vector-icons/AntDesign'
 
-
-
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
@@ -107,6 +105,13 @@ const SavedStack = (props) => {
                     headerShown: false,
                 })}
             />
+            <Stack.Screen
+                name="Notifications"
+                component={Notification}
+                options={({ route }) => ({
+                    headerShown: false,
+                })}
+            />
         </Stack.Navigator>
     );
 };
@@ -126,6 +131,13 @@ const ApplicationsStack = (props) => {
                 component={ApplicationsStageScreen}
                 options={({ route }) => ({
                     title: route.params?.title,
+                    headerShown: false,
+                })}
+            />
+            <Stack.Screen
+                name="Notifications"
+                component={Notification}
+                options={({ route }) => ({
                     headerShown: false,
                 })}
             />
@@ -196,7 +208,7 @@ const ProfileStack = (props) => {
                     },
                     headerTitleAlign: 'center',
                     headerLeft: () => (
-                        <TouchableOpacity onPress={() => props.navigation.navigate('ProfileScreen')}>
+                        <TouchableOpacity onPress={() => props.navigation.navigate('CVResumeScreen')}>
                             <Ionicons name="arrow-back" size={24} color="white" />
                         </TouchableOpacity>
                     ),
@@ -212,6 +224,13 @@ const ProfileStack = (props) => {
             <Stack.Screen
                 name="CVResumeScreen"
                 component={CVResume}
+                options={({ route }) => ({
+                    headerShown: false,
+                })}
+            />
+            <Stack.Screen
+                name="Notifications"
+                component={Notification}
                 options={({ route }) => ({
                     headerShown: false,
                 })}
@@ -267,7 +286,7 @@ const TabNavigatorUser = () => {
                 })}
             />
             <Tab.Screen
-                name="Application"
+                name="Ứng tuyển"
                 component={ApplicationsStack}
                 options={({ route }) => ({
                     tabBarStyle: {
@@ -284,7 +303,7 @@ const TabNavigatorUser = () => {
                 })}
             />
             <Tab.Screen
-                name="Message"
+                name="Tin nhắn"
                 component={MessageStack}
                 options={({ route }) => ({
                     tabBarStyle: {
@@ -330,7 +349,7 @@ const getTabBarVisibility = route => {
     if (routeName == 'DetailsScreen' || routeName == 'Thông tin tuyển dụng' 
     || routeName == 'Notifications' || routeName == 'Chỉnh sửa bài đăng' 
     || routeName == 'Cập nhật thông tin cá nhân' || routeName == 'Cập nhật CV cá nhân' 
-    || routeName == 'CVResumeScreen' || routeName == '"Tạo CV cá nhân' || routeName == 'DetailNotification' 
+    || routeName == 'CVResumeScreen' || routeName == 'Tạo CV cá nhân' || routeName == 'DetailNotification' 
     || routeName == 'ApplicationsStage') {
         return 'none';
     }

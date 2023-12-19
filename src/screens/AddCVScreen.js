@@ -49,7 +49,6 @@ const CVScreen = ({ route, navigation }) => {
   const [isFocusCareer, setIsFocusCareer] = useState(false);
   const [isFocusExp, setIsFocusExp] = useState(false);
   const [isFocusAcademic, setIsFocusAcademic] = useState(false);
-  
   const getListCareers = async () => {
     const data = await AsyncStorage.getItem('listCareers')
     setListCareers(JSON.parse(data));
@@ -136,7 +135,9 @@ const CVScreen = ({ route, navigation }) => {
       Alert.alert("Thành công");
       navigation.navigate('CVResumeScreen');
     }
-  }
+  };
+  const parts = user.birthDay.split('/');
+  const year = parseInt(parts[2], 10); //
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor : COLORS.white }}>
       <Loader visible={loading} />
@@ -163,7 +164,7 @@ const CVScreen = ({ route, navigation }) => {
             onChangeText={text => handleOnchange(text, 'name')}
             onFocus={() => handleError(null, 'name')}
             placeholder="Họ tên"
-            value={user.displayName}
+            value={user?.displayName}
             error={errors.name}
           />
           <View style={{ width: '100%', flexDirection: 'row' }}>
@@ -173,7 +174,7 @@ const CVScreen = ({ route, navigation }) => {
                 onChangeText={text => handleOnchange(text, 'phone')}
                 onFocus={() => handleError(null, 'phone')}
                 placeholder="Số điện thoại"
-                // value={user?.phone}
+                // value={"0"+user.phone}
                 error={errors.phone}
               />
             </View>
@@ -183,7 +184,7 @@ const CVScreen = ({ route, navigation }) => {
                 onChangeText={text => handleOnchange(text, 'year')}
                 onFocus={() => handleError(null, 'year')}
                 placeholder="Năm sinh"
-                // value={route.params?.subtitle}
+                // value={""+year}
                 error={errors.year}
               />
             </View>

@@ -15,6 +15,7 @@ const SelectRoleScreen = ({ navigation }) => {
     const { user } = useContext(UserContext);
     const [data, setData] = React.useState({
         googleId: user?.googleId,
+        facebookId: user?.facebookId,
         displayName: user?.displayName,
         email: user?.email,
         photo: user?.photo,
@@ -26,7 +27,6 @@ const SelectRoleScreen = ({ navigation }) => {
         favoriteCareers: [],
         status: false,
     });
-    console.log(data);
     const [checkedUser, setCheckedUser] = useState(true);
     const [checkedEmployer, setCheckedEmployer] = useState(false);
     const handleCheckUser = () => {
@@ -58,8 +58,8 @@ const SelectRoleScreen = ({ navigation }) => {
                     source={require('../assets/images/SignIn/LogoSignInUp.png')}
                     style={{ width: 140, height: 133, marginBottom: 15 }}
                 />
-                <Text style={{ fontSize: 30, fontWeight: '500', marginTop: 15, color: '#212121' }}>Choose Your Job Type</Text>
-                <Text style={{ textAlign: 'center', fontSize: 16, marginVertical: 15 }}>Choose whether you are looking for a job or you can are an organization/company that needs employees.</Text>
+                <Text style={{ fontSize: 30, fontWeight: '500', marginTop: 15, color: '#212121' }}>Chọn vai trò của bạn</Text>
+                <Text style={{ textAlign: 'center', fontSize: 16, marginVertical: 15 }}>Chọn xem bạn đang tìm việc làm hay bạn có thể là một tổ chức hoặc công ty đang cần tuyển nhân viên.</Text>
                 <View style={{ height: 1, width: '100%', backgroundColor: '#EFEFEF', opacity: 0.9, marginTop: '7%', marginBottom: '6%' }} />
                 <View style={{ flexDirection: 'row', width: '100%', alignItems: 'center', justifyContent: 'center' }}>
                     {/* user role */}
@@ -67,16 +67,16 @@ const SelectRoleScreen = ({ navigation }) => {
                         <View style={{ width: 75, height: 75, borderRadius: 50, backgroundColor: '#EFF4FF', alignItems: 'center', justifyContent: 'center' }}>
                             <MaterialCommunityIcons name="briefcase-variant" size={35} color="#2B70FE" />
                         </View>
-                        <Text style={{ textAlign: 'center', width: '80%', fontSize: 18, fontWeight: '700', marginTop: 15, color: '#212121' }}>Find a job</Text>
-                        <Text style={{ width: '80%', fontSize: 16, fontWeight: '400', marginTop: 15, color: COLORS.grey1, textAlign: 'center' }}>I want to find a job for me.</Text>
+                        <Text style={{ textAlign: 'center', width: '80%', fontSize: 18, fontWeight: '700', marginTop: 15, color: '#212121' }}>Tìm công việc</Text>
+                        <Text style={{ width: '80%', fontSize: 16, fontWeight: '400', marginTop: 15, color: COLORS.grey1, textAlign: 'center' }}>Tôi muốn tìm một công việc.</Text>
                     </TouchableOpacity>
                     {/* employee role */}
                     <TouchableOpacity onPress={handleCheckEmployer} style={[styles.checkEmployer, { borderColor: checkedEmployer ? '#2B70FE' : '#EFEFEF' }]}>
                         <View style={{ width: 75, height: 75, borderRadius: 50, backgroundColor: '#FFF7EB', alignItems: 'center', justifyContent: 'center' }}>
                             <FontAwesome5 name="user" size={35} color="#FEA01D" />
                         </View>
-                        <Text style={{ textAlign: 'center', width: '80%', fontSize: 18, fontWeight: '700', marginTop: 15, color: '#212121' }}>Find an Employee</Text>
-                        <Text style={{ width: '80%', fontSize: 16, fontWeight: '400', marginTop: 15, color: COLORS.grey1, textAlign: 'center' }}>I want to find employee.</Text>
+                        <Text style={{ textAlign: 'center', width: '80%', fontSize: 18, fontWeight: '700', marginTop: 15, color: '#212121' }}>Tìm nhân viên</Text>
+                        <Text style={{ width: '80%', fontSize: 16, fontWeight: '400', marginTop: 15, color: COLORS.grey1, textAlign: 'center' }}>Tôi muốn tìm nhân viên.</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -89,7 +89,7 @@ const SelectRoleScreen = ({ navigation }) => {
                             navigation.navigate('FillProfile', { item: data })
                         }
                     }}
-                style={{
+                    style={{
                         width: '90%',
                         height: 50,
                         backgroundColor: '#246BFD',
@@ -97,8 +97,16 @@ const SelectRoleScreen = ({ navigation }) => {
                         alignItems: 'center',
                         justifyContent: 'center',
                         paddingVertical: 10,
+                        shadowColor: COLORS.primary,
+                        shadowOffset: {
+                            width: 0,
+                            height: 2,
+                        },
+                        shadowOpacity: 0.5,
+                        shadowRadius: 3.84,
+                        elevation: 5,
                     }}>
-                    <Text style={{ color: COLORS.white, fontSize: 18, fontWeight: '500' }}>Continue</Text>
+                    <Text style={{ color: COLORS.white, fontSize: 18, fontWeight: '500' }}>Tiếp tục</Text>
                 </TouchableOpacity>
             </View>
         </SafeAreaView>

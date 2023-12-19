@@ -124,8 +124,8 @@ const PostScreen = ({ navigation }) => {
     if (!inputs.wageMin) {
       handleError('Vui lòng nhập lương', 'wageMin');
       isValid = false;
-    } else if (inputs.wageMin <= 0) {
-      handleError('Lương tối thiểu phải lớn hơn 0', 'wageMin');
+    } else if (inputs.wageMin < 15.000) {
+      handleError('Lương tối thiểu phải lớn hơn hoặc bằng 15.000 đ', 'wageMin');
       isValid = false;
     }
     if (!inputs.wageMax) {
@@ -151,6 +151,10 @@ const PostScreen = ({ navigation }) => {
       isValid = false;
     } else if (inputs.ageMax < inputs.ageMin || inputs.ageMax < 10) {
       handleError('Tuổi tối đa phải >= tuổi tối thiểu', 'ageMax');
+      isValid = false;
+    }
+    else if (inputs.ageMax > 60) {
+      handleError('Độ tuổi lao động tối đa phải nhỏ hơn hoặc bằng 60 tuổi', 'ageMax');
       isValid = false;
     }
     if (!inputs.image) {
@@ -564,7 +568,7 @@ const PostScreen = ({ navigation }) => {
               valueField="_id"
               placeholder={!isFocus1 ? 'Ngành Nghề' : '...'}
               searchPlaceholder="Search..."
-              value={listCareers._id}
+              value={inputs.career_id}
               onFocus={() => setIsFocus1(true)}
               onBlur={() => setIsFocus1(false)}
               onChange={item => {
@@ -650,13 +654,6 @@ const PostScreen = ({ navigation }) => {
           </View>
 
           <View style={{ marginHorizontal: 24 }}>
-            {/* <Input
-              onChangeText={text => handleOnchange(text, 'subtitle')}
-              onFocus={() => handleError(null, 'subtitle')}
-              placeholder="Trình độ học vấn"
-              // value={route.params?.subtitle}
-              error={errors.subtitle}
-            /> */}
             <Dropdown
               style={[styles.dropdown, isFocus3 && { borderColor: COLORS.darkBlue }, errors.academic_id && { borderColor: 'red' }]}
               placeholderStyle={styles.placeholderStyle}
@@ -669,7 +666,7 @@ const PostScreen = ({ navigation }) => {
               valueField="_id"
               placeholder={!isFocus3 ? 'Trình độ học vấn' : '...'}
               searchPlaceholder="Search..."
-              value={listAcademic._id}
+              value={inputs.academic_id}
               onFocus={() => setIsFocus3(true)}
               onBlur={() => setIsFocus3(false)}
               onChange={item => {
@@ -691,7 +688,7 @@ const PostScreen = ({ navigation }) => {
               valueField="_id"
               placeholder={!isFocus4 ? 'Kinh nghiệm' : '...'}
               searchPlaceholder="Search..."
-              value={listExperience._id}
+              value={inputs.experience_id}
               onFocus={() => setIsFocus4(true)}
               onBlur={() => setIsFocus4(false)}
               onChange={item => {

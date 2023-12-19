@@ -52,7 +52,7 @@ const ApplicationsStageScreen = ({ route, navigation }) => {
       receiver_id: data.receiver_id,
       sender_id: user._id,
       post_id: data.post_id,
-  };
+    };
     const response = await axios.post(`${API}/apply/updateAcceptForUser`, AcceptData);
     if (response.status === 200) {
       console.log('thanh cong');
@@ -92,9 +92,9 @@ const ApplicationsStageScreen = ({ route, navigation }) => {
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <AntDesign name="arrowleft" size={26} color="#212121" />
         </TouchableOpacity>
-        <Text style={{ fontSize: 22, fontWeight: '600', color: '#212121', marginLeft: 15 }}>Application Stages</Text>
+        <Text style={{ fontSize: 22, fontWeight: '400', color: '#212121', marginLeft: 15 }}>Trạng thái ứng tuyển</Text>
       </View>
-      <View style={{ width: '100%', justifyContent: 'center', alignItems: 'center', flex: 1, paddingTop: '15%' }}>
+      <View style={{ width: '100%', justifyContent: 'center', alignItems: 'center', flex: 1 }}>
         <View style={{ padding: 20, width: '90%', borderWidth: 0.5, borderColor: COLORS.grey, borderRadius: 20, alignItems: 'center' }}>
           {data?.image.map((imageUrl, index) => {
             if (index === 0) {
@@ -108,13 +108,22 @@ const ApplicationsStageScreen = ({ route, navigation }) => {
               );
             }
           })}
-          <Text style={{ fontSize: 22, fontWeight: '600', color: '#212121', textAlign: 'center' }}>{data.title}</Text>
-          <Text style={{ fontSize: 17, fontWeight: '500', color: '#246BFD', marginVertical: 5, textAlign: 'center' }}>{data.businessName}</Text>
+          <Text numberOfLines={2} style={{ fontSize: 22, fontWeight: '600', color: '#212121', textAlign: 'center' }}>{data.title}</Text>
+          <Text numberOfLines={2} style={{ fontSize: 17, fontWeight: '500', color: '#246BFD', marginVertical: 5, textAlign: 'center' }}>{data.businessName}</Text>
           <View style={{ height: 1, width: '99%', backgroundColor: COLORS.grey, opacity: 0.4, marginTop: 15, marginBottom: 8 }} />
-          <Text style={{ fontSize: 17, fontWeight: '500', color: '#959595', marginTop: 5, marginVertical: 5, textAlign: 'center' }}>{data.address}</Text>
-          <Text style={{ fontSize: 17, fontWeight: '400', color: '#246BFD', marginTop: 5, marginVertical: 5, textAlign: 'center' }}>${data.wageMin} - ${data.wageMax} /month</Text>
+          <Text numberOfLines={2} style={{ fontSize: 17, fontWeight: '500', color: '#959595', marginTop: 5, marginVertical: 5, textAlign: 'center' }}>{data.address}</Text>
+          <View style={{ flexDirection: 'row', marginTop: 5, marginVertical: 5 }}>
+            <Text style={{ fontSize: 17, fontWeight: '400', color: '#246BFD', textAlign: 'center' }}>{data.wageMin}đ - {data.wageMax}đ</Text>
+            {
+              data?.payForm_id?._id === '655de22b9a5b0ffa7ffd5132' ? (
+                <Text style={{ fontSize: 17, fontWeight: '400', color: '#246BFD' }}> /giờ</Text>
+              ) : (
+                <Text style={{ fontSize: 17, fontWeight: '400', color: '#246BFD' }}> /tháng</Text>
+              )
+            }
+          </View>
           <View style={{
-            width: 60,
+            width: 80,
             height: 25,
             borderWidth: 0.5,
             borderColor: COLORS.grey,
@@ -126,9 +135,9 @@ const ApplicationsStageScreen = ({ route, navigation }) => {
           }}>
             {
               data?.workType === '653e66b38e88b23b41388e3c' ? (
-                <Text style={{ fontSize: 10 }} >Parttime</Text>
+                <Text style={{ fontSize: 10 }} >Bán thời gian</Text>
               ) : (
-                <Text style={{ fontSize: 10 }} >Fulltime</Text>
+                <Text style={{ fontSize: 10 }} >Toàn thời gian</Text>
               )
             }
           </View>
@@ -138,35 +147,33 @@ const ApplicationsStageScreen = ({ route, navigation }) => {
         {
           status == 0 ? (
             <View style={{ marginTop: '8%', width: '90%', height: 50, borderRadius: 10, backgroundColor: '#E7EFFF', alignItems: 'center', justifyContent: 'center', marginBottom: '20%' }}>
-              <Text style={{ fontSize: 17, fontWeight: '500', color: '#246BFE' }}>Application Sent</Text>
+              <Text style={{ fontSize: 17, fontWeight: '500', color: '#246BFE' }}>Hồ sơ đã được gửi</Text>
             </View>
           ) : status == 1 ? (
             <View style={{ marginTop: '8%', width: '90%', height: 50, borderRadius: 10, backgroundColor: '#FFF4CD', alignItems: 'center', justifyContent: 'center', marginBottom: '20%' }}>
-              <Text style={{ fontSize: 17, fontWeight: '500', color: '#FBCA17' }}>Application Pending</Text>
+              <Text style={{ fontSize: 17, fontWeight: '500', color: '#FBCA17' }}>Hồ sơ đang xử lí</Text>
             </View>
 
           ) : status == 2 ? (
             <View style={{ width: '100%', alignItems: 'center' }}>
-            <View style={{ marginTop: '8%', width: '90%', height: 50, borderRadius: 10, backgroundColor: '#FDD9DA', alignItems: 'center', justifyContent: 'center', marginBottom: '5%' }}>
-              <Text style={{ fontSize: 17, fontWeight: '500', color: '#F75656' }}>Application Rejected</Text>
+              <View style={{ marginTop: '8%', width: '90%', height: 50, borderRadius: 10, backgroundColor: '#FDD9DA', alignItems: 'center', justifyContent: 'center', marginBottom: '5%' }}>
+                <Text style={{ fontSize: 17, fontWeight: '500', color: '#F75656' }}>Hồ sơ bị từ chối</Text>
+              </View>
+              <Text style={{ fontSize: 18, fontWeight: '600', textAlign: 'left' }}>Lý do: </Text>
+              <Text style={{ fontSize: 16, fontWeight: '400', marginHorizontal: 20, marginTop: 5}}>{data.feedback}</Text>
             </View>
-            <View style={{ flexDirection: 'row', marginBottom: '20%' }}>
-              <Text style={{ fontSize: 18, fontWeight: '600' }}>Lý do: </Text>
-              <Text style={{ fontSize: 18, fontWeight: '600', color: COLORS.primary }}>{data.feedback}</Text>
-            </View>
-          </View>
           ) : status == 4 ? (
             <View style={{ width: '100%', alignItems: 'center' }}>
               <View style={{ marginTop: '8%', width: '90%', height: 50, borderRadius: 10, backgroundColor: '#FFDCC3', alignItems: 'center', justifyContent: 'center', marginBottom: '20%' }}>
-                <Text style={{ fontSize: 17, fontWeight: '500', color: '#FF6B00' }}>Application Negotiation</Text>
+                <Text style={{ fontSize: 17, fontWeight: '500', color: '#FF6B00' }}>Đang thương lượng</Text>
               </View>
-              <View style={{ flexDirection: 'row', marginBottom: 25}}>
-                <Text style={{ fontSize: 18, fontWeight: '600' }}>Lương thương lượng: </Text>
-                <Text style={{ fontSize: 18, fontWeight: '600', color: COLORS.primary}}>{data.bargain_Salary}</Text>
+              <View style={{ flexDirection: 'row', marginTop: '-15%' }}>
+                <Text style={{ fontSize: 18, fontWeight: '500' }}>Lương thương lượng: </Text>
+                <Text style={{ fontSize: 18, fontWeight: '500', color: COLORS.primary }}>{data.bargain_Salary}đ</Text>
               </View>
             </View>
           ) : <View style={{ marginTop: '8%', width: '90%', height: 50, borderRadius: 10, backgroundColor: '#E7FEEE', alignItems: 'center', justifyContent: 'center', marginBottom: '20%' }}>
-            <Text style={{ fontSize: 17, fontWeight: '500', color: '#08BE75' }}>Application Accept</Text>
+            <Text style={{ fontSize: 17, fontWeight: '500', color: '#08BE75' }}>Ứng tuyển thành công</Text>
           </View>
 
         }
@@ -184,7 +191,7 @@ const ApplicationsStageScreen = ({ route, navigation }) => {
                 justifyContent: 'center',
                 paddingVertical: 10,
               }}>
-              <Text style={{ color: COLORS.white, fontSize: 18, fontWeight: '500' }}>Waiting...</Text>
+              <Text style={{ color: COLORS.white, fontSize: 18, fontWeight: '500' }}>Đang chờ...</Text>
             </TouchableOpacity>
 
           ) : status == 2 ? (
@@ -198,7 +205,7 @@ const ApplicationsStageScreen = ({ route, navigation }) => {
                 justifyContent: 'center',
                 paddingVertical: 10,
               }}>
-              <Text style={{ color: COLORS.white, fontSize: 18, fontWeight: '500' }}>Discover Another Job</Text>
+              <Text style={{ color: COLORS.white, fontSize: 18, fontWeight: '500' }}>Tìm công việc khác</Text>
             </TouchableOpacity>
           ) : status == 4 ? (
             <TouchableOpacity
@@ -212,7 +219,7 @@ const ApplicationsStageScreen = ({ route, navigation }) => {
                 justifyContent: 'center',
                 paddingVertical: 10,
               }}>
-              <Text style={{ color: COLORS.white, fontSize: 18, fontWeight: '500' }}>Confirm</Text>
+              <Text style={{ color: COLORS.white, fontSize: 18, fontWeight: '500' }}>Xác nhận</Text>
             </TouchableOpacity>
           ) : <TouchableOpacity
             style={{
@@ -224,7 +231,7 @@ const ApplicationsStageScreen = ({ route, navigation }) => {
               justifyContent: 'center',
               paddingVertical: 10,
             }}>
-            <Text style={{ color: COLORS.white, fontSize: 18, fontWeight: '500' }}>Send Message to Reviewer</Text>
+            <Text style={{ color: COLORS.white, fontSize: 18, fontWeight: '500' }}>Đã hoàn thành</Text>
           </TouchableOpacity>
         }
       </View>

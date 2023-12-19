@@ -8,6 +8,8 @@ import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, StatusBar, Image, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
 import { COLORS, SIZES } from '../constants/theme';
 import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
+import auth from '@react-native-firebase/auth';
+import { LoginManager, AccessToken } from 'react-native-fbsdk-next';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { API } from '../../Sever/sever';
 
@@ -16,12 +18,12 @@ import axios from 'axios';
 
 //icon
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const AuthScreen = ({ navigation }) => {
     const [loading, setLoading] = useState(false);
     const { setUser } = useContext(UserContext);
     const { user } = useContext(UserContext);
-    console.log(user);
     useEffect(() => {
         GoogleSignin.configure({
             webClientId: '598708373288-vlbap93edc5r144q7cnealcu8vls110o.apps.googleusercontent.com',
@@ -39,6 +41,9 @@ const AuthScreen = ({ navigation }) => {
             });
             if (result.data.status) {
                 setUser(result.data);
+                const data = JSON.stringify(result.data);
+                await AsyncStorage.setItem('user', data);
+                await AsyncStorage.setItem('isFirstAccess', "0");
                 if (result.data.role === 0) {
                     navigation.navigate('TabNavigatorUser');
                     setLoading(true);
@@ -52,10 +57,6 @@ const AuthScreen = ({ navigation }) => {
                 setUser(result.data);
                 navigation.navigate('SelectRole');
             }
-            //setUser(result.data);
-            //
-            //loginUser(result.data);
-
         } catch (error) {
             if (error.code === statusCodes.SIGN_IN_CANCELLED) {
                 // Đã huỷ quá trình đăng nhập
@@ -69,6 +70,53 @@ const AuthScreen = ({ navigation }) => {
             }
             setLoading(false);
         }
+    }
+    async function onFacebookButtonPress() {
+        // Attempt login with permissions
+        const result = await LoginManager.logInWithPermissions(['public_profile', 'email']);
+
+        if (result.isCancelled) {
+            console.log('User cancelled the login process');
+        }
+
+        // Once signed in, get the users AccessToken
+        const data = await AccessToken.getCurrentAccessToken();
+        if (!data) {
+            console.log('Something went wrong obtaining access token');
+        }
+
+        // Create a Firebase credential with the AccessToken
+        const facebookCredential = auth.FacebookAuthProvider.credential(data.accessToken);
+
+        // Sign-in the user with the credential
+        auth().signInWithCredential(facebookCredential)
+            .then(async (userCredential) => {
+                const user = userCredential.user;
+                const result = await axios.post(`${API}/users/FaceBookCheck`, {
+                    id: user,
+                });
+                if (result.data.status) {
+                    setUser(result.data);
+                    const data = JSON.stringify(result.data);
+                    await AsyncStorage.setItem('user', data);
+                    await AsyncStorage.setItem('isFirstAccess', "0");
+                    if (result.data.role === 0) {
+                        navigation.navigate('TabNavigatorUser');
+                        setLoading(true);
+                        await new Promise(resolve => setTimeout(resolve, 2000));
+                    } else {
+                        navigation.navigate('TabNavigator');
+                        setLoading(true);
+                        await new Promise(resolve => setTimeout(resolve, 2000));
+                    }
+                } else {
+                    setUser(result.data);
+                    navigation.navigate('SelectRole');
+                }
+            })
+            .catch((error) => {
+                console.log('Error signing in with Facebook:', error);
+            });
     }
 
     return (
@@ -102,11 +150,11 @@ const AuthScreen = ({ navigation }) => {
                             color: COLORS.black,
                             fontFamily: 'BeVietnamPro-Regular',
                         }}>
-                            Let’s you in
+                            Bắt đầu nào !
                         </Text>
                     </View>
                     <TouchableOpacity
-                        onPress={() => { }}
+                        onPress={() => onFacebookButtonPress().then(() => console.log('Signed in with Facebook!'))}
                         style={{
                             backgroundColor: COLORS.white,
                             padding: 10,
@@ -118,16 +166,16 @@ const AuthScreen = ({ navigation }) => {
                             flexDirection: 'row',
                             bottom: '8%',
                             justifyContent: 'center',
-                            marginTop: 20
+                            alignItems: 'center',
+                            marginTop: 20,
+                            gap: 10
                         }}>
                         <Ionicons name="logo-facebook" size={30} color={COLORS.primary} />
                         <Text
                             style={{
                                 fontSize: 18,
                                 color: COLORS.black,
-                                marginStart: '3%',
-                                top: 3,
-                                fontFamily: 'aoboshione-regular',
+                                fontFamily: 'Roboto-Medium',
                             }}>
                             Tiếp tục với Facebook
                         </Text>
@@ -145,14 +193,14 @@ const AuthScreen = ({ navigation }) => {
                             flexDirection: 'row',
                             bottom: '2%',
                             justifyContent: 'center',
+                            alignItems: 'center',
+                            gap: 10
                         }}>
                         <Image
                             source={require('../assets/icon/google.png')}
                             style={{
                                 width: 24,
                                 height: 24,
-                                justifyContent: 'flex-start',
-                                right: 11,
                             }}
                         />
                         <Text
@@ -161,14 +209,14 @@ const AuthScreen = ({ navigation }) => {
                                 color: COLORS.black,
                                 marginStart: '3%',
                                 right: 9,
-                                fontFamily: 'aoboshione-regular',
+                                fontFamily: 'Roboto-Medium',
                             }}>
                             Tiếp tục với Google
                         </Text>
                     </TouchableOpacity>
                     <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', top: '6%' }}>
                         <View style={{ height: 1, width: '33%', backgroundColor: COLORS.grey }} />
-                        <Text style={{ width: 50, textAlign: 'center', color: COLORS.black, fontWeight: '700', fontSize: 18, }}>or</Text>
+                        <Text style={{ width: 50, textAlign: 'center', color: COLORS.black, fontWeight: '400', fontSize: 16, }}>hoặc</Text>
                         <View style={{ height: 1, width: '33%', backgroundColor: COLORS.grey }} />
                     </View>
                     <TouchableOpacity
@@ -193,13 +241,12 @@ const AuthScreen = ({ navigation }) => {
                             style={{
                                 fontSize: 18,
                                 color: COLORS.white,
-                                fontFamily: 'aoboshione-regular',
+                                fontFamily: 'Roboto-Medium',
                             }}>
                             Đăng nhập bằng SĐT
                         </Text>
                     </TouchableOpacity>
-                    <TouchableOpacity
-                        onPress={() => navigation.navigate('SelectRole')}
+                    <View
                         style={{
                             padding: 5,
                             width: '85%',
@@ -211,23 +258,23 @@ const AuthScreen = ({ navigation }) => {
                         }}>
                         <Text
                             style={{
-                                fontWeight: 'bold',
-                                fontSize: 16,
+                                fontWeight: '400',
+                                fontSize: 15,
                                 color: COLORS.black,
                                 opacity: 0.4
                             }}>
-                            Wellcom to
+                            Chào mừng bạn đến với
                         </Text>
                         <Text
                             style={{
-                                fontWeight: 'bold',
-                                fontSize: 16,
+                                fontWeight: '500',
+                                fontSize: 15,
                                 color: COLORS.primary,
                                 marginStart: '1.2%'
                             }}>
                             Part-time Jobs
                         </Text>
-                    </TouchableOpacity>
+                    </View>
                 </View>
             )}
 

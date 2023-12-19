@@ -85,14 +85,21 @@ const TopTabScreenDenied = ({ navigation }) => {
                             source={require('../assets/images/5928293_2953962.jpg')}
                             style={{ width: "100%", height: 430, }}
                         />
-                        <Text style={{ fontSize: 22, color: COLORS.black, fontWeight: '700' }}>Empty</Text>
-                        <Text style={{ fontSize: 16, marginTop: 7, textAlign: 'center' }}>Sorry, the keyword you entered cannot be found, please check again or search with another keyword.</Text>
+                        <Text style={{ fontSize: 22, color: COLORS.black, fontWeight: '700' }}>Không tìm thấy</Text>
+                        <Text style={{ fontSize: 16, marginTop: 7, textAlign: 'center' }}>Rất tiếc, không tìm thấy bài đăng bị từ chối</Text>
                     </View>
                 )}
             />
         );
 
     };
+    const deletePost = async () =>{
+        try {
+            const response = axios.post('')
+        } catch (error) {
+            
+        }
+    }
     //Format tiền
     //const amount = 1000000; // Số tiền cần định dạng
     // const formattedAmount = amount.toLocaleString('vi-VN', {
@@ -300,16 +307,7 @@ const TopTabScreenDenied = ({ navigation }) => {
                                         width: 160,
                                         paddingVertical: 15,
                                     }}
-                                    onPress={() => navigation.navigate('Chỉnh sửa bài đăng', {
-                                        title: selectedItem?.title,
-                                        id: selectedItem?.id,
-                                        uri: selectedItem?.uri,
-                                        address: selectedItem?.Address,
-                                        wagemax: selectedItem?.wagemax,
-                                        wagemin: selectedItem?.wagemin,
-                                        worktype: selectedItem?.worktype,
-                                        Details: selectedItem?.Details,
-                                    })}>
+                                   >
                                     <Text style={{ color: COLORS.white, fontSize: 18, fontWeight: '600' }}>Xóa tin</Text>
                                 </TouchableOpacity>
                             </View>

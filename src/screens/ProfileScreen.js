@@ -4,7 +4,7 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable react-native/no-inline-styles */
 import React, { useState, useContext } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, ImageBackground, FlatList, ScrollView, Alert } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, ImageBackground, FlatList, ScrollView, Alert, ToastAndroid } from 'react-native';
 
 //
 import Input from '../components/Input';
@@ -30,25 +30,16 @@ import EditAccount from './EditAccount';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { firebase } from '@react-native-firebase/auth';
 
 const ProfileScreen = ({ route, navigation }) => {
   const { user } = useContext(UserContext);
   const [darkMode, setDarkMode] = useState(true);
   const Darkmode = () => {
     setDarkMode(!darkMode);
+    ToastAndroid.show('Tính năng đang được phát triển !', ToastAndroid.SHORT)
   }
-  const CV = [
-    { id: '1', name: 'CV01' },
-    { id: '2', name: 'CV02' },
-    { id: '3', name: 'CV03' },
-  ];
-  const renderCV = ({ item }) => (
 
-    <View style={{ marginBottom: 18, flexDirection: 'row' }}>
-      <Ionicons name='document-text-outline' size={24} color={COLORS.black} />
-      <Text numberOfLines={1} style={{ flex: 1, fontSize: 16, fontWeight: '400', marginLeft: 25, color: COLORS.black }}>{item.title}</Text>
-    </View>
-  );
   const Logout = () => {
     Alert.alert('Đăng xuất', 'Bạn muốn đăng xuất ?', [
       { text: 'Không' },
@@ -58,9 +49,17 @@ const ProfileScreen = ({ route, navigation }) => {
 
   };
   const out = async () => {
-    await GoogleSignin.signOut();
-    AsyncStorage.clear();
-    navigation.replace('AuthStack');
+    try {
+      await AsyncStorage.clear();
+      const user = firebase.auth().currentUser;
+      if (user) {
+        firebase.auth().signOut();
+      }
+      await AsyncStorage.setItem('isFirstAccess', "1");
+      navigation.replace('AuthStack');
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white, paddingHorizontal: 20 }}>
@@ -123,35 +122,43 @@ const ProfileScreen = ({ route, navigation }) => {
             <Text style={styles.itemText}>Thông báo</Text>
             <Feather name="chevron-right" size={24} color='rgba(125, 122, 122, 1)' />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.item1}>
+          <TouchableOpacity
+            onPress={() => ToastAndroid.show('Tính năng đang được phát triển !', ToastAndroid.SHORT)}
+            style={styles.item1}>
             <MaterialCommunityIcons name="google-translate" size={24} color='rgba(125, 122, 122, 1)' />
             <Text style={styles.itemText}>Ngôn ngữ</Text>
             <Feather name="chevron-right" size={24} color='rgba(125, 122, 122, 1)' />
           </TouchableOpacity>
-          <TouchableOpacity style={{
-            width: '100%',
-            flexDirection: 'row',
-            marginTop: 8,
-            alignItems: 'center',
-            paddingHorizontal: 10,
-            paddingVertical: 8,
-          }}>
+          <TouchableOpacity
+            onPress={() => ToastAndroid.show('Tính năng đang được phát triển !', ToastAndroid.SHORT)}
+            style={{
+              width: '100%',
+              flexDirection: 'row',
+              marginTop: 8,
+              alignItems: 'center',
+              paddingHorizontal: 10,
+              paddingVertical: 8,
+            }}>
             <Feather name="moon" size={24} color='rgba(125, 122, 122, 1)' />
             <Text style={styles.itemText}>Chế độ tối</Text>
             <TouchableOpacity onPress={Darkmode}>
               {
                 darkMode ? (
-                  <Fontisto name="toggle-on" size={36} color={COLORS.primary} />
-                ) : <Fontisto name="toggle-off" size={36} color='rgba(125, 122, 122, 0.25)' />
+                  <Fontisto name="toggle-off" size={36} color='rgba(125, 122, 122, 0.25)' />
+                ) : <Fontisto name="toggle-on" size={36} color={COLORS.primary} />
               }
             </TouchableOpacity>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.item1}>
+          <TouchableOpacity
+            onPress={() => ToastAndroid.show('Tính năng đang được phát triển !', ToastAndroid.SHORT)}
+            style={styles.item1}>
             <Feather name="help-circle" size={24} color='rgba(125, 122, 122, 1)' />
             <Text style={styles.itemText}>Trợ giúp & hỗ trợ</Text>
             <Feather name="chevron-right" size={24} color='rgba(125, 122, 122, 1)' />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.item1}>
+          <TouchableOpacity
+            onPress={() => ToastAndroid.show('Tính năng đang được phát triển !', ToastAndroid.SHORT)}
+            style={styles.item1}>
             <AntDesign name="staro" size={24} color='rgba(125, 122, 122, 1)' />
             <Text style={styles.itemText}>Đánh giá</Text>
             <Feather name="chevron-right" size={24} color='rgba(125, 122, 122, 1)' />
