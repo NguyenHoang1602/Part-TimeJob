@@ -92,7 +92,7 @@ const ApplicationsStageScreen = ({ route, navigation }) => {
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <AntDesign name="arrowleft" size={26} color="#212121" />
         </TouchableOpacity>
-        <Text style={{ fontSize: 22, fontFamily: 'BeVietnamPro-Bold',marginTop:-2, color: '#212121', marginLeft: 15 }}>Trạng thái ứng tuyển</Text>
+        <Text style={{ fontSize: 22, fontFamily: 'BeVietnamPro-Bold',marginTop:-6, color: '#212121', marginLeft: 15 }}>Trạng thái ứng tuyển</Text>
       </View>
       <View style={{ width: '100%', justifyContent: 'center', alignItems: 'center', flex: 1 }}>
         <View style={{ padding: 20, width: '90%', borderWidth: 0.5, borderColor: COLORS.grey, borderRadius: 20, alignItems: 'center' }}>

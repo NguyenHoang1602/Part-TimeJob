@@ -131,9 +131,9 @@ const FavoriteCareersScreen = ({ navigation }) => {
                 <Text style={{ fontSize: 22, fontWeight: '400', color: COLORS.black, marginLeft: 20 }} />
             </TouchableOpacity>
             <View style={styles.body}>
-                <Text style={{ fontSize: 30, fontWeight: '500', marginTop: 15, color: '#212121', textAlign: 'center' }}>Ngành nghề yêu thích của bạn là gì ?</Text>
-                <Text style={{ textAlign: 'center', fontSize: 16, paddingVertical: 15 }}>Vui lòng ít nhất 1 ngành nghề yêu thích của bạn.</Text>
-                <View style={{ height: 0.5, width: '100%', borderWidth: 0.5, borderColor: '#EFEFEF', opacity: 0.9, marginTop: 15 }} />
+                <Text style={{ fontSize: 30, fontFamily: 'BeVietnamPro-Medium', marginTop: 15, color: '#212121', textAlign: 'center' }}>Ngành nghề yêu thích của bạn là gì ?</Text>
+                <Text style={{ textAlign: 'center', fontSize: 14, paddingVertical: 15, fontFamily: 'BeVietnamPro-Medium', marginTop: -4, }}>Vui lòng ít nhất 1 ngành nghề yêu thích của bạn.</Text>
+                <View style={{ height: 0.5, width: '100%', borderWidth: 0.5, borderColor: '#EFEFEF', opacity: 0.9, marginTop: 15, }} />
                 <ScrollView
                     style={{ width: '100%' }}
                     showsVerticalScrollIndicator={false}
@@ -162,7 +162,7 @@ const FavoriteCareersScreen = ({ navigation }) => {
                         shadowOpacity: 0.3,
                         elevation: 10,
                     }}>
-                    <Text style={{ color: COLORS.white, fontSize: 18, fontWeight: '500' }}>Tiếp theo</Text>
+                    <Text style={{ color: COLORS.white, fontSize: 18, fontFamily: 'BeVietnamPro-Medium', marginTop: -4, }}>Tiếp theo</Text>
                 </TouchableOpacity>
             </View>
         </SafeAreaView>

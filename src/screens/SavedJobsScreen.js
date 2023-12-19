@@ -158,7 +158,7 @@ const SavedJobsScreen = ({ navigation }) => {
               source={require('../assets/images/5928293_2953962.jpg')}
               style={{ width: "100%", height: 430 }}
             />
-            <Text style={{ fontSize: 22, color: COLORS.black, fontFamily: 'BeVietnamPro-Bold' }}>Không tìm thấy công việc đã lưu</Text>
+            <Text style={{ fontSize: 20, color: COLORS.primary, fontFamily: 'BeVietnamPro-Bold' }}>Không tìm thấy công việc đã lưu</Text>
           </View>
         )}
       />
@@ -281,7 +281,7 @@ const SavedJobsScreen = ({ navigation }) => {
             style={{ width: 26, height: 26 }}
             imageStyle={{ borderRadius: 46 }} />
           <View style={{ flex: 1 }}>
-            <Text style={{ color: COLORS.black, fontSize: 24, fontFamily: 'BeVietnamPro-Bold',marginTop:-2 }} numberOfLines={1}>Save Jobs</Text>
+            <Text style={{ color: COLORS.black, fontSize: 24, fontFamily: 'BeVietnamPro-Bold',marginTop:-6 }} numberOfLines={1}>Save Jobs</Text>
           </View>
           <TouchableOpacity
             onPress={() => {
@@ -332,7 +332,7 @@ const SavedJobsScreen = ({ navigation }) => {
         refreshControl={<RefreshControl
           refreshing={refreshing}
           onRefresh={fetchData}
-          colors={['#0000ff']}
+          colors={[COLORS.primary]}
         />}
       >
         <FlatListSaveJobs />

@@ -246,7 +246,7 @@ const ApplicationsScreen = ({ route, navigation }) => {
                         style={{ width: 26, height: 26 }}
                         imageStyle={{ borderRadius: 46 }} />
                     <View style={{ flex: 1 }}>
-                        <Text style={{ color: COLORS.black, fontSize: 24, fontFamily: 'BeVietnamPro-Bold',marginTop:-2 }} numberOfLines={1}>Applications</Text>
+                        <Text style={{ color: COLORS.black, fontSize: 24, fontFamily: 'BeVietnamPro-Bold',marginTop:-6}} numberOfLines={1}>Applications</Text>
                     </View>
                     <TouchableOpacity
                         onPress={() => {
