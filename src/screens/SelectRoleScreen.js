@@ -58,8 +58,8 @@ const SelectRoleScreen = ({ navigation }) => {
                     source={require('../assets/images/SignIn/LogoSignInUp.png')}
                     style={{ width: 140, height: 133, marginBottom: 15 }}
                 />
-                <Text style={{ fontSize: 30, fontWeight: '500', marginTop: 15, color: '#212121' }}>Chọn vai trò của bạn</Text>
-                <Text style={{ textAlign: 'center', fontSize: 16, marginVertical: 15 }}>Chọn xem bạn đang tìm việc làm hay bạn có thể là một tổ chức hoặc công ty đang cần tuyển nhân viên.</Text>
+                <Text style={{ fontSize: 30, fontFamily: 'BeVietnamPro-Bold', marginTop: 15, color: '#212121' }}>Chọn vai trò của bạn</Text>
+                <Text style={{ textAlign: 'center', fontSize: 16, marginVertical: 15, fontFamily: 'BeVietnamPro-Medium', }}>Chọn xem bạn đang tìm việc làm hay bạn có thể là một tổ chức hoặc công ty đang cần tuyển nhân viên.</Text>
                 <View style={{ height: 1, width: '100%', backgroundColor: '#EFEFEF', opacity: 0.9, marginTop: '7%', marginBottom: '6%' }} />
                 <View style={{ flexDirection: 'row', width: '100%', alignItems: 'center', justifyContent: 'center' }}>
                     {/* user role */}
@@ -67,16 +67,16 @@ const SelectRoleScreen = ({ navigation }) => {
                         <View style={{ width: 75, height: 75, borderRadius: 50, backgroundColor: '#EFF4FF', alignItems: 'center', justifyContent: 'center' }}>
                             <MaterialCommunityIcons name="briefcase-variant" size={35} color="#2B70FE" />
                         </View>
-                        <Text style={{ textAlign: 'center', width: '80%', fontSize: 18, fontWeight: '700', marginTop: 15, color: '#212121' }}>Tìm công việc</Text>
-                        <Text style={{ width: '80%', fontSize: 16, fontWeight: '400', marginTop: 15, color: COLORS.grey1, textAlign: 'center' }}>Tôi muốn tìm một công việc.</Text>
+                        <Text style={{ textAlign: 'center', width: '80%', fontSize: 17, fontFamily: 'BeVietnamPro-Medium', marginTop: 15, color: '#212121' }}>Tìm công việc</Text>
+                        <Text style={{ width: '80%', fontSize: 16, fontFamily: 'BeVietnamPro-Medium', marginTop: 15, color: COLORS.grey1, textAlign: 'center' }}>Tôi muốn tìm một công việc.</Text>
                     </TouchableOpacity>
                     {/* employee role */}
                     <TouchableOpacity onPress={handleCheckEmployer} style={[styles.checkEmployer, { borderColor: checkedEmployer ? '#2B70FE' : '#EFEFEF' }]}>
                         <View style={{ width: 75, height: 75, borderRadius: 50, backgroundColor: '#FFF7EB', alignItems: 'center', justifyContent: 'center' }}>
                             <FontAwesome5 name="user" size={35} color="#FEA01D" />
                         </View>
-                        <Text style={{ textAlign: 'center', width: '80%', fontSize: 18, fontWeight: '700', marginTop: 15, color: '#212121' }}>Tìm nhân viên</Text>
-                        <Text style={{ width: '80%', fontSize: 16, fontWeight: '400', marginTop: 15, color: COLORS.grey1, textAlign: 'center' }}>Tôi muốn tìm nhân viên.</Text>
+                        <Text style={{ textAlign: 'center', width: '80%', fontSize: 17, fontFamily: 'BeVietnamPro-Medium', marginTop: 15, color: '#212121' }}>Tìm nhân viên</Text>
+                        <Text style={{ width: '80%', fontSize: 16, fontFamily: 'BeVietnamPro-Medium', marginTop: 15, color: COLORS.grey1, textAlign: 'center' }}>Tôi muốn tìm nhân viên.</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -106,7 +106,9 @@ const SelectRoleScreen = ({ navigation }) => {
                         shadowRadius: 3.84,
                         elevation: 5,
                     }}>
-                    <Text style={{ color: COLORS.white, fontSize: 18, fontWeight: '500' }}>Tiếp tục</Text>
+                    <Text style={{
+                        color: COLORS.white, fontSize: 18, fontFamily: 'BeVietnamPro-Medium', marginTop: -4,
+                    }}>Tiếp tục</Text>
                 </TouchableOpacity>
             </View>
         </SafeAreaView>

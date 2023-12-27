@@ -13,8 +13,6 @@ import COLORS from '../assets/const/colors';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import axios from 'axios';
 
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useFocusEffect } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { API } from '../../Sever/sever';
@@ -82,8 +80,7 @@ const TopTabScreenWaiting = ({ navigation }) => {
                             source={require('../assets/images/5928293_2953962.jpg')}
                             style={{ width: "100%", height: 430, }}
                         />
-                        <Text style={{ fontSize: 22, color: COLORS.black, fontWeight: '700' }}>Không tìm thấy</Text>
-                        <Text style={{ fontSize: 16, marginTop: 7, textAlign: 'center' }}>Rất tiếc, không tìm thấy bài đăng đang chờ duyệt</Text>
+                        <Text style={{ fontSize: 22, color: COLORS.primary, fontFamily: 'BeVietnamPro-Medium', marginTop: -4, }}>Không tìm thấy</Text>
                     </View>
                 )}
             />
@@ -130,24 +127,24 @@ const TopTabScreenWaiting = ({ navigation }) => {
                     })}
                     <View style={{ width: '50%', height: '100%', marginStart: 20, flex: 1 }}>
                         <Text style={{ fontSize: 18, fontWeight: '400' }}>{item.title}</Text>
-                        <Text numberOfLines={1} style={{ fontSize: 15, fontWeight: '400', color: COLORS.grey }}>{item.address}</Text>
+                        <Text numberOfLines={1} style={{ fontSize: 15, fontFamily: 'BeVietnamPro-Medium', color: COLORS.grey }}>{item.address}</Text>
                     </View>
                 </View>
                 <View style={{ height: 1, width: '99%', backgroundColor: COLORS.grey, opacity: 0.4, marginTop: 15, marginBottom: 8 }} />
                 <View style={{ width: '100%', paddingStart: '22%' }}>
-                    <Text numberOfLines={1} style={{ fontSize: 16, fontWeight: 'bold', color: COLORS.grey, width: 200, marginBottom: 5 }}>{item.businessName}</Text>
+                    <Text numberOfLines={1} style={{ fontSize: 16, fontFamily: 'BeVietnamPro-Medium', color: COLORS.grey, width: 200, marginBottom: 5 }}>{item.businessName}</Text>
                     <View style={{ flexDirection: 'row' }}>
-                        <Text style={{ color: COLORS.blue, fontSize: 16, marginVertical: 9 }}>{formattedWageMin}đ - {formattedWageMax}đ</Text>
+                        <Text style={{ color: COLORS.blue, fontSize: 16, marginVertical: 9, fontFamily: 'BeVietnamPro-Medium', }}>{formattedWageMin}đ - {formattedWageMax}đ</Text>
                         {
                             item.payForm_id === '655de22b9a5b0ffa7ffd5132' ? (
-                                <Text style={{ color: COLORS.blue, fontSize: 16, marginVertical: 9 }}> /giờ</Text>
+                                <Text style={{ color: COLORS.blue, fontSize: 16, marginVertical: 9, fontFamily: 'BeVietnamPro-Medium', }}> /giờ</Text>
                             ) : item.payForm_id === '355de22b9a5b0ffa7ffd5132' ? (
-                                <Text style={{ color: COLORS.blue, fontSize: 16, marginVertical: 9 }}> /tháng</Text>
+                                <Text style={{ color: COLORS.blue, fontSize: 16, marginVertical: 9, fontFamily: 'BeVietnamPro-Medium', }}> /tháng</Text>
                             ) : null
                         }
                     </View>
                     <View style={{
-                        width: 80,
+                        width: 85,
                         height: 25,
                         borderWidth: 0.5,
                         borderColor: COLORS.grey,
@@ -158,9 +155,9 @@ const TopTabScreenWaiting = ({ navigation }) => {
                     }}>
                         {
                             item.workType_id === "653e66b38e88b23b41388e3c" ? (
-                                <Text style={{ fontSize: 10 }} >Bán thời gian</Text>
+                                <Text style={{ fontSize: 10, fontFamily: 'BeVietnamPro-Medium', }} >Bán thời gian</Text>
                             ) : item.workType_id === "6558634415be344ac80a3b40" ? (
-                                <Text style={{ fontSize: 10 }} >Toàn thời gian</Text>
+                                <Text style={{ fontSize: 10, fontFamily: 'BeVietnamPro-Medium', }} >Toàn thời gian</Text>
                             ) : null
                         }
                     </View>

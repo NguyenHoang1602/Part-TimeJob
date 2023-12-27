@@ -229,11 +229,11 @@ const FillProfileScreen = ({ navigation, route }) => {
                         .collection('users')
                         .doc(item._id)
                         .set({
-                            displayName: item.displayName,
-                            email: item.email,
-                            phone: item.phone,
-                            _id: item._id,
-                            photo: item.photo
+                            displayName: item?.displayName,
+                            email: item?.email,
+                            phone: item?.phone,
+                            _id: item?._id,
+                            photo: item?.photo
                         })
                         .then(res => {
 
@@ -289,7 +289,7 @@ const FillProfileScreen = ({ navigation, route }) => {
                         }}
                         onPress={() => navigation.navigate('SelectRole')}>
                         <AntDesign name="arrowleft" size={26} color={COLORS.black} />
-                        <Text style={{ fontSize: 22, fontWeight: '600', color: COLORS.black, marginLeft: 20 }}>Cập nhật thông tin</Text>
+                        <Text style={{ fontSize: 22,fontFamily: 'BeVietnamPro-Bold',marginTop: -4, color: COLORS.black, marginLeft: 20 }}>Cập nhật thông tin</Text>
                     </TouchableOpacity>
                     <ScrollView>
                         <View style={styles.body}>
@@ -308,7 +308,7 @@ const FillProfileScreen = ({ navigation, route }) => {
                                 <Input
                                     value={valueDate}
                                     onFocus={() => handleError(null, 'birthDay')}
-                                    placeholder="Ngày sinh"
+                                    placeholder="Năm sinh"
                                     iconName={'calendar-month-outline'}
                                     onPress={showDatepicker}
                                     error={errors.birthDay}
@@ -349,7 +349,7 @@ const FillProfileScreen = ({ navigation, route }) => {
                                         handleError(null, 'gender')
                                     }}
                                 />
-                                {errors.gender ? <Text style={{ marginTop: 7, color: COLORS.red, fontSize: 12 }}>{errors.gender}</Text> : null}
+                                    {errors.gender ? <Text style={{ marginTop: 7, color: COLORS.red, fontSize: 11, fontFamily: 'BeVietnamPro-Medium', }}>{errors.gender}</Text> : null}
                                 {phones ?
                                     <View
                                         style={{
@@ -368,6 +368,8 @@ const FillProfileScreen = ({ navigation, route }) => {
                                                 marginStart: 14,
                                                 fontSize: 14,
                                                 color: COLORS.black,
+                                                fontFamily: 'BeVietnamPro-Medium',
+                                                marginTop: -4,
                                             }}>
                                             {inputs.phone}
                                         </Text>
@@ -415,7 +417,7 @@ const FillProfileScreen = ({ navigation, route }) => {
                                 alignItems: 'center',
                                 justifyContent: 'center',
                             }}>
-                            <Text style={{ color: COLORS.white, fontSize: 18, fontWeight: '500' }}>Continue</Text>
+                            <Text style={{ color: COLORS.white, fontSize: 18, fontFamily: 'BeVietnamPro-Bold', marginTop: -4, }}>Tiếp tục</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -474,10 +476,13 @@ const styles = StyleSheet.create({
         marginVertical: 5,
         fontSize: 14,
         color: COLORS.grey1,
+        fontFamily: 'BeVietnamPro-Medium',
     },
     selectedTextStyle: {
         fontSize: 14,
         color: COLORS.darkBlue,
+        fontFamily: 'BeVietnamPro-Medium',
+        marginTop: -4,
     },
     iconStyle: {
         width: 20,

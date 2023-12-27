@@ -2,16 +2,21 @@
 /* eslint-disable react/self-closing-comp */
 /* eslint-disable prettier/prettier */
 /* eslint-disable react-native/no-inline-styles */
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, ImageBackground, StyleSheet, ScrollView, Alert } from 'react-native';
+import React, { useCallback, useState } from 'react';
+import { View, Text, TouchableOpacity, ImageBackground, StyleSheet, ScrollView, Alert, ToastAndroid } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import COLORS from '../assets/const/colors';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import axios from 'axios';
 import { API } from '../../Sever/sever';
+import { useFocusEffect } from '@react-navigation/native';
 
 const DetailsCVScreen = ({ navigation, route }) => {
-
+  useFocusEffect(
+    React.useCallback(() => {
+      getListApply();
+    }, [])
+  );
   const datalist = {
     _id: route.params?.item?._id,
     title: route.params?.item?.title,
@@ -27,10 +32,34 @@ const DetailsCVScreen = ({ navigation, route }) => {
     introduce: route.params?.item?.introduce,
   };
   const [data, setData] = useState(datalist);
+  const [listApplied, setListApplied] = useState([]);
 
-  const updateCv = async (item) => {
-
+  async function getListApply() {
+    try {
+      const result = await axios.get(`${API}/apply//listAll`);
+      if (result.status === 200) {
+        setListApplied(result.data);
+      }
+    } catch (error) {
+      console.log('Err : ', error);
+    }
   }
+  const checkEdit = (id) => {
+    const saveAppliedIDlist = listApplied.map(item => item.cv_id);
+    if (saveAppliedIDlist.some(cv_id => cv_id === id) == true) {
+      ToastAndroid.show('Xin lỗi, có vẻ như CV đang trong trạng thái ứng tuyển !', ToastAndroid.SHORT);
+    } else {
+      navigation.navigate('UpdateCvScreen', { item: data });
+    }
+  };
+  const checkDelete = (id) => {
+    const saveAppliedIDlist = listApplied.map(item => item.cv_id);
+    if (saveAppliedIDlist.some(cv_id => cv_id === id) == true) {
+      ToastAndroid.show('Xin lỗi, có vẻ như CV đang trong trạng thái ứng tuyển !', ToastAndroid.SHORT);
+    } else {
+      deleteCv();
+    }
+  };
 
   const deleteCv = () => {
     Alert.alert('Xóa CV', 'Bạn muốn xóa CV này ?', [
@@ -70,7 +99,7 @@ const DetailsCVScreen = ({ navigation, route }) => {
           <Ionicons name="arrow-back" size={30} color={COLORS.black} />
         </TouchableOpacity>
         <View style={{ marginLeft: 20, alignItems: 'center' }}>
-          <Text style={{ fontSize: 22, fontWeight: "600", color: COLORS.black }}>Thông tin CV</Text>
+          <Text style={{ fontSize: 21, fontFamily: 'BeVietnamPro-Medium', color: COLORS.black }}>Thông tin CV</Text>
         </View>
       </View>
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -81,44 +110,44 @@ const DetailsCVScreen = ({ navigation, route }) => {
               source={{ uri: data?.cv_id.user_id.photo }}
               style={{ width: 90, height: 90, marginBottom: 10 }}
               imageStyle={{ borderRadius: 100 }} /> */}
-            <Text style={{ fontSize: 20, fontWeight: '600', color: "white" }}>{data?.title}</Text>
+            <Text style={{ fontSize: 19, fontFamily: 'BeVietnamPro-Medium', color: "white" }}>{data?.title}</Text>
           </View>
           <View style={styles.view1}>
             <Text style={styles.text1}>Tên: </Text>
-            <Text style={{ fontSize: 16 }}>{data?.name}</Text>
+            <Text style={{ fontSize: 16,fontFamily: 'BeVietnamPro-Medium',marginTop:-2 }}>{data?.name}</Text>
           </View>
           <View style={styles.view1}>
             <Text style={styles.text2}>Số ĐT: </Text>
-            <Text style={{ fontSize: 16, flex: 1 }}>{data?.phone}</Text>
+            <Text style={{ fontSize: 16, flex: 1,fontFamily: 'BeVietnamPro-Medium',marginTop:-2 }}>{data?.phone}</Text>
             <Text style={styles.text2}>Năm sinh: </Text>
-            <Text style={{ fontSize: 16, marginEnd: 25 }}>{data?.year}</Text>
+            <Text style={{ fontSize: 16, marginEnd: 25,fontFamily: 'BeVietnamPro-Medium',marginTop:-2 }}>{data?.year}</Text>
           </View>
           <View style={styles.view1}>
             <Text style={styles.text2}>Giới tính: </Text>
-            <Text style={{ fontSize: 16 }}>{data?.gender_id?.title}</Text>
+            <Text style={{ fontSize: 16,fontFamily: 'BeVietnamPro-Medium',marginTop:-2 }}>{data?.gender_id?.title}</Text>
           </View>
           <View style={styles.view1}>
             <Text style={styles.text2}>Email: </Text>
-            <Text style={{ fontSize: 16 }}>{data?.email}</Text>
+            <Text style={{ fontSize: 16,fontFamily: 'BeVietnamPro-Medium',marginTop:-2 }}>{data?.email}</Text>
           </View>
           <View style={styles.view1}>
             <Text style={styles.text2}>Địa chỉ: </Text>
-            <Text style={{ fontSize: 16 }}>{data?.address}</Text>
+            <Text style={{ fontSize: 16 ,fontFamily: 'BeVietnamPro-Medium',marginTop:-2}}>{data?.address}</Text>
           </View>
           <View style={styles.view1}>
             <Text style={styles.text2}>Ngành nghề: </Text>
-            <Text style={{ fontSize: 16 }}>{data?.career_id?.title}</Text>
+            <Text style={{ fontSize: 16,fontFamily: 'BeVietnamPro-Medium',marginTop:-2 }}>{data?.career_id?.title}</Text>
           </View>
           <View style={styles.view1}>
             <Text style={styles.text2}>Kinh nghiệm: </Text>
-            <Text style={{ fontSize: 16 }}>{data?.experience_id?.title}</Text>
+            <Text style={{ fontSize: 16 ,fontFamily: 'BeVietnamPro-Medium',marginTop:-2}}>{data?.experience_id?.title}</Text>
           </View>
           <View style={styles.view1}>
             <Text style={styles.text2}>Trình độ học vấn: </Text>
-            <Text style={{ fontSize: 16 }}>{data?.academic_id?.title}</Text>
+            <Text style={{ fontSize: 16 ,fontFamily: 'BeVietnamPro-Medium',marginTop:-2}}>{data?.academic_id?.title}</Text>
           </View>
           <Text style={styles.text1}>Giới thiệu bản thân: </Text>
-          <Text style={{ fontSize: 16, marginTop: 5, marginBottom: 20 }}>- {data?.introduce}</Text>
+          <Text style={{ fontSize: 16,fontFamily: 'BeVietnamPro-Medium',marginTop:-2 , marginTop: 5, marginBottom: 20 }}>- {data?.introduce}</Text>
           <View style={{ width: '100%', height: 1, backgroundColor: '#FF5D01', opacity: 0.7, position: 'relative', }} />
         </View>
 
@@ -129,7 +158,7 @@ const DetailsCVScreen = ({ navigation, route }) => {
         }}>
           <TouchableOpacity
             onPress={() => {
-              deleteCv()
+              checkDelete(data._id);
             }}
             style={{
               backgroundColor: 'rgba(51, 123, 255, 0.20)',
@@ -141,12 +170,16 @@ const DetailsCVScreen = ({ navigation, route }) => {
               paddingVertical: 15,
               marginEnd: 15,
             }}>
-            <Text style={{ color: COLORS.primary, fontSize: 18, fontWeight: "600" }}>Xóa</Text>
+            <Text style={{
+              color: COLORS.primary,
+              fontSize: 16,
+              fontFamily: 'BeVietnamPro-Medium',
+            }}>Xóa</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate('UpdateCvScreen', {item : data});
+              checkEdit(data._id);
             }}
             style={{
               backgroundColor: COLORS.primary,
@@ -157,7 +190,11 @@ const DetailsCVScreen = ({ navigation, route }) => {
               width: 160,
               paddingVertical: 15,
             }}>
-            <Text style={{ color: COLORS.white, fontSize: 18, fontWeight: "600" }}>Chỉnh sửa</Text>
+            <Text style={{
+              color: COLORS.white,
+              fontSize: 16,
+              fontFamily: 'BeVietnamPro-Medium',
+            }}>Chỉnh sửa</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
@@ -171,13 +208,13 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   text1: {
-    fontSize: 16,
-    fontWeight: '500',
+    fontSize: 15,
+    fontFamily: 'BeVietnamPro-Medium',
     marginRight: 20,
   },
   text2: {
-    fontSize: 16,
-    fontWeight: '500',
+    fontSize: 15,
+    fontFamily: 'BeVietnamPro-Medium',
     marginRight: 5,
   },
 });

@@ -117,7 +117,17 @@ const CurriculumVitae = ({ navigation }) => {
 
     return [...sortedLeft, pivot, ...sortedRight];
   }
+  const careerOrder = {
+    "6554b9b322054e51b8327165": 0,
+    "6554b9ce22054e51b8327168": 1,
+    "6554b9de22054e51b832716b": 2,
+    "6554b9f522054e51b832716e": 3,
+    "6554ba1922054e51b8327171": 4,
+    "6558505e70f5b03183a9c903": 5,
+    "6558620586d0490539c8353c": 6,
+    "65586aa480b16af7fdeef6f3": 7,
 
+  };
   const experienceOrder = {
     "653e64098e88b23b41388e37": 0,
     "653e64198e88b23b41388e38": 1,
@@ -127,14 +137,20 @@ const CurriculumVitae = ({ navigation }) => {
   };
 
   const academicOrder = {
-    "Không yêu cầu": 0,
-    "Dưới trung học": 1,
-    "Trung học phổ thông": 2,
-    "Cao đẳng": 3,
-    "Đại học": 4,
+    "655de6289a5b0ffa7ffd5135": 0,
+    "655de6059a5b0ffa7ffd5134": 1,
+    "653e661f8e88b23b41388e3b": 2,
+    "655de7129a5b0ffa7ffd5137": 3,
+    "655de6fc9a5b0ffa7ffd5136": 4,
   };
+  const genderOrder = {
+    "Nam": 0,
+    "Nữ": 1,
+    "Không yêu cầu": 2,
+  }
 
   function compare(a, b) {
+
     const cvExperienceA = a.cv_id.experience_id;
     const postExperienceA = a.post_id.experience_id;
     const cvExperienceB = b.cv_id.experience_id;
@@ -144,12 +160,46 @@ const CurriculumVitae = ({ navigation }) => {
     const postExperienceOrderA = experienceOrder[postExperienceA] || -1;
     const cvExperienceOrderB = experienceOrder[cvExperienceB] || -1;
     const postExperienceOrderB = experienceOrder[postExperienceB] || -1;
-
+    console.log(cvExperienceA, cvExperienceOrderA, postExperienceOrderA);
     if (cvExperienceOrderA > postExperienceOrderA && cvExperienceOrderB <= postExperienceOrderB) {
       return -1; // a đạt yêu cầu hơn b
     } else if (cvExperienceOrderA <= postExperienceOrderA && cvExperienceOrderB > postExperienceOrderB) {
       return 1; // b đạt yêu cầu hơn a
+    } else if (cvExperienceOrderA < postExperienceOrderA && cvExperienceOrderB >= postExperienceOrderB) {
+      console.log("ok");
+      return 1; // b đạt yêu cầu hơn a
     }
+
+    const cvAcademicA = a.cv_id.academic_id;
+    const postAcademicA = a.post_id.academic_id;
+    const cvAcademicB = b.cv_id.academic_id;
+    const postAcademicB = b.post_id.academic_id;
+
+    const cvAcademicOrderA = academicOrder[cvAcademicA] || -1;
+    const postAcademicOrderA = academicOrder[postAcademicA] || -1;
+    const cvAcademicOrderB = academicOrder[cvAcademicB] || -1;
+    const postAcademicOrderB = academicOrder[postAcademicB] || -1;
+
+    if (cvAcademicOrderA > postAcademicOrderA && cvAcademicOrderB <= postAcademicOrderB) {
+      return -1; // a đạt yêu cầu hơn b
+    } else if (cvAcademicOrderA <= postAcademicOrderA && cvAcademicOrderB > postAcademicOrderB) {
+      return 1; // b đạt yêu cầu hơn a
+    }
+
+    const cvGenderA = a.cv_id.gender;
+    const postGenderA = a.post_id.gender;
+    const cvGenderB = b.cv_id.gender;
+    const postGenderB = b.post_id.gender;
+    const cvGenderOrderA = genderOrder[cvGenderA] || -1;
+    const postGenderOrderA = genderOrder[postGenderA] || -1;
+    const cvGenderOrderB = genderOrder[cvGenderB] || -1;
+    const postGenderOrderB = genderOrder[postGenderB] || -1;
+
+    // if (cvGenderOrderA < postGenderOrderA && cvGenderOrderB >= postGenderOrderB) {
+    //   return -1; // a đạt yêu cầu hơn b
+    // } else if (cvGenderOrderA >= postGenderOrderA && cvGenderOrderB < postGenderOrderB) {
+    //   return 1; // b đạt yêu cầu hơn a
+    // }
 
     return 0; // giữ nguyên thứ tự
   }
@@ -167,10 +217,10 @@ const CurriculumVitae = ({ navigation }) => {
           style={{ width: 45, height: 45 }}
           imageStyle={{}} />
         <View style={{ marginLeft: 13, flex: 1 }}>
-          <Text numberOfLines={1} style={{ fontSize: 16, color: COLORS.black }}>{item?.cv_id?.name}</Text>
+          <Text numberOfLines={1} style={{ fontSize: 16, color: COLORS.black, fontFamily: 'BeVietnamPro-Medium', marginTop: -4 }}>{item?.cv_id?.name}</Text>
           <View style={{ flexDirection: 'row', marginTop: 5 }}>
             {/* <Text numberOfLines={1} style={{ fontSize: 13 }}>Thời gian : </Text> */}
-            <Text numberOfLines={1} style={{ fontSize: 13 }}>Ngày {date} lúc {item?.time}</Text>
+            <Text numberOfLines={1} style={{ fontSize: 13, fontFamily: 'BeVietnamPro-Medium', marginTop: -4 }}>Ngày {date} lúc {item?.time}</Text>
           </View>
           {/* <View style={{ flexDirection: 'row', marginTop: 2 }}>
           <Text numberOfLines={1} style={{ fontSize: 13 }}>Ngày : </Text>
@@ -192,7 +242,7 @@ const CurriculumVitae = ({ navigation }) => {
           }}
           onPress={() => navigation.goBack()}>
           <AntDesign name="arrowleft" size={24} color={COLORS.black} />
-          <Text style={{ fontSize: 22, fontWeight: '400', color: COLORS.black, marginLeft: 20 }}>Hồ sơ ứng tuyển</Text>
+          <Text style={{ fontSize: 22, fontWeight: '400', color: COLORS.black, marginLeft: 20, fontFamily: 'BeVietnamPro-Bold', marginTop: -4 }}>Hồ sơ ứng tuyển</Text>
         </TouchableOpacity>
         {/* Search */}
         <View
@@ -216,7 +266,7 @@ const CurriculumVitae = ({ navigation }) => {
             }}
             onFocus={() => { setIsFocusedSearch(!isFocusedSearch) }}
             onBlur={() => { setIsFocusedSearch(!isFocusedSearch) }}
-            style={{ flex: 1, fontSize: 16, color: COLORS.black, paddingHorizontal: 10, }} />
+            style={{ flex: 1, fontSize: 16, color: COLORS.black, paddingHorizontal: 10, fontFamily: 'BeVietnamPro-Medium', marginTop: -4 }} />
         </View>
 
         <View style={{ marginTop: 10, gap: 14 }}>
@@ -249,7 +299,7 @@ const CurriculumVitae = ({ navigation }) => {
                       source={require('../assets/images/5928293_2953962.jpg')}
                       style={{ width: "100%", height: 260 }}
                     />
-                    <Text style={{ fontSize: 20, color: COLORS.primary, fontWeight: '500' }}>Không tìm thấy hồ sơ liên quan</Text>
+                    <Text style={{ fontSize: 20, color: COLORS.primary, fontFamily: 'BeVietnamPro-Bold', marginTop: -4 }}>Không tìm thấy hồ sơ liên quan</Text>
                   </View>
                 )}
               />
@@ -276,11 +326,11 @@ const styles = StyleSheet.create({
   foundNav: {
     flexDirection: 'row',
     paddingHorizontal: 0,
-
   },
   textFound: {
     fontSize: 16,
-    fontWeight: '700',
+    fontFamily: 'BeVietnamPro-Bold', 
+    marginTop: -4,
     color: '#000000',
   },
 })

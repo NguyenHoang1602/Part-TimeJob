@@ -42,7 +42,7 @@ const ApplicationsStageScreen = ({ route, navigation }) => {
       getCVApply();
     }, [])
   );
-
+  console.log(data);
   const [CvApply, setCvApply] = useState([]);
   const handleAccept = async () => {
     console.log(data.id);
@@ -92,7 +92,7 @@ const ApplicationsStageScreen = ({ route, navigation }) => {
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <AntDesign name="arrowleft" size={26} color="#212121" />
         </TouchableOpacity>
-        <Text style={{ fontSize: 22, fontWeight: '400', color: '#212121', marginLeft: 15 }}>Trạng thái ứng tuyển</Text>
+        <Text style={{ fontSize: 21,  fontFamily: 'BeVietnamPro-Medium', color: '#212121', marginLeft: 15 }}>Trạng thái ứng tuyển</Text>
       </View>
       <View style={{ width: '100%', justifyContent: 'center', alignItems: 'center', flex: 1 }}>
         <View style={{ padding: 20, width: '90%', borderWidth: 0.5, borderColor: COLORS.grey, borderRadius: 20, alignItems: 'center' }}>
@@ -108,22 +108,22 @@ const ApplicationsStageScreen = ({ route, navigation }) => {
               );
             }
           })}
-          <Text numberOfLines={2} style={{ fontSize: 22, fontWeight: '600', color: '#212121', textAlign: 'center' }}>{data.title}</Text>
-          <Text numberOfLines={2} style={{ fontSize: 17, fontWeight: '500', color: '#246BFD', marginVertical: 5, textAlign: 'center' }}>{data.businessName}</Text>
+          <Text numberOfLines={2} style={{ fontSize: 21, fontFamily: 'BeVietnamPro-Medium', color: '#212121', textAlign: 'center' }}>{data.title}</Text>
+          <Text numberOfLines={2} style={{ fontSize: 16,  fontFamily: 'BeVietnamPro-Medium', color: '#246BFD', marginVertical: 5, textAlign: 'center' }}>{data.businessName}</Text>
           <View style={{ height: 1, width: '99%', backgroundColor: COLORS.grey, opacity: 0.4, marginTop: 15, marginBottom: 8 }} />
-          <Text numberOfLines={2} style={{ fontSize: 17, fontWeight: '500', color: '#959595', marginTop: 5, marginVertical: 5, textAlign: 'center' }}>{data.address}</Text>
+          <Text numberOfLines={2} style={{ fontSize: 16,  fontFamily: 'BeVietnamPro-Medium', color: '#959595', marginTop: 5, marginVertical: 5, textAlign: 'center' }}>{data.address}</Text>
           <View style={{ flexDirection: 'row', marginTop: 5, marginVertical: 5 }}>
-            <Text style={{ fontSize: 17, fontWeight: '400', color: '#246BFD', textAlign: 'center' }}>{data.wageMin}đ - {data.wageMax}đ</Text>
+            <Text style={{ fontSize: 16,  fontFamily: 'BeVietnamPro-Medium', color: 'red', textAlign: 'center' }}>{data.wageMin}đ - {data.wageMax}đ</Text>
             {
-              data?.payForm_id?._id === '655de22b9a5b0ffa7ffd5132' ? (
-                <Text style={{ fontSize: 17, fontWeight: '400', color: '#246BFD' }}> /giờ</Text>
+              data?.post_id?.payForm_id === '655de22b9a5b0ffa7ffd5132' ? (
+                <Text style={{ fontSize: 17,  fontFamily: 'BeVietnamPro-Medium',color: 'red', marginTop: -2 }}> /giờ</Text>
               ) : (
-                <Text style={{ fontSize: 17, fontWeight: '400', color: '#246BFD' }}> /tháng</Text>
+                  <Text style={{ fontSize: 17, fontFamily: 'BeVietnamPro-Medium', color: 'red', marginTop: -2 }}> /tháng</Text>
               )
             }
           </View>
           <View style={{
-            width: 80,
+            width: 90,
             height: 25,
             borderWidth: 0.5,
             borderColor: COLORS.grey,
@@ -134,46 +134,46 @@ const ApplicationsStageScreen = ({ route, navigation }) => {
             marginTop: 10,
           }}>
             {
-              data?.workType === '653e66b38e88b23b41388e3c' ? (
-                <Text style={{ fontSize: 10 }} >Bán thời gian</Text>
+              data?.post_id?.workType_id === '653e66b38e88b23b41388e3c' ? (
+                <Text style={{ fontSize: 10, fontFamily: 'BeVietnamPro-Medium'}} >Bán thời gian</Text>
               ) : (
-                <Text style={{ fontSize: 10 }} >Toàn thời gian</Text>
+                <Text style={{ fontSize: 10 ,fontFamily: 'BeVietnamPro-Medium' }} >Toàn thời gian</Text>
               )
             }
           </View>
         </View>
         <View style={{ height: 1, width: '90%', backgroundColor: COLORS.grey, opacity: 0.4, marginTop: '7%', marginBottom: '6%' }} />
-        <Text style={{ fontSize: 17, fontWeight: '500', color: '#414141' }}>Trạng thái ứng tuyển</Text>
+        <Text style={{ fontSize: 16,  fontFamily: 'BeVietnamPro-Medium', color: '#414141' }}>Trạng thái ứng tuyển</Text>
         {
           status == 0 ? (
             <View style={{ marginTop: '8%', width: '90%', height: 50, borderRadius: 10, backgroundColor: '#E7EFFF', alignItems: 'center', justifyContent: 'center', marginBottom: '20%' }}>
-              <Text style={{ fontSize: 17, fontWeight: '500', color: '#246BFE' }}>Hồ sơ đã được gửi</Text>
+              <Text style={{ fontSize: 16,  fontFamily: 'BeVietnamPro-Medium', color: '#246BFE' }}>Hồ sơ đã được gửi</Text>
             </View>
           ) : status == 1 ? (
             <View style={{ marginTop: '8%', width: '90%', height: 50, borderRadius: 10, backgroundColor: '#FFF4CD', alignItems: 'center', justifyContent: 'center', marginBottom: '20%' }}>
-              <Text style={{ fontSize: 17, fontWeight: '500', color: '#FBCA17' }}>Hồ sơ đang xử lí</Text>
+              <Text style={{ fontSize: 16,  fontFamily: 'BeVietnamPro-Medium', color: '#FBCA17' }}>Hồ sơ đang xử lí</Text>
             </View>
 
           ) : status == 2 ? (
             <View style={{ width: '100%', alignItems: 'center' }}>
               <View style={{ marginTop: '8%', width: '90%', height: 50, borderRadius: 10, backgroundColor: '#FDD9DA', alignItems: 'center', justifyContent: 'center', marginBottom: '5%' }}>
-                <Text style={{ fontSize: 17, fontWeight: '500', color: '#F75656' }}>Hồ sơ bị từ chối</Text>
+                <Text style={{ fontSize: 16,  fontFamily: 'BeVietnamPro-Medium', color: '#F75656' }}>Hồ sơ bị từ chối</Text>
               </View>
-              <Text style={{ fontSize: 18, fontWeight: '600', textAlign: 'left' }}>Lý do: </Text>
-              <Text style={{ fontSize: 16, fontWeight: '400', marginHorizontal: 20, marginTop: 5}}>{data.feedback}</Text>
+              <Text style={{ fontSize: 18, fontFamily: 'BeVietnamPro-Medium',marginTop:-2, textAlign: 'left' }}>Lý do: </Text>
+              <Text style={{ fontSize: 16, fontFamily: 'BeVietnamPro-Medium',marginTop:-2, marginHorizontal: 20, marginTop: 5}}>{data.feedback}</Text>
             </View>
           ) : status == 4 ? (
             <View style={{ width: '100%', alignItems: 'center' }}>
               <View style={{ marginTop: '8%', width: '90%', height: 50, borderRadius: 10, backgroundColor: '#FFDCC3', alignItems: 'center', justifyContent: 'center', marginBottom: '20%' }}>
-                <Text style={{ fontSize: 17, fontWeight: '500', color: '#FF6B00' }}>Đang thương lượng</Text>
+                <Text style={{ fontSize: 16,  fontFamily: 'BeVietnamPro-Medium', color: '#FF6B00' }}>Đang thương lượng</Text>
               </View>
               <View style={{ flexDirection: 'row', marginTop: '-15%' }}>
-                <Text style={{ fontSize: 18, fontWeight: '500' }}>Lương thương lượng: </Text>
+                <Text style={{ fontSize: 17, fontFamily: 'BeVietnamPro-Medium' }}>Lương thương lượng: </Text>
                 <Text style={{ fontSize: 18, fontWeight: '500', color: COLORS.primary }}>{data.bargain_Salary}đ</Text>
               </View>
             </View>
           ) : <View style={{ marginTop: '8%', width: '90%', height: 50, borderRadius: 10, backgroundColor: '#E7FEEE', alignItems: 'center', justifyContent: 'center', marginBottom: '20%' }}>
-            <Text style={{ fontSize: 17, fontWeight: '500', color: '#08BE75' }}>Ứng tuyển thành công</Text>
+            <Text style={{ fontSize: 16,  fontFamily: 'BeVietnamPro-Medium', color: '#08BE75' }}>Ứng tuyển thành công</Text>
           </View>
 
         }
@@ -191,7 +191,7 @@ const ApplicationsStageScreen = ({ route, navigation }) => {
                 justifyContent: 'center',
                 paddingVertical: 10,
               }}>
-              <Text style={{ color: COLORS.white, fontSize: 18, fontWeight: '500' }}>Đang chờ...</Text>
+              <Text style={{ color: COLORS.white, fontSize: 17, fontFamily: 'BeVietnamPro-Medium' }}>Đang chờ...</Text>
             </TouchableOpacity>
 
           ) : status == 2 ? (
@@ -205,7 +205,7 @@ const ApplicationsStageScreen = ({ route, navigation }) => {
                 justifyContent: 'center',
                 paddingVertical: 10,
               }}>
-              <Text style={{ color: COLORS.white, fontSize: 18, fontWeight: '500' }}>Tìm công việc khác</Text>
+              <Text style={{ color: COLORS.white, fontSize: 17, fontFamily: 'BeVietnamPro-Medium' }}>Tìm công việc khác</Text>
             </TouchableOpacity>
           ) : status == 4 ? (
             <TouchableOpacity
@@ -219,7 +219,7 @@ const ApplicationsStageScreen = ({ route, navigation }) => {
                 justifyContent: 'center',
                 paddingVertical: 10,
               }}>
-              <Text style={{ color: COLORS.white, fontSize: 18, fontWeight: '500' }}>Xác nhận</Text>
+              <Text style={{ color: COLORS.white, fontSize: 17, fontFamily: 'BeVietnamPro-Medium' }}>Xác nhận</Text>
             </TouchableOpacity>
           ) : <TouchableOpacity
             style={{
@@ -231,7 +231,7 @@ const ApplicationsStageScreen = ({ route, navigation }) => {
               justifyContent: 'center',
               paddingVertical: 10,
             }}>
-            <Text style={{ color: COLORS.white, fontSize: 18, fontWeight: '500' }}>Đã hoàn thành</Text>
+            <Text style={{ color: COLORS.white, fontSize: 17, fontFamily: 'BeVietnamPro-Medium' }}>Đã hoàn thành</Text>
           </TouchableOpacity>
         }
       </View>
@@ -270,6 +270,7 @@ const ApplicationsStageScreen = ({ route, navigation }) => {
             flexDirection: 'row',
             justifyContent: 'center',
             marginVertical: 20,
+            gap: 10
           }}>
             <TouchableOpacity
               onPress={toggleModalclose}
@@ -279,13 +280,11 @@ const ApplicationsStageScreen = ({ route, navigation }) => {
                 justifyContent: 'center',
                 borderRadius: 64,
                 position: 'relative',
-                width: 160,
+                width: 140,
                 paddingVertical: 15,
-                marginEnd: 15,
               }}>
-              <Text style={{ color: COLORS.primary, fontSize: 18, fontWeight: '600' }}>Thương lượng</Text>
+              <Text style={{ color: COLORS.primary, fontSize: 17, fontFamily: 'BeVietnamPro-Medium'  }}>Thương lượng</Text>
             </TouchableOpacity>
-
             <TouchableOpacity
               onPress={() => {
                 handleAccept();
@@ -296,10 +295,10 @@ const ApplicationsStageScreen = ({ route, navigation }) => {
                 justifyContent: 'center',
                 borderRadius: 64,
                 position: 'relative',
-                width: 160,
+                width: 120,
                 paddingVertical: 15,
               }}>
-              <Text style={{ color: COLORS.white, fontSize: 18, fontWeight: '600' }}>Chấp nhận</Text>
+              <Text style={{ color: COLORS.white, fontSize: 17, fontFamily: 'BeVietnamPro-Medium'  }}>Chấp nhận</Text>
             </TouchableOpacity>
           </View>
         </View>

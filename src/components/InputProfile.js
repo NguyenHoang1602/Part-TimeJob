@@ -21,7 +21,7 @@ const Input = ({
             borderColor: error
               ? COLORS.red
               : isFocused
-                ? COLORS.darkBlue
+                ? COLORS.primary
                 : COLORS.grey,
             alignItems: 'center',
           },
@@ -33,7 +33,7 @@ const Input = ({
             setIsFocused(true);
           }}
           onBlur={() => setIsFocused(false)}
-          style={{ color: COLORS.darkBlue, flex: 1, marginLeft: 10 }}
+          style={{ color: COLORS.darkBlue, flex: 1, marginLeft: 10, fontFamily: 'BeVietnamPro-Medium', marginTop: -2, }}
           {...props}
         />
         <TouchableOpacity onPress={onPress}>
@@ -44,7 +44,7 @@ const Input = ({
         </TouchableOpacity>
       </View>
       {error && (
-        <Text style={{ marginTop: 7, color: COLORS.red, fontSize: 12 }}>
+        <Text style={{ marginTop: 7, color: COLORS.red, fontSize: 11, fontFamily: 'BeVietnamPro-Medium', }}>
           {error}
         </Text>
       )}

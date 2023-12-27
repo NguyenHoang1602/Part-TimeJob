@@ -49,7 +49,6 @@ const CVScreen = ({ route, navigation }) => {
   const [isFocusCareer, setIsFocusCareer] = useState(false);
   const [isFocusExp, setIsFocusExp] = useState(false);
   const [isFocusAcademic, setIsFocusAcademic] = useState(false);
-  
   const getListCareers = async () => {
     const data = await AsyncStorage.getItem('listCareers')
     setListCareers(JSON.parse(data));
@@ -72,24 +71,43 @@ const CVScreen = ({ route, navigation }) => {
   const validate = () => {
     Keyboard.dismiss();
     let isValid = true;
+    const regex = /^(0|\+84)\d{9,10}$/;
+    const regexY = /[!@#$%^&*(),.?":{}|<>]/;
+    const year = 2023 - inputs.year;
 
     if (!inputs.title) {
       handleError('Vui lòng nhập tên CV', 'title');
       isValid = false;
+    } else if (regexY.test(inputs.title)) {
+      handleError('Chứa ký tự đặc biệt', 'title');
+      isValid = false;
     }
-
     if (!inputs.name) {
       handleError('Vui lòng nhập họ tên', 'name');
       isValid = false;
     }
-
     if (!inputs.phone) {
       handleError('Vui lòng nhập số điện thoại', 'phone');
       isValid = false;
+    } else if (regexY.test(inputs.phone)) {
+      handleError('Chứa ký tự đặc biệt', 'phone');
+      isValid = false;
+    } else {
+      const vld = regex.test(inputs.phone);
+      console.log(vld);
+      if (!vld) {
+        handleError('Số điện thoại không hợp lệ', 'phone');
+        isValid = false;
+      }
     }
-
     if (!inputs.year) {
       handleError('Vui lòng nhập năm sinh', 'year');
+      isValid = false;
+    } else if (year < 15 || 60 < year) {
+      handleError('Độ tuổi không hợp lệ', 'year');
+      isValid = false;
+    } else if (regexY.test(inputs.year)) {
+      handleError('Chứa ký tự đặc biệt', 'year');
       isValid = false;
     }
     if (!inputs.gender_id) {
@@ -136,9 +154,12 @@ const CVScreen = ({ route, navigation }) => {
       Alert.alert("Thành công");
       navigation.navigate('CVResumeScreen');
     }
-  }
+  };
+  const parts = user.birthDay.split('/');
+  const year = parseInt(parts[2], 10); //
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor : COLORS.white }}>
+      <StatusBar barStyle={'light-content'} />
       <Loader visible={loading} />
       <ScrollView>
         <View
@@ -147,7 +168,7 @@ const CVScreen = ({ route, navigation }) => {
             height: 60,
             justifyContent: 'center',
           }}>
-          <Text style={{ fontSize: 16, marginStart: 20 }}>
+          <Text style={{ fontSize: 16, marginStart: 20,fontFamily: 'BeVietnamPro-Bold',marginTop:-2 }}>
             THÔNG TIN BẮT BUỘC
           </Text>
         </View>
@@ -163,7 +184,7 @@ const CVScreen = ({ route, navigation }) => {
             onChangeText={text => handleOnchange(text, 'name')}
             onFocus={() => handleError(null, 'name')}
             placeholder="Họ tên"
-            value={user.displayName}
+            value={user?.displayName}
             error={errors.name}
           />
           <View style={{ width: '100%', flexDirection: 'row' }}>
@@ -173,7 +194,7 @@ const CVScreen = ({ route, navigation }) => {
                 onChangeText={text => handleOnchange(text, 'phone')}
                 onFocus={() => handleError(null, 'phone')}
                 placeholder="Số điện thoại"
-                // value={user?.phone}
+                // value={"0"+user.phone}
                 error={errors.phone}
               />
             </View>
@@ -183,7 +204,7 @@ const CVScreen = ({ route, navigation }) => {
                 onChangeText={text => handleOnchange(text, 'year')}
                 onFocus={() => handleError(null, 'year')}
                 placeholder="Năm sinh"
-                // value={route.params?.subtitle}
+                // value={""+year}
                 error={errors.year}
               />
             </View>
@@ -240,7 +261,7 @@ const CVScreen = ({ route, navigation }) => {
           {errors.career_id ? <Text style={styles.error}>{errors.career_id}</Text> : null}
         </View>
         <View style={{ backgroundColor: '#D9D9D9', height: 60, justifyContent: 'center' }}>
-          <Text style={{ fontSize: 16, marginStart: 25 }}>THÔNG TIN THÊM</Text>
+          <Text style={{ fontSize: 16,fontFamily: 'BeVietnamPro-Bold',marginTop:-2, marginStart: 25 }}>THÔNG TIN THÊM</Text>
         </View>
         <View style={{ marginVertical: 22, marginHorizontal: 24 }}>
           <Input
@@ -308,6 +329,7 @@ const CVScreen = ({ route, navigation }) => {
             paddingVertical: 20,
             flexDirection: 'row',
             justifyContent: 'center',
+            
           }}>
           <TouchableOpacity
             onPress={validate}
@@ -327,8 +349,9 @@ const CVScreen = ({ route, navigation }) => {
             }}>
             <Text
               style={{
-                fontWeight: 'bold',
-                fontSize: 18,
+                marginBottom: 8,
+                fontFamily: 'BeVietnamPro-Medium',
+                fontSize: 17,
                 color: COLORS.white,
               }}>
               Lưu

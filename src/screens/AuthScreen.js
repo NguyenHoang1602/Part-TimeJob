@@ -131,7 +131,7 @@ const AuthScreen = ({ navigation }) => {
             {loading ? (
                 <ActivityIndicator size="large" color={COLORS.primary} />
             ) : (
-                <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', width: "100%" }}>
+                <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', width: "100%", marginBottom: '5%' }}>
                     <View style={{
                         bottom: '10%',
                         alignItems: 'center',
@@ -146,9 +146,9 @@ const AuthScreen = ({ navigation }) => {
                         />
                         <Text style={{
                             fontSize: 38,
-                            fontWeight: 400,
                             color: COLORS.black,
-                            fontFamily: 'BeVietnamPro-Regular',
+                            fontFamily: 'BeVietnamPro-Medium',
+                            marginTop: -4,
                         }}>
                             Bắt đầu nào !
                         </Text>
@@ -175,7 +175,8 @@ const AuthScreen = ({ navigation }) => {
                             style={{
                                 fontSize: 18,
                                 color: COLORS.black,
-                                fontFamily: 'Roboto-Medium',
+                                fontFamily: 'BeVietnamPro-Medium',
+                                marginTop: -4,
                             }}>
                             Tiếp tục với Facebook
                         </Text>
@@ -209,14 +210,17 @@ const AuthScreen = ({ navigation }) => {
                                 color: COLORS.black,
                                 marginStart: '3%',
                                 right: 9,
-                                fontFamily: 'Roboto-Medium',
+                                fontFamily: 'BeVietnamPro-Medium',
+                                marginTop: -4,
                             }}>
                             Tiếp tục với Google
                         </Text>
                     </TouchableOpacity>
                     <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', top: '6%' }}>
                         <View style={{ height: 1, width: '33%', backgroundColor: COLORS.grey }} />
-                        <Text style={{ width: 50, textAlign: 'center', color: COLORS.black, fontWeight: '400', fontSize: 16, }}>hoặc</Text>
+                        <Text style={{
+                            width: 50, textAlign: 'center', color: COLORS.black, fontSize: 16, fontFamily: 'BeVietnamPro-Medium', marginTop: -4,
+                        }}>hoặc</Text>
                         <View style={{ height: 1, width: '33%', backgroundColor: COLORS.grey }} />
                     </View>
                     <TouchableOpacity
@@ -241,7 +245,8 @@ const AuthScreen = ({ navigation }) => {
                             style={{
                                 fontSize: 18,
                                 color: COLORS.white,
-                                fontFamily: 'Roboto-Medium',
+                                fontFamily: 'BeVietnamPro-Medium',
+                                marginTop: -4,
                             }}>
                             Đăng nhập bằng SĐT
                         </Text>
@@ -258,7 +263,8 @@ const AuthScreen = ({ navigation }) => {
                         }}>
                         <Text
                             style={{
-                                fontWeight: '400',
+                                fontFamily: 'BeVietnamPro-Medium',
+                                marginTop: -4,
                                 fontSize: 15,
                                 color: COLORS.black,
                                 opacity: 0.4
@@ -267,7 +273,8 @@ const AuthScreen = ({ navigation }) => {
                         </Text>
                         <Text
                             style={{
-                                fontWeight: '500',
+                                fontFamily: 'BeVietnamPro-Medium',
+                                marginTop: -4,
                                 fontSize: 15,
                                 color: COLORS.primary,
                                 marginStart: '1.2%'

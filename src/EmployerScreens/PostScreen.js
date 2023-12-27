@@ -213,7 +213,7 @@ const PostScreen = ({ navigation }) => {
       setLoading(false);
       Alert.alert('Đăng tin thành công !', 'Đi tới trang quản lí tin?', [
         { text: 'Không' },
-        { text: 'Có', onPress: () => navigation.navigate('Quản lí') },
+        { text: 'Có', onPress: () => navigation.navigate('Quản lý') },
       ],
         { cancelable: false });
     }
@@ -340,9 +340,6 @@ const PostScreen = ({ navigation }) => {
             <Text style={styles.panelTitle}>Tải ảnh lên</Text>
             <Text style={styles.panelSubtitle}>Chọn hình ảnh nơi làm việc</Text>
           </View>
-          <TouchableOpacity style={styles.panelButton} onPress={''}>
-            <Text style={styles.panelButtonTitle}>Camera</Text>
-          </TouchableOpacity>
           <TouchableOpacity style={styles.panelButton} onPress={openImagePicker}>
             <Text style={styles.panelButtonTitle}>Chọn từ thư viện</Text>
           </TouchableOpacity>
@@ -371,7 +368,7 @@ const PostScreen = ({ navigation }) => {
             onClose={toggleBottomSheet}
           />
           <View style={{ backgroundColor: '#D9D9D9', height: 60, justifyContent: 'center' }}>
-            <Text style={{ fontSize: 16, marginStart: 25 }}>THÔNG TIN NHÀ TUYỂN DỤNG</Text>
+            <Text style={{ fontSize: 16, marginStart: 25, fontFamily: 'BeVietnamPro-Medium', marginTop: -4,  }}>THÔNG TIN NHÀ TUYỂN DỤNG</Text>
           </View>
           <View style={{ paddingTop: 22, marginHorizontal: 24 }}>
             <Input
@@ -406,7 +403,7 @@ const PostScreen = ({ navigation }) => {
                       alignItems: 'center',
                     }}>
                       <Ionicons style={{ marginStart: 4 }} name="information-circle" size={16} color="#3E7CEF" />
-                      <Text style={{ fontSize: 11, marginLeft: 3, marginBottom: 2 }}>Hình ảnh nơi làm việc</Text>
+                      <Text style={{ fontSize: 11, marginLeft: 3, marginBottom: 2, fontFamily: 'BeVietnamPro-Medium', marginTop: -4, }}>Hình ảnh nơi làm việc</Text>
                     </View>
                     <View style={{
                       flexDirection: 'row',
@@ -444,7 +441,7 @@ const PostScreen = ({ navigation }) => {
                             />
                           </TouchableOpacity>
                         </View>
-                        <Text style={{ marginTop: '8%', fontSize: 11, color: '#7D7A7A', opacity: 0.8 }}>Thêm ảnh</Text>
+                        <Text style={{ marginTop: '8%', fontSize: 11, color: '#7D7A7A', opacity: 0.8, fontFamily: 'BeVietnamPro-Medium', marginTop: -4, }}>Thêm ảnh</Text>
                       </View>
                       <FlatList
                         data={selectedImages}
@@ -487,7 +484,7 @@ const PostScreen = ({ navigation }) => {
                   <View style={{ alignItems: 'flex-end' }}>
                     <View style={styles.pickImage}>
                       <Ionicons style={{ marginStart: 4 }} name="information-circle" size={16} color="#3E7CEF" />
-                      <Text style={{ fontSize: 9, marginLeft: 3, marginBottom: 2 }}>Hình ảnh hợp lệ</Text>
+                        <Text style={{ fontSize: 9, marginLeft: 3, marginBottom: 2, fontFamily: 'BeVietnamPro-Medium', }}>Hình ảnh hợp lệ</Text>
                     </View>
                   </View>
                   <TouchableOpacity
@@ -506,11 +503,11 @@ const PostScreen = ({ navigation }) => {
                       marginVertical: '4%',
                       opacity: 0.8,
                     }}>
-                      <Text style={{ fontSize: 16, color: 'white' }}>Hình nơi làm việc</Text>
+                        <Text style={{ fontSize: 16, color: 'white', fontFamily: 'BeVietnamPro-Medium', }}>Hình nơi làm việc</Text>
                     </View>
                   </TouchableOpacity>
                   <View style={{ alignItems: 'center' }}>
-                    <Text style={{ fontSize: 12, color: '#7D7A7A', opacity: 0.7 }}>ĐĂNG TỪ 01 ĐẾN 06 HÌNH</Text>
+                      <Text style={{ fontSize: 12, color: '#7D7A7A', opacity: 0.7, fontFamily: 'BeVietnamPro-Medium', }}>ĐĂNG TỪ 01 ĐẾN 06 HÌNH</Text>
                   </View>
                 </View>
               }
@@ -518,7 +515,7 @@ const PostScreen = ({ navigation }) => {
             {errors.image ? <Text style={styles.error}>{errors.image}</Text> : null}
           </View>
           <View style={{ backgroundColor: '#D9D9D9', height: 60, justifyContent: 'center', marginTop: 10 }}>
-            <Text style={{ fontSize: 16, marginStart: 25 }}>NỘI DUNG ĐĂNG TUYỂN</Text>
+            <Text style={{ fontSize: 16, marginStart: 25, fontFamily: 'BeVietnamPro-Medium', marginTop: -4, }}>NỘI DUNG ĐĂNG TUYỂN</Text>
           </View>
           <View style={{ marginVertical: 22, marginHorizontal: 24 }}>
             <Input
@@ -601,7 +598,7 @@ const PostScreen = ({ navigation }) => {
             />
             {errors.workType_id ? <Text style={styles.error}>{errors.workType_id}</Text> : null}
             <View style={styles.payForm}>
-              <Text>
+              <Text style={{ fontFamily: 'BeVietnamPro-Medium', marginTop: -4, }}>
                 {inputs.payForm_id === "" ? "Hình thức trả lương" : (inputs.payForm_id === "655de22b9a5b0ffa7ffd5132" ? "Theo giờ" : "Theo tháng")}
               </Text>
             </View>
@@ -632,7 +629,7 @@ const PostScreen = ({ navigation }) => {
             />
           </View>
           <View style={{ backgroundColor: '#D9D9D9', height: 60, justifyContent: 'center' }}>
-            <Text style={{ fontSize: 16, marginStart: 25 }}>THÔNG TIN THÊM</Text>
+            <Text style={{ fontSize: 16, marginStart: 25, fontFamily: 'BeVietnamPro-Medium', marginTop: -4, }}>THÔNG TIN THÊM</Text>
           </View>
           <View style={{ marginHorizontal: 24, marginTop: 22, flexDirection: 'row', gap: 20 }}>
             <Input
@@ -755,12 +752,14 @@ const styles = StyleSheet.create({
   panelTitle: {
     fontSize: 27,
     height: 35,
+    fontFamily: 'BeVietnamPro-Medium',
   },
   panelSubtitle: {
     fontSize: 14,
     color: COLORS.darkBlue,
     height: 30,
     marginBottom: 10,
+    fontFamily: 'BeVietnamPro-Medium',
   },
   panelButton: {
     padding: 13,
@@ -773,6 +772,7 @@ const styles = StyleSheet.create({
     fontSize: 17,
     fontWeight: 'bold',
     color: 'white',
+    fontFamily: 'BeVietnamPro-Medium',
   },
   action: {
     flexDirection: 'row',
@@ -814,10 +814,13 @@ const styles = StyleSheet.create({
     marginVertical: 5,
     fontSize: 14,
     color: COLORS.grey1,
+    fontFamily: 'BeVietnamPro-Medium',
   },
   selectedTextStyle: {
     fontSize: 14,
     color: COLORS.darkBlue,
+    fontFamily: 'BeVietnamPro-Medium', 
+    marginTop: -4,
   },
   iconStyle: {
     width: 20,
@@ -829,9 +832,11 @@ const styles = StyleSheet.create({
     borderRadius: 6,
   },
   error: {
-    fontSize: 12,
+    fontSize: 11,
     color: 'red',
-    paddingBottom: 12
+    paddingBottom: 12,
+    fontFamily: 'BeVietnamPro-Medium', 
+    marginTop: -2,
   },
   pickImage: {
     width: 96,

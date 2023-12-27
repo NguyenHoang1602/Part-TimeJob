@@ -43,7 +43,6 @@ const CVScreen = ({ route, navigation }) => {
     academic_id: '',
     introduce: '',
   });
-
   const [errors, setErrors] = React.useState({});
   const [loading, setLoading] = React.useState(false);
   const [isFocusGender, setIsFocusGender] = useState(false);
@@ -73,24 +72,42 @@ const CVScreen = ({ route, navigation }) => {
   const validate = () => {
     Keyboard.dismiss();
     let isValid = true;
-
+    const regex = /^(0|\+84)\d{9,10}$/;
+    const regexY = /[!@#$%^&*(),.?":{}|<>]/;
+    const year = 2023 - inputs.year;
     if (!inputs.title) {
       handleError('Vui lòng nhập tên CV', 'title');
       isValid = false;
+    } else if (regexY.test(inputs.title)) {
+      handleError('Chứa ký tự đặc biệt', 'title');
+      isValid = false;
     }
-
     if (!inputs.name) {
       handleError('Vui lòng nhập họ tên', 'name');
       isValid = false;
     }
-
     if (!inputs.phone) {
       handleError('Vui lòng nhập số điện thoại', 'phone');
       isValid = false;
+    } else if (regexY.test(inputs.phone)) {
+      handleError('Chứa ký tự đặc biệt', 'phone');
+      isValid = false;
+    } else {
+      const vld = regex.test(inputs.phone);
+      console.log(vld);
+      if (!vld) {
+        handleError('Số điện thoại không hợp lệ', 'phone');
+        isValid = false;
+      }
     }
-
     if (!inputs.year) {
       handleError('Vui lòng nhập năm sinh', 'year');
+      isValid = false;
+    } else if (year < 15 || 60 < year) {
+      handleError('Độ tuổi không hợp lệ', 'year');
+      isValid = false;
+    } else if (regexY.test(inputs.year)) {
+      handleError('Chứa ký tự đặc biệt', 'year');
       isValid = false;
     }
     if (!inputs.gender_id) {
@@ -134,11 +151,11 @@ const CVScreen = ({ route, navigation }) => {
     const response = await axios.post(`${API}/cvs/new`, inputs);
     if (response.status === 200) {
       setLoading(false);
-      Alert.alert('Thành công','Tạo CV thành công !',[
-        {text: ''},
-        {text: 'ok', onPress : () =>  navigation.navigate('DetailsScreen')},
+      Alert.alert('Thành công', 'Tạo CV thành công !', [
+        { text: '' },
+        { text: 'ok', onPress: () => navigation.navigate('DetailsScreen') },
       ],
-      { cancelable: false });
+        { cancelable: false });
     }
   }
 
@@ -152,7 +169,7 @@ const CVScreen = ({ route, navigation }) => {
             height: 60,
             justifyContent: 'center',
           }}>
-          <Text style={{ fontSize: 16, marginStart: 20 }}>
+          <Text style={{ fontSize: 16, marginStart: 20, fontFamily: 'BeVietnamPro-Medium', marginTop: -2 }}>
             THÔNG TIN BẮT BUỘC
           </Text>
         </View>
@@ -215,7 +232,6 @@ const CVScreen = ({ route, navigation }) => {
           />
           {errors.gender_id ? <Text style={styles.error}>{errors.gender_id}</Text> : null}
           <Input
-            onChangeText={text => handleOnchange(text, 'email')}
             onFocus={() => handleError(null, 'email')}
             placeholder="Địa chỉ email"
             value={user?.email}
@@ -245,7 +261,7 @@ const CVScreen = ({ route, navigation }) => {
           {errors.career_id ? <Text style={styles.error}>{errors.career_id}</Text> : null}
         </View>
         <View style={{ backgroundColor: '#D9D9D9', height: 60, justifyContent: 'center' }}>
-          <Text style={{ fontSize: 16, marginStart: 25 }}>THÔNG TIN THÊM</Text>
+          <Text style={{ fontSize: 16, marginStart: 25, fontFamily: 'BeVietnamPro-Medium', marginTop: -2 }}>THÔNG TIN THÊM</Text>
         </View>
         <View style={{ marginVertical: 22, marginHorizontal: 24 }}>
           <Input
@@ -332,7 +348,8 @@ const CVScreen = ({ route, navigation }) => {
             }}>
             <Text
               style={{
-                fontWeight: 'bold',
+                fontFamily: 'BeVietnamPro-Bold',
+                marginTop: -2,
                 fontSize: 18,
                 color: COLORS.white,
               }}>
@@ -388,10 +405,12 @@ const styles = StyleSheet.create({
     marginVertical: 5,
     fontSize: 14,
     color: COLORS.grey1,
+    fontFamily: 'BeVietnamPro-Medium',
   },
   selectedTextStyle: {
     fontSize: 14,
     color: COLORS.darkBlue,
+    fontFamily: 'BeVietnamPro-Medium',
   },
   iconStyle: {
     width: 20,
@@ -401,10 +420,12 @@ const styles = StyleSheet.create({
     height: 50,
     fontSize: 14,
     borderRadius: 6,
+    fontFamily: 'BeVietnamPro-Medium', marginTop: -2
   },
   error: {
-    fontSize: 12,
+    fontSize: 11,
     color: 'red',
-    paddingBottom: 12
+    paddingBottom: 12,
+    fontFamily: 'BeVietnamPro-Medium',
   },
 });

@@ -4,7 +4,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable eol-last */
 /* eslint-disable react-native/no-inline-styles */
-import { View, Text, StyleSheet, ImageBackground, TouchableOpacity, TextInput, Pressable, FlatList, Image, ScrollView, RefreshControl } from 'react-native';
+import { View, Text, StyleSheet, ImageBackground, TouchableOpacity, TextInput, Pressable, FlatList, Image, ScrollView, RefreshControl, ToastAndroid } from 'react-native';
 import React, { useContext, useState } from 'react'
 import COLORS from '../assets/const/colors';
 import UserContext from '../components/UserConText';
@@ -14,7 +14,7 @@ import Button from '../components/Button';
 //icon
 import Feather from 'react-native-vector-icons/Feather';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Entypo from 'react-native-vector-icons/Entypo';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import IconWithBadge from '../components/IconWithBadge';
 import IconWithBadgeAntDesign from '../components/IconWithBadgeAntDesign';
@@ -131,7 +131,7 @@ const ApplicationsScreen = ({ route, navigation }) => {
                     image: item?.post_id?.image,
                     bargain_Salary: formattedBarSalary,
                     feedback: item?.feedback,
-                    post_id: item?.post_id?._id,
+                    post_id: item?.post_id,
                     receiver_id: item?.receiver_id,
                 })}>
                 <View style={{ flexDirection: 'row', width: '100%', alignItems: 'center' }}>
@@ -149,8 +149,8 @@ const ApplicationsScreen = ({ route, navigation }) => {
                         }
                     })}
                     <View style={{ flex: 1, marginLeft: '5%' }}>
-                        <Text numberOfLines={2} style={{ fontSize: 18, fontWeight: '600', color: '#212121', width: '99%' }}>{item?.post_id?.title}</Text>
-                        <Text style={{ fontSize: 15, fontWeight: '600', color: '#616161', marginTop: 5 }} numberOfLines={1}>{item?.post_id?.businessName}</Text>
+                        <Text numberOfLines={2} style={{ fontSize: 17,  fontFamily: 'BeVietnamPro-Medium', color: '#212121', width: '99%' }}>{item?.post_id?.title}</Text>
+                        <Text style={{ fontSize: 14,  fontFamily: 'BeVietnamPro-Medium', color: '#616161', marginTop: 5 }} numberOfLines={1}>{item?.post_id?.businessName}</Text>
                     </View>
                     <TouchableOpacity
                         style={{
@@ -170,11 +170,11 @@ const ApplicationsScreen = ({ route, navigation }) => {
                             marginStart: '20%',
                             marginTop: '2%',
                         }}>
-                            <Text style={{ fontSize: 9.5, color: '#246BFE' }} >Hồ sơ đã gửi</Text>
+                            <Text style={{ fontSize: 9, color: '#246BFE', fontFamily: 'BeVietnamPro-Medium'}} >Hồ sơ đã gửi</Text>
                         </View>
                     ) : item.status === 1 ? (
                         <View style={{
-                            width: 100,
+                            width: 95,
                             backgroundColor: '#FFF4CD',
                             borderRadius: 6,
                             padding: 5,
@@ -183,7 +183,7 @@ const ApplicationsScreen = ({ route, navigation }) => {
                             marginStart: '20%',
                             marginTop: '3%',
                         }}>
-                            <Text style={{ fontSize: 9.5, color: '#FBCA17' }} >Hồ sơ đang xử lí</Text>
+                            <Text style={{ fontSize: 9, color: '#FBCA17',  fontFamily: 'BeVietnamPro-Medium'}} >Hồ sơ đang xử lí</Text>
                         </View>
                     ) : item.status === 2 ? (
                         <View style={{
@@ -196,11 +196,11 @@ const ApplicationsScreen = ({ route, navigation }) => {
                             marginStart: '20%',
                             marginTop: '2%',
                         }}>
-                            <Text style={{ fontSize: 9.5, color: '#F75656' }} >Hồ sơ bị từ chối</Text>
+                            <Text style={{ fontSize: 9, color: '#F75656' ,fontFamily: 'BeVietnamPro-Medium' }} >Hồ sơ bị từ chối</Text>
                         </View>
                     ) : item.status === 4 ? (
                         <View style={{
-                            width: 100,
+                            width: 110,
                             backgroundColor: '#FFCAA3',
                             borderRadius: 6,
                             padding: 5,
@@ -209,11 +209,11 @@ const ApplicationsScreen = ({ route, navigation }) => {
                             marginStart: '20%',
                             marginTop: '2%',
                         }}>
-                            <Text style={{ fontSize: 9.5, color: '#FF6B00' }} >Đang thương lượng</Text>
+                            <Text style={{ fontSize: 9, color: '#FF6B00', fontFamily: 'BeVietnamPro-Medium' }} >Đang thương lượng</Text>
                         </View>
                     ) :
                         <View style={{
-                            width: 110,
+                            width: 115,
                             backgroundColor: '#E7FEEE',
                             borderRadius: 6,
                             padding: 5,
@@ -222,7 +222,7 @@ const ApplicationsScreen = ({ route, navigation }) => {
                             marginStart: '20%',
                             marginTop: '2%',
                         }}>
-                            <Text style={{ fontSize: 9.5, color: '#08BE75' }} >Ứng tuyển thành công</Text>
+                            <Text style={{ fontSize: 9, color: '#08BE75',  fontFamily: 'BeVietnamPro-Medium' }} >Ứng tuyển thành công</Text>
                         </View>
                 }
                 <View style={{ height: 1, width: '99%', backgroundColor: COLORS.grey, opacity: 0.4, marginTop: 15, marginBottom: 8 }} />
@@ -246,24 +246,22 @@ const ApplicationsScreen = ({ route, navigation }) => {
                         style={{ width: 26, height: 26 }}
                         imageStyle={{ borderRadius: 46 }} />
                     <View style={{ flex: 1 }}>
-                        <Text style={{ color: COLORS.black, fontSize: 24, fontWeight: '600' }} numberOfLines={1}>Applications</Text>
+                        <Text style={{ color: COLORS.black, fontSize: 23,  fontFamily: 'BeVietnamPro-Medium'}} numberOfLines={1}>Applications</Text>
                     </View>
                     <TouchableOpacity
+                        onPress={() => {
+                            ToastAndroid.show('Đang phát triển', ToastAndroid.SHORT);
+                        }}
                         style={{
                             width: 46,
                             aspectRatio: 1,
                             borderRadius: 52,
-                            alignItems: 'center',
+                            alignItems: 'flex-end',
                             justifyContent: 'center',
-                            borderWidth: 1,
                             borderColor: COLORS.grey,
                         }}
-                        onPress={() => openNotification()}>
-                        {
-                            check ? (
-                                <IconWithBadge iconName="bell" badgeText="4" />
-                            ) : <IconWithBadge iconName="bell" badgeText="" />
-                        }
+                    >
+                        <Entypo name='dots-three-vertical' size={20} color={COLORS.black} />
                     </TouchableOpacity>
                 </View>
                 {/* Search */}
@@ -287,7 +285,7 @@ const ApplicationsScreen = ({ route, navigation }) => {
                         }}
                         onFocus={() => { setIsFocusedSearch(!isFocusedSearch) }}
                         onBlur={() => { setIsFocusedSearch(!isFocusedSearch) }}
-                        style={{ flex: 1, fontSize: 16, color: COLORS.black, paddingHorizontal: 10, }} />
+                        style={{ flex: 1, fontSize: 15, color: COLORS.black, paddingHorizontal: 10,  fontFamily: 'BeVietnamPro-Medium' }} />
                     <TouchableOpacity onPress={() => {
 
                     }}>
@@ -314,7 +312,7 @@ const ApplicationsScreen = ({ route, navigation }) => {
                                 source={require('../assets/images/5928293_2953962.jpg')}
                                 style={{ width: "100%", height: 430 }}
                             />
-                            <Text style={{ fontSize: 22, color: COLORS.black, fontWeight: '600', textAlign: 'center'}}>Không tìm thấy công việc đã ứng tuyển</Text>
+                            <Text style={{ fontSize: 22, color: COLORS.black, fontFamily: 'BeVietnamPro-Medium',marginTop:-2, textAlign: 'center'}}>Không tìm thấy công việc đã ứng tuyển</Text>
                         </View>
                     )}
                 />

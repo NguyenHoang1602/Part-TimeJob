@@ -283,8 +283,6 @@ const EmployerHome = ({ navigation }) => {
     };
     var number = 0;
     const list = () => {
-        console.log(listApplied.length);
-        console.log(listAllAccept.length);
         let a = listAllAccept.length / listApplied.length * 100;
         if (!isNaN(a) && isFinite(a)) {
            number = a;
@@ -306,7 +304,7 @@ const EmployerHome = ({ navigation }) => {
                     paddingLeft: 20,
                     paddingRight: 20,
                 }}>
-                <TouchableOpacity
+                <View
                     style={{
                         flexDirection: 'row',
                         marginStart: '2%',
@@ -317,11 +315,11 @@ const EmployerHome = ({ navigation }) => {
                         source={{ uri: user.photo }}
                         style={{ width: 46, height: 46 }}
                         imageStyle={{ borderRadius: 46 }} />
-                    <View style={{ flexDirection: 'column', height: '100%', justifyContent: 'center', marginStart: 13 }}>
-                        <Text style={{ color: '#7D7A7A', fontSize: 16 }}>Xin chào 👋</Text>
-                        <Text style={{ color: COLORS.black, fontSize: 20, fontWeight: '600' }} numberOfLines={1}>{user.displayName}</Text>
+                    <View style={{ flexDirection: 'column', height: 46, justifyContent: 'center', marginStart: 13, }}>
+                        <Text style={{ color: '#7D7A7A', fontSize: 16, fontFamily: 'BeVietnamPro-Medium', marginTop: -4, }}>Xin chào 👋</Text>
+                        <Text style={{ color: COLORS.black, fontSize: 20, fontFamily: 'BeVietnamPro-Bold', marginTop: -4, width: 165 }} numberOfLines={1}>{user.displayName}</Text>
                     </View>
-                </TouchableOpacity>
+                </View>
                 <TouchableOpacity
                     style={{
                         width: 46,
@@ -374,13 +372,13 @@ const EmployerHome = ({ navigation }) => {
                         />
                     </View>
                     <View style={{ flex: 1 }}>
-                        <Text style={{ marginLeft: 38, color: COLORS.white, fontSize: 19, fontWeight: '500' }}>Thống kê tuyển dụng</Text>
-                        <Text style={{ marginLeft: 38, color: COLORS.white, fontSize: 14, fontWeight: '300', marginTop: 2 }}>Tỉ lệ tuyển dụng </Text>
+                        <Text style={{ marginLeft: 38, color: COLORS.white, fontSize: 19, fontFamily: 'BeVietnamPro-Medium', marginTop: -4, }}>Thống kê tuyển dụng</Text>
+                        <Text style={{ marginLeft: 38, color: COLORS.white, fontSize: 14, fontFamily: 'BeVietnamPro-Medium', marginTop: 2, }}>Tỉ lệ tìm được nhân sự</Text>
                     </View>
                 </View>
                 <View style={{ width: '100%', alignItems: 'center', marginBottom: 15, marginTop: 15 }}>
                     <View style={{ width: '100%', marginBottom: 10 }}>
-                        <Text style={{ fontSize: 20, fontStyle: 'normal', color: COLORS.black, fontWeight: 'bold' }}>Quản lý bài đăng</Text>
+                        <Text style={{ fontSize: 20, fontStyle: 'normal', color: COLORS.black, fontFamily: 'BeVietnamPro-Bold', marginTop: -4, }}>Quản lý bài đăng</Text>
                     </View>
                     <View style={{ width: '100%', marginTop: 10 }}>
                         <TouchableOpacity
@@ -397,8 +395,8 @@ const EmployerHome = ({ navigation }) => {
                             }}>
                             <View style={{ width: 6, height: '90%', backgroundColor: '#246BFD', borderRadius: 20 }} />
                             <View style={{ marginLeft: '5%' }}>
-                                <Text style={{ marginBottom: '3%', fontSize: 16, fontWeight: '600', color: COLORS.black }}>Bài đăng đã được duyệt</Text>
-                                <Text style={{ fontSize: 14 }}>{listIsDisplay.length} tin</Text>
+                                <Text style={{ marginBottom: '3%', fontSize: 16, fontFamily: 'BeVietnamPro-Medium', marginTop: -4, color: COLORS.black }}>Bài đăng đã được duyệt</Text>
+                                <Text style={{ fontSize: 14, fontFamily: 'BeVietnamPro-Medium', marginTop: -4, }}>{listIsDisplay.length} tin</Text>
                             </View>
                         </TouchableOpacity>
                         <TouchableOpacity
@@ -416,8 +414,8 @@ const EmployerHome = ({ navigation }) => {
                             }}>
                             <View style={{ width: 6, height: '90%', backgroundColor: '#FBCD17', borderRadius: 20 }} />
                             <View style={{ marginLeft: '5%' }}>
-                                <Text style={{ marginBottom: '3%', fontSize: 16, fontWeight: '600', color: COLORS.black }}>Bài đăng đang chờ duyệt</Text>
-                                <Text style={{ fontSize: 14 }}>{listWaiting.length} tin</Text>
+                                <Text style={{ marginBottom: '3%', fontSize: 16, fontFamily: 'BeVietnamPro-Medium', marginTop: -4, color: COLORS.black }}>Bài đăng đang chờ duyệt</Text>
+                                <Text style={{ fontSize: 14, fontFamily: 'BeVietnamPro-Medium', marginTop: -4, }}>{listWaiting.length} tin</Text>
                             </View>
                         </TouchableOpacity>
                         <TouchableOpacity
@@ -434,8 +432,8 @@ const EmployerHome = ({ navigation }) => {
                             }}>
                             <View style={{ width: 6, height: '90%', backgroundColor: '#F75555', borderRadius: 20 }} />
                             <View style={{ marginLeft: '5%' }}>
-                                <Text style={{ marginBottom: '3%', fontSize: 16, fontWeight: '600', color: COLORS.black }}>Bài đăng bị từ chối</Text>
-                                <Text style={{ fontSize: 14 }}>{listDenied.length} tin</Text>
+                                <Text style={{ marginBottom: '3%', fontSize: 16, fontFamily: 'BeVietnamPro-Medium', marginTop: -4, color: COLORS.black }}>Bài đăng bị từ chối</Text>
+                                <Text style={{ fontSize: 14, fontFamily: 'BeVietnamPro-Medium', marginTop: -4, }}>{listDenied.length} tin</Text>
                             </View>
                         </TouchableOpacity>
                     </View>
@@ -443,7 +441,7 @@ const EmployerHome = ({ navigation }) => {
                 </View>
                 <View style={{ width: '100%', alignItems: 'center', marginBottom: 15, marginTop: 5 }}>
                     <View style={{ width: '100%', marginBottom: 15 }}>
-                        <Text style={{ fontSize: 20, fontStyle: 'normal', color: COLORS.black, fontWeight: 'bold' }}>Hồ sơ ứng tuyển</Text>
+                        <Text style={{ fontSize: 20, fontStyle: 'normal', color: COLORS.black, fontFamily: 'BeVietnamPro-Bold', marginTop: -4, }}>Hồ sơ ứng tuyển</Text>
                     </View>
                     <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
                         <TouchableOpacity
@@ -462,8 +460,8 @@ const EmployerHome = ({ navigation }) => {
                                 imageStyle={{ position: 'absolute', borderRadius: 20 }}
                             /> */}
                             <View style={{ flex: 1 }} />
-                            <Text style={{ width: '50%', fontSize: 18, fontWeight: '500', marginBottom: '3%', marginHorizontal: 10, color: COLORS.white }}>Chưa xem</Text>
-                            <Text style={{ fontSize: 14, marginHorizontal: 10, color: COLORS.white }}>{listUnRead.length}</Text>
+                            <Text style={{ width: '50%', fontSize: 18, fontFamily: 'BeVietnamPro-Medium', marginTop: -4, marginBottom: '3%', marginHorizontal: 10, color: COLORS.white }}>Chưa xem</Text>
+                            <Text style={{ fontSize: 14, marginHorizontal: 10, color: COLORS.white, fontFamily: 'BeVietnamPro-Medium', marginTop: -4, }}>{listUnRead.length}</Text>
 
                         </TouchableOpacity>
                         <TouchableOpacity
@@ -482,8 +480,8 @@ const EmployerHome = ({ navigation }) => {
                                 imageStyle={{ position: 'absolute', borderRadius: 20 }}
                             /> */}
                             <View style={{ flex: 1 }} />
-                            <Text style={{ width: '30%', fontSize: 18, fontWeight: '500', marginBottom: '3%', marginHorizontal: 10, marginTop: '-60%', color: COLORS.white }}>Chờ xử lý</Text>
-                            <Text style={{ fontSize: 14, marginHorizontal: 10, color: COLORS.white }}>{listPending.length}</Text>
+                            <Text style={{ width: '33%', fontSize: 18, fontFamily: 'BeVietnamPro-Medium', marginBottom: '3%', marginHorizontal: 10, marginTop: '-60%', color: COLORS.white }}>Chờ xử lý</Text>
+                            <Text style={{ fontSize: 14, marginHorizontal: 10, color: COLORS.white, fontFamily: 'BeVietnamPro-Medium', marginTop: -4, }}>{listPending.length}</Text>
 
                         </TouchableOpacity>
                         <TouchableOpacity
@@ -502,8 +500,8 @@ const EmployerHome = ({ navigation }) => {
                                 imageStyle={{ position: 'absolute', borderRadius: 20 }}
                             /> */}
                             <View style={{ flex: 1 }} />
-                            <Text style={{ width: '30%', fontSize: 18, fontWeight: '500', marginBottom: '3%', marginHorizontal: 10, marginTop: '-60%', color: COLORS.white }}>Từ chối</Text>
-                            <Text style={{ fontSize: 14, marginHorizontal: 10, color: COLORS.white }}>{listReject.length}</Text>
+                            <Text style={{ width: '40%', fontSize: 18, fontFamily: 'BeVietnamPro-Medium', marginBottom: '3%', marginHorizontal: 10, marginTop: '-60%', color: COLORS.white }}>Từ chối</Text>
+                            <Text style={{ fontSize: 14, marginHorizontal: 10, color: COLORS.white, fontFamily: 'BeVietnamPro-Medium', marginTop: -4, }}>{listReject.length}</Text>
 
                         </TouchableOpacity>
                         <TouchableOpacity
@@ -522,8 +520,8 @@ const EmployerHome = ({ navigation }) => {
                                 imageStyle={{ position: 'absolute', borderRadius: 20 }}
                             /> */}
                             <View style={{ flex: 1 }} />
-                            <Text style={{ width: '50%', fontSize: 18, fontWeight: '500', marginBottom: '3%', marginHorizontal: 10, marginTop: '-60%', color: COLORS.white }}>Thương lượng</Text>
-                            <Text style={{ fontSize: 14, marginHorizontal: 10, color: COLORS.white }}>{listBargain.length}</Text>
+                            <Text style={{ width: '60%', fontSize: 18, fontFamily: 'BeVietnamPro-Medium', marginBottom: '3%', marginHorizontal: 10, marginTop: '-60%', color: COLORS.white }}>Thương lượng</Text>
+                            <Text style={{ fontSize: 14, marginHorizontal: 10, color: COLORS.white, fontFamily: 'BeVietnamPro-Medium', marginTop: -4, }}>{listBargain.length}</Text>
 
                         </TouchableOpacity>
                         <TouchableOpacity
@@ -541,8 +539,8 @@ const EmployerHome = ({ navigation }) => {
                                 imageStyle={{ position: 'absolute', borderRadius: 20 }}
                             /> */}
                             <View style={{ flex: 1 }} />
-                            <Text style={{ width: '50%', fontSize: 18, fontWeight: '500', marginBottom: '3%', marginHorizontal: 10, marginTop: '-60%', color: COLORS.white }}>Đã duyệt</Text>
-                            <Text style={{ fontSize: 14, marginHorizontal: 10, color: COLORS.white }}>{listAccept.length}</Text>
+                            <Text style={{ width: '50%', fontSize: 18, fontFamily: 'BeVietnamPro-Medium', marginBottom: '3%', marginHorizontal: 10, marginTop: '-60%', color: COLORS.white }}>Đã duyệt</Text>
+                            <Text style={{ fontSize: 14, marginHorizontal: 10, color: COLORS.white, fontFamily: 'BeVietnamPro-Medium', marginTop: -4, }}>{listAccept.length}</Text>
 
                         </TouchableOpacity>
                     </ScrollView>

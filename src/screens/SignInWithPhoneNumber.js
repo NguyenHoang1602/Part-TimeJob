@@ -294,23 +294,24 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 20,
     color: COLORS.black,
-    fontWeight: '700'
+    fontFamily: 'BeVietnamPro-Bold',
+    marginTop: -4,
   },
   title: {
     fontSize: 20,
-    fontFamily: Fonts.POPPINS_MEDIUM,
     lineHeight: 20 * 1.4,
     marginTop: 50,
     marginBottom: 10,
     marginHorizontal: 20,
+    fontFamily: 'BeVietnamPro-Medium',
   },
   content: {
     fontSize: 16,
-    fontFamily: Fonts.POPPINS_MEDIUM,
     marginTop: 10,
     marginBottom: 10,
     marginHorizontal: 20,
-    textAlign: 'center'
+    textAlign: 'center',
+    fontFamily: 'BeVietnamPro-Medium',
   },
   inputsContainer: {
     flexDirection: 'row',
@@ -327,7 +328,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
     alignItems: 'center',
     borderWidth: 0.5,
-    borderColor: COLORS.LIGHT_GREY2,
     flexDirection: 'row',
   },
   phoneInputContainer: {
@@ -335,7 +335,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     borderRadius: 8,
     borderWidth: 0.5,
-    borderColor: COLORS.LIGHT_GREY2,
     justifyContent: 'center',
     flex: 1,
   },
@@ -343,7 +342,8 @@ const styles = StyleSheet.create({
     fontSize: 18,
     textAlignVertical: 'center',
     height: Display.setHeight(6),
-    color: COLORS.DEFAULT_BLACK,
+    fontFamily: 'BeVietnamPro-Medium',
+    marginTop: -4,
   },
   signinButton: {
     backgroundColor: COLORS.primary,
@@ -365,7 +365,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     lineHeight: 18 * 1.4,
     color: COLORS.white,
-    fontFamily: Fonts.POPPINS_MEDIUM,
+    fontFamily: 'BeVietnamPro-Medium',
   },
   otpContainer: {
     marginHorizontal: 20,
@@ -387,5 +387,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     paddingHorizontal: 18,
     paddingVertical: 10,
+    fontFamily: 'BeVietnamPro-Medium',
+    marginTop: -4,
   },
 });

@@ -7,14 +7,14 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable react-native/no-inline-styles */
 import React, { useState, useContext, useEffect } from 'react';
-import { FlatList, Image, TextInput, ScrollView, StyleSheet, Text, TouchableHighlight, TouchableOpacity, View, Button, ImageBackground, RefreshControl, Pressable } from 'react-native';
+import { FlatList, Image, TextInput, ScrollView, StyleSheet, Text, TouchableHighlight, TouchableOpacity, View, Button, ImageBackground, RefreshControl, Pressable, ToastAndroid } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Feather from 'react-native-vector-icons/Feather';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import IconWithBadge from '../components/IconWithBadge';
-import AntDesign from 'react-native-vector-icons/AntDesign';
+import Entypo from 'react-native-vector-icons/Entypo';
 import { API } from '../../Sever/sever';
 
 import Modal from "react-native-modal";
@@ -141,7 +141,7 @@ const SavedJobsScreen = ({ navigation }) => {
       // setLoading(false);
       toggleModalclose();
       fetchData();
-      console.log("Thành công");
+      ToastAndroid.show('Xóa thành công !', ToastAndroid.SHORT);
     }
   }
   const FlatListSaveJobs = () => {
@@ -158,7 +158,7 @@ const SavedJobsScreen = ({ navigation }) => {
               source={require('../assets/images/5928293_2953962.jpg')}
               style={{ width: "100%", height: 430 }}
             />
-            <Text style={{ fontSize: 22, color: COLORS.black, fontWeight: '600' }}>Không tìm thấy công việc đã lưu</Text>
+            <Text style={{ fontSize: 20, color: COLORS.primary, fontFamily: 'BeVietnamPro-Bold' }}>Không tìm thấy công việc đã lưu</Text>
           </View>
         )}
       />
@@ -167,6 +167,11 @@ const SavedJobsScreen = ({ navigation }) => {
   const renderItemJob = ({ item }) => {
     const formattedWageMin = item.post_id.wageMin.toLocaleString('vi-VN');
     const formattedWageMax = item.post_id.wageMax.toLocaleString('vi-VN');
+    const date = item.post_id.date.slice(0, 10);
+    const ngayDang = new Date(date);
+    const ngayHienTai = new Date();
+    const soMiligiay = ngayHienTai.getTime() - ngayDang.getTime();
+    const soNgay = Math.floor(soMiligiay / (1000 * 60 * 60 * 24));
     return (
       <TouchableOpacity
         style={{
@@ -193,7 +198,7 @@ const SavedJobsScreen = ({ navigation }) => {
           wage_min: formattedWageMin,
           wage_max: formattedWageMax,
           status_id: item?.post_id.status_id,
-          date: item?.post_id.date,
+          date: soNgay,
           time: item?.post_id.time,
         })}>
         <View style={{ borderRadius: 15, borderWidth: 0.5, padding: 18, borderColor: COLORS.grey }}>
@@ -210,10 +215,10 @@ const SavedJobsScreen = ({ navigation }) => {
               }
             })}
             <View style={{ flex: 1 }}>
-              <Text numberOfLines={2} style={{ fontSize: 18, fontWeight: '500', color: COLORS.black }}>
+              <Text numberOfLines={2} style={{ fontSize: 18, fontFamily: 'BeVietnamPro-Medium', marginTop: -2, color: COLORS.black }}>
                 {item.post_id.title}
               </Text>
-              <Text numberOfLines={1} style={{ fontSize: 15, fontWeight: 'normal', color: COLORS.black, opacity: 0.5 }}>
+              <Text numberOfLines={1} style={{ fontSize: 15, fontFamily: 'BeVietnamPro-Medium', marginTop: -2, color: COLORS.black, opacity: 0.5 }}>
                 {item.post_id.address}
               </Text>
             </View>
@@ -227,22 +232,22 @@ const SavedJobsScreen = ({ navigation }) => {
           <View style={{ borderTopWidth: 0.5, borderColor: COLORS.grey, marginVertical: 8 }} />
 
           <View style={{ flexDirection: 'row', gap: 10, }}>
-            <View style={{ paddingStart: '21%' }}>
-              <Text numberOfLines={1} style={{ fontSize: 16, fontWeight: '400', color: COLORS.black, opacity: 0.6, }}>
+            <View style={{ paddingStart: '21%', }}>
+              <Text numberOfLines={1} style={{ fontSize: 14, fontFamily: 'BeVietnamPro-Medium', marginTop: -2, color: COLORS.black, opacity: 0.6, }}>
                 {item.post_id.businessName}
               </Text>
-              <View style={{ flexDirection: 'row' }}>
-                <Text style={{ color: COLORS.blue, fontSize: 16, marginVertical: 9 }}>{formattedWageMin}đ - {formattedWageMax}đ</Text>
+              <View style={{ flexDirection: 'row', marginVertical: 9 }}>
+                <Text style={{ color: COLORS.blue, fontSize: 14, fontFamily: 'BeVietnamPro-Medium', marginTop: -2 }}>{formattedWageMin}đ - {formattedWageMax}đ</Text>
                 {
-                  item.payForm_id === '655de22b9a5b0ffa7ffd5132' ? (
-                    <Text style={{ color: COLORS.blue, fontSize: 16, marginVertical: 9 }}> /giờ</Text>
+                  item.post_id.payForm_id._id === '655de22b9a5b0ffa7ffd5132' ? (
+                    <Text style={{ color: COLORS.blue, fontSize: 14, fontFamily: 'BeVietnamPro-Medium', marginTop: -2 }}> /giờ</Text>
                   ) : (
-                    <Text style={{ color: COLORS.blue, fontSize: 16, marginVertical: 9 }}> /tháng</Text>
+                    <Text style={{ color: COLORS.blue, fontSize: 14, fontFamily: 'BeVietnamPro-Medium', marginTop: -2 }}> /tháng</Text>
                   )
                 }
               </View>
               <View style={{
-                width: 80,
+                width: 85,
                 height: 25,
                 borderWidth: 1,
                 borderColor: COLORS.grey,
@@ -252,10 +257,10 @@ const SavedJobsScreen = ({ navigation }) => {
                 justifyContent: 'center',
               }}>
                 {
-                  item.workType_id == '653e66b38e88b23b41388e3c' ? (
-                    <Text style={{ fontSize: 10 }} >Bán thời gian</Text>
+                  item.post_id.workType_id._id === '653e66b38e88b23b41388e3c' ? (
+                    <Text style={{ fontSize: 10, fontFamily: 'BeVietnamPro-Medium', marginTop: -2 }} >Bán thời gian</Text>
                   ) : (
-                    <Text style={{ fontSize: 10 }} >Toàn thời gian</Text>
+                    <Text style={{ fontSize: 10, fontFamily: 'BeVietnamPro-Medium', marginTop: -2 }} >Toàn thời gian</Text>
                   )
                 }
               </View>
@@ -281,24 +286,22 @@ const SavedJobsScreen = ({ navigation }) => {
             style={{ width: 26, height: 26 }}
             imageStyle={{ borderRadius: 46 }} />
           <View style={{ flex: 1 }}>
-            <Text style={{ color: COLORS.black, fontSize: 24, fontWeight: '600' }} numberOfLines={1}>Save Jobs</Text>
+            <Text style={{ color: COLORS.black, fontSize: 24, fontFamily: 'BeVietnamPro-Bold', marginTop: -6 }} numberOfLines={1}>Save Jobs</Text>
           </View>
           <TouchableOpacity
+            onPress={() => {
+              ToastAndroid.show('Đang phát triển', ToastAndroid.SHORT);
+            }}
             style={{
               width: 46,
               aspectRatio: 1,
               borderRadius: 52,
-              alignItems: 'center',
+              alignItems: 'flex-end',
               justifyContent: 'center',
-              borderWidth: 1,
               borderColor: COLORS.grey,
             }}
-            onPress={() => openNotification()}>
-            {
-              check ? (
-                <IconWithBadge iconName="bell" badgeText="4" />
-              ) : <IconWithBadge iconName="bell" badgeText="" />
-            }
+          >
+            <Entypo name='dots-three-vertical' size={20} color={COLORS.black} />
           </TouchableOpacity>
         </View>
         {/* Search */}
@@ -322,7 +325,7 @@ const SavedJobsScreen = ({ navigation }) => {
             }}
             onFocus={() => { setIsFocusedSearch(!isFocusedSearch) }}
             onBlur={() => { setIsFocusedSearch(!isFocusedSearch) }}
-            style={{ flex: 1, fontSize: 16, color: COLORS.black, paddingHorizontal: 10, }} />
+            style={{ flex: 1, fontSize: 16, fontFamily: 'BeVietnamPro-Medium', marginTop: -2, color: COLORS.black, paddingHorizontal: 10, }} />
           <TouchableOpacity onPress={() => {
 
           }}>
@@ -334,7 +337,7 @@ const SavedJobsScreen = ({ navigation }) => {
         refreshControl={<RefreshControl
           refreshing={refreshing}
           onRefresh={fetchData}
-          colors={['#0000ff']}
+          colors={[COLORS.primary]}
         />}
       >
         <FlatListSaveJobs />
@@ -369,7 +372,7 @@ const SavedJobsScreen = ({ navigation }) => {
           paddingTop: 20,
           alignItems: 'center',
         }}>
-          <Text style={{ fontSize: 18, fontWeight: '700', color: COLORS.black }}>Xóa công việc đã lưu ?</Text>
+          <Text style={{ fontSize: 18, fontWeight: '700', color: COLORS.black, fontFamily: 'BeVietnamPro-Medium', marginTop: -2 }}>Xóa công việc đã lưu ?</Text>
           <View style={{ borderColor: COLORS.blackOpacity, marginVertical: 10, width: "100%" }} />
           <View style={{ paddingVertical: 18, width: "100%" }}>
             <View style={{ borderRadius: 15, borderWidth: 1, paddingHorizontal: 18, borderColor: COLORS.grey }}>
@@ -386,10 +389,10 @@ const SavedJobsScreen = ({ navigation }) => {
                   }
                 })}
                 <View style={{ flex: 1 }}>
-                  <Text style={{ fontSize: 18, color: COLORS.black, fontWeight: "600" }} numberOfLines={1}>
+                  <Text style={{ fontSize: 18, color: COLORS.black, fontFamily: 'BeVietnamPro-Medium', marginTop: -2 }} numberOfLines={1}>
                     {selectedItem?.post_id.title}
                   </Text>
-                  <Text style={{ fontSize: 16, color: COLORS.grey, paddingTop: 4 }} numberOfLines={1}>
+                  <Text style={{ fontSize: 15, color: COLORS.grey, paddingTop: 4, fontFamily: 'BeVietnamPro-Medium', marginTop: -2 }} numberOfLines={1}>
                     {selectedItem?.post_id.address}
                   </Text>
                 </View>
@@ -399,24 +402,24 @@ const SavedJobsScreen = ({ navigation }) => {
               </View>
               <View style={{ borderTopWidth: 1, borderColor: COLORS.grey }} />
               <View style={{ flexDirection: 'row', gap: 8, paddingVertical: 12 }}>
-                <View style={{ paddingStart: 60 }}>
-                  <Text style={{ fontSize: 18, color: COLORS.black, fontWeight: "600" }} >
+                <View style={{ paddingStart: 60, gap : 8 }}>
+                  <Text style={{ fontSize: 14, color: COLORS.black, fontFamily: 'BeVietnamPro-Medium', marginTop: -2 }} numberOfLines={1} >
                     {selectedItem?.post_id.businessName}
                   </Text>
-                  <View style={{ flexDirection: 'row', paddingVertical: 4  }}>
-                    <Text style={{ fontSize: 16, color: COLORS.primary}} >
+                  <View style={{ flexDirection: 'row', paddingVertical: 4 }}>
+                    <Text style={{ fontSize: 14, color: COLORS.primary, fontFamily: 'BeVietnamPro-Medium', marginTop: -2 }} numberOfLines={1} >
                       {selectedItem?.post_id.wageMin.toLocaleString('vi-VN')}đ - {selectedItem?.post_id.wageMax.toLocaleString('vi-VN')}đ
                     </Text>
                     {
                       selectedItem?.post_id?.payForm_id?._id === '655de22b9a5b0ffa7ffd5132' ? (
-                        <Text style={{ color: COLORS.blue, fontSize: 16 }}> /giờ</Text>
+                        <Text style={{ color: COLORS.blue, fontSize: 14, fontFamily: 'BeVietnamPro-Medium', marginTop: -2 }}> /giờ</Text>
                       ) : (
-                        <Text style={{ color: COLORS.blue, fontSize: 16 }}> /tháng</Text>
+                        <Text style={{ color: COLORS.blue, fontSize: 14, fontFamily: 'BeVietnamPro-Medium', marginTop: -2 }}> /tháng</Text>
                       )
                     }
                   </View>
                   <View style={{
-                    width: 80,
+                    width: 85,
                     borderWidth: 0.5,
                     borderColor: COLORS.grey,
                     borderRadius: 7,
@@ -426,9 +429,9 @@ const SavedJobsScreen = ({ navigation }) => {
                   }}>
                     {
                       selectedItem?.post_id.workType_id._id == '653e66b38e88b23b41388e3c' ? (
-                        <Text style={{ fontSize: 10 }} >Bán thời gian</Text>
+                        <Text style={{ fontSize: 10, fontFamily: 'BeVietnamPro-Medium', marginTop: -2 }} >Bán thời gian</Text>
                       ) : (
-                        <Text style={{ fontSize: 10 }} >Toàn thời gian</Text>
+                        <Text style={{ fontSize: 10, fontFamily: 'BeVietnamPro-Medium', marginTop: -2 }} >Toàn thời gian</Text>
                       )
                     }
                   </View>
@@ -451,7 +454,7 @@ const SavedJobsScreen = ({ navigation }) => {
                 paddingVertical: 15,
                 marginEnd: 15,
               }}>
-              <Text style={{ color: COLORS.primary, fontSize: 18, fontWeight: "600" }}>Hủy</Text>
+              <Text style={{ color: COLORS.primary, fontSize: 18, fontFamily: 'BeVietnamPro-Medium', marginTop: -2 }}>Hủy</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -465,7 +468,7 @@ const SavedJobsScreen = ({ navigation }) => {
                 width: 160,
                 paddingVertical: 15,
               }}>
-              <Text style={{ color: COLORS.white, fontSize: 18, fontWeight: "600" }}>Xóa</Text>
+              <Text style={{ color: COLORS.white, fontSize: 18, fontFamily: 'BeVietnamPro-Medium', marginTop: -2 }}>Xóa</Text>
             </TouchableOpacity>
           </View>
         </View>

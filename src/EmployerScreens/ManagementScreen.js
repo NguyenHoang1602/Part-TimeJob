@@ -149,9 +149,9 @@ const ManagementScreen = ({ route, navigation }) => {
               source={{ uri: user.photo }}
               style={{ width: 46, height: 46 }}
               imageStyle={{ borderRadius: 46 }} />
-            <View style={{ flexDirection: 'column', height: '100%', justifyContent: 'center', marginStart: 13 }}>
-              <Text style={{ color: '#7D7A7A', fontSize: 16 }}>Xin chào 👋</Text>
-              <Text numberOfLines={1} style={{ color: COLORS.black, fontSize: 20, fontWeight: '600' }}>{user.displayName}</Text>
+            <View style={{ flexDirection: 'column', height: '46', justifyContent: 'center', marginStart: 13 }}>
+              <Text style={{ color: '#7D7A7A', fontSize: 16, fontFamily: 'BeVietnamPro-Medium', marginTop: -4, }}>Xin chào 👋</Text>
+              <Text numberOfLines={1} style={{ color: COLORS.black, fontSize: 20, fontFamily: 'BeVietnamPro-Bold', marginTop: -4, }}>{user.displayName}</Text>
             </View>
           </TouchableOpacity>
           <TouchableOpacity
@@ -166,7 +166,6 @@ const ManagementScreen = ({ route, navigation }) => {
               justifyContent: 'center',
             }}
             onPress={() => navigation.navigate('Notifications')}>
-            {/* <Feather name='bell' size={24} color={COLORS.black}/> */}
             {
               check ? (
                 <IconWithBadge iconName="bell" badgeText="4" />
@@ -189,11 +188,12 @@ const ManagementScreen = ({ route, navigation }) => {
             <IconWithBadgeAntDesign iconName="message1" badgeText="" />
           </TouchableOpacity>
         </View>
-      </View><TopTab.Navigator
+      </View>
+      <TopTab.Navigator
         screenOptions={{
           tabBarLabelStyle: {
             fontSize: 14,
-            fontWeight: '500',
+            fontFamily: 'BeVietnamPro-Bold',
           },
           tabBarItemStyle: {
             width: 'auto',
@@ -241,7 +241,7 @@ const styles = StyleSheet.create({
   },
   textStyle: {
     color: 'white',
-    fontWeight: 'bold',
+    fontFamily: 'BeVietnamPro-Medium', marginTop: -4,
     textAlign: 'center',
   },
   modalText: {

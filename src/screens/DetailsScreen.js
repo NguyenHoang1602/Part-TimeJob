@@ -53,7 +53,8 @@ const DetailsScreen = ({ route, navigation }) => {
         title: route.params?.title,
         gender: route.params?.gender,
         career_id: route.params?.career_id.title,
-        payform_id: route.params?.payform_id?.title,
+        career_ID: route.params?.career_id._id,
+        payform_id: route.params?.payform_id,
         experience_id: route.params?.experience_id.title,
         acedemic_id: route.params?.acedemic_id.title,
         worktype_id: route.params?.worktype_id.title,
@@ -77,6 +78,7 @@ const DetailsScreen = ({ route, navigation }) => {
     const handlePress = (itemId) => {
         setSelectedItem(itemId === selectedItem ? null : itemId);
     };
+    console.log(data);
     const getAllApplied = async () => {
         try {
             const response = await axios.post(`${API}/apply/listMyApplied`, {
@@ -113,8 +115,7 @@ const DetailsScreen = ({ route, navigation }) => {
             const result = await axios.post(`${API}/savePost/add`, savedata);
             if (result.status === 200) {
                 getListSave();
-                Alert.alert('Lưu tin thành công !')
-                console.log("Thành công");
+                ToastAndroid.show('Lưu tin thành công !', ToastAndroid.SHORT);
             }
         } catch (error) {
             console.log('Err: ', error);
@@ -143,11 +144,17 @@ const DetailsScreen = ({ route, navigation }) => {
     const validate = async () => {
         Keyboard.dismiss();
         let isValid = true;
+        const bargain_Salary = Number(salary.replace(/\./g, ''));
+        const wageMin = Number(data?.wage_min.replace(/\./g, ''));
+        console.log(bargain_Salary);
         if (selectedItem === null) {
             ToastAndroid.show("Bạn chưa chọn CV", ToastAndroid.LONG);
         } else {
-            if (!salary) {
+            if (!bargain_Salary) {
                 setErrors('Vui lòng nhập lương mong muốn')
+                isValid = false;
+            } else if (bargain_Salary < wageMin) {
+                setErrors('Lương mong muốn phải lớn hơn hoặc bằng lương tối thiểu')
                 isValid = false;
             }
             if (isValid) {
@@ -192,11 +199,15 @@ const DetailsScreen = ({ route, navigation }) => {
     };
 
     const getCV = async () => {
+        const tempData = {
+            id: user._id,
+            c_id: data.career_ID,
+        }
         axios({
             url: `${API}/cvs/myCVs`,
             method: 'POST',
             data: {
-                id: user._id,
+                tempData
             },
         }).then(async (response) => {
             if (response.status === 200) {
@@ -216,6 +227,7 @@ const DetailsScreen = ({ route, navigation }) => {
         const result = await axios.post(`${API}/savePost/deleteWithCondition`, deleteSave);
         if (result.status === 200) {
             getListSave();
+            ToastAndroid.show('Xóa tin đã lưu thành công !', ToastAndroid.SHORT);
             console.log("Thành công");
         }
     }
@@ -240,7 +252,7 @@ const DetailsScreen = ({ route, navigation }) => {
                 {({ pressed }) => (
                     <View style={{ flexDirection: 'row' }}>
                         <Ionicons name="document-text-outline" size={24} color={COLORS.black} />
-                        <Text numberOfLines={1} style={{ flex: 1, fontSize: 16, fontWeight: '400', marginLeft: 25, color: COLORS.black }}>{item.title}</Text>
+                        <Text numberOfLines={1} style={{ flex: 1, fontSize: 16, marginLeft: 25, color: COLORS.black, fontFamily: 'BeVietnamPro-Medium', marginTop: -2 }}>{item.title}</Text>
                         {
                             isSelected ? (
                                 <AntDesign name="checkcircle" size={24} color={COLORS.primary} />
@@ -298,7 +310,7 @@ const DetailsScreen = ({ route, navigation }) => {
                     showSkipButton={false}
                     showDoneButton={false}
                     showNextButton={false}
-                    data={data.image}
+                    data={data?.image}
                     renderItem={({ item }) => {
                         return (
                             <View style={{ marginBottom: 5 }}>
@@ -319,74 +331,74 @@ const DetailsScreen = ({ route, navigation }) => {
                 <View style={{ width: '100%', paddingHorizontal: 15 }}>
                     <View
                         style={styles.postHeaders}>
-                        <Text style={styles.title}>{data.title}</Text>
+                        <Text style={styles.title}>{data?.title}</Text>
                         <View style={{ flexDirection: 'row' }}>
-                            <Text style={{ color: COLORS.red, fontSize: 16, marginVertical: 9 }}>{data.wage_min}đ - {data.wage_max}đ</Text>
+                            <Text style={{ color: COLORS.red, fontSize: 16, marginVertical: 9, fontFamily: 'BeVietnamPro-Medium' }}>{data?.wage_min}đ - {data?.wage_max}đ</Text>
                             {
-                                data.payform_id === '655de22b9a5b0ffa7ffd5132' ? (
-                                    <Text style={{ color: COLORS.red, fontSize: 16, marginVertical: 9 }}> /giờ</Text>
+                                data?.payform_id?._id === '655de22b9a5b0ffa7ffd5132' ? (
+                                    <Text style={{ color: COLORS.red, fontSize: 16, marginVertical: 9, fontFamily: 'BeVietnamPro-Medium'}}> /giờ</Text>
                                 ) : (
-                                    <Text style={{ color: COLORS.red, fontSize: 16, marginVertical: 9 }}> /tháng</Text>
+                                        <Text style={{ color: COLORS.red, fontSize: 16, marginVertical: 9, fontFamily: 'BeVietnamPro-Medium'}}> /tháng</Text>
                                 )
                             }
                         </View>
-                        <Text style={styles.datetime}>Đã đăng {data.date} ngày trước vào lúc {data.time}</Text>
+                        <Text style={styles.datetime}>Đã đăng {data?.date} ngày trước vào lúc {data?.time}</Text>
                         <View style={styles.user}>
                             <ImageBackground
-                                source={{ uri: data.avatar }}
+                                source={{ uri: data?.avatar }}
                                 style={{ width: 48, height: 48 }}
                                 imageStyle={{ borderRadius: 48 }}
                             />
-                            <Text style={styles.usertitle}>{data.displayName}</Text>
+                            <Text style={styles.usertitle}>{data?.displayName}</Text>
                         </View>
                     </View>
                     <View style={styles.dot} />
                     <View style={{ width: '100%' }}>
-                        <Text style={styles.describe}>{data.describe}</Text>
+                        <Text style={styles.describe}>{data?.describe}</Text>
                     </View>
                     <View style={styles.item1}>
                         <AntDesign name="creditcard" size={24} color={COLORS.blue} />
-                        <Text style={styles.itemText}>Hình thức trả lương: {data.payform_id}</Text>
+                        <Text style={styles.itemText}>Hình thức trả lương: {data?.payform_id?.title}</Text>
                     </View>
                     <View style={styles.item}>
                         <Octicons name="log" size={24} color={COLORS.blue} />
-                        <Text style={styles.itemText}>Loại công việc: {data.worktype_id}</Text>
+                        <Text style={styles.itemText}>Loại công việc: {data?.worktype_id}</Text>
                     </View>
                     <View style={styles.item}>
                         <SimpleLineIcons name="briefcase" size={24} color={COLORS.blue} />
-                        <Text style={styles.itemText}>Ngành nghề: {data.career_id}</Text>
+                        <Text style={styles.itemText}>Ngành nghề: {data?.career_id}</Text>
                     </View>
                     <View style={styles.item}>
                         <AntDesign name="carryout" size={24} color={COLORS.blue} />
-                        <Text style={styles.itemText}>Kinh nghiệm: {data.experience_id}</Text>
+                        <Text style={styles.itemText}>Kinh nghiệm: {data?.experience_id}</Text>
                     </View>
                     <View style={styles.item}>
                         <Octicons name="mortar-board" size={24} color={COLORS.blue} />
-                        <Text style={styles.itemText}>Trình độ học vấn: {data.acedemic_id}</Text>
+                        <Text style={styles.itemText}>Trình độ học vấn: {data?.acedemic_id}</Text>
                     </View>
                     <View style={styles.item}>
                         <Fontisto name="venus-mars" size={24} color={COLORS.blue} />
-                        <Text style={styles.itemText}>Giới tính: {data.gender}</Text>
+                        <Text style={styles.itemText}>Giới tính: {data?.gender}</Text>
                     </View>
                     <View style={styles.item}>
                         <FontAwesome name="building-o" size={24} color={COLORS.blue} />
-                        <Text style={styles.itemText}>Tên Công ty: {data.business_name}</Text>
+                        <Text style={styles.itemText}>Tên Công ty: {data?.business_name}</Text>
                     </View>
                     <View style={styles.item}>
                         <Octicons name="people" size={24} color={COLORS.blue} />
-                        <Text style={styles.itemText}>Số lượng tuyển dụng: {data.quantity}</Text>
+                        <Text style={styles.itemText}>Số lượng tuyển dụng: {data?.quantity}</Text>
                     </View>
                     <View style={styles.item}>
                         <AntDesign name="leftsquareo" size={24} color={COLORS.blue} />
-                        <Text style={styles.itemText}>Tuổi tối thiểu: {data.age_min}</Text>
+                        <Text style={styles.itemText}>Tuổi tối thiểu: {data?.age_min}</Text>
                     </View>
                     <View style={styles.item}>
                         <AntDesign name="rightsquareo" size={24} color={COLORS.blue} />
-                        <Text style={styles.itemText}>Tuổi đa: {data.age_max}</Text>
+                        <Text style={styles.itemText}>Tuổi đa: {data?.age_max}</Text>
                     </View>
                     <View style={{ flexDirection: 'row', marginTop: 10, alignItems: 'center', width: '90%' }}>
                         <Feather name="map-pin" size={24} color={COLORS.blue} />
-                        <Text style={styles.itemText}>{data.address}</Text>
+                        <Text style={styles.itemText}>{data?.address}</Text>
                     </View>
                     <View style={{ width: '100%', alignItems: 'center', paddingVertical: 50 }}>
                         {isFollowed(data?.postid) ? (
@@ -395,7 +407,8 @@ const DetailsScreen = ({ route, navigation }) => {
                                 style={styles.btnApply}>
                                 <Text
                                     style={{
-                                        fontWeight: 'bold',
+                                        fontFamily: 'BeVietnamPro-Medium',
+                                        marginTop : -2,
                                         fontSize: 18,
                                         color: COLORS.white,
                                     }}>
@@ -407,7 +420,8 @@ const DetailsScreen = ({ route, navigation }) => {
                             style={styles.btnApply}>
                             <Text
                                 style={{
-                                    fontWeight: 'bold',
+                                    fontFamily: 'BeVietnamPro-Medium',
+                                    marginTop : -2,
                                     fontSize: 18,
                                     color: COLORS.white,
                                 }}>
@@ -435,7 +449,7 @@ const DetailsScreen = ({ route, navigation }) => {
                 </View>
                 <View style={{ backgroundColor: '#FFFFFF' }}>
                     <View style={styles.addcv}>
-                        <Text style={{ fontSize: 18, fontWeight: '600', color: COLORS.black }}>Hồ sơ ứng tuyển</Text>
+                        <Text style={{ fontSize: 18, fontFamily: 'BeVietnamPro-Medium', marginTop: -2, color: COLORS.black }}>Hồ sơ ứng tuyển</Text>
                         <View style={styles.add}>
                             <TouchableOpacity
                                 style={{
@@ -447,12 +461,12 @@ const DetailsScreen = ({ route, navigation }) => {
                             >
                                 <AntDesign name="addfile" size={30} color={COLORS.primary} />
                                 <View style={{ alignItems: 'center' }}>
-                                    <Text style={{ fontSize: 14, color: '#7D7A7A', opacity: 0.7 }}>Tạo hồ sơ mới</Text>
+                                    <Text style={{ fontSize: 14, color: '#7D7A7A', opacity: 0.7, fontFamily: 'BeVietnamPro-Medium', marginTop: -2 }}>Tạo hồ sơ mới</Text>
                                 </View>
                             </TouchableOpacity>
                         </View>
                     </View>
-                    <Text style={{ marginStart: '7%', fontSize: 16 }}>Hồ sơ của bạn</Text>
+                    <Text style={{ marginStart: '7%', fontSize: 16, fontFamily: 'BeVietnamPro-Medium', marginTop: -2 }}>Hồ sơ của bạn</Text>
                     <ScrollView showsVerticalScrollIndicator={false} style={{ width: '100%', height: 200, paddingHorizontal: 30, marginTop: 20 }}>
                         <FlatList
                             data={cv}
@@ -460,6 +474,15 @@ const DetailsScreen = ({ route, navigation }) => {
                             renderItem={renderCV}
                             nestedScrollEnabled={true}
                             scrollEnabled={false}
+                            ListEmptyComponent={() => (
+                                <View style={{ alignItems: 'center', justifyContent: 'center', gap: 10 }}>
+                                    <ImageBackground
+                                        source={require('../assets/images/5928293_2953962.jpg')}
+                                        style={{ width: 200, height: 160 }}
+                                    />
+                                    <Text style={{ fontSize: 16, color: COLORS.primary, fontFamily: 'BeVietnamPro-Medium', marginTop: -2 }}>Không có CV liên quan đến công việc này</Text>
+                                </View>
+                            )}
                         />
                     </ScrollView>
                     {
@@ -467,7 +490,7 @@ const DetailsScreen = ({ route, navigation }) => {
                             <View style={{ alignItems: 'center' }}>
                                 <TextInput
                                     keyboardType='numeric'
-                                    style={{ backgroundColor: "#F5F5F5", width: '80%', paddingHorizontal: 13, paddingVertical: 11, borderRadius: 5 }}
+                                    style={{ backgroundColor: "#F5F5F5", width: '80%', paddingHorizontal: 13, paddingVertical: 11, borderRadius: 5, fontFamily: 'BeVietnamPro-Medium', marginTop: -2 }}
                                     placeholder="Nhập lương mong muốn"
                                     onChangeText={handleOnChangeSalary}
                                     value={salary}
@@ -477,7 +500,7 @@ const DetailsScreen = ({ route, navigation }) => {
                     }
                     {
                         errors != '' && (
-                            <Text style={{ marginTop: 7, color: COLORS.red, fontSize: 12, marginLeft: 40 }}>
+                            <Text style={{ marginTop: 7, color: COLORS.red, fontSize: 12, marginLeft: 40, fontFamily: 'BeVietnamPro-Medium'}}>
                                 {errors}
                             </Text>
                         )
@@ -499,7 +522,7 @@ const DetailsScreen = ({ route, navigation }) => {
                                 paddingVertical: 15,
                                 marginEnd: 15,
                             }}>
-                            <Text style={{ color: COLORS.primary, fontSize: 18, fontWeight: '600' }}>Hủy</Text>
+                            <Text style={{ color: COLORS.primary, fontSize: 18, fontFamily: 'BeVietnamPro-Medium', marginTop: -2 }}>Hủy</Text>
                         </TouchableOpacity>
 
                         <TouchableOpacity
@@ -515,7 +538,7 @@ const DetailsScreen = ({ route, navigation }) => {
                                 width: 160,
                                 paddingVertical: 15,
                             }}>
-                            <Text style={{ color: COLORS.white, fontSize: 18, fontWeight: '600' }}>Ứng tuyển</Text>
+                            <Text style={{ color: COLORS.white, fontSize: 18, fontFamily: 'BeVietnamPro-Medium', marginTop: -2 }}>Ứng tuyển</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -556,18 +579,19 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 19,
         color: COLORS.black,
-        fontWeight: '600',
+        fontFamily: 'BeVietnamPro-Bold',
     },
     wage: {
         color: '#FA1300',
         fontSize: 14,
         marginTop: 5,
         marginBottom: 7,
-        fontWeight: 'bold',
+        fontFamily: 'BeVietnamPro-Medium',
     },
     datetime: {
         fontSize: 14,
         color: COLORS.grey,
+        fontFamily: 'BeVietnamPro-Medium', 
     },
     user: {
         flexDirection: 'row',
@@ -579,7 +603,7 @@ const styles = StyleSheet.create({
         color: COLORS.black,
         fontSize: 16,
         marginStart: 10,
-        fontWeight: 'bold',
+        fontFamily: 'BeVietnamPro-Medium', marginTop: -2
     },
     dot: {
         height: 1.5,
@@ -590,10 +614,11 @@ const styles = StyleSheet.create({
         opacity: 0.9,
     },
     describe: {
-        fontSize: 15,
+        fontSize: 14,
         fontStyle: 'normal',
         color: COLORS.black,
         opacity: 0.8,
+        fontFamily: 'BeVietnamPro-Medium', marginTop: -2
     },
     item: {
         flexDirection: 'row',
@@ -607,9 +632,10 @@ const styles = StyleSheet.create({
     },
     itemText: {
         marginStart: 15,
-        fontSize: 15,
+        fontSize: 14,
         color: COLORS.black,
         opacity: 0.8,
+        fontFamily: 'BeVietnamPro-Medium', marginTop: -2
     },
     btnApply: {
         backgroundColor: COLORS.blue,
