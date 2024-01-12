@@ -4,21 +4,120 @@
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable prettier/prettier */
-import { Image, StatusBar, StyleSheet, Text, View } from 'react-native'
+import { Image, StatusBar, StyleSheet, Text, View, Platform, PermissionsAndroid } from 'react-native'
 import React, { useContext, useEffect } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import COLORS from '../assets/const/colors'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import UserContext from '../components/UserConText'
+import axios from 'axios';
+import { request, PERMISSIONS, RESULTS } from 'react-native-permissions';
 
 const WelcomeScreen = ({ navigation }) => {
   const { setUser } = useContext(UserContext);
+
+  const requestNotificationsPermission = async () => {
+    try {
+      const permission = Platform.select({
+        android: PERMISSIONS.ANDROID.NOTIFICATIONS,
+      });
+  
+      const result = await request(permission);
+      if (result === RESULTS.GRANTED) {
+        console.log('Quyền thông báo đã được cấp!');
+        const loadData = async () => {
+          try {
+            const isFirstAccess = await AsyncStorage.getItem('isFirstAccess');
+            if (isFirstAccess === null) {
+              setTimeout(() => {
+                navigation.replace('Onboarding');
+              }, 5000);
+            } else if (isFirstAccess === "1") {
+              setTimeout(() => {
+                navigation.replace('AuthStack');
+              }, 5000);
+            } else {
+              const tempData = await AsyncStorage.getItem('user');
+              const data = JSON.parse(tempData);
+              setUser(data);
+              await AsyncStorage.setItem('isFirstAccess', "0");
+              if (data.role === 0) {
+                setTimeout(() => {
+                  navigation.replace('TabNavigatorUser');
+                }, 5000);
+              } else {
+                setTimeout(() => {
+                  navigation.replace('TabNavigator');
+                }, 5000);
+              }
+            }
+          } catch (error) {
+            console.error('Error during app access check:', error);
+          }
+        };
+        loadData();
+      } else {
+        console.log('Quyền thông báo bị từ chối!');
+      }
+    } catch (error) {
+      console.log('Lỗi khi yêu cầu quyền thông báo:', error);
+    }
+  };
+
+  const checkApplicationPermission = async () => {
+    if (Platform.OS === 'android') {
+      try {
+        const result  = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS,
+        );
+        if (result === RESULTS.GRANTED) {
+          console.log('Quyền thông báo đã được cấp!');
+          const loadData = async () => {
+            try {
+              const isFirstAccess = await AsyncStorage.getItem('isFirstAccess');
+              if (isFirstAccess === null) {
+                setTimeout(() => {
+                  navigation.replace('Onboarding');
+                }, 5000);
+              } else if (isFirstAccess === "1") {
+                setTimeout(() => {
+                  navigation.replace('AuthStack');
+                }, 5000);
+              } else {
+                const tempData = await AsyncStorage.getItem('user');
+                const data = JSON.parse(tempData);
+                setUser(data);
+                await AsyncStorage.setItem('isFirstAccess', "0");
+                if (data.role === 0) {
+                  setTimeout(() => {
+                    navigation.replace('TabNavigatorUser');
+                  }, 5000);
+                } else {
+                  setTimeout(() => {
+                    navigation.replace('TabNavigator');
+                  }, 5000);
+                }
+              }
+            } catch (error) {
+              console.error('Error during app access check:', error);
+            }
+          };
+          loadData();
+        } else {
+          requestNotificationsPermission();
+        }
+        
+      } catch (error) {
+        
+      }
+    }
+  }
+  
 
   useEffect(() => {
     const loadData = async () => {
       try {
         const isFirstAccess = await AsyncStorage.getItem('isFirstAccess');
-
         if (isFirstAccess === null) {
           setTimeout(() => {
             navigation.replace('Onboarding');
@@ -46,9 +145,8 @@ const WelcomeScreen = ({ navigation }) => {
         console.error('Error during app access check:', error);
       }
     };
-
     loadData();
-  }, [navigation]);
+  }, []);
   return (
     <View style={{ flex: 1 }}>
       <StatusBar barStyle={"light-content"} />

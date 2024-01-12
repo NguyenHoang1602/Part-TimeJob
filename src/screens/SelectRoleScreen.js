@@ -11,9 +11,10 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome';
 
-const SelectRoleScreen = ({ navigation }) => {
+const SelectRoleScreen = ({ navigation, route }) => {
     const { user } = useContext(UserContext);
     const [data, setData] = React.useState({
+        messagingToken: route.params?.item,
         googleId: user?.googleId,
         facebookId: user?.facebookId,
         displayName: user?.displayName,
@@ -27,6 +28,7 @@ const SelectRoleScreen = ({ navigation }) => {
         favoriteCareers: [],
         status: false,
     });
+    console.log(data);
     const [checkedUser, setCheckedUser] = useState(true);
     const [checkedEmployer, setCheckedEmployer] = useState(false);
     const handleCheckUser = () => {
@@ -99,7 +101,7 @@ const SelectRoleScreen = ({ navigation }) => {
                         paddingVertical: 10,
                         shadowColor: COLORS.primary,
                         shadowOffset: {
-                            width: 0,
+                            width: 0,  
                             height: 2,
                         },
                         shadowOpacity: 0.5,
