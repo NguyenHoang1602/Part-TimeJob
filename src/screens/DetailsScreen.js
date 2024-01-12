@@ -211,35 +211,6 @@ const DetailsScreen = ({route, navigation}) => {
         getAllApplied();
         setLoading(false);
         setErrors('');
-
-        var myHeaders = new Headers();
-        myHeaders.append(
-          'Authorization',
-          'key=AAAAi2XMxyg:APA91bH-FRApbC_AHFGwqjofdkWE2xKIFfHmwL7K93WuhP34Um8WjkfnD48BObq5oEmv7yL5mURLBTnFSAgrwKSkIulpDfoJYuDxmSBGUy2ucIKEzUp_3Vzh9f2bhayOgCFZpH5TvMUi',
-        );
-        myHeaders.append('Content-Type', 'application/json');
-
-        var raw = JSON.stringify({
-          registration_ids: [
-            'eJVD_nLxTt-6VD0-feAPne:APA91bFn1oyHAU8Kr6aJj6iAnIhrHvOriAHh8nOXUhzCDpm2AfflqAvip7TJwM6tPLAyMN7Glk4Mm5acvFoDB9f1inQrhO8vCuNTwfXqJnXBijd1QuDPKs4j5l69pNAHI_duZHjO3Psk',
-          ],
-          notification: {
-            title: 'Thông báo',
-            body: 'abc',
-          },
-        });
-
-        var requestOptions = {
-          method: 'POST',
-          headers: myHeaders,
-          body: raw,
-          redirect: 'follow',
-        };
-
-        fetch('https://fcm.googleapis.com/fcm/send', requestOptions)
-          .then(response => response.text())
-          .then(result => console.log(result))
-          .catch(error => console.log('error', error));
         Alert.alert('Ứng tuyển thành công!');
       }
     }

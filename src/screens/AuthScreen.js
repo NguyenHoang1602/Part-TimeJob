@@ -72,18 +72,20 @@ const AuthScreen = ({navigation}) => {
   }
 
   async function signIn() {
+    console.log('token');
     try {
+      console.log('token');
       await GoogleSignin.hasPlayServices();
       await GoogleSignin.signOut();
       const userInfo = await GoogleSignin.signIn();
       const token = userInfo.idToken;
-      
+      console.log('fdgdg');
       const messagingToken = await messaging().getToken();
       const idToken = {
         token: token,
         messagingToken: messagingToken,
       };
-      console.log(messagingToken);
+      console.log("message Token: ", messagingToken);
 
       // const unsubcribe = messaging().onMessage(async remoteMsg => {
       //   console.log('remoteMsg: ', remoteMsg);

@@ -88,6 +88,7 @@ const HomeScreen = ({navigation}) => {
   //   }
   // };
   // getToken();
+  
 
   useEffect(() => {
     getAllData();
@@ -98,6 +99,10 @@ const HomeScreen = ({navigation}) => {
 
   const getAllData = async () => {
     try {
+      const data = await AsyncStorage.getItem('user');
+      const a = JSON.parse(data);
+    
+        console.log(a?.messagingToken);
       //list save
       axios({
         url: `${API}/savePost/list`,

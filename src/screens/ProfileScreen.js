@@ -50,7 +50,7 @@ const ProfileScreen = ({ route, navigation }) => {
   };
   const out = async () => {
     try {
-      await messaging().deleteToken();
+      //await messaging().deleteToken();
       await AsyncStorage.clear();
       const user = firebase.auth().currentUser;
       if (user) {
