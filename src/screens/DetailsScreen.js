@@ -53,6 +53,8 @@ import axios from 'axios';
 import {API} from '../../Sever/sever';
 import UserContext from '../components/UserConText';
 import {useFocusEffect} from '@react-navigation/native';
+import { messaging } from 'firebase-admin';
+import messaging from '@react-native-firebase/messaging';
 
 const DetailsScreen = ({route, navigation}) => {
   const {user} = useContext(UserContext);
