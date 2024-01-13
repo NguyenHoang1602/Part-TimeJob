@@ -28,12 +28,12 @@ const WelcomeScreen = ({navigation}) => {
 
   async function requestUserPermission() {
     const fcmToken = await messaging().getToken();
-    console.log('abc: ', fcmToken);
+    console.log('fcm token: ', fcmToken);
     const data = await AsyncStorage.getItem('user');
     const token = JSON.parse(data);
-    console.log(token?.messagingToken);
+    console.log('messaging token', token?.messagingToken);
     if (fcmToken === token?.messagingToken) {
-      loadData();
+      return true;
     } else {
       const tempData = {
         id: data?._id,

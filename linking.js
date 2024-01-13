@@ -3,11 +3,20 @@ const config = {
         WelcomeScreen: {
             path : 'welcome',
         },
+        ApplicationsScreen: {
+            path : 'apply',
+        },
+        NotificationScreen : {
+            path : 'notification',
+        },
+        CurriculumVitaeScreen : {
+            path : 'vitae',
+        }
     },
 };
 
 const linking = {
-    prefixes: ['ParttimeJob://app'],
+    prefixes: ['parttimejob://app'],
     config,
 };
 

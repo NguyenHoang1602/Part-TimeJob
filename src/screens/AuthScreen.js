@@ -79,7 +79,6 @@ const AuthScreen = ({navigation}) => {
       await GoogleSignin.signOut();
       const userInfo = await GoogleSignin.signIn();
       const token = userInfo.idToken;
-      console.log('fdgdg');
       const messagingToken = await messaging().getToken();
       const idToken = {
         token: token,
