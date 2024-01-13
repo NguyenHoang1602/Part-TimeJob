@@ -272,11 +272,11 @@ const TabNavigatorUser = () => {
             if (category == 0) {
                 linkTo('/notification');
             } else if (category == 1 && role == 0) {
-                linkTo('/apply');
+                linkTo('/notification');
             } else if (category == 1 && role == 1) {
                 linkTo('/vitae');
             } else {
-                linkTo('/apply');
+                linkTo('/notification');
             }
             // process the notification
 

@@ -5,6 +5,11 @@ import { AppRegistry, Platform } from "react-native";
 import PushNotification from "react-native-push-notification";
 import messaging from '@react-native-firebase/messaging';
 
+messaging().setBackgroundMessageHandler(function (payload) {
+  // Xử lý tin nhắn nền ở đây
+  // Ví dụ: hiển thị thông báo, cập nhật dữ liệu, vv.
+});
+
 // Must be outside of any component LifeCycle (such as `componentDidMount`).
 // PushNotification.configure({
 //   // (optional) Called when Token is generated (iOS and Android)
