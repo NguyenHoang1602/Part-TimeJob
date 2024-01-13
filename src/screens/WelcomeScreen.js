@@ -31,7 +31,7 @@ const WelcomeScreen = ({navigation}) => {
     console.log('fcm token: ', fcmToken);
     const data = await AsyncStorage.getItem('user');
     const token = JSON.parse(data);
-    console.log('messaging token', token?.messagingToken);
+    console.log('messaging token: ', token?.messagingToken);
     if (fcmToken === token?.messagingToken) {
       return true;
     } else {

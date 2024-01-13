@@ -842,13 +842,6 @@ const HomeScreen = ({navigation}) => {
     setChek(false);
   };
 
-  // messaging.onNotificationOpenedApp(mess => {
-  //   const data = mess.data;
-  //   const taskid = data.taskId;
-    
-  //   console.log(mess, taskid);
-  // });
-
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: COLORS.white}}>
       {/* Header */}

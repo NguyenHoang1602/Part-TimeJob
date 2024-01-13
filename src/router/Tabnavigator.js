@@ -3,12 +3,12 @@
 /* eslint-disable react/no-unstable-nested-components */
 /* eslint-disable eqeqeq */
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { TouchableOpacity } from 'react-native';
 // Navigation
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
+import { getFocusedRouteNameFromRoute, useLinkTo } from '@react-navigation/native';
 import HomeScreen from '../screens/HomeScreen';
 import SavedJobsScreen from '../screens/SavedJobsScreen';
 import ManagementScreen from '../EmployerScreens/ManagementScreen';
@@ -33,8 +33,7 @@ import Octicons from 'react-native-vector-icons/Octicons';
 import Feather from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-
-
+import messaging from '@react-native-firebase/messaging';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -91,7 +90,7 @@ const HomeStack = (props) => {
                     headerShown: false,
                 })}
             />
-             <Stack.Screen
+            <Stack.Screen
                 name="CurriculumVitaeScreen"
                 component={CurriculumVitae}
                 options={({ route }) => ({
@@ -283,6 +282,26 @@ const ProfileStack = (props) => {
 };
 
 const TabNavigator = () => {
+
+    const linkTo = useLinkTo();
+
+    useEffect(() => {
+        messaging().onNotificationOpenedApp(mess => {
+            const category = mess.data.category;
+            const role = mess.data.role;
+            console.log("sd : ", category, role);
+            if (category == 0) {
+                linkTo('/notification');
+            } else if (category == 1 && role == 0) {
+                linkTo('/apply');
+            } else if (category == 1 && role == 1) {
+                linkTo('/vitae');
+            } else {
+                linkTo('/apply');
+            }
+        })
+    }, []);
+
     return (
         <Tab.Navigator
             screenOptions={{
@@ -391,8 +410,8 @@ const getTabBarVisibility = route => {
     const routeName = getFocusedRouteNameFromRoute(route) ?? 'Feed';
     // console.log(routeName);
 
-    if (routeName == 'DetailsScreen' || routeName == 'Thông tin tuyển dụng' || routeName == 'Notifications' || routeName == 'Chỉnh sửa bài đăng' || routeName == 'Cập nhật thông tin cá nhân' 
-    || routeName == 'Cập nhật CV cá nhân' || routeName == 'CVResumeScreen' || routeName == '"Tạo CV cá nhân' 
+    if (routeName == 'DetailsScreen' || routeName == 'Thông tin tuyển dụng' || routeName == 'Notifications' || routeName == 'Chỉnh sửa bài đăng' || routeName == 'Cập nhật thông tin cá nhân'
+        || routeName == 'Cập nhật CV cá nhân' || routeName == 'CVResumeScreen' || routeName == '"Tạo CV cá nhân'
         || routeName == 'DetailNotification' || routeName == 'CurriculumVitaeScreen' || routeName == 'StageCurriculumScreen') {
         return 'none';
     }

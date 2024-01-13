@@ -90,6 +90,7 @@ const CurriculumVitae = ({ navigation }) => {
     }
   }
 
+  //
   function customQuickSort(arr) {
     if (arr.length <= 1) {
       return arr;

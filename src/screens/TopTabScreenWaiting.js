@@ -126,20 +126,20 @@ const TopTabScreenWaiting = ({ navigation }) => {
                         }
                     })}
                     <View style={{ width: '50%', height: '100%', marginStart: 20, flex: 1 }}>
-                        <Text style={{ fontSize: 18, fontWeight: '400' }}>{item.title}</Text>
-                        <Text numberOfLines={1} style={{ fontSize: 15, fontFamily: 'BeVietnamPro-Medium', color: COLORS.grey }}>{item.address}</Text>
+                        <Text style={{ fontSize: 17, fontWeight: '400' }}>{item.title}</Text>
+                        <Text numberOfLines={1} style={{ fontSize: 14, fontFamily: 'BeVietnamPro-Medium', color: COLORS.grey }}>{item.address}</Text>
                     </View>
                 </View>
                 <View style={{ height: 1, width: '99%', backgroundColor: COLORS.grey, opacity: 0.4, marginTop: 15, marginBottom: 8 }} />
                 <View style={{ width: '100%', paddingStart: '22%' }}>
-                    <Text numberOfLines={1} style={{ fontSize: 16, fontFamily: 'BeVietnamPro-Medium', color: COLORS.grey, width: 200, marginBottom: 5 }}>{item.businessName}</Text>
+                    <Text numberOfLines={1} style={{ fontSize: 15, fontFamily: 'BeVietnamPro-Medium', color: COLORS.grey, width: 200, marginBottom: 5 }}>{item.businessName}</Text>
                     <View style={{ flexDirection: 'row' }}>
-                        <Text style={{ color: COLORS.blue, fontSize: 16, marginVertical: 9, fontFamily: 'BeVietnamPro-Medium', }}>{formattedWageMin}đ - {formattedWageMax}đ</Text>
+                        <Text style={{ color: COLORS.blue, fontSize: 15, marginVertical: 9, fontFamily: 'BeVietnamPro-Medium', }}>{formattedWageMin}đ - {formattedWageMax}đ</Text>
                         {
                             item.payForm_id === '655de22b9a5b0ffa7ffd5132' ? (
-                                <Text style={{ color: COLORS.blue, fontSize: 16, marginVertical: 9, fontFamily: 'BeVietnamPro-Medium', }}> /giờ</Text>
+                                <Text  numberOfLines={1} style={{ color: COLORS.blue, fontSize: 15, marginVertical: 9, fontFamily: 'BeVietnamPro-Medium', }}> /giờ</Text>
                             ) : item.payForm_id === '355de22b9a5b0ffa7ffd5132' ? (
-                                <Text style={{ color: COLORS.blue, fontSize: 16, marginVertical: 9, fontFamily: 'BeVietnamPro-Medium', }}> /tháng</Text>
+                                <Text  numberOfLines={1} style={{ color: COLORS.blue, fontSize: 15, marginVertical: 9, fontFamily: 'BeVietnamPro-Medium', }}> /tháng</Text>
                             ) : null
                         }
                     </View>
@@ -229,10 +229,10 @@ const TopTabScreenWaiting = ({ navigation }) => {
                                         })}
                                         {/* <Image source={{ uri: selectedItem?.image }} style={{ width: 52, aspectRatio: 1, borderRadius: 52 }} /> */}
                                         <View style={{ flex: 1 }}>
-                                            <Text style={{ fontSize: 18, color: COLORS.black, fontWeight: "600" }} numberOfLines={1}>
+                                            <Text style={{ fontSize: 17, fontFamily: 'BeVietnamPro-Medium', color: COLORS.black, fontWeight: "600" }} numberOfLines={1}>
                                                 {selectedItem?.title}
                                             </Text>
-                                            <Text style={{ fontSize: 16, color: COLORS.grey, paddingTop: 4 }} numberOfLines={1}>
+                                            <Text style={{ fontSize: 15, fontFamily: 'BeVietnamPro-Medium', color: COLORS.grey, paddingTop: 4 }} numberOfLines={1}>
                                                 {selectedItem?.address}
                                             </Text>
                                         </View>
@@ -240,21 +240,21 @@ const TopTabScreenWaiting = ({ navigation }) => {
                                     <View style={{ borderTopWidth: 1, borderColor: COLORS.grey }} />
                                     <View style={{ flexDirection: 'row', gap: 8, paddingVertical: 12 }}>
                                         <View style={{ paddingStart: 60 }}>
-                                            <Text numberOfLines={1} style={{ fontSize: 18, color: COLORS.black, fontWeight: "600" }}>
+                                            <Text numberOfLines={1} style={{ fontSize: 17,fontFamily: 'BeVietnamPro-Medium', color: COLORS.black, fontWeight: "600" }}>
                                                 {selectedItem?.businessName}
                                             </Text>
                                             <View style={{ flexDirection: 'row' }}>
-                                                <Text style={{ color: COLORS.blue, fontSize: 16, marginVertical: 9 }}>{selectedItem?.wageMin.toLocaleString('vi-VN')}đ - {selectedItem?.wageMax.toLocaleString('vi-VN')}đ</Text>
+                                                <Text style={{ color: COLORS.blue, fontSize: 15, fontFamily: 'BeVietnamPro-Medium', marginVertical: 9 }}>{selectedItem?.wageMin.toLocaleString('vi-VN')}đ - {selectedItem?.wageMax.toLocaleString('vi-VN')}đ</Text>
                                                 {
                                                     selectedItem?.payForm_id === '655de22b9a5b0ffa7ffd5132' ? (
-                                                        <Text style={{ color: COLORS.blue, fontSize: 16, marginVertical: 9 }}> /giờ</Text>
+                                                        <Text style={{ color: COLORS.blue, fontSize: 15,fontFamily: 'BeVietnamPro-Medium', marginVertical: 9 }}> /giờ</Text>
                                                     ) : selectedItem?.payForm_id === '355de22b9a5b0ffa7ffd5132' ? (
-                                                        <Text style={{ color: COLORS.blue, fontSize: 16, marginVertical: 9 }}> /tháng</Text>
+                                                        <Text style={{ color: COLORS.blue, fontSize: 15,fontFamily: 'BeVietnamPro-Medium', marginVertical: 9 }}> /tháng</Text>
                                                     ) : null
                                                 }
                                             </View>
                                             <View style={{
-                                                width: 80,
+                                                width: 85,
                                                 borderWidth: 0.5,
                                                 borderColor: COLORS.grey,
                                                 borderRadius: 7,
@@ -263,9 +263,9 @@ const TopTabScreenWaiting = ({ navigation }) => {
                                                 justifyContent: 'center',
                                             }}>
                                                 {selectedItem?.workType_id._id == '653e66b38e88b23b41388e3c' ? (
-                                                    <Text style={{ fontSize: 10 }}>Bán thời gian</Text>
+                                                    <Text style={{ fontSize: 10, fontFamily: 'BeVietnamPro-Medium', }}>Bán thời gian</Text>
                                                 ) : (
-                                                    <Text style={{ fontSize: 10 }}>Toàn thời gian</Text>
+                                                    <Text style={{ fontSize: 10, fontFamily: 'BeVietnamPro-Medium', }}>Toàn thời gian</Text>
                                                 )}
                                             </View>
                                         </View>
@@ -287,7 +287,7 @@ const TopTabScreenWaiting = ({ navigation }) => {
                                         paddingVertical: 15,
                                         marginEnd: 15,
                                     }}>
-                                    <Text style={{ color: COLORS.primary, fontSize: 18, fontWeight: '600' }}>Xóa tin</Text>
+                                    <Text style={{ color: COLORS.primary, fontSize: 17, fontFamily: 'BeVietnamPro-Medium', fontWeight: '600' }}>Xóa tin</Text>
                                 </TouchableOpacity>
 
                                 <TouchableOpacity
@@ -301,7 +301,7 @@ const TopTabScreenWaiting = ({ navigation }) => {
                                         paddingVertical: 15,
                                     }}
                                     onPress={() => console.log(selectedItem?._id)}>
-                                    <Text style={{ color: COLORS.white, fontSize: 18, fontWeight: '600' }}>Sửa tin</Text>
+                                    <Text style={{ color: COLORS.white, fontSize: 17, fontFamily: 'BeVietnamPro-Medium', fontWeight: '600' }}>Sửa tin</Text>
                                 </TouchableOpacity>
                             </View>
                         </View>

@@ -3,12 +3,12 @@
 /* eslint-disable react/no-unstable-nested-components */
 /* eslint-disable eqeqeq */
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { TouchableOpacity } from 'react-native';
 // Navigation
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
+import { getFocusedRouteNameFromRoute, useLinkTo } from '@react-navigation/native';
 import HomeScreen from '../screens/HomeScreen';
 import SavedJobsScreen from '../screens/SavedJobsScreen';
 import ProfileScreen from '../screens/ProfileScreen';
@@ -31,6 +31,10 @@ import Feather from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import DetailNotification from '../screens/DetailNotification';
 import AntDesign from 'react-native-vector-icons/AntDesign'
+
+import messaging from '@react-native-firebase/messaging';
+import PushNotification from "react-native-push-notification";
+
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -250,6 +254,71 @@ const ProfileStack = (props) => {
 };
 
 const TabNavigatorUser = () => {
+
+    const linkTo = useLinkTo();
+
+    PushNotification.configure({
+        // (optional) Called when Token is generated (iOS and Android)
+        onRegister: function (token) {
+            console.log("token:", token);
+        },
+
+        // (required) Called when a remote is received or opened, or local notification is opened
+        onNotification: function (notification) {
+            console.log("dayne:", notification);
+            const category = notification.data.category;
+            const role = notification.data.role;
+            console.log("sd : ", category, role);
+            if (category == 0) {
+                linkTo('/notification');
+            } else if (category == 1 && role == 0) {
+                linkTo('/apply');
+            } else if (category == 1 && role == 1) {
+                linkTo('/vitae');
+            } else {
+                linkTo('/apply');
+            }
+            // process the notification
+
+            // (required) Called when a remote is received or opened, or local notification is opened
+            // notification.finish(PushNotificationIOS.FetchResult.NoData);
+        },
+
+        // (optional) Called when Registered Action is pressed and invokeApp is false, if true onNotification will be called (Android)
+        onAction: function (notification) {
+            console.log("ACTION:", notification.action);
+            console.log("NOTIFICATION:", notification);
+
+            // process the action
+        },
+
+        // (optional) Called when the user fails to register for remote notifications. Typically occurs when APNS is having issues, or the device is a simulator. (iOS)
+        onRegistrationError: function (err) {
+            console.error(err.message, err);
+        },
+        popInitialNotification: true,
+        requestPermissions: Platform.OS === 'ios',
+    });
+
+
+    useEffect(() => {
+        console.log("oke");
+        messaging().onNotificationOpenedApp(mess => {
+            const category = mess.data.category;
+            const role = mess.data.role;
+            console.log("sd : ", category, role);
+            if (category == 0) {
+                linkTo('/notification');
+            } else if (category == 1 && role == 0) {
+                linkTo('/apply');
+            } else if (category == 1 && role == 1) {
+                linkTo('/vitae');
+            } else {
+                linkTo('/apply');
+            }
+        })
+    }, []);
+
     return (
         <Tab.Navigator
             screenOptions={{

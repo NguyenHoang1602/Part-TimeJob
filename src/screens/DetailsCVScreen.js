@@ -147,7 +147,7 @@ const DetailsCVScreen = ({ navigation, route }) => {
             <Text style={{ fontSize: 16 ,fontFamily: 'BeVietnamPro-Medium',marginTop:-2}}>{data?.academic_id?.title}</Text>
           </View>
           <Text style={styles.text1}>Giới thiệu bản thân: </Text>
-          <Text style={{ fontSize: 16,fontFamily: 'BeVietnamPro-Medium',marginTop:-2 , marginTop: 5, marginBottom: 20 }}>- {data?.introduce}</Text>
+          <Text style={{ fontSize: 16,fontFamily: 'BeVietnamPro-Medium', marginTop: 5, marginBottom: 20 }}>- {data?.introduce}</Text>
           <View style={{ width: '100%', height: 1, backgroundColor: '#FF5D01', opacity: 0.7, position: 'relative', }} />
         </View>
 
