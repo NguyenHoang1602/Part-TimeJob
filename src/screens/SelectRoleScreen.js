@@ -10,9 +10,12 @@ import UserContext from '../components/UserConText';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome';
+import axios from 'axios';
+import { API } from '../../Sever/sever';
 
 const SelectRoleScreen = ({ navigation, route }) => {
     const { user } = useContext(UserContext);
+    const { setUser } = useContext(UserContext);
     const [data, setData] = React.useState({
         messagingToken: route.params?.item,
         googleId: user?.googleId,
@@ -41,6 +44,26 @@ const SelectRoleScreen = ({ navigation, route }) => {
         setCheckedUser(false);
         setData({ ...data, role: 1 });
     };
+    const handleSignIn = async (data) => {
+        const result = await axios.post(`${API}/users/GoogleSignIn`, { data });
+            if (result.status === 200) {
+                //loginUser(result.data);
+                setUser(result.data);
+                const data = JSON.stringify(result.data);
+                await AsyncStorage.setItem('user', data);
+                if (result.data.status) {
+                    setUser(result.data);
+                    if (result.data.role === 0) {
+                        navigation.navigate('TabNavigatorUser');
+                    } else {
+                        navigation.navigate('TabNavigator');
+                    }
+                }
+                //console.log("ok");
+                // setLoading(true);
+                // await new Promise(resolve => setTimeout(resolve, 2000));
+            }
+    }
     return (
         <SafeAreaView style={styles.container}>
             {/* header */}
@@ -88,7 +111,8 @@ const SelectRoleScreen = ({ navigation, route }) => {
                         if (data.role === 0) {
                             navigation.navigate('FavoriteCareersScreen', { item: data })
                         } else {
-                            navigation.navigate('FillProfile', { item: data })
+                            // navigation.navigate('FillProfile', { item: data })
+                            handleSignIn(data);
                         }
                     }}
                     style={{
