@@ -16,15 +16,17 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import CheckBoxHasBorder from '../components/CheckBoxHasBorder';
 
-const FavoriteCareersScreen = ({ navigation }) => {
+const FavoriteCareersScreen = ({ navigation, route }) => {
 
     useEffect(() => {
         getAllData();
     }, []);
 
     const { user } = useContext(UserContext);
+    const { setUser } = useContext(UserContext);
     const [listCareers, setListCareers] = useState([]);
     const [data, setData] = React.useState({
+        messagingToken: route?.params?.item?.messagingToken,
         googleId: user?.googleId,
         facebookId: user?.facebookId,
         displayName: user?.displayName,
@@ -38,7 +40,6 @@ const FavoriteCareersScreen = ({ navigation }) => {
         favoriteCareers: [],
         status: false,
     });
-    console.log(data);
     const getAllData = async () => {
         try {
             //All Post allow
@@ -116,6 +117,64 @@ const FavoriteCareersScreen = ({ navigation }) => {
             console.error('Error fetching data:', error);
         }
     }
+    console.log(data);
+    const register = async() => {
+        if (data.googleId) {
+            const result = await axios.post(`${API}/users/GoogleSignIn`, { data });
+            if (result.status === 200) {
+                //loginUser(result.data);
+                setUser(result.data);
+                const data = JSON.stringify(result.data);
+                await AsyncStorage.setItem('user', data);
+                if (result.data.status) {
+                    setUser(result.data);
+                    if (result.data.role === 0) {
+                        navigation.navigate('TabNavigatorUser');
+                    } else {
+                        navigation.navigate('TabNavigator');
+                    }
+                }
+                console.log("ok");
+                // setLoading(true);
+                // await new Promise(resolve => setTimeout(resolve, 2000));
+            }
+        } else if (data?.facebookId) {
+            const result = await axios.post(`${API}/users/FacebookSignIn`, { inputs });
+            if (result.status === 200) {
+                loginUser(result.data);
+                setUser(result.data);
+                const data = JSON.stringify(result.data);
+                await AsyncStorage.setItem('user', data);
+                await AsyncStorage.setItem('isFirstAccess', "0");
+                if (result.data.status) {
+                    setUser(result.data);
+                    if (result.data.role === 0) {
+                        navigation.navigate('TabNavigatorUser');
+                    } else {
+                        navigation.navigate('TabNavigator');
+                    }
+                }
+                setLoading(true);
+                await new Promise(resolve => setTimeout(resolve, 2000));
+            }
+        } else {
+            const result = await axios.post(`${API}/users/PhoneNumberSignIn`, { inputs });
+            if (result.status === 200) {
+                loginUser(result.data);
+                setUser(result.data);
+                if (result.data.status) {
+                    setUser(result.data);
+                    if (result.data.role === 0) {
+                        navigation.navigate('TabNavigatorUser');
+                    } else {
+                        navigation.navigate('TabNavigator');
+                    }
+                }
+                setLoading(true);
+                await new Promise(resolve => setTimeout(resolve, 2000));
+            }
+        }
+    }
     return (
         <SafeAreaView style={styles.container}>
             {/* header */}
@@ -145,7 +204,7 @@ const FavoriteCareersScreen = ({ navigation }) => {
                 <TouchableOpacity
                     onPress={() => {
                         if (data.favoriteCareers && data.favoriteCareers.length > 0) {
-                            navigation.navigate('FillProfile', { item: data });
+                            register();
                         } else {
                             ToastAndroid.show('Hãy chọn ít nhất 1 ngành nghề', ToastAndroid.SHORT);
                         }

@@ -18,6 +18,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import Router from './src/router/router';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { UserProvider } from './src/components/UserConText';
+import linking from './linking';
 
 const App = () => {
 
@@ -30,7 +31,7 @@ const App = () => {
   return (
     <UserProvider value={{ user, setUser }}>
       <GestureHandlerRootView style={{ flex: 1 }}>
-        <NavigationContainer>
+        <NavigationContainer linking={linking}>
           <Router />
         </NavigationContainer>
       </GestureHandlerRootView>

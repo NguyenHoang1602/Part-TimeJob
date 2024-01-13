@@ -25,7 +25,7 @@ const DetailsCVScreen = ({ navigation, route }) => {
     year: route.params?.item?.year,
     gender_id: route.params?.item?.gender_id,
     email: route.params?.item?.email,
-    career_id: route.params?.item?.career_id,
+    career_id: route.params?.item?.career_id, 
     address: route.params?.item?.address,
     experience_id: route.params?.item?.experience_id,
     academic_id: route.params?.item?.academic_id,

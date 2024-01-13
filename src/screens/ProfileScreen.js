@@ -30,6 +30,7 @@ import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { firebase } from '@react-native-firebase/auth';
+import messaging from '@react-native-firebase/messaging';
 
 const ProfileScreen = ({ route, navigation }) => {
   const { user } = useContext(UserContext);
@@ -49,6 +50,7 @@ const ProfileScreen = ({ route, navigation }) => {
   };
   const out = async () => {
     try {
+      //await messaging().deleteToken();
       await AsyncStorage.clear();
       const user = firebase.auth().currentUser;
       if (user) {

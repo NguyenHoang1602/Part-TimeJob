@@ -249,7 +249,7 @@ const NotificationScreen = ({ route, navigation }) => {
                                         source={require('../assets/images/5928293_2953962.jpg')}
                                         style={{ width: "108%", height: 430, marginEnd: '9%', marginBottom: -25 }} />
                                     <Text style={{ fontSize: 22, color: COLORS.black, fontWeight: '700' }}>Empty</Text>
-                                    <Text style={{ fontSize: 16, marginTop: 7, marginBottom: '50%' }}>You don’t have any notifications at this time</Text>
+                                    <Text style={{ fontSize: 16, marginTop: 7, marginBottom: '50%', color: COLORS.primary }}>You don’t have any notifications at this time</Text>
                                 </View>
                             );
                         }} /></>
