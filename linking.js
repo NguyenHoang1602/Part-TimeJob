@@ -3,7 +3,7 @@ const config = {
         WelcomeScreen: {
             path : 'welcome',
         },
-        ApplicationsScreen: {
+        ApplicationsStack: {
             path : 'apply',
         },
         NotificationScreen : {
