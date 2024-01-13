@@ -72,9 +72,7 @@ const AuthScreen = ({navigation}) => {
   }
 
   async function signIn() {
-    console.log('token');
     try {
-      console.log('token');
       await GoogleSignin.hasPlayServices();
       await GoogleSignin.signOut();
       const userInfo = await GoogleSignin.signIn();

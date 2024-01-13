@@ -50,7 +50,6 @@ import axios from 'axios';
 import Loader from '../components/Loader';
 import {API} from '../../Sever/sever';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import messaging from '@react-native-firebase/messaging';
 
 const HomeScreen = ({navigation}) => {
   const {user} = useContext(UserContext);
@@ -843,12 +842,12 @@ const HomeScreen = ({navigation}) => {
     setChek(false);
   };
 
-  messaging.onNotificationOpenedApp(mess => {
-    const data = mess.data;
-    const taskid = data.taskId;
+  // messaging.onNotificationOpenedApp(mess => {
+  //   const data = mess.data;
+  //   const taskid = data.taskId;
     
-    console.log(mess);
-  });
+  //   console.log(mess, taskid);
+  // });
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: COLORS.white}}>
