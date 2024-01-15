@@ -54,7 +54,7 @@ const MessageScreen = ({ navigation }) => {
                     });
                 }
                 setUsers(tempData);
-            });
+        });
     };
     const FlatListb = () => {
         return (
