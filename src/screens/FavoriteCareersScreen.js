@@ -117,7 +117,7 @@ const FavoriteCareersScreen = ({ navigation, route }) => {
             console.error('Error fetching data:', error);
         }
     }
-    console.log(data);
+    //console.log(data);
     const register = async() => {
         if (data.googleId) {
             const result = await axios.post(`${API}/users/GoogleSignIn`, { data });
@@ -134,7 +134,7 @@ const FavoriteCareersScreen = ({ navigation, route }) => {
                         navigation.navigate('TabNavigator');
                     }
                 }
-                console.log("ok");
+                //console.log("ok");
                 // setLoading(true);
                 // await new Promise(resolve => setTimeout(resolve, 2000));
             }

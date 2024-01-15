@@ -50,7 +50,6 @@ import axios from 'axios';
 import Loader from '../components/Loader';
 import {API} from '../../Sever/sever';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import messaging from '@react-native-firebase/messaging';
 
 const HomeScreen = ({navigation}) => {
   const {user} = useContext(UserContext);
