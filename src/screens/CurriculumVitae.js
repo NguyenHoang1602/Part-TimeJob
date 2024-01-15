@@ -153,13 +153,13 @@ const CurriculumVitae = ({ navigation }) => {
   function compare(a, b) {
 
     const cvExperienceA = a.cv_id.experience_id;
-    const postExperienceA = a.post_id.experience_id;
+    const postExperienceA = a.post_id.experience_id; //1
     const cvExperienceB = b.cv_id.experience_id;
     const postExperienceB = b.post_id.experience_id;
 
-    const cvExperienceOrderA = experienceOrder[cvExperienceA] || -1;
-    const postExperienceOrderA = experienceOrder[postExperienceA] || -1;
-    const cvExperienceOrderB = experienceOrder[cvExperienceB] || -1;
+    const cvExperienceOrderA = experienceOrder[cvExperienceA] || -1; //0
+    const postExperienceOrderA = experienceOrder[postExperienceA] || -1; 
+    const cvExperienceOrderB = experienceOrder[cvExperienceB] || -1; //1
     const postExperienceOrderB = experienceOrder[postExperienceB] || -1;
     console.log(cvExperienceA, cvExperienceOrderA, postExperienceOrderA);
     if (cvExperienceOrderA > postExperienceOrderA && cvExperienceOrderB <= postExperienceOrderB) {
