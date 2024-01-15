@@ -45,7 +45,6 @@ const ChatScreen = ({ route, navigation }) => {
 
     const [messageList, setMessageList] = useState([]);
     const { user } = useContext(UserContext);
-
     const onSend = useCallback(async (messages = []) => {
         const msg = messages[0];
         const myMsg = {

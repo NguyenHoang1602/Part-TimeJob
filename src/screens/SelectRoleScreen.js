@@ -12,6 +12,8 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome';
 import axios from 'axios';
 import { API } from '../../Sever/sever';
+import firestore from '@react-native-firebase/firestore';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const SelectRoleScreen = ({ navigation, route }) => {
     const { user } = useContext(UserContext);
@@ -47,7 +49,7 @@ const SelectRoleScreen = ({ navigation, route }) => {
     const handleSignIn = async (data) => {
         const result = await axios.post(`${API}/users/GoogleSignIn`, { data });
             if (result.status === 200) {
-                //loginUser(result.data);
+                loginUser(result.data);
                 setUser(result.data);
                 const data = JSON.stringify(result.data);
                 await AsyncStorage.setItem('user', data);
@@ -64,6 +66,39 @@ const SelectRoleScreen = ({ navigation, route }) => {
                 // await new Promise(resolve => setTimeout(resolve, 2000));
             }
     }
+
+    const loginUser = (item) => {
+        firestore()
+            .collection('users')
+            .where('_id', '==', item._id)
+            .get()
+            .then(res => {
+                if (res.docs.length !== 0) {
+
+                } else {
+                    firestore()
+                        .collection('users')
+                        .doc(item._id)
+                        .set({
+                            displayName: item?.displayName,
+                            email: item?.email,
+                            phone: item?.phone,
+                            _id: item?._id,
+                            photo: item?.photo
+                        })
+                        .then(res => {
+
+                        })
+                        .catch(error => {
+                            console.log(error);
+                        });
+                }
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    };
+
     return (
         <SafeAreaView style={styles.container}>
             {/* header */}
