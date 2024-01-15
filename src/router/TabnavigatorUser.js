@@ -278,6 +278,7 @@ const TabNavigatorUser = () => {
             } else {
                 linkTo('/notification');
             }
+            //ád
             // process the notification
 
             // (required) Called when a remote is received or opened, or local notification is opened
