@@ -43,38 +43,8 @@ const AuthScreen = ({navigation}) => {
     });
   });
 
-  const getToken = async () => {
-    try {
-      const token = await messaging().getToken();
-      // Sử dụng token để gửi tin nhắn messaging
-      // ...
-    } catch (error) {
-      console.log('Lỗi khi lấy token messaging', error);
-    }
-  };
-
-  async function requestUserPermission() {
-    const authStatus = await messaging().requestPermission();
-    const enabled =
-      authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
-      authStatus === messaging.AuthorizationStatus.PROVISIONAL;
-  
-    if (enabled) {
-      const fcmToken = await messaging().getToken();
-      if (fcmToken) {
-        // Send the FCM token to your server
-        axios.post('https://your-server.com/api/update-fcm-token', {
-          email: 'user@gmail.com',  // Replace with the user's email
-          fcmToken: fcmToken
-        });
-      }
-    }
-  }
-
   async function signIn() {
-    console.log('token');
     try {
-      console.log('token');
       await GoogleSignin.hasPlayServices();
       await GoogleSignin.signOut();
       const userInfo = await GoogleSignin.signIn();
