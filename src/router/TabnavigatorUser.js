@@ -265,10 +265,8 @@ const TabNavigatorUser = () => {
 
         // (required) Called when a remote is received or opened, or local notification is opened
         onNotification: function (notification) {
-            console.log("dayne:", notification);
             const category = notification.data.category;
             const role = notification.data.role;
-            console.log("sd : ", category, role);
             if (category == 0) {
                 linkTo('/notification');
             } else if (category == 1 && role == 0) {
@@ -303,19 +301,17 @@ const TabNavigatorUser = () => {
 
 
     useEffect(() => {
-        console.log("oke");
         messaging().onNotificationOpenedApp(mess => {
             const category = mess.data.category;
             const role = mess.data.role;
-            console.log("sd : ", category, role);
             if (category == 0) {
                 linkTo('/notification');
             } else if (category == 1 && role == 0) {
-                linkTo('/apply');
+                linkTo('/notification');
             } else if (category == 1 && role == 1) {
                 linkTo('/vitae');
             } else {
-                linkTo('/apply');
+                linkTo('/notification');
             }
         })
     }, []);
