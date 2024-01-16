@@ -58,6 +58,7 @@ const MessageScreen = ({ navigation }) => {
                 if (res.docs.length != 0) {
                     for (const item of res.docs) {
                         const newData = item.data();
+                        console.log("Xem : ", newData);
                         const last = await getLastMess(item.data());
                         const timeSend = last.createdAt;
                         const date = new Date(timeSend); // Tạo đối tượng Date từ số miligiây
@@ -74,7 +75,7 @@ const MessageScreen = ({ navigation }) => {
                         tempData.push(newData);
                     }
                 }
-                setUsers(tempData);
+                checkAndSort(tempData);
             });
     };
     const getLastMess = async (items) => {
@@ -97,6 +98,16 @@ const MessageScreen = ({ navigation }) => {
             });
         });
     };
+    const checkAndSort = async (items = []) => {
+        const tempData = [];
+        items.map(async (item) => {
+            if (item.last) {
+                console.log(item);
+                tempData.push(item);
+            }
+        })
+        setUsers(tempData);
+    }
     const FlatListb = () => {
         return (
             <FlatList
