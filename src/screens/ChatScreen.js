@@ -14,13 +14,15 @@ import UserContext from '../components/UserConText';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Feather from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import axios from 'axios';
+import { API } from '../../Sever/sever';
 
 const ChatScreen = ({ route, navigation }) => {
     
     const data = {
-        _id : route.params?.item._id,
-        photo : route.params?.item.photo,
-        displayName : route.params?.item.displayName,
+        _id : route.params?.id,
+        photo : route.params?.photo,
+        displayName : route.params?.displayName,
     };
     const [items , setItem ] = useState(data)
 
@@ -66,6 +68,19 @@ const ChatScreen = ({ route, navigation }) => {
             .doc('' + items?._id + user._id)
             .collection('messages')
             .add(myMsg);
+        
+            try {
+                axios({
+                    url: `${API}/notifications/mess`,
+                    method: 'POST',
+                    data: {
+                        id: items._id,
+                    },
+                });
+            } catch (error) {
+                console.log(error);
+            }
+       
     }, []);
 
     const renderSend = (props) => {

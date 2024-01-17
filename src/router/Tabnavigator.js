@@ -296,7 +296,7 @@ const TabNavigator = () => {
         // (optional) Called when Token is generated (iOS and Android)
         onRegister: function (token) {
             console.log("token:", token);
-            linkTo('/notification');
+            //linkTo('/notification');
         },
 
         // (required) Called when a remote is received or opened, or local notification is opened
@@ -312,6 +312,8 @@ const TabNavigator = () => {
                     linkTo('/notification');
                 } else if (category == 1 && role == 1) {
                     linkTo('/vitae');
+                } else if (category == 5) {
+                    linkTo('/welcome');
                 } else {
                     linkTo('/notification');
                 }
@@ -354,6 +356,8 @@ const TabNavigator = () => {
                     linkTo('/notification');
                 } else if (category == 1 && role == 1) {
                     linkTo('/vitae');
+                } else if (category == 5) {
+                    linkTo('/welcome');
                 } else {
                     linkTo('/notification');
                 }

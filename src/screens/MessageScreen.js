@@ -10,9 +10,9 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable react-native/no-inline-styles */
 import React, { useState, useEffect, useContext } from 'react';
-import { FlatList, Image, Text, ImageBackground, TouchableOpacity, View, StyleSheet, ToastAndroid } from 'react-native';
+import { FlatList, Image, Text, ImageBackground, TouchableOpacity, View, StyleSheet, ToastAndroid, TextInput } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { COLORS } from '../constants/theme';
+
 import firestore from '@react-native-firebase/firestore';
 import { useIsFocused, useNavigation, useFocusEffect } from '@react-navigation/native';
 import UserContext from '../components/UserConText';
@@ -20,36 +20,57 @@ import UserContext from '../components/UserConText';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Feather from 'react-native-vector-icons/Feather';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
+import COLORS from '../assets/const/colors';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import PushNotification from "react-native-push-notification";
 
 const MessageScreen = ({ navigation }) => {
     useEffect(() => {
         getUsers();
-    }, [])
+    }, []);
+
     useFocusEffect(
         React.useCallback(() => {
             getUsers();
         }, [])
     );
 
+    // PushNotification.configure({
+    //     // (optional) Called when Token is generated (iOS and Android)
+    //     onRegister: function (token) {
+    //         getUsers();
+    //     },
+    // });
 
     const [users, setUsers] = useState([]);
     const { user } = useContext(UserContext);
+    const [isFocusedSearch, setIsFocusedSearch] = useState(false);
+    const [list, setList] = useState([]);
     const now = new Date();
 
+    const handleSearch = async (key) => {
+        const data = await AsyncStorage.getItem('listMess');
+        if (key === "") {
+            setUsers(JSON.parse(data));
+            setList(JSON.parse(data));
+        } else {
+            try {
+                const filteredData = list.filter((post) => {
+                    const titleA = post.post_id.title.toLowerCase();
+                    const keyA = key.toLowerCase();
+                    const find = titleA.indexOf(keyA) !== -1;
+                    return find;
+                });
+                setUsers(filteredData);
+            } catch (error) {
+                console.log(error);
+            }
+        }
+    }
+
     const getUsers = async () => {
-        // const id = user._id;
-        // const chatRef = firestore().collection('chats');
-        // const chatSnapshot = await chatRef.where('participants', 'array-contains', id).get();
-        // console.log(chatSnapshot);
-        // const userIds = chatSnapshot.docs.map(doc => {
-        //     const participants = doc.data().participants;
-        //     return participants.filter(participantId => participantId !== user._id)[0];
-        // });
-        // const usersSnapshot = await firestore().collection('users').where('_id', 'in', userIds).get();
-        // const users = usersSnapshot.docs.map(doc => doc.data());
-        // setUsers(users);
-        let tempData = [];
+        const tempData = [];
         firestore()
             .collection('users')
             .where('_id', '!=', user._id)
@@ -58,17 +79,17 @@ const MessageScreen = ({ navigation }) => {
                 if (res.docs.length != 0) {
                     for (const item of res.docs) {
                         const newData = item.data();
-                        console.log("Xem : ", newData);
                         const last = await getLastMess(item.data());
                         const timeSend = last.createdAt;
                         const date = new Date(timeSend); // Tạo đối tượng Date từ số miligiây
-                        const formattedDate = date.toLocaleString(); // Chuyển đổi thành định dạng thời gian đọc được
+                        newData.date = date;
+                        const formattedDate = date.toLocaleTimeString(); // Chuyển đổi thành định dạng thời gian đọc được
+                        console.log(formattedDate);
                         if (date.toDateString() === now.toDateString()) {
                             const time = formattedDate.slice(0, 5);
                             newData.time = time;
                         } else {
                             const formattedDate = date.toLocaleDateString(); // Lấy ngày từ đối tượng Date
-                            console.log(formattedDate);
                             newData.time = formattedDate;
                         }
                         newData.last = last;
@@ -99,6 +120,7 @@ const MessageScreen = ({ navigation }) => {
         });
     };
     const checkAndSort = async (items = []) => {
+        console.log("day : ", items);
         const tempData = [];
         items.map(async (item) => {
             if (item.last) {
@@ -106,8 +128,15 @@ const MessageScreen = ({ navigation }) => {
                 tempData.push(item);
             }
         })
+        tempData.sort((a, b) => {
+            return b.date - a.date;
+        })
+        const data = JSON.stringify(tempData);
+        await AsyncStorage.setItem('listMess', data);
+
         setUsers(tempData);
     }
+
     const FlatListb = () => {
         return (
             <FlatList
@@ -130,7 +159,11 @@ const MessageScreen = ({ navigation }) => {
     const renderItemJob = ({ item }) => (
         <View style={{ padding: 18, }}>
             <TouchableOpacity onPress={() => {
-                navigation.navigate('ChatScreen', { item })
+                navigation.navigate('ChatScreen', {
+                    id: item?._id,
+                    displayName: item?.displayName,
+                    photo: item?.photo
+                })
             }}>
                 <View style={{ flexDirection: 'row', gap: 18 }}>
                     <Image source={{ uri: item.photo }} style={{ width: 52, aspectRatio: 1, borderRadius: 52 }} />
@@ -140,30 +173,12 @@ const MessageScreen = ({ navigation }) => {
                         </Text>
                         <View style={{ flexDirection: 'row', gap: 5 }}>
                             <Text style={{ fontSize: 16, color: COLORS.grey, paddingTop: 6 }} numberOfLines={1}>
-                                {item.last.text}
+                                {item.last.sendBy === user._id ? ("Bạn : " + item.last.text) : (item.displayName + " : " + item.last.text)}
                             </Text>
                             <Text style={{ fontSize: 16, color: COLORS.grey, paddingTop: 6 }} numberOfLines={1}>
                                 • {item.time}
                             </Text>
                         </View>
-
-                    </View>
-                    <View style={{ alignItems: "flex-end", marginEnd: 3 }}>
-                        <TouchableOpacity
-                            onPress={() => {
-                                ToastAndroid.show('Đang phát triển', ToastAndroid.SHORT);
-                            }}
-                            style={{
-                                width: 46,
-                                aspectRatio: 1,
-                                borderRadius: 52,
-                                alignItems: 'flex-end',
-                                justifyContent: 'center',
-                                borderColor: COLORS.grey,
-                            }}
-                        >
-                            <Entypo name='dots-three-vertical' size={14} color={COLORS.grey} />
-                        </TouchableOpacity>
                     </View>
                 </View>
             </TouchableOpacity>
@@ -204,6 +219,36 @@ const MessageScreen = ({ navigation }) => {
                         <Entypo name='dots-three-vertical' size={20} color={COLORS.black} />
                     </TouchableOpacity>
                 </View>
+            </View>
+            {/* Search */}
+            <View
+                style={{
+                    flexDirection: 'row',
+                    height: 50,
+                    borderRadius: 15,
+                    alignItems: 'center',
+                    paddingHorizontal: 18,
+                    marginHorizontal: 18,
+                    marginTop: 20,
+                    backgroundColor: !isFocusedSearch ? COLORS.lightGrey : '#E9F0FF',
+                    borderWidth: 1,
+                    borderColor: !isFocusedSearch ? COLORS.white : COLORS.primary
+                }}>
+                <Feather name='search' size={24} color={!isFocusedSearch ? COLORS.grey : COLORS.primary} />
+                <TextInput
+                    placeholder="Tìm kiếm . . ."
+                    placeholderTextColor={COLORS.grey}
+                    onChangeText={value => {
+                        handleSearch(value)
+                    }}
+                    onFocus={() => { setIsFocusedSearch(!isFocusedSearch) }}
+                    onBlur={() => { setIsFocusedSearch(!isFocusedSearch) }}
+                    style={{ flex: 1, fontSize: 16, fontFamily: 'BeVietnamPro-Medium', marginTop: -2, color: COLORS.black, paddingHorizontal: 10, }} />
+                {/* <TouchableOpacity onPress={() => {
+
+                }}>
+                    <FontAwesome6 name='sliders' size={20} color={COLORS.primary} />
+                </TouchableOpacity> */}
             </View>
             <FlatListb />
         </SafeAreaView>

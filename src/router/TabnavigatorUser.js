@@ -273,6 +273,8 @@ const TabNavigatorUser = () => {
                 linkTo('/notification');
             } else if (category == 1 && role == 1) {
                 linkTo('/vitae');
+            } else if (category == 5) {
+                linkTo('/welcome');
             } else {
                 linkTo('/notification');
             }
@@ -310,6 +312,8 @@ const TabNavigatorUser = () => {
                 linkTo('/notification');
             } else if (category == 1 && role == 1) {
                 linkTo('/vitae');
+            } else if (category == 5) {
+                linkTo('/welcome');
             } else {
                 linkTo('/notification');
             }
