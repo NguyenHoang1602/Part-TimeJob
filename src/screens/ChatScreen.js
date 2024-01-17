@@ -77,6 +77,7 @@ const ChatScreen = ({ route, navigation }) => {
         cuối cùng, nó thực hiện các bước tương tự để lưu tin nhắn vào document của đoạn chat giữa 2 người dùng theo thứ tự
         ngược lại
         */
+       // tạo ra 2 đoạn chat
         fireStore()
             .collection('chats')
             .doc('' + user._id + items?._id)

@@ -110,7 +110,7 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:32.7.0"))
     implementation("com.google.firebase:firebase-analytics")
     implementation project(':react-native-fbsdk-next')
-
+    implementation project(':react-native-push-notification')
     implementation 'com.facebook.android:facebook-android-sdk:[4,5)'
 
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}")
