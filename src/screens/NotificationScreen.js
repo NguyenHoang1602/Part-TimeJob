@@ -52,6 +52,7 @@ const NotificationScreen = ({ route, navigation }) => {
         setLoading(true);
         try {
             await new Promise(resolve => setTimeout(resolve, 1000));
+            await AsyncStorage.removeItem('StatusApp');
             const response = await axios.post(`${API}/notifications/list`, { receiver_id: user._id });
             if (response.status === 200) {
                 setNotification(response.data)

@@ -35,6 +35,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import messaging from '@react-native-firebase/messaging';
 import PushNotification from "react-native-push-notification";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -285,26 +286,37 @@ const ProfileStack = (props) => {
 const TabNavigator = () => {
 
     const linkTo = useLinkTo();
+    const status = async () => {
+        const status = await AsyncStorage.getItem('StatusApp');
+        return status;
+    }
 
     PushNotification.configure({
+
         // (optional) Called when Token is generated (iOS and Android)
         onRegister: function (token) {
             console.log("token:", token);
+            linkTo('/notification');
         },
 
         // (required) Called when a remote is received or opened, or local notification is opened
-        onNotification: function (notification) {
-            const category = notification.data.category;
-            const role = notification.data.role;
-            if (category == 0) {
-                linkTo('/notification');
-            } else if (category == 1 && role == 0) {
-                linkTo('/notification');
-            } else if (category == 1 && role == 1) {
-                linkTo('/vitae');
-            } else {
-                linkTo('/notification');
+        onNotification: async function (notification) {
+            const st = await status();
+            console.log("statusoDay : ", st);
+            if (st) {
+                const category = notification.data.category;
+                const role = notification.data.role;
+                if (category == 0) {
+                    linkTo('/notification');
+                } else if (category == 1 && role == 0) {
+                    linkTo('/notification');
+                } else if (category == 1 && role == 1) {
+                    linkTo('/vitae');
+                } else {
+                    linkTo('/notification');
+                }
             }
+
             // process the notification
 
             // (required) Called when a remote is received or opened, or local notification is opened
@@ -323,24 +335,32 @@ const TabNavigator = () => {
         onRegistrationError: function (err) {
             console.error(err.message, err);
         },
-        popInitialNotification: true,
-        requestPermissions: Platform.OS === 'ios',
+        popInitialNotification: false,
+        //requestPermissions: Platform.OS === 'ios',
+        requestPermissions: true,
     });
+
+
 
 
     useEffect(() => {
         messaging().onNotificationOpenedApp(mess => {
-            const category = mess.data.category;
-            const role = mess.data.role;
-            if (category == 0) {
-                linkTo('/notification');
-            } else if (category == 1 && role == 0) {
-                linkTo('/notification');
-            } else if (category == 1 && role == 1) {
-                linkTo('/vitae');
-            } else {
-                linkTo('/notification');
+            try {
+                const category = mess.data.category;
+                const role = mess.data.role;
+                if (category == 0) {
+                    linkTo('/notification');
+                } else if (category == 1 && role == 0) {
+                    linkTo('/notification');
+                } else if (category == 1 && role == 1) {
+                    linkTo('/vitae');
+                } else {
+                    linkTo('/notification');
+                }
+            } catch (error) {
+                console.log(error);
             }
+            
         })
     }, []);
 

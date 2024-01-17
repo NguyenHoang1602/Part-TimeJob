@@ -1,51 +1,35 @@
 /**
  * @format
  */
+
+import App from './App';
+import { name as appName } from './app.json';
 import { AppRegistry, Platform } from "react-native";
 import PushNotification from "react-native-push-notification";
 import messaging from '@react-native-firebase/messaging';
 
-messaging().setBackgroundMessageHandler(function (payload) {
-  // Xử lý tin nhắn nền ở đây
-  // Ví dụ: hiển thị thông báo, cập nhật dữ liệu, vv.
+// Register background handler
+messaging().setBackgroundMessageHandler(async remoteMessage => {
+  console.log('Message handled in the background!', remoteMessage);
 });
 
-// Must be outside of any component LifeCycle (such as `componentDidMount`).
-// PushNotification.configure({
-//   // (optional) Called when Token is generated (iOS and Android)
-//   onRegister: function (token) {
-//     console.log("token:", token);
-//   },
 
-//   // (required) Called when a remote is received or opened, or local notification is opened
-//   onNotification: function (notification) {
-//     //console.log("ntf:", notification);
+// Check if app was launched in the background and conditionally render null if so
+function HeadlessCheck({ isHeadless }) {
+  if (isHeadless) {
+    // App has been launched in the background by iOS, ignore
+    return null;
+  }
 
-//     // process the notification
+  // Render the app component on foreground launch
+  return <App />;
+}
 
-//     // (required) Called when a remote is received or opened, or local notification is opened
-//     // notification.finish(PushNotificationIOS.FetchResult.NoData);
-//   },
-
-//   // (optional) Called when Registered Action is pressed and invokeApp is false, if true onNotification will be called (Android)
-//   onAction: function (notification) {
-//     console.log("ACTION:", notification.action);
-//     console.log("NOTIFICATION:", notification);
-
-//     // process the action
-//   },
-
-//   // (optional) Called when the user fails to register for remote notifications. Typically occurs when APNS is having issues, or the device is a simulator. (iOS)
-//   onRegistrationError: function(err) {
-//     console.error(err.message, err);
-//   }, 
-//   popInitialNotification: true,
-//   requestPermissions: Platform.OS === 'ios',
-// });
-
-import App from './App';
-import {name as appName} from './app.json';
+// Your main application component defined here
+// function App() {
+//   // Your application
+// }
 
 // Đăng ký task headless
 //AppRegistry.registerHeadlessTask('ReactNativeFirebaseMessagingHeadlessTask', () => messaging().setBackgroundMessageHandler);
-AppRegistry.registerComponent(appName, () => App);
+AppRegistry.registerComponent(appName, () => HeadlessCheck);

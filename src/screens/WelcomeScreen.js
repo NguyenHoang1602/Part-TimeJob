@@ -157,6 +157,7 @@ const WelcomeScreen = ({navigation}) => {
         const data = JSON.parse(tempData);
         setUser(data);
         await AsyncStorage.setItem('isFirstAccess', '0');
+        await AsyncStorage.setItem('StatusApp', '0');
         if (data.role === 0) {
           setTimeout(() => {
             navigation.replace('TabNavigatorUser');
