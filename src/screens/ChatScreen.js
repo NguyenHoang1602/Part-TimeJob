@@ -26,12 +26,6 @@ const ChatScreen = ({ route, navigation }) => {
     };
     const [items , setItem ] = useState(data)
 
-    /* sử dụng useeffect để lắng nghe sự thay đổi trong collection chat và message của firestore
-    khi có sự thay đổi, nó sẽ lấy tất cả tin nhắn từ đoạn chat và cập nhật danh sách tin nhắn
-    cụ thể, nó tạo ra 1 subscriber bằng cách truy vấn collection chat, sau đó lắng nghe sự thay đổi bằng phương thức
-    onSnapshot, khi có sự thay đổi, nó sẽ lấy tất cả các tài liệu trong querySnapshot và chuyển đổi chúng thành 1 mảng 
-    các tin nhắn. Cuối cùng cập nhật danh sách tin nhắn bằng cách gọi setMessageList với mảng tin nhắn mới
-    */
     useEffect(() => {
         const subscriber = fireStore()
             .collection('chats')
@@ -65,18 +59,10 @@ const ChatScreen = ({ route, navigation }) => {
             sendTo: items?._id,
             createdAt: Date.parse(msg.createdAt),
         };
-        // cập nhật danh sách tin nhắn bằng cách thêm tin nhắn mới (myMsg) vào cuối danh sách tin nhắn hiện tại (previous)
+        
         setMessageList(previousMessages =>
             GiftedChat.append(previousMessages, myMsg),
         );
-        
-        /* sử dụng firestore để truy vấn collection chát và sử dụng phương thức doc để truy cập đến document của đoạn chat
-        giữa hai người, document được định danh bằng cách kết hợp giữa 2 id.
-        tiếp theo truy vấn đến collection messages trong doc và sử dụng phương thức add() để thêm tin nhắn mới (myMsg)
-        vào collection messages
-        cuối cùng, nó thực hiện các bước tương tự để lưu tin nhắn vào document của đoạn chat giữa 2 người dùng theo thứ tự
-        ngược lại
-        */
        // tạo ra 2 đoạn chat
         fireStore()
             .collection('chats')
