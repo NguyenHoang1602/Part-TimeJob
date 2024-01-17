@@ -286,7 +286,7 @@ const TabNavigator = () => {
 
     const linkTo = useLinkTo();
 
-    PushNotification.configure({
+    PushNotification.configure({ 
         // (optional) Called when Token is generated (iOS and Android)
         onRegister: function (token) {
             console.log("token:", token);

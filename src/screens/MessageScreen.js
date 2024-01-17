@@ -102,7 +102,7 @@ const MessageScreen = ({ navigation }) => {
         const tempData = [];
         items.map(async (item) => {
             if (item.last) {
-                console.log(item);
+                //console.log(item);
                 tempData.push(item);
             }
         })

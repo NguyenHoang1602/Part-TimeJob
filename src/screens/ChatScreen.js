@@ -16,7 +16,9 @@ import Feather from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const ChatScreen = ({ route, navigation }) => {
-    
+
+    const [messageList, setMessageList] = useState([]);
+    const { user } = useContext(UserContext);
     const data = {
         _id : route.params?.item._id,
         photo : route.params?.item.photo,
@@ -24,13 +26,21 @@ const ChatScreen = ({ route, navigation }) => {
     };
     const [items , setItem ] = useState(data)
 
+    /* sử dụng useeffect để lắng nghe sự thay đổi trong collection chat và message của firestore
+    khi có sự thay đổi, nó sẽ lấy tất cả tin nhắn từ đoạn chat và cập nhật danh sách tin nhắn
+    cụ thể, nó tạo ra 1 subscriber bằng cách truy vấn collection chat, sau đó lắng nghe sự thay đổi bằng phương thức
+    onSnapshot, khi có sự thay đổi, nó sẽ lấy tất cả các tài liệu trong querySnapshot và chuyển đổi chúng thành 1 mảng 
+    các tin nhắn. Cuối cùng cập nhật danh sách tin nhắn bằng cách gọi setMessageList với mảng tin nhắn mới
+    */
     useEffect(() => {
         const subscriber = fireStore()
             .collection('chats')
+            // tìm đoạn chat có id, tạo bằng cách
             .doc(user._id + items?._id)
             .collection('messages')
             .orderBy('createdAt', 'desc');
         subscriber.onSnapshot(querySnapshot => {
+            // lấy tất cả tin nhắn từ đoạn chat
             const allMessages = querySnapshot.docs.map(item => {
                 return { ...item._data, createdAt: item._data.createdAt };
             });
@@ -43,19 +53,30 @@ const ChatScreen = ({ route, navigation }) => {
         };
     }, []);
 
-    const [messageList, setMessageList] = useState([]);
-    const { user } = useContext(UserContext);
     const onSend = useCallback(async (messages = []) => {
+        // khai báo 1 biến lấy tin nhắn đầu tiên từ mảng tin nhắn được truyền vào
         const msg = messages[0];
+        /* tạo 1 đối tượng tin nhắn mới bằng cách sao chép các thuộc tính từ tin nhắn ban đầu (msg), 
+        đồng thời thêm các thuộc tính
+        */
         const myMsg = {
             ...msg,
             sendBy: user._id,
             sendTo: items?._id,
             createdAt: Date.parse(msg.createdAt),
         };
+        // cập nhật danh sách tin nhắn bằng cách thêm tin nhắn mới (myMsg) vào cuối danh sách tin nhắn hiện tại (previous)
         setMessageList(previousMessages =>
             GiftedChat.append(previousMessages, myMsg),
         );
+        
+        /* sử dụng firestore để truy vấn collection chát và sử dụng phương thức doc để truy cập đến document của đoạn chat
+        giữa hai người, document được định danh bằng cách kết hợp giữa 2 id.
+        tiếp theo truy vấn đến collection messages trong doc và sử dụng phương thức add() để thêm tin nhắn mới (myMsg)
+        vào collection messages
+        cuối cùng, nó thực hiện các bước tương tự để lưu tin nhắn vào document của đoạn chat giữa 2 người dùng theo thứ tự
+        ngược lại
+        */
         fireStore()
             .collection('chats')
             .doc('' + user._id + items?._id)

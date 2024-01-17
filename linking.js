@@ -1,3 +1,4 @@
+// điều hướng thông báo đến screen
 const config = {
     screens: {
         WelcomeScreen: {
