@@ -31,12 +31,12 @@ const InputMutiple = ({
             setIsFocused(true);
           }}
           onBlur={() => setIsFocused(false)}
-          style={{color: COLORS.darkBlue}}
+          style={{ color: COLORS.darkBlue, verticalAlign: 'top', fontFamily: 'BeVietnamPro-Medium', height: 120}}
           {...props}
         />
       </View>
       {error && (
-        <Text style={{marginTop: 7, color: COLORS.red, fontSize: 12}}>
+        <Text style={{ marginTop: 7, color: COLORS.red, fontSize: 11, fontFamily: 'BeVietnamPro-Medium',}}>
           {error}
         </Text>
       )}
@@ -47,19 +47,20 @@ const InputMutiple = ({
 const style = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'space-between',
     marginBottom : 13,
   },
   label: {
     marginVertical: 5,
     fontSize: 14,
     color: COLORS.grey,
+    fontFamily: 'BeVietnamPro-Medium',
   },
   inputContainer: {
     height: 130,
     paddingHorizontal: 5,
     borderWidth: 1,
     borderRadius : 6,
+    
   },
 });
 

@@ -7,7 +7,9 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 const Input = ({
     iconName,
     error,
-    onFocus = () => {},
+    onFocus = () => {
+      
+    },
     ...props
 }) => {
   const [isFocused, setIsFocused] = React.useState(false);
@@ -20,7 +22,7 @@ const Input = ({
             borderColor: error
               ? COLORS.red
               : isFocused
-              ? COLORS.darkBlue
+              ? COLORS.primary
               : COLORS.grey,
             alignItems: 'center',
           },
@@ -36,12 +38,12 @@ const Input = ({
             setIsFocused(true);
           }}
           onBlur={() => setIsFocused(false)}
-          style={{color: COLORS.darkBlue, flex: 1}}
+          style={{ color: COLORS.darkBlue, flex: 1, fontFamily: 'BeVietnamPro-Medium', }}
           {...props}
         />
       </View>
       {error && (
-        <Text style={{marginTop: 7, color: COLORS.red, fontSize: 12}}>
+        <Text style={{ marginTop: 7, color: COLORS.red, fontSize: 11, fontFamily: 'BeVietnamPro-Medium',}}>
           {error}
         </Text>
       )}
@@ -59,6 +61,7 @@ const style = StyleSheet.create({
     marginVertical: 5,
     fontSize: 14,
     color: COLORS.grey,
+    fontFamily: 'BeVietnamPro-Medium',
   },
   inputContainer: {
     height: 50,

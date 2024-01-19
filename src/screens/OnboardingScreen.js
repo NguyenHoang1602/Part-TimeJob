@@ -114,7 +114,7 @@ export default function App({ navigation }) {
                 }}
                 renderNextButton={() => buttonLabel("Next")}
                 renderDoneButton={() => buttonLabel("Next")}
-                onDone={() => navigation.navigate("Auth")}
+                onDone={() => navigation.navigate("AuthStack")}
             />
         )
     }

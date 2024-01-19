@@ -17,6 +17,7 @@ export const COLORS = {
     yellow: '#F4D03F',
     black: '#000000',
     blackOpacity: '#D9D9D9',
+    blue: '#E9F0FF'
 };
 
 export const SIZES = {

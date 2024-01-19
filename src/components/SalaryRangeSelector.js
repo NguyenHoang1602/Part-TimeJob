@@ -1,3 +1,7 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable quotes */
+/* eslint-disable react-native/no-inline-styles */
+/* eslint-disable prettier/prettier */
 import { View, Text } from "react-native";
 import React, { useEffect, useMemo, useState } from "react";
 import { useTheme } from "@react-navigation/native";
@@ -18,6 +22,7 @@ const SalaryRangeSelector = ({
     endPrice,
     onStartPriceChange,
     onEndPriceChange,
+    salaryUnit,
 }) => {
     const theme = useTheme();
     const [barWidth, setBarWidth] = useState(0);
@@ -33,10 +38,8 @@ const SalaryRangeSelector = ({
                 rightHandlePos.value,
                 Math.max(0, context.prevPos + event.translationX)
             );
-
-            runOnJS(onStartPriceChange)(
-                Math.round((maxPrice / barWidth) * leftHandlePos.value)
-            );
+            const newStartPrice = Math.round((maxPrice / barWidth) * leftHandlePos.value);
+            runOnJS(onStartPriceChange)(newStartPrice);
         },
     });
 
@@ -49,9 +52,8 @@ const SalaryRangeSelector = ({
                 barWidth,
                 Math.max(leftHandlePos.value, context.prevPos + event.translationX)
             );
-            runOnJS(onEndPriceChange)(
-                Math.round((maxPrice / barWidth) * rightHandlePos.value)
-            );
+            const newEndPrice = Math.round((maxPrice / barWidth) * rightHandlePos.value);
+            runOnJS(onEndPriceChange)(newEndPrice);
         },
     });
 
@@ -76,28 +78,6 @@ const SalaryRangeSelector = ({
         right: barWidth - rightHandlePos.value,
     }));
 
-    const bars = useMemo(
-        () => (
-            <View style={{ flexDirection: "row", alignItems: "flex-end" }}>
-                {new Array(Math.round(maxPrice / 50)).fill("").map((_, i) => {
-                    const randomVlaue = Math.random();
-                    return (
-                        <View
-                            key={i}
-                            style={{
-                                flex: 1,
-                                height: Math.round(randomVlaue * 40) + 8,
-                                backgroundColor: "#3b82f6",
-                                opacity: Math.max(0.2, Math.min(0.5, randomVlaue)),
-                            }}
-                        />
-                    );
-                })}
-            </View>
-        ),
-        []
-    );
-
     useEffect(() => {
         if (barWidth === 0) return;
 
@@ -106,7 +86,7 @@ const SalaryRangeSelector = ({
     }, [barWidth]);
 
     return (
-        <View style={{ paddingVertical: 18,}}>
+        <View style={{ paddingVertical: 18, }}>
 
             <View
                 style={{
@@ -143,7 +123,7 @@ const SalaryRangeSelector = ({
                                 bottom: 24,
                             }}
                         />
-                        <SliderHandle label={`$${startPrice}`} />
+                        <SliderHandle label={salaryUnit === "655de22b9a5b0ffa7ffd5132" ? `${startPrice}k/h` : `${startPrice}tr`} />
                     </Animated.View>
                 </PanGestureHandler>
 
@@ -158,7 +138,7 @@ const SalaryRangeSelector = ({
                                 bottom: 24,
                             }}
                         />
-                        <SliderHandle label={`$${endPrice}`} />
+                        <SliderHandle label={salaryUnit === "655de22b9a5b0ffa7ffd5132" ? `${endPrice}k/h` : `${endPrice}tr`} />
                     </Animated.View>
                 </PanGestureHandler>
             </View>

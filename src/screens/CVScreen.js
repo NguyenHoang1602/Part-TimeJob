@@ -2,67 +2,141 @@
 /* eslint-disable quotes */
 /* eslint-disable prettier/prettier */
 /* eslint-disable react-native/no-inline-styles */
-import { View, Text, SafeAreaView, Keyboard, ScrollView, StyleSheet, TouchableOpacity, ImageBackground, useWindowDimensions, FlatList, Image, StatusBar } from 'react-native';
-import React, { useState } from 'react';
-import {TextInput} from 'react-native-paper';
+import { View, Text, SafeAreaView, Keyboard, ScrollView, StyleSheet, TouchableOpacity, ImageBackground, useWindowDimensions, FlatList, Image, StatusBar, Alert } from 'react-native';
+import React, { useState, useContext, useEffect } from 'react';
+import { TextInput } from 'react-native-paper';
 import Input from '../components/Input';
 import InputMutiple from '../components/InputMutiple';
 import COLORS from '../assets/const/colors';
-
-import Button from '../components/Button';
-//icon
-import Octicons from 'react-native-vector-icons/Octicons';
-import Feather from 'react-native-vector-icons/Feather';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Dropdown } from 'react-native-element-dropdown';
+import UserContext from '../components/UserConText';
+import axios from 'axios';
+import { API } from '../../Sever/sever';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Loader from '../components/Loader';
 
-const data = [
-  { label: 'Item 1', value: '1' },
-  { label: 'Item 2', value: '2' },
-  { label: 'Item 3', value: '3' },
-  { label: 'Item 4', value: '4' },
-  { label: 'Item 5', value: '5' },
-  { label: 'Item 6', value: '6' },
-  { label: 'Item 7', value: '7' },
-  { label: 'Item 8', value: '8' },
-];
+const CVScreen = ({ route, navigation }) => {
 
-const CVScreen = ({navigation}) => {
-  const [value, setValue] = useState(null);
-  const [isFocus, setIsFocus] = useState(false);
+  useEffect(() => {
+    getListAcademic()
+    getListCareers()
+    getListExperience()
+    getListGender()
+  }, []);
+
+  const { user } = useContext(UserContext);
+  const [listAcademic, setListAcademic] = useState([]);
+  const [listCareers, setListCareers] = useState([]);
+  const [listExperience, setListExperience] = useState([]);
+  const [listGender, setListGender] = useState([]);
   const [inputs, setInputs] = React.useState({
-    id: '',
+    user_id: user._id,
     title: '',
-    subtitle: '',
-    price: '',
-    details: '',
+    name: user.displayName,
+    phone: '',
+    year: '',
+    gender_id: '',
+    email: user.email,
+    career_id: '',
+    address: '',
+    experience_id: '',
+    academic_id: '',
+    introduce: '',
   });
   const [errors, setErrors] = React.useState({});
+  const [loading, setLoading] = React.useState(false);
+  const [isFocusGender, setIsFocusGender] = useState(false);
+  const [isFocusCareer, setIsFocusCareer] = useState(false);
+  const [isFocusExp, setIsFocusExp] = useState(false);
+  const [isFocusAcademic, setIsFocusAcademic] = useState(false);
+
+  const getListCareers = async () => {
+    const data = await AsyncStorage.getItem('listCareers')
+    setListCareers(JSON.parse(data));
+  }
+
+  const getListAcademic = async () => {
+    const data = await AsyncStorage.getItem('listAcademics');
+    setListAcademic(JSON.parse(data));
+  }
+
+  const getListExperience = async () => {
+    const data = await AsyncStorage.getItem('listExperiences');
+    setListExperience(JSON.parse(data));
+  }
+  const getListGender = async () => {
+    const data = await AsyncStorage.getItem('listGenders');
+    setListGender(JSON.parse(data));
+  }
+
   const validate = () => {
     Keyboard.dismiss();
     let isValid = true;
-
+    const regex = /^(0|\+84)\d{9,10}$/;
+    const regexY = /[!@#$%^&*(),.?":{}|<>]/;
+    const year = 2023 - inputs.year;
     if (!inputs.title) {
-      handleError('Please input title', 'title');
+      handleError('Vui lòng nhập tên CV', 'title');
+      isValid = false;
+    } else if (regexY.test(inputs.title)) {
+      handleError('Chứa ký tự đặc biệt', 'title');
       isValid = false;
     }
-    if (!inputs.subtitle) {
-      handleError('Please input subtitle', 'subtitle');
+    if (!inputs.name) {
+      handleError('Vui lòng nhập họ tên', 'name');
       isValid = false;
     }
-
-    if (!inputs.price) {
-      handleError('Please input phone price', 'price');
+    if (!inputs.phone) {
+      handleError('Vui lòng nhập số điện thoại', 'phone');
+      isValid = false;
+    } else if (regexY.test(inputs.phone)) {
+      handleError('Chứa ký tự đặc biệt', 'phone');
+      isValid = false;
+    } else {
+      const vld = regex.test(inputs.phone);
+      console.log(vld);
+      if (!vld) {
+        handleError('Số điện thoại không hợp lệ', 'phone');
+        isValid = false;
+      }
+    }
+    if (!inputs.year) {
+      handleError('Vui lòng nhập năm sinh', 'year');
+      isValid = false;
+    } else if (year < 15 || 60 < year) {
+      handleError('Độ tuổi không hợp lệ', 'year');
+      isValid = false;
+    } else if (regexY.test(inputs.year)) {
+      handleError('Chứa ký tự đặc biệt', 'year');
       isValid = false;
     }
-
-    if (!inputs.details) {
-      handleError('Please input details', 'details');
+    if (!inputs.gender_id) {
+      handleError('Vui lòng chọn giới tính', 'gender_id');
+      isValid = false;
+    }
+    if (!inputs.career_id) {
+      handleError('Vui lòng chọn ngành nghề', 'career_id');
+      isValid = false;
+    }
+    if (!inputs.address) {
+      handleError('Vui lòng nhập địa chỉ', 'address');
+      isValid = false;
+    }
+    if (!inputs.experience_id) {
+      handleError('Vui lòng nhập kinh nghiệm', 'experience_id');
+      isValid = false;
+    }
+    if (!inputs.academic_id) {
+      handleError('Vui lòng chọn trình độ học vấn', 'academic_id');
+      isValid = false;
+    }
+    if (!inputs.introduce) {
+      handleError('Vui lòng nhập giới thiệu bản thân', 'introduce');
       isValid = false;
     }
     if (isValid) {
-      console.log(' oce ');
+      handleUpNewCv();
+      console.log(inputs);
     }
   };
   const handleOnchange = (text, input) => {
@@ -71,180 +145,218 @@ const CVScreen = ({navigation}) => {
   const handleError = (error, input) => {
     setErrors(prevState => ({ ...prevState, [input]: error }));
   };
+  const handleUpNewCv = async () => {
+    setLoading(true);
+    setTimeout(() => { 3000 });
+    const response = await axios.post(`${API}/cvs/new`, inputs);
+    if (response.status === 200) {
+      setLoading(false);
+      Alert.alert('Thành công', 'Tạo CV thành công !', [
+        { text: '' },
+        { text: 'ok', onPress: () => navigation.navigate('DetailsScreen') },
+      ],
+        { cancelable: false });
+    }
+  }
+
   return (
-    <SafeAreaView style={{flex: 1}}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
+      <Loader visible={loading} />
       <ScrollView>
-          <View
-            style={{
-              backgroundColor: '#D9D9D9',
-              height: 60,
-              justifyContent: 'center',
-            }}>
-            <Text style={{fontSize: 16, marginStart: 20}}>
-              THÔNG TIN BẮT BUỘC
-            </Text>
-          </View>
-          <View style={{ marginVertical: 22, marginHorizontal: 24 }}>
-            <Input
-              onChangeText={text => handleOnchange(text, 'subtitle')}
-              onFocus={() => handleError(null, 'price')}
-              placeholder="Họ tên"
-              value=""
-              error=""
-            />
-            <View style={{ width: '100%', flexDirection: 'row' }}>
-              <View style={{ width: '45%', justifyContent: 'flex-start' }}>
-                <Input
-                  keyboardType="numeric"
-                  onChangeText={text => handleOnchange(text, 'subtitle')}
-                  onFocus={() => handleError(null, 'subtitle')}
-                  placeholder="Số điện thoại"
-                  // value={route.params?.subtitle}
-                  error={errors.subtitle}
-                />
-              </View>
-              <View style={{ width: '45%', marginStart: '9.5%' }}>
-                <Input
-                  keyboardType="numeric"
-                  onChangeText={text => handleOnchange(text, 'subtitle')}
-                  onFocus={() => handleError(null, 'subtitle')}
-                  placeholder="Năm sinh"
-                  // value={route.params?.subtitle}
-                  error={errors.subtitle}
-                />
-              </View>
+        <View
+          style={{
+            backgroundColor: '#D9D9D9',
+            height: 60,
+            justifyContent: 'center',
+          }}>
+          <Text style={{ fontSize: 16, marginStart: 20, fontFamily: 'BeVietnamPro-Medium', marginTop: -2 }}>
+            THÔNG TIN BẮT BUỘC
+          </Text>
+        </View>
+        <View style={{ marginVertical: 22, marginHorizontal: 24 }}>
+          <Input
+            onChangeText={text => handleOnchange(text, 'title')}
+            onFocus={() => handleError(null, 'title')}
+            placeholder="Tên CV"
+            value={inputs.title}
+            error={errors.title}
+          />
+          <Input
+            onChangeText={text => handleOnchange(text, 'name')}
+            onFocus={() => handleError(null, 'name')}
+            placeholder="Họ tên"
+            value={user.displayName}
+            error={errors.name}
+          />
+          <View style={{ width: '100%', flexDirection: 'row' }}>
+            <View style={{ width: '45%', justifyContent: 'flex-start' }}>
+              <Input
+                keyboardType="numeric"
+                onChangeText={text => handleOnchange(text, 'phone')}
+                onFocus={() => handleError(null, 'phone')}
+                placeholder="Số điện thoại"
+                // value={user?.phone}
+                error={errors.phone}
+              />
             </View>
-            <Dropdown
-            style={[styles.dropdown, isFocus && { borderColor: COLORS.darkBlue }]}
-            placeholderStyle={styles.placeholderStyle}
-            selectedTextStyle={styles.selectedTextStyle}
-            inputSearchStyle={styles.inputSearchStyle}
-            iconStyle={styles.iconStyle}
-            data={data}
-            search
-            maxHeight={300}
-            labelField="label"
-            valueField="value"
-            placeholder={!isFocus ? 'Ngành Nghề' : '...'}
-            searchPlaceholder="Search..."
-            value={value}
-            onFocus={() => setIsFocus(true)}
-            onBlur={() => setIsFocus(false)}
-            onChange={item => {
-              setValue(item.value);
-              setIsFocus(false);
-            }}
-          />
-          <Input
-              onChangeText={text => handleOnchange(text, 'subtitle')}
-              onFocus={() => handleError(null, 'price')}
-              placeholder="Địa chỉ email"
-              value=""
-              error=""
-            />
+            <View style={{ width: '45%', marginStart: '9.5%' }}>
+              <Input
+                keyboardType="numeric"
+                onChangeText={text => handleOnchange(text, 'year')}
+                onFocus={() => handleError(null, 'year')}
+                placeholder="Năm sinh"
+                // value={route.params?.subtitle}
+                error={errors.year}
+              />
+            </View>
           </View>
-          <View style={{ backgroundColor: '#D9D9D9', height: 60, justifyContent: 'center' }}>
-            <Text style={{ fontSize: 16, marginStart: 25 }}>THÔNG TIN THÊM</Text>
-          </View>
-          <View style={{ marginVertical: 22, marginHorizontal: 24 }}>
-            <Input
-              onChangeText={text => handleOnchange(text, 'subtitle')}
-              onFocus={() => handleError(null, 'price')}
-              placeholder="Địa chỉ hiện tại"
-              value=""
-              error=""
-            />
-            <Dropdown
-            style={[styles.dropdown, isFocus && { borderColor: COLORS.darkBlue }]}
+          <Dropdown
+            style={[styles.dropdown, isFocusGender && { borderColor: COLORS.darkBlue }, errors.gender_id && { borderColor: 'red' }]}
             placeholderStyle={styles.placeholderStyle}
             selectedTextStyle={styles.selectedTextStyle}
             inputSearchStyle={styles.inputSearchStyle}
             iconStyle={styles.iconStyle}
-            data={data}
-            search
+            data={listGender}
+            labelField="title"
+            valueField="_id"
             maxHeight={300}
-            labelField="label"
-            valueField="value"
-            placeholder={!isFocus ? 'Trình độ học vấn' : '...'}
-            searchPlaceholder="Search..."
-            value={value}
-            onFocus={() => setIsFocus(true)}
-            onBlur={() => setIsFocus(false)}
+            placeholder={!isFocusGender ? 'Giới tính' : '...'}
+            value={listGender._id}
+            onFocus={() => setIsFocusGender(true)}
+            onBlur={() => setIsFocusGender(false)}
             onChange={item => {
-              setValue(item.value);
-              setIsFocus(false);
+              setIsFocusGender(false);
+              handleOnchange(item._id, 'gender_id')
+              handleError(null, 'gender_id')
             }}
           />
+          {errors.gender_id ? <Text style={styles.error}>{errors.gender_id}</Text> : null}
           <Input
-              onChangeText={text => handleOnchange(text, 'subtitle')}
-              onFocus={() => handleError(null, 'price')}
-              placeholder="Kinh nghiệm làm việc"
-              value=""
-              error=""
-            />
-            <Dropdown
-            style={[styles.dropdown, isFocus && { borderColor: COLORS.darkBlue }]}
+            onFocus={() => handleError(null, 'email')}
+            placeholder="Địa chỉ email"
+            value={user?.email}
+            error={errors.email}
+          />
+          <Dropdown
+            style={[styles.dropdown, isFocusCareer && { borderColor: COLORS.darkBlue }, errors.career_id && { borderColor: 'red' }]}
             placeholderStyle={styles.placeholderStyle}
             selectedTextStyle={styles.selectedTextStyle}
             inputSearchStyle={styles.inputSearchStyle}
             iconStyle={styles.iconStyle}
-            data={data}
-            search
+            data={listCareers}
             maxHeight={300}
-            labelField="label"
-            valueField="value"
-            placeholder={!isFocus ? 'Hình thức trả lương' : '...'}
+            labelField="title"
+            valueField="_id"
+            placeholder={!isFocusCareer ? 'Ngành Nghề' : '...'}
             searchPlaceholder="Search..."
-            value={value}
-            onFocus={() => setIsFocus(true)}
-            onBlur={() => setIsFocus(false)}
+            value={listCareers._id}
+            onFocus={() => setIsFocusCareer(true)}
+            onBlur={() => setIsFocusCareer(false)}
             onChange={item => {
-              setValue(item.value);
-              setIsFocus(false);
+              setIsFocusCareer(false);
+              handleOnchange(item._id, 'career_id')
+              handleError(null, 'career_id')
             }}
           />
+          {errors.career_id ? <Text style={styles.error}>{errors.career_id}</Text> : null}
+        </View>
+        <View style={{ backgroundColor: '#D9D9D9', height: 60, justifyContent: 'center' }}>
+          <Text style={{ fontSize: 16, marginStart: 25, fontFamily: 'BeVietnamPro-Medium', marginTop: -2 }}>THÔNG TIN THÊM</Text>
+        </View>
+        <View style={{ marginVertical: 22, marginHorizontal: 24 }}>
+          <Input
+            onChangeText={text => handleOnchange(text, 'address')}
+            onFocus={() => handleError(null, 'address')}
+            placeholder="Địa chỉ hiện tại"
+            value={inputs.address}
+            error={errors.address}
+          />
+          <Dropdown
+            style={[styles.dropdown, isFocusExp && { borderColor: COLORS.darkBlue }, errors.experience_id && { borderColor: 'red' }]}
+            placeholderStyle={styles.placeholderStyle}
+            selectedTextStyle={styles.selectedTextStyle}
+            inputSearchStyle={styles.inputSearchStyle}
+            iconStyle={styles.iconStyle}
+            data={listExperience}
+            maxHeight={300}
+            labelField="title"
+            valueField="_id"
+            placeholder={!isFocusExp ? 'Kinh nghiệm' : '...'}
+            searchPlaceholder="Search..."
+            value={listExperience._id}
+            onFocus={() => setIsFocusExp(true)}
+            onBlur={() => setIsFocusExp(false)}
+            onChange={item => {
+              setIsFocusExp(false);
+              handleOnchange(item._id, 'experience_id')
+              handleError(null, 'experience_id')
+            }}
+          />
+          {errors.experience_id ? <Text style={styles.error}>{errors.experience_id}</Text> : null}
+          <Dropdown
+            style={[styles.dropdown, isFocusAcademic && { borderColor: COLORS.darkBlue }, errors.academic_id && { borderColor: 'red' }]}
+            placeholderStyle={styles.placeholderStyle}
+            selectedTextStyle={styles.selectedTextStyle}
+            inputSearchStyle={styles.inputSearchStyle}
+            iconStyle={styles.iconStyle}
+            data={listAcademic}
+            labelField="title"
+            valueField="_id"
+            maxHeight={300}
+            placeholder={!isFocusAcademic ? 'Trình độ học vấn' : '...'}
+            value={listAcademic._id}
+            onFocus={() => setIsFocusAcademic(true)}
+            onBlur={() => setIsFocusAcademic(false)}
+            onChange={item => {
+              setIsFocusAcademic(false);
+              handleOnchange(item._id, 'academic_id')
+              handleError(null, 'academic_id')
+            }}
+          />
+          {errors.academic_id ? <Text style={styles.error}>{errors.academic_id}</Text> : null}
           <InputMutiple
-              onChangeText={text => handleOnchange(text, 'subtitle')}
-              onFocus={() => handleError(null, 'subtitle')}
-              placeholder={"Giới thiệu bản thân\nHãy nêu ra kinh nghiệm, sở trường và mong muốn của bạn liên quan đến công việc để ghi điểm hơn trong mắt nhà tuyển dụng"}
-              // value={route.params?.subtitle}
-              error={errors.subtitle}
-            />
-          </View>
-          <View
+            onChangeText={text => handleOnchange(text, 'introduce')}
+            onFocus={() => handleError(null, 'introduce')}
+            placeholder={"Giới thiệu bản thân\nHãy nêu ra kinh nghiệm, sở trường và mong muốn của bạn liên quan đến công việc để ghi điểm hơn trong mắt nhà tuyển dụng"}
+            value={inputs.introduce}
+            error={errors.introduce}
+          />
+        </View>
+        <View
+          style={{
+            width: '100%',
+            alignItems: 'center',
+            paddingVertical: 20,
+            flexDirection: 'row',
+            justifyContent: 'center',
+          }}>
+          <TouchableOpacity
+            onPress={validate}
             style={{
-              width: '100%',
-              alignItems: 'center',
-              paddingVertical: 20,
+              backgroundColor: COLORS.blue,
+              padding: 5,
+              width: '80%',
+              height: 50,
+              borderRadius: 30,
               flexDirection: 'row',
               justifyContent: 'center',
+              alignItems: 'center',
+              shadowColor: COLORS.black,
+              shadowOffset: { width: 10, height: 10 },
+              shadowOpacity: 1,
+              shadowRadius: 3,
             }}>
-            <TouchableOpacity
-              onPress={() => navigation.navigate('CVScreen')}
+            <Text
               style={{
-                backgroundColor: COLORS.blue,
-                padding: 5,
-                width: '80%',
-                height: 50,
-                borderRadius: 30,
-                flexDirection: 'row',
-                justifyContent: 'center',
-                alignItems: 'center',
-                shadowColor: COLORS.black,
-                shadowOffset: {width: 10, height: 10},
-                shadowOpacity: 1,
-                shadowRadius: 3,
+                fontFamily: 'BeVietnamPro-Bold',
+                marginTop: -2,
+                fontSize: 18,
+                color: COLORS.white,
               }}>
-              <Text
-                style={{
-                  fontWeight: 'bold',
-                  fontSize: 18,
-                  color: COLORS.white,
-                }}>
-                Ứng tuyển
-              </Text>
-            </TouchableOpacity>
-          </View>
+              Lưu
+            </Text>
+          </TouchableOpacity>
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -284,7 +396,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 6,
     paddingHorizontal: 18,
-    marginBottom : 13,
+    marginBottom: 13,
   },
   icon: {
     marginRight: 5,
@@ -293,10 +405,12 @@ const styles = StyleSheet.create({
     marginVertical: 5,
     fontSize: 14,
     color: COLORS.grey1,
+    fontFamily: 'BeVietnamPro-Medium',
   },
   selectedTextStyle: {
     fontSize: 14,
     color: COLORS.darkBlue,
+    fontFamily: 'BeVietnamPro-Medium',
   },
   iconStyle: {
     width: 20,
@@ -306,5 +420,12 @@ const styles = StyleSheet.create({
     height: 50,
     fontSize: 14,
     borderRadius: 6,
+    fontFamily: 'BeVietnamPro-Medium', marginTop: -2
+  },
+  error: {
+    fontSize: 11,
+    color: 'red',
+    paddingBottom: 12,
+    fontFamily: 'BeVietnamPro-Medium',
   },
 });
