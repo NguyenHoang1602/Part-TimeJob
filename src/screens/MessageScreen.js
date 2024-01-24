@@ -56,8 +56,8 @@ const MessageScreen = ({ navigation }) => {
             setList(JSON.parse(data));
         } else {
             try {
-                const filteredData = list.filter((post) => {
-                    const titleA = post.post_id.title.toLowerCase();
+                const filteredData = list.filter((name) => {
+                    const titleA = name.displayName.toLowerCase();
                     const keyA = key.toLowerCase();
                     const find = titleA.indexOf(keyA) !== -1;
                     return find;

@@ -19,7 +19,6 @@ const DetailNotification = ({ route, navigation }) => {
         date: route.params?.date,
         time: route.params?.time,
     };
-    console.log(datalist)
     const [data, setData] = useState(datalist);
     return (
         <SafeAreaView
@@ -185,7 +184,11 @@ const DetailNotification = ({ route, navigation }) => {
                 }}>
                     <TouchableOpacity
                         onPress={() => {
-                            navigation.navigate('ChatScreen', { item: data?.sender_id });
+                            navigation.navigate('ChatScreen', {
+                                id: data?.sender_id?._id,
+                                displayName: data?.sender_id?.displayName,
+                                photo: data?.sender_id?.photo
+                            });
                         }}
                         style={{
                             backgroundColor: 'rgba(51, 123, 255, 0.20)',
