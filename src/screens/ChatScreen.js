@@ -18,7 +18,9 @@ import axios from 'axios';
 import { API } from '../../Sever/sever';
 
 const ChatScreen = ({ route, navigation }) => {
-    
+
+    const [messageList, setMessageList] = useState([]);
+    const { user } = useContext(UserContext);
     const data = {
         _id : route.params?.id,
         photo : route.params?.photo,
@@ -29,10 +31,12 @@ const ChatScreen = ({ route, navigation }) => {
     useEffect(() => {
         const subscriber = fireStore()
             .collection('chats')
+            // tìm đoạn chat có id, tạo bằng cách
             .doc(user._id + items?._id)
             .collection('messages')
             .orderBy('createdAt', 'desc');
         subscriber.onSnapshot(querySnapshot => {
+            // lấy tất cả tin nhắn từ đoạn chat
             const allMessages = querySnapshot.docs.map(item => {
                 return { ...item._data, createdAt: item._data.createdAt };
             });
@@ -45,19 +49,23 @@ const ChatScreen = ({ route, navigation }) => {
         };
     }, []);
 
-    const [messageList, setMessageList] = useState([]);
-    const { user } = useContext(UserContext);
     const onSend = useCallback(async (messages = []) => {
+        // khai báo 1 biến lấy tin nhắn đầu tiên từ mảng tin nhắn được truyền vào
         const msg = messages[0];
+        /* tạo 1 đối tượng tin nhắn mới bằng cách sao chép các thuộc tính từ tin nhắn ban đầu (msg), 
+        đồng thời thêm các thuộc tính
+        */
         const myMsg = {
             ...msg,
             sendBy: user._id,
             sendTo: items?._id,
             createdAt: Date.parse(msg.createdAt),
         };
+        
         setMessageList(previousMessages =>
             GiftedChat.append(previousMessages, myMsg),
         );
+       // tạo ra 2 đoạn chat
         fireStore()
             .collection('chats')
             .doc('' + user._id + items?._id)

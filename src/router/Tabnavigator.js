@@ -302,6 +302,7 @@ const TabNavigator = () => {
         // (required) Called when a remote is received or opened, or local notification is opened
         onNotification: async function (notification) {
             const st = await status();
+            // bắt sự kiện để lắng nghe app đang chạy ngầm
             console.log("statusoDay : ", st);
             if (st) {
                 const category = notification.data.category;
@@ -342,10 +343,8 @@ const TabNavigator = () => {
         requestPermissions: true,
     });
 
-
-
-
     useEffect(() => {
+        // chạy khi app đang chạy ngầm
         messaging().onNotificationOpenedApp(mess => {
             try {
                 const category = mess.data.category;
